@@ -1,0 +1,61 @@
+#                                    
+#     __                           _ 
+#    / /  _____   _____ _ __ _   _| |
+#   / /  / _ \ \ / / _ \ '__| | | | |
+#  / /__|  __/\ V /  __/ |  | |_| | |
+#  \____/\___| \_/ \___|_|   \__, |_|
+#                            |___/   
+#                                    
+#   Configuration File for Leveryl   
+
+# Configuration File Version (DO NOT CHANGE)
+ConfigVersion: 1
+
+# Nether [W.I.P. (Not Working YET)]
+NetherEnabled: true
+NetherWorldName: "nether"
+
+# Developer Tools (DevTools Commands, FolderPluginLoader, Debug Logger, PacketLogger, Test Command)
+DevTools: true
+FolderPluginLoader: true
+DebugMode: false
+PacketLogger: false
+ServerTesterCommand: false
+
+# Administration Tools
+CommandLogger: true
+#### Setting the option below to "true" will allow ONLY the console can do /op and /deop
+ConsoleOnlyOPCommand: false
+ConsoleOnlyCommands: false
+ConsoleOnlyCommandsList:
+ - /stop
+LimitedCreative: true
+#### Send Leveryl Core's AntiCheat Messages to OPs
+TellOPsPlayerAntiCheatMessages: false
+
+# Performance
+AutoClearEntities: false
+#### AutoClearEntitiesTimer(In minutes)
+AutoClearEntitiesTimer: 3
+BlockTNTExplosion: false
+
+# Game Mechanics
+Criticals: true
+Weather: false
+Lightning: false
+LightningFire: false
+FireSpread: false
+
+# Network
+DisableRakLib: false
+
+# Player
+KeepInventory: false
+ClearInventoryOnGameModeChange: true
+KeepExperiencePoints: false
+#### Enables / Disables Leveryl Core's AntiCheat Messages on Console
+VerboseConsoleMessages: true
+
+# Miscellaneous
+DisableServerDotLog: false
+DisablePluginAPIVersionCheck: true
