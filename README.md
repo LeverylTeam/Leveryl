@@ -2,28 +2,34 @@
   <img width="100%" height="100%" src="https://github.com/LeverylTeam/Leveryl/blob/master/assets/banner.png">
 </p>
 
-## Warning: 32-Bit support is Deprecated. :(
+## Warning: 32-Bit support is Deprecated!!!
 
-## Introduction:
-This is an Advanced Server Software to hopefully Replace Tesseract.</br>
-(They're dead. And this is NOT supposed to be taken out of context.)</br>
-This spoon is based off of PMMP (For Stability)</br>
+# Introduction:
+This is an Advanced Server Software to hopefully Replace Tesseract.  
+(They're dead. And this is **NOT** supposed to be taken out of context.)  
+This spoon is based off of PMMP (For Stability)  
 
-## Builds:
+# Plugin Compatibility:
+Leveryl is Developed to support **BOTH** Tesseract and PocketMine-MP Plugins! :D
+
+# Builds:
 #### CircleCI Build Status: [![CircleCI](https://circleci.com/gh/LeverylTeam/Leveryl.svg?style=svg)](https://circleci.com/gh/LeverylTeam/Leveryl)
 #### TravisCI Build Status: [![TravisCI](https://travis-ci.org/LeverylTeam/Leveryl.svg?branch=master)](https://travis-ci.org/LeverylTeam/Leveryl)
 
-## Resources:
+# Windows & Linux Installation:
+Read [this](https://github.com/LeverylTeam/Leveryl/wiki/Installation) page on our [Wiki](https://github.com/LeverylTeam/Leveryl/wiki/)... ;)
+
+# Resources:
 To be able to run this on Windows, You'll need Visual Studio C++ Redistributable 2015,
 Which can be downloaded [Here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
 
-## Acknowledgements / Credits:
+# Acknowledgements / Credits:
 - Leveryl is a "spoon" of **[Pocketmine-MP](http://github.com/pmmp/PocketMine-MP/)**
 - Most of the original code was written by the original PocketMine Team and the new PMMP Team.
 - Some Implementations are ported from Tesseract, Nukkit and Genisys
 - Ported files' authors are stated inside the file
 
-## License:
+# License:
 ```
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -38,7 +44,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ```
-## Third-party Libraries/Protocols Used:
+# Third-party Libraries/Protocols Used:
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
 * __[PHP mbstring](http://php.net/manual/en/book.mbstring.php)__
 * __[PHP SQLite3](http://php.net/manual/en/book.sqlite3.php)__
