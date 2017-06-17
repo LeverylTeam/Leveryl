@@ -46,7 +46,7 @@ class SetupWizard{
 	}
 
 	public function run(){
-		$this->message("PocketMine-MP set-up wizard");
+		$this->message("Leveryl set-up wizard");
 
 		$langs = BaseLang::getLanguageList();
 		if(empty($langs)){
