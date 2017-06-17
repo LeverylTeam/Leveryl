@@ -19,7 +19,7 @@
  *
  */
 
-namespace TridentFactions\window;
+namespace pocketmine\inventor;
 
 use pocketmine\block\Block;
 use pocketmine\inventory\CustomInventory;

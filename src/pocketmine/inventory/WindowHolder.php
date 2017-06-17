@@ -19,7 +19,7 @@
  *
  */
 
-namespace TridentFactions\window;
+namespace pocketmine\inventory;
 
 use pocketmine\math\Vector3;
 use pocketmine\inventory\Inventory;
