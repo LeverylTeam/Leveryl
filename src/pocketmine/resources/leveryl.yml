@@ -28,6 +28,7 @@ ConsoleOnlyCommands: false
 ConsoleOnlyCommandsList:
  - /stop
 LimitedCreative: true
+ConsoleOnlyCommandMessage: "This command can only be run in the Leveryl Console."
 #### Send Leveryl Core's AntiCheat Messages to OPs
 TellOPsPlayerAntiCheatMessages: false
 

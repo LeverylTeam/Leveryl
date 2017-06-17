@@ -2075,11 +2075,18 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 
 					$ev = new PlayerCommandPreprocessEvent($this, $message);
-
+					
+					if($this->server->getLeverylConfigValue("ConsoleOnlyCommands")){
+						if(in_array(strtolower($ev->getMessage()), $this->server->getLeverylConfigValue("ConsoleOnlyCommandsList"))){
+							$ev->setCancelled();
+							$ev->getPlayer()->sendMessage(TextFormat::RED . $this->server->getLeverylConfigValue("ConsoleOnlyCommandMessage") . TextFormat::RESET);
+						}
+					}
+					
 					if(mb_strlen($ev->getMessage(), "UTF-8") > 320){
 						$ev->setCancelled();
 					}
-					$this->server->getPluginManager()->callEvent($ev);
+					$ev->call();
 
 					if($ev->isCancelled()){
 						break;
