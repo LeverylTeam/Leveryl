@@ -19,7 +19,7 @@
  *
  */
 
-namespace pocketmine\inventor;
+namespace pocketmine\inventory;
 
 use pocketmine\block\Block;
 use pocketmine\inventory\CustomInventory;
