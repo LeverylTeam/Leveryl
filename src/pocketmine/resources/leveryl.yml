@@ -22,11 +22,11 @@ PacketLogger: false
 
 # Administration Tools
 CommandLogger: true
-#### Setting the option below to "true" will allow ONLY the console can do /op and /deop
-ConsoleOnlyOPCommand: false
 ConsoleOnlyCommands: false
 ConsoleOnlyCommandsList:
  - /stop
+ - /op
+ - /deop
 LimitedCreative: true
 ConsoleOnlyCommandMessage: "This command can only be run in the Leveryl Console."
 #### Send Leveryl Core's AntiCheat Messages to OPs
