@@ -25,6 +25,7 @@ Code Syntax:
  - Strict types SHOULD be enabled on NEW files where it is sensible to do so.
 
 (Most of the rules are from PMMP's standards... xD)
+https://github.com/LeverylTeam/Leveryl/blob/master/assets/prjoke.jpg
 -->
 ## Introduction
 Description about the Pull Request
