@@ -1,4 +1,6 @@
-![Leveryl](https://github.com/LeverylTeam/Leveryl/blob/master/assets/banner.png)</br>
+<p align="center">
+  <img width="100%" height="100%" src="https://github.com/LeverylTeam/Leveryl/blob/master/assets/banner.png">
+</p>
 
 ## Warning: 32-Bit support is Deprecated. :(
 
