@@ -7,11 +7,11 @@ before_script:
  - pecl install channel://pecl.php.net/pthreads-3.1.6
  - pecl install channel://pecl.php.net/weakref-0.3.3
  - echo | pecl install channel://pecl.php.net/yaml-2.0.0
- - chmod +x ./tests/travis.sh
+ - chmod +x ./tests/test.sh
  - chmod +x ./tests/lint.sh
 
 script:
- - ./tests/travis.sh
+ - ./tests/test.sh
 
 notifications:
  email: false
