@@ -2,7 +2,7 @@
 
 /**
  *
- *  ____       _                          _
+ *  ____	   _						  _
  * |  _ \ _ __(_)___ _ __ ___   __ _ _ __(_)_ __   ___
  * | |_) | '__| / __| '_ ` _ \ / _` | '__| | '_ \ / _ \
  * |  __/| |  | \__ \ | | | | | (_| | |  | | | | |  __/
@@ -26,14 +26,14 @@ use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
 
 class WindowHolder extends Vector3 implements InventoryHolder{
-    protected $inventory;
+	protected $inventory;
 
-    public function __construct($x, $y, $z, Inventory $inventory){
-        parent::__construct($x, $y, $z);
-        $this->inventory = $inventory;
-    }
+	public function __construct($x, $y, $z, Inventory $inventory){
+		parent::__construct($x, $y, $z);
+		$this->inventory = $inventory;
+	}
 
-    public function getInventory(){
-        return $this->inventory;
-    }
+	public function getInventory(){
+		return $this->inventory;
+	}
 }
