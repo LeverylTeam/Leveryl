@@ -12,9 +12,10 @@ This spoon is based off of PMMP (For Stability)
 # Plugin Compatibility:
 Leveryl is Developed to support **BOTH** Tesseract and PocketMine-MP Plugins! :D
 
-# Builds:
+# Builds & Gitter Chat:
 #### CircleCI Build Status: [![CircleCI](https://circleci.com/gh/LeverylTeam/Leveryl.svg?style=svg)](https://circleci.com/gh/LeverylTeam/Leveryl)
 #### TravisCI Build Status: [![TravisCI](https://travis-ci.org/LeverylTeam/Leveryl.svg?branch=master)](https://travis-ci.org/LeverylTeam/Leveryl)
+#### Gitter Chat: [![Gitter](https://badges.gitter.im/leveryl/leveryl.svg)](https://gitter.im/leveryl/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=pr-badge)
 
 # Windows & Linux Installation:
 Read [this](https://github.com/LeverylTeam/Leveryl/wiki/Installation) page on our [Wiki](https://github.com/LeverylTeam/Leveryl/wiki/)... ;)
