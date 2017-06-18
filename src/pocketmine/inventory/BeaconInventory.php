@@ -2,12 +2,12 @@
 
 /*
  *
- *    _______                                _
- *   |__   __|                              | |
- *      | | ___  ___ ___  ___ _ __ __ _  ___| |_
- *      | |/ _ \/ __/ __|/ _ \  __/ _` |/ __| __|
- *      | |  __/\__ \__ \  __/ | | (_| | (__| |_
- *      |_|\___||___/___/\___|_|  \__,_|\___|\__|
+ *	_______								_
+ *   |__   __|							  | |
+ *	  | | ___  ___ ___  ___ _ __ __ _  ___| |_
+ *	  | |/ _ \/ __/ __|/ _ \  __/ _` |/ __| __|
+ *	  | |  __/\__ \__ \  __/ | | (_| | (__| |_
+ *	  |_|\___||___/___/\___|_|  \__,_|\___|\__|
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,11 +27,11 @@ use pocketmine\tile\Beacon;
 
 class BeaconInventory extends ContainerInventory {
 
-    public function __construct(Beacon $tile) {
-        parent::__construct($tile, InventoryType::get(InventoryType::BEACON));
-    }
+	public function __construct(Beacon $tile) {
+		parent::__construct($tile, InventoryType::get(InventoryType::BEACON));
+	}
 
-    public function getHolder() {
-        return $this->holder;
-    }
+	public function getHolder() {
+		return $this->holder;
+	}
 }

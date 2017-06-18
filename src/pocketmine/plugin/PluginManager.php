@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -93,7 +93,7 @@ class PluginManager{
 	public static $useTimings = false;
 
 	/**
-	 * @param Server           $server
+	 * @param Server		   $server
 	 * @param SimpleCommandMap $commandMap
 	 */
 	public function __construct(Server $server, SimpleCommandMap $commandMap){
@@ -139,7 +139,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param string         $path
+	 * @param string		 $path
 	 * @param PluginLoader[] $loaders
 	 *
 	 * @return Plugin|null
@@ -216,63 +216,63 @@ class PluginManager{
 								$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.restrictedName"]));
 								continue;
 							}elseif(strpos(strtolower($name), " ") !== false){
-                                $this->server->getLogger()->warning($this->server->getLanguage()->translateString("pocketmine.plugin.spacesDiscouraged", [$name]));
-                            }elseif(stripos(strtolower($name), "devtools") !== false){
-                                if($this->server->getLeverylConfigValue("DevTools", true)){
-                                    $this->server->getLogger()->warning("Built-In DevTools is already enabled!");
-                                    continue;
-                                }
-                            }elseif(stripos(strtolower($name), "folderpluginloader") !== false){
-                                if($this->server->getLeverylConfigValue("FolderPluginLoader", true)){
-                                    $this->server->getLogger()->warning("Built-In FolderPluginLoader is already enabled!");
-                                    continue;
-                                }
-                            }elseif(stripos(strtolower($name), "packetlogger") !== false){
-                                if($this->server->getLeverylConfigValue("PacketLogger", true)){
-                                    $this->server->getLogger()->warning("Built-In PacketLogger is already enabled!");
-                                    continue;
-                                }
-                            }
+								$this->server->getLogger()->warning($this->server->getLanguage()->translateString("pocketmine.plugin.spacesDiscouraged", [$name]));
+							}elseif(stripos(strtolower($name), "devtools") !== false){
+								if($this->server->getLeverylConfigValue("DevTools", true)){
+									$this->server->getLogger()->warning("Built-In DevTools is already enabled!");
+									continue;
+								}
+							}elseif(stripos(strtolower($name), "folderpluginloader") !== false){
+								if($this->server->getLeverylConfigValue("FolderPluginLoader", true)){
+									$this->server->getLogger()->warning("Built-In FolderPluginLoader is already enabled!");
+									continue;
+								}
+							}elseif(stripos(strtolower($name), "packetlogger") !== false){
+								if($this->server->getLeverylConfigValue("PacketLogger", true)){
+									$this->server->getLogger()->warning("Built-In PacketLogger is already enabled!");
+									continue;
+								}
+							}
 
 							if(isset($plugins[$name]) or $this->getPlugin($name) instanceof Plugin){
 								$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.duplicateError", [$name]));
 								continue;
 							}
-                            if($this->server->getLeverylConfigValue("DisablePluginAPIVersionCheck", false)) {
-                                $compatible = false;
-                                //Check multiple dependencies
-                                foreach ($description->getCompatibleApis() as $version) {
-                                    //Format: majorVersion.minorVersion.patch (3.0.0)
-                                    //    or: majorVersion.minorVersion.patch-devBuild (3.0.0-alpha1)
-                                    if ($version !== $this->server->getApiVersion()) {
-                                        $pluginApi = array_pad(explode("-", $version), 2, ""); //0 = version, 1 = suffix (optional)
-                                        $serverApi = array_pad(explode("-", $this->server->getApiVersion()), 2, "");
+							if($this->server->getLeverylConfigValue("DisablePluginAPIVersionCheck", false)) {
+								$compatible = false;
+								//Check multiple dependencies
+								foreach ($description->getCompatibleApis() as $version) {
+									//Format: majorVersion.minorVersion.patch (3.0.0)
+									//	or: majorVersion.minorVersion.patch-devBuild (3.0.0-alpha1)
+									if ($version !== $this->server->getApiVersion()) {
+										$pluginApi = array_pad(explode("-", $version), 2, ""); //0 = version, 1 = suffix (optional)
+										$serverApi = array_pad(explode("-", $this->server->getApiVersion()), 2, "");
 
-                                        if (strtoupper($pluginApi[1]) !== strtoupper($serverApi[1])) { //Different release phase (alpha vs. beta) or phase build (alpha.1 vs alpha.2)
-                                            continue;
-                                        }
+										if (strtoupper($pluginApi[1]) !== strtoupper($serverApi[1])) { //Different release phase (alpha vs. beta) or phase build (alpha.1 vs alpha.2)
+											continue;
+										}
 
-                                        $pluginNumbers = array_map("intval", explode(".", $pluginApi[0]));
-                                        $serverNumbers = array_map("intval", explode(".", $serverApi[0]));
+										$pluginNumbers = array_map("intval", explode(".", $pluginApi[0]));
+										$serverNumbers = array_map("intval", explode(".", $serverApi[0]));
 
-                                        if ($pluginNumbers[0] !== $serverNumbers[0]) { //Completely different API version
-                                            continue;
-                                        }
+										if ($pluginNumbers[0] !== $serverNumbers[0]) { //Completely different API version
+											continue;
+										}
 
-                                        if ($pluginNumbers[1] > $serverNumbers[1]) { //If the plugin requires new API features, being backwards compatible
-                                            continue;
-                                        }
-                                    }
+										if ($pluginNumbers[1] > $serverNumbers[1]) { //If the plugin requires new API features, being backwards compatible
+											continue;
+										}
+									}
 
-                                    $compatible = true;
-                                    break;
-                                }
+									$compatible = true;
+									break;
+								}
 
-                                if ($compatible === false) {
-                                    $this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.incompatibleAPI"]));
-                                    continue;
-                                }
-                            }
+								if ($compatible === false) {
+									$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.incompatibleAPI"]));
+									continue;
+								}
+							}
 
 							$plugins[$name] = $file;
 
@@ -461,7 +461,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param string      $permission
+	 * @param string	  $permission
 	 * @param Permissible $permissible
 	 */
 	public function subscribeToPermission($permission, Permissible $permissible){
@@ -472,7 +472,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param string      $permission
+	 * @param string	  $permission
 	 * @param Permissible $permissible
 	 */
 	public function unsubscribeFromPermission($permission, Permissible $permissible){
@@ -510,7 +510,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param bool        $op
+	 * @param bool		$op
 	 * @param Permissible $permissible
 	 */
 	public function subscribeToDefaultPerms($op, Permissible $permissible){
@@ -522,7 +522,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param bool        $op
+	 * @param bool		$op
 	 * @param Permissible $permissible
 	 */
 	public function unsubscribeFromDefaultPerms($op, Permissible $permissible){
@@ -767,12 +767,12 @@ class PluginManager{
 	}
 
 	/**
-	 * @param string        $event Class name that extends Event
-	 * @param Listener      $listener
-	 * @param int           $priority
+	 * @param string		$event Class name that extends Event
+	 * @param Listener	  $listener
+	 * @param int		   $priority
 	 * @param EventExecutor $executor
-	 * @param Plugin        $plugin
-	 * @param bool          $ignoreCancelled
+	 * @param Plugin		$plugin
+	 * @param bool		  $ignoreCancelled
 	 *
 	 * @throws PluginException
 	 */

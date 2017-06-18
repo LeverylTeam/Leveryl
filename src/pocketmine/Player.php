@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -323,12 +323,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	private $batchedPackets = [];
 
-    // Client Information
-    public $deviceos;
-    public $devicemodel;
-    public $uiprofile;
-    public $guiscale;
-    public $controls;
+	// Client Information
+	public $deviceos;
+	public $devicemodel;
+	public $uiprofile;
+	public $guiscale;
+	public $controls;
 
 	/** @var PermissibleBase */
 	private $perm = null;
@@ -645,9 +645,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * @param SourceInterface $interface
-	 * @param null            $clientID
-	 * @param string          $ip
-	 * @param int             $port
+	 * @param null			$clientID
+	 * @param string		  $ip
+	 * @param int			 $port
 	 */
 	public function __construct(SourceInterface $interface, $clientID, $ip, $port){
 		$this->interface = $interface;
@@ -1062,7 +1062,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Sends an ordered DataPacket to the send buffer
 	 *
 	 * @param DataPacket $packet
-	 * @param bool       $needACK
+	 * @param bool	   $needACK
 	 *
 	 * @return int|bool
 	 */
@@ -1100,7 +1100,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * @param DataPacket $packet
-	 * @param bool       $needACK
+	 * @param bool	   $needACK
 	 *
 	 * @return bool|int
 	 */
@@ -2877,8 +2877,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		if($this->gamemode === self::SPECTATOR){
-		    return false;
-        }
+			return false;
+		}
 
 		$item = $this->inventory->getItemInHand();
 		$ev = new PlayerDropItemEvent($this, $item);
@@ -3296,7 +3296,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$tile = $this->level->getTile($this->temporalVector->setComponents($packet->x, $packet->y, $packet->z));
 		if($tile instanceof ItemFrame){
 			$ev = new PlayerInteractEvent($this, $this->inventory->getItemInHand(), $tile->getBlock(), 5 - $tile->getBlock()->getDamage(), PlayerInteractEvent::LEFT_CLICK_BLOCK);
-            ($ev = new ItemFrameDropItemEvent($this, $tile->getBlock(), $tile, $tile->getItem()))->call();
+			($ev = new ItemFrameDropItemEvent($this, $tile->getBlock(), $tile, $tile->getItem()))->call();
 			$this->server->getPluginManager()->callEvent($ev);
 
 			if($this->isSpectator()){
@@ -3441,13 +3441,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->server->getLogger()->debug("Unhandled " . $packet->getName() . " received from " . $this->getName() . ": 0x" . bin2hex($packet->buffer));
 		}
 
-        if ($packet instanceof LoginPacket) {
-            $this->deviceos = $packet->deviceos;
-            $this->devicemodel = $packet->devicemodel;
-            $this->uiprofile = $packet->uiprofile;
-            $this->guiscale = $packet->guiscale;
-            $this->controls = $packet->controls;
-        }
+		if ($packet instanceof LoginPacket) {
+			$this->deviceos = $packet->deviceos;
+			$this->devicemodel = $packet->devicemodel;
+			$this->uiprofile = $packet->uiprofile;
+			$this->guiscale = $packet->guiscale;
+			$this->controls = $packet->controls;
+		}
 
 		$timings->stopTiming();
 	}
@@ -3456,7 +3456,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Transfers a player to another server.
 	 *
 	 * @param string $address The IP address or hostname of the destination server
-	 * @param int    $port    The destination port, defaults to 19132
+	 * @param int	$port	The destination port, defaults to 19132
 	 * @param string $message Message to show in the console when closing the player
 	 *
 	 * @return bool if transfer was successful.
@@ -3514,9 +3514,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 *
 	 * @param string $title
 	 * @param string $subtitle
-	 * @param int    $fadeIn Duration in ticks for fade-in. If -1 is given, client-sided defaults will be used.
-	 * @param int    $stay Duration in ticks to stay on screen for
-	 * @param int    $fadeOut Duration in ticks for fade-out.
+	 * @param int	$fadeIn Duration in ticks for fade-in. If -1 is given, client-sided defaults will be used.
+	 * @param int	$stay Duration in ticks to stay on screen for
+	 * @param int	$fadeOut Duration in ticks for fade-out.
 	 */
 	public function addTitle(string $title, string $subtitle = "", int $fadeIn = -1, int $stay = -1, int $fadeOut = -1){
 		$this->setTitleDuration($fadeIn, $stay, $fadeOut);
@@ -4067,8 +4067,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * @param Vector3|Position|Location $pos
-	 * @param float                     $yaw
-	 * @param float                     $pitch
+	 * @param float					 $yaw
+	 * @param float					 $pitch
 	 *
 	 * @return bool
 	 */
@@ -4149,7 +4149,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Returns the created/existing window id
 	 *
 	 * @param Inventory $inventory
-	 * @param int       $forceId
+	 * @param int	   $forceId
 	 *
 	 * @return int
 	 */
@@ -4229,61 +4229,61 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return $this->isConnected();
 	}
 
-    // Thanks to @Matthww for the lists (OS, GUIScale, GUIMode, Controls). Appreciate it bruh. ;)
-    public function getDeviceOS($mode = "int")
-    {
-        $OS = ["Unknown", "Android", "iOS", "OSX", "FireOS", "GearVR", "HoloLens", "Windows 10", "Windows", "Dedicated"];
-        if($mode === "int"){
-            return $this->deviceos;
-        } elseif($mode === "string"){
-            return $OS[$this->deviceos];
-        } else {
-            $this->server->getLogger()->warning("getDeviceOS() mode ERROR! There are only two modes available: (\"string\", \"int\")... Falling back to integer mode.");
-            return $this->deviceos;
-        }
-    }
+	// Thanks to @Matthww for the lists (OS, GUIScale, GUIMode, Controls). Appreciate it bruh. ;)
+	public function getDeviceOS($mode = "int")
+	{
+		$OS = ["Unknown", "Android", "iOS", "OSX", "FireOS", "GearVR", "HoloLens", "Windows 10", "Windows", "Dedicated"];
+		if($mode === "int"){
+			return $this->deviceos;
+		} elseif($mode === "string"){
+			return $OS[$this->deviceos];
+		} else {
+			$this->server->getLogger()->warning("getDeviceOS() mode ERROR! There are only two modes available: (\"string\", \"int\")... Falling back to integer mode.");
+			return $this->deviceos;
+		}
+	}
 
-    public function getDeviceModel(): string
-    {
-        return $this->devicemodel;
-    }
+	public function getDeviceModel(): string
+	{
+		return $this->devicemodel;
+	}
 
-    public function getGUIMode($mode = "string")
-    {
-        $UI = ["Classic UI", "Pocket UI"];
-        if($mode === "string") {
-            return $UI[$this->uiprofile];
-        } elseif($mode === "int") {
-            return $this->uiprofile;
-        } else {
-            $this->server->getLogger()->warning("getGUIMode() mode ERROR! There are only two modes available: (\"string\", \"int\")... Falling back to string mode.");
-            return $this->deviceos;
-        }
-    }
+	public function getGUIMode($mode = "string")
+	{
+		$UI = ["Classic UI", "Pocket UI"];
+		if($mode === "string") {
+			return $UI[$this->uiprofile];
+		} elseif($mode === "int") {
+			return $this->uiprofile;
+		} else {
+			$this->server->getLogger()->warning("getGUIMode() mode ERROR! There are only two modes available: (\"string\", \"int\")... Falling back to string mode.");
+			return $this->deviceos;
+		}
+	}
 
-    public function getControls($mode = "string")
-    {
-        $Controls = ["Unknown", "Mouse", "Touch", "Controller"];
-        if($mode === "string") {
-            return $Controls[$this->controls];
-        } elseif($mode === "int") {
-            return $this->controls;
-        } else {
-            $this->server->getLogger()->warning("getGUIMode() mode ERROR! There are only two modes available: (\"string\", \"int\")... Falling back to string mode.");
-            return $Controls[$this->controls];
-        }
-    }
+	public function getControls($mode = "string")
+	{
+		$Controls = ["Unknown", "Mouse", "Touch", "Controller"];
+		if($mode === "string") {
+			return $Controls[$this->controls];
+		} elseif($mode === "int") {
+			return $this->controls;
+		} else {
+			$this->server->getLogger()->warning("getGUIMode() mode ERROR! There are only two modes available: (\"string\", \"int\")... Falling back to string mode.");
+			return $Controls[$this->controls];
+		}
+	}
 
-    public function getGUIScale($mode = "string")
-    {
-        $GUIScale = [-2 => "Minimum", -1 => "Medium", 0 => "Maximum"];
-        if ($mode === "string") {
-            return $GUIScale[$this->guiscale];
-        } elseif ($mode === "int") {
-            return $this->guiscale;
-        } else {
-            $this->server->getLogger()->warning("getGUIScale() mode ERROR! There are only two modes available: (\"string\", \"int\")... Falling back to string mode.");
-            return $GUIScale[$this->guiscale];
-        }
-    }
+	public function getGUIScale($mode = "string")
+	{
+		$GUIScale = [-2 => "Minimum", -1 => "Medium", 0 => "Maximum"];
+		if ($mode === "string") {
+			return $GUIScale[$this->guiscale];
+		} elseif ($mode === "int") {
+			return $this->guiscale;
+		} else {
+			$this->server->getLogger()->warning("getGUIScale() mode ERROR! There are only two modes available: (\"string\", \"int\")... Falling back to string mode.");
+			return $GUIScale[$this->guiscale];
+		}
+	}
 }

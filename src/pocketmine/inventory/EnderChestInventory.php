@@ -2,12 +2,12 @@
 
 /*
  *
- *    _______                                _
- *   |__   __|                              | |
- *      | | ___  ___ ___  ___ _ __ __ _  ___| |_
- *      | |/ _ \/ __/ __|/ _ \  __/ _` |/ __| __|
- *      | |  __/\__ \__ \  __/ | | (_| | (__| |_
- *      |_|\___||___/___/\___|_|  \__,_|\___|\__|
+ *	_______								_
+ *   |__   __|							  | |
+ *	  | | ___  ___ ___  ___ _ __ __ _  ___| |_
+ *	  | |/ _ \/ __/ __|/ _ \  __/ _` |/ __| __|
+ *	  | |  __/\__ \__ \  __/ | | (_| | (__| |_
+ *	  |_|\___||___/___/\___|_|  \__,_|\___|\__|
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,69 +33,69 @@ use pocketmine\Player;
 
 class EnderChestInventory extends ContainerInventory {
 
-    private $owner;
+	private $owner;
 
-    public function __construct(Human $owner, $contents = null) {
-        $this->owner = $owner;
-        parent::__construct(new FakeBlockMenu($this, $owner), InventoryType::get(InventoryType::ENDER_CHEST));
+	public function __construct(Human $owner, $contents = null) {
+		$this->owner = $owner;
+		parent::__construct(new FakeBlockMenu($this, $owner), InventoryType::get(InventoryType::ENDER_CHEST));
 
-        if ($contents !== null) {
-            if ($contents instanceof ListTag) {
-                foreach ($contents as $item) {
-                    $this->setItem($item["Slot"], Item::nbtDeserialize($item));
-                }
-            } else {
-                throw new \InvalidArgumentException("Expecting ListTag, received " . gettype($contents));
-            }
-        }
-    }
+		if ($contents !== null) {
+			if ($contents instanceof ListTag) {
+				foreach ($contents as $item) {
+					$this->setItem($item["Slot"], Item::nbtDeserialize($item));
+				}
+			} else {
+				throw new \InvalidArgumentException("Expecting ListTag, received " . gettype($contents));
+			}
+		}
+	}
 
-    public function getOwner() {
-        return $this->owner;
-    }
+	public function getOwner() {
+		return $this->owner;
+	}
 
-    public function openAt(Position $pos) {
-        if($this->owner instanceof Player and $this->owner instanceof Human) {
-            $this->owner->setComponents($pos->x, $pos->y, $pos->z);
-            $this->owner->setLevel($pos->getLevel());
-            $this->owner->addWindow($this);
-        }
-    }
+	public function openAt(Position $pos) {
+		if($this->owner instanceof Player and $this->owner instanceof Human) {
+			$this->owner->setComponents($pos->x, $pos->y, $pos->z);
+			$this->owner->setLevel($pos->getLevel());
+			$this->owner->addWindow($this);
+		}
+	}
 
-    public function getHolder() {
-        return $this->holder;
-    }
+	public function getHolder() {
+		return $this->holder;
+	}
 
-    public function onOpen(Player $who) {
-        parent::onOpen($who);
+	public function onOpen(Player $who) {
+		parent::onOpen($who);
 
-        if (count($this->getViewers()) === 1) {
-            $pk = new BlockEventPacket();
-            $pk->x = $this->holder->getX();
-            $pk->y = $this->holder->getY();
-            $pk->z = $this->holder->getZ();
-            $pk->case1 = 1;
-            $pk->case2 = 2;
-            if (($level = $this->holder->getLevel()) instanceof Level) {
-                $level->addChunkPacket($this->holder->getX() >> 4, $this->holder->getZ() >> 4, $pk);
-            }
-        }
-    }
+		if (count($this->getViewers()) === 1) {
+			$pk = new BlockEventPacket();
+			$pk->x = $this->holder->getX();
+			$pk->y = $this->holder->getY();
+			$pk->z = $this->holder->getZ();
+			$pk->case1 = 1;
+			$pk->case2 = 2;
+			if (($level = $this->holder->getLevel()) instanceof Level) {
+				$level->addChunkPacket($this->holder->getX() >> 4, $this->holder->getZ() >> 4, $pk);
+			}
+		}
+	}
 
-    public function onClose(Player $who) {
-        if (count($this->getViewers()) === 1) {
-            $pk = new BlockEventPacket();
-            $pk->x = $this->holder->getX();
-            $pk->y = $this->holder->getY();
-            $pk->z = $this->holder->getZ();
-            $pk->case1 = 1;
-            $pk->case2 = 0;
-            if (($level = $this->holder->getLevel()) instanceof Level) {
-                $level->addChunkPacket($this->holder->getX() >> 4, $this->holder->getZ() >> 4, $pk);
-            }
-        }
+	public function onClose(Player $who) {
+		if (count($this->getViewers()) === 1) {
+			$pk = new BlockEventPacket();
+			$pk->x = $this->holder->getX();
+			$pk->y = $this->holder->getY();
+			$pk->z = $this->holder->getZ();
+			$pk->case1 = 1;
+			$pk->case2 = 0;
+			if (($level = $this->holder->getLevel()) instanceof Level) {
+				$level->addChunkPacket($this->holder->getX() >> 4, $this->holder->getZ() >> 4, $pk);
+			}
+		}
 
-        parent::onClose($who);
-    }
+		parent::onClose($who);
+	}
 
 } 

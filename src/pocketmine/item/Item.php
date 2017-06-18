@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -312,9 +312,9 @@ class Item implements ItemIds, \JsonSerializable{
 	/**
 	 * Returns an instance of the Item with the specified id, meta, count and NBT.
 	 *
-	 * @param int                $id
-	 * @param int                $meta
-	 * @param int                $count
+	 * @param int				$id
+	 * @param int				$meta
+	 * @param int				$count
 	 * @param CompoundTag|string $tags
 	 *
 	 * @return Item
@@ -878,19 +878,19 @@ class Item implements ItemIds, \JsonSerializable{
 		return false;
 	}
 
-    /**
-     * @return bool
-     */
-    public function isTool(){
-        return false;
-    }
+	/**
+	 * @return bool
+	 */
+	public function isTool(){
+		return false;
+	}
 
-    /**
-     * @return bool
-     */
-    public function isArmor(){
-        return false;
-    }
+	/**
+	 * @return bool
+	 */
+	public function isArmor(){
+		return false;
+	}
 
 	/**
 	 * @return int|bool
@@ -1008,7 +1008,7 @@ class Item implements ItemIds, \JsonSerializable{
 	/**
 	 * Serializes the item to an NBT CompoundTag
 	 *
-	 * @param int    $slot optional, the inventory slot of the item
+	 * @param int	$slot optional, the inventory slot of the item
 	 * @param string $tagName the name to assign to the CompoundTag object
 	 *
 	 * @return CompoundTag
