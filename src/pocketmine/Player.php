@@ -2891,7 +2891,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
 		$motion = $this->getDirectionVector()->multiply(0.4);
 
-		$this->level->dropItem($this->add(0, 1.3, 0), $item, $motion, 40);
+		$this->level->dropItem($this->add(0, 1.3, 0), $ev->getItem(), $motion, 40);
 
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 
