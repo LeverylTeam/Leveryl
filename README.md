@@ -1,16 +1,29 @@
 <p align="center">
-  <img width="100%" height="100%" src="https://github.com/LeverylTeam/Leveryl/blob/master/assets/banner.png">
+  <img src="https://github.com/LeverylTeam/Leveryl/blob/master/assets/banner.png">
 </p>
 
 ## Warning: 32-Bit support is Deprecated!!!
 
 # Introduction:
-This is an Advanced Server Software to hopefully Replace Tesseract.  
+This is an Advanced & Feature Rich Server Software to hopefully Replace Tesseract.  
 (They're dead. And this is **NOT** supposed to be taken out of context.)  
 This spoon is based off of PMMP (For Stability)  
 
-# Plugin Compatibility:
-Leveryl is Developed to support **BOTH** Tesseract and PocketMine-MP Plugins! :D
+# Features:
+- [X] **Full Tesseract & PMMP PluginAPI Compatibility**
+- [X] **CustomPotions**
+- [X] **CustomEnchants**
+- [ ] 1.0.1 Blocks & Items
+- [X] **CommandLogger**
+- [X] **Toggleable PluginAPI Version Checking**
+- [ ] Fully Functional Nether
+- [X] **Toggleable Built-In Devtools & FolderPluginLoader**
+- [ ] Toggleable PacketLogger (May be removed in the future)
+- [X] **Console Only Commands**
+- [X] **Limited Creative**
+- [X] **Weather**  
+
+***Other List Entries are on "leveryl.yml"....***
 
 # Builds & Gitter Chat:
 #### CircleCI Build Status: [![CircleCI](https://circleci.com/gh/LeverylTeam/Leveryl.svg?style=svg)](https://circleci.com/gh/LeverylTeam/Leveryl)
