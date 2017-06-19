@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -40,7 +40,6 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\Tag;
 use pocketmine\Player;
 use pocketmine\Server;
-use pocketmine\utils\Binary;
 use pocketmine\utils\Config;
 
 class Item implements ItemIds, \JsonSerializable{
@@ -313,9 +312,9 @@ class Item implements ItemIds, \JsonSerializable{
 	/**
 	 * Returns an instance of the Item with the specified id, meta, count and NBT.
 	 *
-	 * @param int                $id
-	 * @param int                $meta
-	 * @param int                $count
+	 * @param int				$id
+	 * @param int				$meta
+	 * @param int				$count
 	 * @param CompoundTag|string $tags
 	 *
 	 * @return Item
@@ -879,19 +878,19 @@ class Item implements ItemIds, \JsonSerializable{
 		return false;
 	}
 
-    /**
-     * @return bool
-     */
-    public function isTool(){
-        return false;
-    }
+	/**
+	 * @return bool
+	 */
+	public function isTool(){
+		return false;
+	}
 
-    /**
-     * @return bool
-     */
-    public function isArmor(){
-        return false;
-    }
+	/**
+	 * @return bool
+	 */
+	public function isArmor(){
+		return false;
+	}
 
 	/**
 	 * @return int|bool
@@ -1009,7 +1008,7 @@ class Item implements ItemIds, \JsonSerializable{
 	/**
 	 * Serializes the item to an NBT CompoundTag
 	 *
-	 * @param int    $slot optional, the inventory slot of the item
+	 * @param int	$slot optional, the inventory slot of the item
 	 * @param string $tagName the name to assign to the CompoundTag object
 	 *
 	 * @return CompoundTag
@@ -1017,7 +1016,7 @@ class Item implements ItemIds, \JsonSerializable{
 	public function nbtSerialize(int $slot = -1, string $tagName = "") : CompoundTag{
 		$tag = new CompoundTag($tagName, [
 			"id" => new ShortTag("id", $this->id),
-            "Count" => new ByteTag("Count", Binary::signByte($this->count)),
+			"Count" => new ByteTag("Count", $this->count),
 			"Damage" => new ShortTag("Damage", $this->meta),
 		]);
 
@@ -1045,15 +1044,12 @@ class Item implements ItemIds, \JsonSerializable{
 			return Item::get(0);
 		}
 
-        $count = Binary::unsignByte($tag->Count->getValue());
-        $meta = isset($tag->Damage) ? $tag->Damage->getValue() : 0;
-
 		if($tag->id instanceof ShortTag){
-            $item = Item::get($tag->id->getValue(), $meta, $count);
+			$item = Item::get($tag->id->getValue(), !isset($tag->Damage) ? 0 : $tag->Damage->getValue(), $tag->Count->getValue());
 		}elseif($tag->id instanceof StringTag){ //PC item save format
 			$item = Item::fromString($tag->id->getValue());
-            $item->setDamage($meta);
-            $item->setCount($count);
+			$item->setDamage(!isset($tag->Damage) ? 0 : $tag->Damage->getValue());
+			$item->setCount($tag->Count->getValue());
 		}else{
 			throw new \InvalidArgumentException("Item CompoundTag ID must be an instance of StringTag or ShortTag, " . get_class($tag->id) . " given");
 		}

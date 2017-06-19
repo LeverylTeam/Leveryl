@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -152,7 +152,7 @@ class Server{
 	 *
 	 * @var int
 	 */
-	private $tickCounter = 0;
+	private $tickCounter;
 	private $nextTick = 0;
 	private $tickAverage = [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20];
 	private $useAverage = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -735,7 +735,7 @@ class Server{
 			//new IntTag("SpawnZ", (int) $spawn->z),
 			//new ByteTag("SpawnForced", 1), //TODO
 			new ListTag("Inventory", []),
-            new ListTag("EnderChestInventory", []),
+			new ListTag("EnderChestInventory", []),
 			new CompoundTag("Achievements", []),
 			new IntTag("playerGameType", $this->getGamemode()),
 			new ListTag("Motion", [
@@ -756,7 +756,7 @@ class Server{
 		]);
 		$nbt->Pos->setTagType(NBT::TAG_Double);
 		$nbt->Inventory->setTagType(NBT::TAG_Compound);
-        $nbt->EnderChestInventory->setTagType(NBT::TAG_Compound);
+		$nbt->EnderChestInventory->setTagType(NBT::TAG_Compound);
 		$nbt->Motion->setTagType(NBT::TAG_Double);
 		$nbt->Rotation->setTagType(NBT::TAG_Float);
 
@@ -765,9 +765,9 @@ class Server{
 	}
 
 	/**
-	 * @param string      $name
+	 * @param string	  $name
 	 * @param CompoundTag $nbtTag
-	 * @param bool        $async
+	 * @param bool		$async
 	 */
 	public function saveOfflinePlayerData(string $name, CompoundTag $nbtTag, bool $async = false){
 		$ev = new PlayerDataSaveEvent($nbtTag, $name);
@@ -1014,10 +1014,10 @@ class Server{
 	/**
 	 * Generates a new level if it does not exists
 	 *
-	 * @param string      $name
-	 * @param int|null    $seed
+	 * @param string	  $name
+	 * @param int|null	$seed
 	 * @param string|null $generator Class name that extends pocketmine\level\generator\Noise
-	 * @param array       $options
+	 * @param array	   $options
 	 *
 	 * @return bool
 	 */
@@ -1112,7 +1112,7 @@ class Server{
 	 * Searches all levels for the entity with the specified ID.
 	 * Useful for tracking entities across multiple worlds without needing strong references.
 	 *
-	 * @param int        $entityId
+	 * @param int		$entityId
 	 * @param Level|null $expectedLevel Level to look in first for the target
 	 *
 	 * @return Entity|null
@@ -1138,11 +1138,11 @@ class Server{
 	}
 	
 	public function getLeverylConfigValue(string $key, $defaultValue = null){
-	    if($this->leverylconfig->exists($key)){
-	        return $this->leverylconfig->get($key);
-        } else {
-	        return $defaultValue;
-        }
+		if($this->leverylconfig->exists($key)){
+			return $this->leverylconfig->get($key);
+		} else {
+			return $defaultValue;
+		}
 	}
 	
 	/**
@@ -1189,7 +1189,7 @@ class Server{
 
 	/**
 	 * @param string $variable
-	 * @param int    $defaultValue
+	 * @param int	$defaultValue
 	 *
 	 * @return int
 	 */
@@ -1204,7 +1204,7 @@ class Server{
 
 	/**
 	 * @param string $variable
-	 * @param int    $value
+	 * @param int	$value
 	 */
 	public function setConfigInt(string $variable, int $value){
 		$this->properties->set($variable, (int) $value);
@@ -1246,6 +1246,11 @@ class Server{
 		$this->properties->set($variable, $value == true ? "1" : "0");
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return PluginIdentifiableCommand|null
+	 */
 	public function getPluginCommand(string $name){
 		if(($command = $this->commandMap->getCommand($name)) instanceof PluginIdentifiableCommand){
 			return $command;
@@ -1380,11 +1385,11 @@ class Server{
 	}
 
 	/**
-	 * @param \ClassLoader    $autoloader
+	 * @param \ClassLoader	$autoloader
 	 * @param \ThreadedLogger $logger
-	 * @param string          $filePath
-	 * @param string          $dataPath
-	 * @param string          $pluginPath
+	 * @param string		  $filePath
+	 * @param string		  $dataPath
+	 * @param string		  $pluginPath
 	 */
 	public function __construct(\ClassLoader $autoloader, \ThreadedLogger $logger, string $filePath, string $dataPath, string $pluginPath){
 		self::$instance = $this;
@@ -1407,21 +1412,13 @@ class Server{
 				mkdir($pluginPath, 0777);
 			}
 
-            if(!file_exists($dataPath . "plugins/Leveryl/")){
-			    if(file_exists(realpath($dataPath) . DIRECTORY_SEPARATOR . "leveryl.yml")) {
-                    if (($lconf = new Config(realpath($dataPath) . DIRECTORY_SEPARATOR . "leveryl.yml", Config::YAML, []))->get("DevTools")) {
-                        mkdir($dataPath . "plugins/Leveryl/", 0777);
-                    }
-                }
-            }
-
-            if(!file_exists($dataPath . "plugins/Leveryl/CommandLogger")){
-                if(file_exists(realpath($dataPath) . DIRECTORY_SEPARATOR . "leveryl.yml")) {
-                    if (($lconf = new Config(realpath($dataPath) . DIRECTORY_SEPARATOR . "leveryl.yml", Config::YAML, []))->get("CommandLogger")) {
-                        mkdir($dataPath . "plugins/Leveryl/CommandLogger", 0777);
-                    }
-                }
-            }
+			if(!file_exists($dataPath . "plugins/Leveryl/")){
+				if(file_exists(realpath($dataPath) . DIRECTORY_SEPARATOR . "leveryl.yml")) {
+					if (($lconf = new Config(realpath($dataPath) . DIRECTORY_SEPARATOR . "leveryl.yml", Config::YAML, []))->get("DevTools")) {
+						mkdir($dataPath . "plugins/Leveryl/", 0777);
+					}
+				}
+			}
 
 			$this->dataPath = realpath($dataPath) . DIRECTORY_SEPARATOR;
 			$this->pluginPath = realpath($pluginPath) . DIRECTORY_SEPARATOR;
@@ -1474,45 +1471,45 @@ class Server{
 			//$this->logger->info($this->getLanguage()->translateString("language.selected", [$this->getLanguage()->getName(), $this->getLanguage()->getLang()]));
 
 			$this->memoryManager = new MemoryManager($this);
-            $version = $this->getVersion();
-            $this->version = $version;
-            $code = $this->getCodename();
-            $mcpe = $this->getVersion();
-            $protocol = ProtocolInfo::CURRENT_PROTOCOL;
-            $api = $this->getApiVersion();
-            $ip = Utils::getIP();
-            $port = $this->getPort();
-            $query = $this->getIp();
-            $ssl = $this->isExtensionInstalled("OpenSSL");
-            $mode = $this->checkAuthentication();
-            $lang = $this->getProperty("settings.language", "eng");
-            $date = date("D, F d, Y, H:i T");
+			$version = $this->getVersion();
+			$this->version = $version;
+			$code = $this->getCodename();
+			$mcpe = $this->getVersion();
+			$protocol = ProtocolInfo::CURRENT_PROTOCOL;
+			$api = $this->getApiVersion();
+			$ip = Utils::getIP();
+			$port = $this->getPort();
+			$query = $this->getIp();
+			$ssl = $this->isExtensionInstalled("OpenSSL");
+			$mode = $this->checkAuthentication();
+			$lang = $this->getProperty("settings.language", "eng");
+			$date = date("D, F d, Y, H:i T");
 
-            if(\Phar::running(true) === ""){
-                $package = "src";
-            } else {
-                $package = "phar";
-            }
+			if(\Phar::running(true) === ""){
+				$package = "src";
+			} else {
+				$package = "phar";
+			}
 
-            $startupmsg = "
+			$startupmsg = "
 §l§f╔═════════════════════════════════════════════════╗  §r§f══ Loaded: Properties and Configuration ══
-§l§f║                                                 ║    §r§cDate: §d$date
-§l§f║§r§b          __                           _         §l§f║§r    §cVersion: §d$version §cCodename: §d$code
-§l§f║§r§b         / /  _____   _____ _ __ _   _| |        §l§f║§r    §cMCPE: §d$mcpe §cProtocol: §d$protocol
-§l§f║§r§b        / /  / _ \ \ / / _ \ '__| | | | |        §l§f║ §r   §cIP: §d$ip §cPort: §d$port
-§l§f║§r§b       / /__|  __/\ V /  __/ |  | |_| | |        §l§f║ §r   §cQuery: §d$query
-§l§f║§r§b       \____/\___| \_/ \___|_|   \__, |_|        §l§f║ §r   §cSSL Extension: §d$ssl
-§l§f║§r§b                               |____/            §l§f║ §r   §cAuthentication: §d$mode
-§l§f║                                                 ║   §r §r§cAPI Version: §d$api
+§l§f║												 ║	§r§cDate: §d$date
+§l§f║§r§b		  __						   _		 §l§f║§r	§cVersion: §d$version §cCodename: §d$code
+§l§f║§r§b		 / /  _____   _____ _ __ _   _| |		§l§f║§r	§cMCPE: §d$mcpe §cProtocol: §d$protocol
+§l§f║§r§b		/ /  / _ \ \ / / _ \ '__| | | | |		§l§f║ §r   §cIP: §d$ip §cPort: §d$port
+§l§f║§r§b	   / /__|  __/\ V /  __/ |  | |_| | |		§l§f║ §r   §cQuery: §d$query
+§l§f║§r§b	   \____/\___| \_/ \___|_|   \__, |_|		§l§f║ §r   §cSSL Extension: §d$ssl
+§l§f║§r§b							   |____/			§l§f║ §r   §cAuthentication: §d$mode
+§l§f║												 ║   §r §r§cAPI Version: §d$api
 §l§f║§r   §bRepository : §bGitHub.com/LeverylTeam/Leveryl  §l §f║  §r  §cLanguage: §d$lang
-§l§f║					          ║  §r  §cPackage: §d$package
+§l§f║							  ║  §r  §cPackage: §d$package
 §l§f╚═════════════════════════════════════════════════╝  §r§f══════════════════════════════════════════";
 
-            if($this->logger instanceof MainLogger){
-                $this->logger->directSend($startupmsg);
-            } else {
-                $this->logger->info($startupmsg);
-            }
+			if($this->logger instanceof MainLogger){
+				$this->logger->directSend($startupmsg);
+			} else {
+				$this->logger->info($startupmsg);
+			}
 			if(($poolSize = $this->getProperty("settings.async-workers", "auto")) === "auto"){
 				$poolSize = ServerScheduler::$WORKERS;
 				$processors = Utils::getCoreCount() - 2;
@@ -1620,8 +1617,8 @@ class Server{
 			$this->profilingTickRate = (float) $this->getProperty("settings.profile-report-trigger", 20);
 
 			if($this->getLeverylConfigValue("FolderPluginLoader", true)){
-			    $this->pluginManager->registerInterface(FolderPluginLoader::class);
-            }
+				$this->pluginManager->registerInterface(FolderPluginLoader::class);
+			}
 
 			$this->pluginManager->registerInterface(PharPluginLoader::class);
 			$this->pluginManager->registerInterface(ScriptPluginLoader::class);
@@ -1711,7 +1708,7 @@ class Server{
 
 	/**
 	 * @param TextContainer|string $message
-	 * @param Player[]             $recipients
+	 * @param Player[]			 $recipients
 	 *
 	 * @return int
 	 */
@@ -1782,9 +1779,9 @@ class Server{
 	/**
 	 * @param string $title
 	 * @param string $subtitle
-	 * @param int    $fadeIn Duration in ticks for fade-in. If -1 is given, client-sided defaults will be used.
-	 * @param int    $stay Duration in ticks to stay on screen for
-	 * @param int    $fadeOut Duration in ticks for fade-out.
+	 * @param int	$fadeIn Duration in ticks for fade-in. If -1 is given, client-sided defaults will be used.
+	 * @param int	$stay Duration in ticks to stay on screen for
+	 * @param int	$fadeOut Duration in ticks for fade-out.
 	 * @param Player[]|null $recipients
 	 *
 	 * @return int
@@ -1811,7 +1808,7 @@ class Server{
 
 	/**
 	 * @param TextContainer|string $message
-	 * @param string               $permissions
+	 * @param string			   $permissions
 	 *
 	 * @return int
 	 */
@@ -1848,10 +1845,10 @@ class Server{
 	/**
 	 * Broadcasts a list of packets in a batch to a list of players
 	 *
-	 * @param Player[]     $players
+	 * @param Player[]	 $players
 	 * @param DataPacket[] $packets
-	 * @param bool         $forceSync
-	 * @param bool         $immediate
+	 * @param bool		 $forceSync
+	 * @param bool		 $immediate
 	 */
 	public function batchPackets(array $players, array $packets, bool $forceSync = false, bool $immediate = false){
 		Timings::$playerNetworkTimer->startTiming();
@@ -1954,7 +1951,7 @@ class Server{
 	 * Executes a command from a CommandSender
 	 *
 	 * @param CommandSender $sender
-	 * @param string        $commandLine
+	 * @param string		$commandLine
 	 *
 	 * @return bool
 	 */
@@ -2121,31 +2118,31 @@ class Server{
 
 		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.startFinished", [round(microtime(true) - \pocketmine\START_TIME, 3)]));
 
-        switch (strtolower($this->getCodename())){
-            case "priv":
-            case "private": // Yes, There will be private versions of this spoon.... :P
-                $this->logger->notice("------------------ NOTICE ------------------");
-                $this->logger->notice("You're running a PRIVATE version of Leveryl.");
-                $this->logger->notice("------------------ NOTICE ------------------");
-                break;
-            case "developer":
-            case "dev":
-                $this->logger->notice("-------------------- NOTICE --------------------");
-                $this->logger->notice("You're running a DEVELOPER's version of Leveryl.");
-                $this->logger->notice("           DO NOT use in production             ");
-                $this->logger->notice("-------------------- NOTICE --------------------");
-                break;
-            case "experimental":
-            case "exp":
-                $this->logger->notice("--------------------- NOTICE ---------------------");
-                $this->logger->notice("You're running an EXPERIMENTAL version of Leveryl.");
-                $this->logger->notice("            DO NOT use in production              ");
-                $this->logger->notice("--------------------- NOTICE ---------------------");
-                break;
-            default:
-                // Do nothing.
-                break;
-        }
+		switch (strtolower($this->getCodename())){
+			case "priv":
+			case "private": // Yes, There will be private versions of this spoon.... :P
+				$this->logger->notice("------------------ NOTICE ------------------");
+				$this->logger->notice("You're running a PRIVATE version of Leveryl.");
+				$this->logger->notice("------------------ NOTICE ------------------");
+				break;
+			case "developer":
+			case "dev":
+				$this->logger->notice("-------------------- NOTICE --------------------");
+				$this->logger->notice("You're running a DEVELOPER's version of Leveryl.");
+				$this->logger->notice("		   DO NOT use in production			 ");
+				$this->logger->notice("-------------------- NOTICE --------------------");
+				break;
+			case "experimental":
+			case "exp":
+				$this->logger->notice("--------------------- NOTICE ---------------------");
+				$this->logger->notice("You're running an EXPERIMENTAL version of Leveryl.");
+				$this->logger->notice("			DO NOT use in production			  ");
+				$this->logger->notice("--------------------- NOTICE ---------------------");
+				break;
+			default:
+				// Do nothing.
+				break;
+		}
 
 		$this->tickProcessor();
 		$this->forceShutdown();
@@ -2241,7 +2238,7 @@ class Server{
 					"reportPaste" => base64_encode($dump->getEncodedData())
 				]);
 
-                if($reply !== false and ($data = json_decode($reply)) !== null and isset($data->crashId) and isset($data->crashUrl)){
+				if(($data = json_decode($reply)) !== false and isset($data->crashId)){
 					$reportId = $data->crashId;
 					$reportUrl = $data->crashUrl;
 					$this->logger->emergency($this->getLanguage()->translateString("pocketmine.crash.archive", [$reportUrl, $reportId]));
@@ -2451,7 +2448,7 @@ class Server{
 
 	/**
 	 * @param string $address
-	 * @param int    $port
+	 * @param int	$port
 	 * @param string $payload
 	 *
 	 * TODO: move this to Network
@@ -2584,31 +2581,31 @@ class Server{
 		throw new \BadMethodCallException("Cannot serialize Server instance");
 	}
 
-    public function isExtensionInstalled($type){
-        switch($type){
-            case 'OpenSSL':
-                if(!extension_loaded("openssl")){
-                    return "false";
-                } else {
-                    return "true";
-                    break;
-                }
-            default:
-                if(!extension_loaded($type)){
-                    return "false";
+	public function isExtensionInstalled($type){
+		switch($type){
+			case 'OpenSSL':
+				if(!extension_loaded("openssl")){
+					return "false";
+				} else {
+					return "true";
+					break;
+				}
+			default:
+				if(!extension_loaded($type)){
+					return "false";
 
-                } else {
-                    return "true";
-                }
-        }
-    }
+				} else {
+					return "true";
+				}
+		}
+	}
 
-    public function checkAuthentication(){
-        if($this->isExtensionInstalled("OpenSSL") == "false"){
-            return "offline mode/insecure";
+	public function checkAuthentication(){
+		if($this->isExtensionInstalled("OpenSSL") == "false"){
+			return "offline mode/insecure";
 
-        } else {
-            return "online mode/secure";
-        }
-    }
+		} else {
+			return "online mode/secure";
+		}
+	}
 }

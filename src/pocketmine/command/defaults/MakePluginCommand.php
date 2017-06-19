@@ -53,15 +53,15 @@ class MakePluginCommand extends VanillaCommand{
 		}
 		$description = $plugin->getDescription();
 
-        if(!($plugin->getPluginLoader() instanceof FolderPluginLoader)){
-            $sender->sendMessage("[LeverylDevTools] " . TextFormat::RED . "Plugin " . $description->getName() . " is not in folder structure.");
-            return true;
-        }
+		if(!($plugin->getPluginLoader() instanceof FolderPluginLoader)){
+			$sender->sendMessage("[LeverylDevTools] " . TextFormat::RED . "Plugin " . $description->getName() . " is not in folder structure.");
+			return true;
+		}
 
-        if($plugin->getPluginLoader() instanceof ZipPluginLoader){
-            $sender->sendMessage("[LeverylDevTools] " . TextFormat::RED . "Plugin " . $description->getName() . " is in ZIP structure.");
-            return true;
-        }
+		if($plugin->getPluginLoader() instanceof ZipPluginLoader){
+			$sender->sendMessage("[LeverylDevTools] " . TextFormat::RED . "Plugin " . $description->getName() . " is in ZIP structure.");
+			return true;
+		}
 
 		$pharPath = Server::getInstance()->getPluginPath() . DIRECTORY_SEPARATOR . "Leveryl" . DIRECTORY_SEPARATOR . $description->getName() . "_v" . $description->getVersion() . ".phar";
 		if(file_exists($pharPath)){

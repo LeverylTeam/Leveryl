@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -345,7 +345,7 @@ class LevelDB extends BaseLevelProvider{
 					$offset = 1; //Skip subchunk version byte
 					$subChunkData = $this->db->get($index . self::TAG_SUBCHUNK_PREFIX . chr($y));
 					$subChunks[$y] = new SubChunk(
-						substr($subChunkData, $offset,         4096), //block ids
+						substr($subChunkData, $offset,		 4096), //block ids
 						substr($subChunkData, $offset += 4096, 2048), //block meta
 						substr($subChunkData, $offset += 2048, 2048), //sky light
 						substr($subChunkData, $offset += 2048, 2048) //block light

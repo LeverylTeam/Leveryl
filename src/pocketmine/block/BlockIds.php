@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -147,9 +147,9 @@ interface BlockIds{
 
 	const END_PORTAL_FRAME = 120, END_PORTAL = 120;
 	const END_STONE = 121;
-    const END_STONE_BRICKS = 206;
-    const DRAGON_EGG = 122;
-    const END_ROD = 208;
+	const END_STONE_BRICKS = 206;
+	const DRAGON_EGG = 122;
+	const END_ROD = 208;
 
 	const REDSTONE_LAMP = 123, INACTIVE_REDSTONE_LAMP = 123;
 	const LIT_REDSTONE_LAMP = 124, ACTIVE_REDSTONE_LAMP = 124;
@@ -158,7 +158,7 @@ interface BlockIds{
 	const COCOA_BLOCK = 127, COCOA_PODS = 127;
 	const SANDSTONE_STAIRS = 128;
 	const EMERALD_ORE = 129;
-    const ENDER_CHEST = 130;
+	const ENDER_CHEST = 130;
 
 	const TRIPWIRE_HOOK = 131;
 	const TRIPWIRE = 132;

@@ -15,9 +15,10 @@ ConfigVersion: 1
 NetherEnabled: true
 NetherWorldName: "nether"
 
-# Developer Tools (DevTools Commands, FolderPluginLoader)
+# Developer Tools (DevTools Commands, FolderPluginLoader, PacketLogger)
 DevTools: true
 FolderPluginLoader: true
+PacketLogger: false
 
 # Administration Tools
 CommandLogger: true

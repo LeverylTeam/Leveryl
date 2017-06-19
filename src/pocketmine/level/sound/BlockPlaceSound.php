@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __    __  _____
+ *  _____   _____   __   _   _   _____  __	__  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,21 +26,21 @@ use pocketmine\network\mcpe\protocol\LevelEventPacket;
 
 class BlockPlaceSound extends GenericSound {
 
-    protected $data;
+	protected $data;
 
-    public function __construct(Block $b) {
-        parent::__construct($b, LevelEventPacket::EVENT_SOUND_BLOCK_PLACE);
-        $this->data = $b->getId();
-    }
+	public function __construct(Block $b) {
+		parent::__construct($b, LevelEventPacket::EVENT_SOUND_BLOCK_PLACE);
+		$this->data = $b->getId();
+	}
 
-    public function encode() {
-        $pk = new LevelEventPacket;
-        $pk->evid = $this->id;
-        $pk->x = $this->x;
-        $pk->y = $this->y;
-        $pk->z = $this->z;
-        $pk->data = $this->data;
+	public function encode() {
+		$pk = new LevelEventPacket;
+		$pk->evid = $this->id;
+		$pk->x = $this->x;
+		$pk->y = $this->y;
+		$pk->z = $this->z;
+		$pk->data = $this->data;
 
-        return $pk;
-    }
+		return $pk;
+	}
 }

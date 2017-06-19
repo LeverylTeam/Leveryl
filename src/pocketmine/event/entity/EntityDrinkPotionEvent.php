@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __    __  _____
+ *  _____   _____   __   _   _   _____  __	__  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,25 +28,25 @@ use pocketmine\item\Potion;
 
 class EntityDrinkPotionEvent extends EntityEvent implements Cancellable {
 
-    public static $handlerList = null;
+	public static $handlerList = null;
 
-    /* @var Potion */
-    private $potion;
+	/* @var Potion */
+	private $potion;
 
-    /* @var Effect[] */
-    private $effects;
+	/* @var Effect[] */
+	private $effects;
 
-    public function __construct(Entity $entity, Potion $potion) {
-        $this->entity = $entity;
-        $this->potion = $potion;
-        $this->effects = $potion->getEffects();
-    }
+	public function __construct(Entity $entity, Potion $potion) {
+		$this->entity = $entity;
+		$this->potion = $potion;
+		$this->effects = $potion->getEffects();
+	}
 
-    public function getEffects() {
-        return $this->effects;
-    }
+	public function getEffects() {
+		return $this->effects;
+	}
 
-    public function getPotion() {
-        return $this->potion;
-    }
+	public function getPotion() {
+		return $this->potion;
+	}
 }

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -228,7 +228,7 @@ class Network{
 	}
 
 	/**
-	 * @param int        $id 0-255
+	 * @param int		$id 0-255
 	 * @param DataPacket $class
 	 */
 	public function registerPacket($id, $class){
@@ -256,7 +256,7 @@ class Network{
 
 	/**
 	 * @param string $address
-	 * @param int    $port
+	 * @param int	$port
 	 * @param string $payload
 	 */
 	public function sendPacket($address, $port, $payload){
@@ -269,7 +269,7 @@ class Network{
 	 * Blocks an IP address from the main interface. Setting timeout to -1 will block it forever
 	 *
 	 * @param string $address
-	 * @param int    $timeout
+	 * @param int	$timeout
 	 */
 	public function blockAddress($address, $timeout = 300){
 		foreach($this->advancedInterfaces as $interface){
