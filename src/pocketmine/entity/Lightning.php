@@ -24,8 +24,8 @@ namespace pocketmine\entity;
 use pocketmine\block\Liquid;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\math\Vector3;
-use pocketmine\network\mcpe\protocol\AddEntityPacket;
-use pocketmine\network\mcpe\protocol\ExplodePacket;
+use pocketmine\network\protocol\AddEntityPacket;
+use pocketmine\network\protocol\ExplodePacket;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\Player;
 
@@ -84,7 +84,7 @@ class Lightning extends Animal {
     public function spawnToAll() {
         parent::spawnToAll();
 
-        if ($this->getLevel()->getServer()->getLeverylConfigValue("LightningFire", false)) {
+        if ($this->getLevel()->getServer()->lightningFire) {
             $fire = ItemItem::get(ItemItem::FIRE)->getBlock();
             $oldBlock = $this->getLevel()->getBlock($this);
             if ($oldBlock instanceof Liquid) {
