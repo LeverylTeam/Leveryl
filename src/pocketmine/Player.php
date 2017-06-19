@@ -330,6 +330,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public $guiscale;
 	public $controls;
 
+    public $weatherData = [0, 0, 0];
+
 	/** @var PermissibleBase */
 	private $perm = null;
 
@@ -775,6 +777,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			$this->usedChunks = [];
 			$this->level->sendTime($this);
+            $targetLevel->getWeather()->sendWeather($this);
 		}
 	}
 
@@ -929,6 +932,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->teleport($pos);
 
 		$this->spawnToAll();
+
+        $this->level->getWeather()->sendWeather($this);
 
 		if($this->getHealth() <= 0){
 			$pk = new RespawnPacket();
@@ -1276,6 +1281,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$this->server->getPluginManager()->callEvent($ev = new PlayerGameModeChangeEvent($this, $gm));
+		if($this->server->getLeverylConfigValue("ClearInventoryOnGameModeChange", true)){
+			$this->getInventory()->clearAll();
+		}
 		if($ev->isCancelled()){
 			if($client){ //gamemode change by client in the GUI
 				$this->sendGamemode();
@@ -1715,6 +1723,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 				}
 			}
+
 		}
 
 		$this->checkTeleportPosition();
@@ -1845,6 +1854,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->resourcePackEntries = $manager->getResourceStack();
 		$pk->mustAccept = $manager->resourcePacksRequired();
 		$this->dataPacket($pk);
+
+        $this->level->getWeather()->sendWeather($this);
 	}
 
 	protected function completeLoginSequence(){

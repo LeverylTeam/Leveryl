@@ -2,12 +2,12 @@
 
 /*
  *
- *	_______								_
- *   |__   __|							  | |
- *	  | | ___  ___ ___  ___ _ __ __ _  ___| |_
- *	  | |/ _ \/ __/ __|/ _ \  __/ _` |/ __| __|
- *	  | |  __/\__ \__ \  __/ | | (_| | (__| |_
- *	  |_|\___||___/___/\___|_|  \__,_|\___|\__|
+ *    _______                                _
+ *   |__   __|                              | |
+ *      | | ___  ___ ___  ___ _ __ __ _  ___| |_
+ *      | |/ _ \/ __/ __|/ _ \  __/ _` |/ __| __|
+ *      | |  __/\__ \__ \  __/ | | (_| | (__| |_
+ *      |_|\___||___/___/\___|_|  \__,_|\___|\__|
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -94,6 +94,8 @@ class EnderChest extends Transparent{
 				$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 			}
 
+			$tile = Tile::createTile("EnderChest", $this->getLevel(), $nbt);
+
 			return true;
 		}
 
@@ -120,7 +122,7 @@ class EnderChest extends Transparent{
  				Tile::createTile("EnderChest", $this->getLevel(), $nbt);
 			}
 
-			if($player->isCreative() and $player->getServer()->getLeverylConfigValue("LimitedCreative", true)){
+			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
 

@@ -51,6 +51,7 @@ use pocketmine\entity\Arrow;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Item as DroppedItem;
+use pocketmine\entity\Lightning;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\block\BlockUpdateEvent;
@@ -107,6 +108,7 @@ use pocketmine\tile\Tile;
 use pocketmine\utils\Binary;
 use pocketmine\utils\Random;
 use pocketmine\utils\ReversePriorityQueue;
+use pocketmine\level\weather\Weather;
 
 #include <rules/Level.h>
 
@@ -264,6 +266,9 @@ class Level implements ChunkManager, Metadatable{
 
 	private $closed = false;
 
+    /** @var Weather */
+    private $weather;
+    
 	public static function chunkHash(int $x, int $z){
 		return (($x & 0xFFFFFFFF) << 32) | ($z & 0xFFFFFFFF);
 	}
@@ -350,7 +355,22 @@ class Level implements ChunkManager, Metadatable{
 		$this->temporalPosition = new Position(0, 0, 0, $this);
 		$this->temporalVector = new Vector3(0, 0, 0);
 		$this->tickRate = 1;
+
+        $this->weather = new Weather($this, 0);
+        //if ($this->server->getLeverylConfigValue("Weather", true) and $this->server->getLeverylConfigValue("NetherWorldName") == $this->folderName) $this->setDimension(self::DIMENSION_NETHER);
+        //else $this->setDimension(self::DIMENSION_NORMAL); MultiDimension (Nether not implemented YET)
+        if ($this->server->getLeverylConfigValue("Weather", true)/* and $this->getDimension() == self::DIMENSION_NORMAL*/) {
+            $this->weather->setCanCalculate(true);
+        } else $this->weather->setCanCalculate(false);
 	}
+
+    /**
+     * @return Weather
+     */
+    public function getWeather()
+    {
+        return $this->weather;
+    }
 
 	public function getTickRate() : int{
 		return $this->tickRate;
@@ -668,6 +688,40 @@ class Level implements ChunkManager, Metadatable{
 		$this->server->broadcastPacket(count($targets) > 0 ? $targets : $this->players, $pk);
 	}
 
+    public function canBlockSeeSky(Vector3 $pos): bool {
+        return $this->getHighestBlockAt($pos->getFloorX(), $pos->getFloorZ()) < $pos->getY();
+    }
+
+    /**
+     * Add a lightning
+     *
+     * @param Vector3 $pos
+     * @return Lightning
+     */
+    public function spawnLightning(Vector3 $pos): Lightning {
+        $nbt = new CompoundTag("", [
+            "Pos" => new ListTag("Pos", [
+                new DoubleTag("", $pos->getX()),
+                new DoubleTag("", $pos->getY()),
+                new DoubleTag("", $pos->getZ())
+            ]),
+            "Motion" => new ListTag("Motion", [
+                new DoubleTag("", 0),
+                new DoubleTag("", 0),
+                new DoubleTag("", 0)
+            ]),
+            "Rotation" => new ListTag("Rotation", [
+                new FloatTag("", 0),
+                new FloatTag("", 0)
+            ]),
+        ]);
+
+        $lightning = new Lightning($this, $nbt);
+        $lightning->spawnToAll();
+
+        return $lightning;
+    }
+
 	/**
 	 * WARNING: Do not use this, it's only for internal use.
 	 * Changes to this function won't be recorded on the version.
@@ -688,6 +742,8 @@ class Level implements ChunkManager, Metadatable{
 			$this->sendTime();
 			$this->sendTimeTicker = 0;
 		}
+
+        $this->weather->calcWeather($currentTick);
 
 		$this->unloadChunks();
 

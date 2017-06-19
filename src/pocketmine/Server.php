@@ -107,7 +107,6 @@ use pocketmine\utils\Terminal;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 use pocketmine\utils\UUID;
-use pocketmine\utils\VersionString;
 
 /**
  * The class that manages everything
@@ -263,7 +262,11 @@ class Server{
 
 	/** @var Level */
 	private $levelDefault = null;
-
+	
+	// ############################################ / Leveryl Config / ############################################
+	public $limitedCreative = true;
+	// ############################################ / Leveryl Config / ############################################
+	
 	/**
 	 * @return string
 	 */
@@ -1484,6 +1487,10 @@ class Server{
 			$mode = $this->checkAuthentication();
 			$lang = $this->getProperty("settings.language", "eng");
 			$date = date("D, F d, Y, H:i T");
+			
+			// ############################################ / Leveryl Config / ############################################
+			$this->limitedCreative = $this->getLeverylConfigValue("LimitedCreative", true);
+			// ############################################ / Leveryl Config / ############################################
 
 			if(\Phar::running(true) === ""){
 				$package = "src";

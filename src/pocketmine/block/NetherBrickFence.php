@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,10 +16,8 @@
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
  *
- *
-*/
+ */
 
-declare(strict_types=1);
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -33,15 +31,26 @@ class NetherBrickFence extends Transparent{
 		$this->meta = $meta;
 	}
 
+	public function getBreakTime(Item $item){
+		if($item instanceof Air){
+			//Breaking by hand
+			return 10;
+		}else{
+			// Other breaktimes are equal to woodfences.
+			return parent::getBreakTime($item);
+		}
+	}
+
 	public function getHardness(){
 		return 2;
 	}
 
 	public function getToolType(){
+		//Different then the woodfences
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Nether Brick Fence";
 	}
 
@@ -49,10 +58,10 @@ class NetherBrickFence extends Transparent{
 		return ($block instanceof NetherBrickFence) or ($block->isSolid() and !$block->isTransparent());
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [
-				[$this->id, $this->meta, 1],
+				[Item::NETHER_BRICK_FENCE, $this->meta, 1],
 			];
 		}else{
 			return [];

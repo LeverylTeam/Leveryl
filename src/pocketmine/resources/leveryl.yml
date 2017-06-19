@@ -40,10 +40,16 @@ BlockTNTExplosion: false
 
 # Game Mechanics
 Criticals: true
-Weather: false
+FireSpread: false
+EnchantingTableEnabled: true
+
+# Weather
+Weather: true
+weatherRandomDurationMin: 6000
+weatherRandomDurationMax: 12000
 Lightning: false
 LightningFire: false
-FireSpread: false
+LightningTime: 200
 
 # Network
 DisableRakLib: false

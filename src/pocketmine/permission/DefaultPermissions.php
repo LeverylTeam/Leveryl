@@ -127,6 +127,7 @@ abstract class DefaultPermissions{
 		self::registerPermission(new Permission(self::ROOT . ".command.setworldspawn", "Allows the user to change the world spawn", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.transferserver", "Allows the user to transfer self to another server", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.title", "Allows the user to send a title to the specified player", Permission::DEFAULT_OP), $commands);
+        self::registerPermission(new Permission(self::ROOT . ".command.weather", "Allows the user to change the weather", Permission::DEFAULT_OP), $commands);
 
 		$commands->recalculatePermissibles();
 
