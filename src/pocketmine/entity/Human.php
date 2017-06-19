@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -55,8 +55,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	/** @var PlayerInventory */
 	protected $inventory;
 	
-	/** @var EnderChestInventory */
-	protected $enderChestInventory;
+    /** @var EnderChestInventory */
+    protected $enderChestInventory;
 
 	/** @var UUID */
 	protected $uuid;
@@ -280,9 +280,9 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		return $this->inventory;
 	}
 	
-	public function getEnderChestInventory() {
-		return $this->enderChestInventory;
-	}
+    public function getEnderChestInventory() {
+        return $this->enderChestInventory;
+    }
 
 	protected function initEntity(){
 
@@ -290,7 +290,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		$this->setDataProperty(self::DATA_PLAYER_BED_POSITION, self::DATA_TYPE_POS, [0, 0, 0], false);
 
 		$this->inventory = new PlayerInventory($this);
-		$this->enderChestInventory = new EnderChestInventory($this, ($this->namedtag->EnderChestInventory ?? null));
+        $this->enderChestInventory = new EnderChestInventory($this, ($this->namedtag->EnderChestInventory ?? null));
 		if($this instanceof Player){
 			$this->addWindow($this->inventory, 0);
 		}else{

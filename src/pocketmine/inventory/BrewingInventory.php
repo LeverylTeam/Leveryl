@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __	__  _____
+ *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,32 +25,32 @@ use pocketmine\item\Item;
 use pocketmine\tile\BrewingStand;
 
 class BrewingInventory extends ContainerInventory {
-	public function __construct(BrewingStand $tile) {
-		parent::__construct($tile, InventoryType::get(InventoryType::BREWING_STAND));
-	}
+    public function __construct(BrewingStand $tile) {
+        parent::__construct($tile, InventoryType::get(InventoryType::BREWING_STAND));
+    }
 
-	/**
-	 * @return InventoryHolder|BrewingStand
-	 */
-	public function getHolder() {
-		return $this->holder;
-	}
+    /**
+     * @return InventoryHolder|BrewingStand
+     */
+    public function getHolder() {
+        return $this->holder;
+    }
 
-	public function setIngredient(Item $item) {
-		$this->setItem(0, $item);
-	}
+    public function setIngredient(Item $item) {
+        $this->setItem(0, $item);
+    }
 
-	/**
-	 * @return Item
-	 */
-	public function getIngredient() {
-		return $this->getItem(0);
-	}
+    /**
+     * @return Item
+     */
+    public function getIngredient() {
+        return $this->getItem(0);
+    }
 
-	public function onSlotChange($index, $before) {
-		parent::onSlotChange($index, $before);
+    public function onSlotChange($index, $before) {
+        parent::onSlotChange($index, $before);
 
-		$this->getHolder()->scheduleUpdate();
-		$this->getHolder()->updateSurface();
-	}
+        $this->getHolder()->scheduleUpdate();
+        $this->getHolder()->updateSurface();
+    }
 }

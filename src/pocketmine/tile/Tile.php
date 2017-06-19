@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -44,13 +44,13 @@ abstract class Tile extends Position{
 	const MOB_SPAWNER = "MobSpawner";
 	const SIGN = "Sign";
 	const SKULL = "Skull";
-	const ENDER_CHEST = "EnderChest";
-	const ITEM_FRAME = "ItemFrame";
-	const DISPENSER = "Dispenser";
-	const DROPPER = "Dropper";
-	const CAULDRON = "Cauldron";
-	const HOPPER = "Hopper";
-	const BEACON = "Beacon";
+    const ENDER_CHEST = "EnderChest";
+    const ITEM_FRAME = "ItemFrame";
+    const DISPENSER = "Dispenser";
+    const DROPPER = "Dropper";
+    const CAULDRON = "Cauldron";
+    const HOPPER = "Hopper";
+    const BEACON = "Beacon";
 
 	public static $tileCount = 1;
 
@@ -73,27 +73,27 @@ abstract class Tile extends Position{
 	public $tickTimer;
 
 	public static function init(){
-		self::registerTile(Beacon::class);
-		self::registerTile(BrewingStand::class);
-		self::registerTile(Cauldron::class);
+        self::registerTile(Beacon::class);
+        self::registerTile(BrewingStand::class);
+        self::registerTile(Cauldron::class);
 		self::registerTile(Chest::class);
-		self::registerTile(Dispenser::class);
-		self::registerTile(Dropper::class);
+        self::registerTile(Dispenser::class);
+        self::registerTile(Dropper::class);
 		self::registerTile(EnchantTable::class);
-		self::registerTile(EnderChest::class);
+        self::registerTile(EnderChest::class);
 		self::registerTile(FlowerPot::class);
 		self::registerTile(Furnace::class);
-		self::registerTile(Hopper::class);
+        self::registerTile(Hopper::class);
 		self::registerTile(ItemFrame::class);
 		self::registerTile(Sign::class);
 		self::registerTile(Skull::class);
 	}
 
 	/**
-	 * @param string	  $type
-	 * @param Level	   $level
+	 * @param string      $type
+	 * @param Level       $level
 	 * @param CompoundTag $nbt
-	 * @param			 $args
+	 * @param             $args
 	 *
 	 * @return Tile
 	 */

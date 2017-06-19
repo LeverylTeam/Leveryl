@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -54,9 +54,9 @@ abstract class BaseInventory implements Inventory{
 	/**
 	 * @param InventoryHolder $holder
 	 * @param InventoryType   $type
-	 * @param Item[]		  $items
-	 * @param int			 $overrideSize
-	 * @param string		  $overrideTitle
+	 * @param Item[]          $items
+	 * @param int             $overrideSize
+	 * @param string          $overrideTitle
 	 */
 	public function __construct(InventoryHolder $holder, InventoryType $type, array $items = [], $overrideSize = null, $overrideTitle = null){
 		$this->holder = $holder;
@@ -245,14 +245,14 @@ abstract class BaseInventory implements Inventory{
 		return false;
 	}
 
-	public function firstOccupied() {
-		for ($i = 0; $i < $this->size; $i++) {
-			if (($item = $this->getItem($i))->getId() !== Item::AIR and $item->getCount() > 0) {
-				return $i;
-			}
-		}
-		return -1;
-	}
+    public function firstOccupied() {
+        for ($i = 0; $i < $this->size; $i++) {
+            if (($item = $this->getItem($i))->getId() !== Item::AIR and $item->getCount() > 0) {
+                return $i;
+            }
+        }
+        return -1;
+    }
 
 	public function addItem(Item ...$slots){
 		/** @var Item[] $itemSlots */
@@ -446,7 +446,7 @@ abstract class BaseInventory implements Inventory{
 	}
 
 	/**
-	 * @param int			 $index
+	 * @param int             $index
 	 * @param Player|Player[] $target
 	 */
 	public function sendSlot($index, $target){

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -82,13 +82,13 @@ class Chunk{
 	protected $NBTentities = [];
 
 	/**
-	 * @param int		   $chunkX
-	 * @param int		   $chunkZ
-	 * @param SubChunk[]	$subChunks
+	 * @param int           $chunkX
+	 * @param int           $chunkZ
+	 * @param SubChunk[]    $subChunks
 	 * @param CompoundTag[] $entities
 	 * @param CompoundTag[] $tiles
-	 * @param string		$biomeIds
-	 * @param int[]		 $heightMap
+	 * @param string        $biomeIds
+	 * @param int[]         $heightMap
 	 */
 	public function __construct(int $chunkX, int $chunkZ, array $subChunks = [], array $entities = [], array $tiles = [], string $biomeIds = "", array $heightMap = []){
 		$this->x = $chunkX;
@@ -184,9 +184,9 @@ class Chunk{
 	/**
 	 * Sets block ID and meta in one call at the specified chunk block coordinates
 	 *
-	 * @param int	  $x 0-15
-	 * @param int	  $y
-	 * @param int	  $z 0-15
+	 * @param int      $x 0-15
+	 * @param int      $y
+	 * @param int      $z 0-15
 	 * @param int|null $blockId 0-255 if null, does not change
 	 * @param int|null $meta 0-15 if null, does not change
 	 *
@@ -811,9 +811,9 @@ class Chunk{
 
 	/**
 	 * Sets a subchunk in the chunk index
-	 * @param int		   $y
+	 * @param int           $y
 	 * @param SubChunk|null $subChunk
-	 * @param bool		  $allowEmpty Whether to check if the chunk is empty, and if so replace it with an empty stub
+	 * @param bool          $allowEmpty Whether to check if the chunk is empty, and if so replace it with an empty stub
 	 *
 	 * @return bool
 	 */
@@ -895,8 +895,8 @@ class Chunk{
 			$result .= $this->subChunks[$y]->networkSerialize();
 		}
 		$result .= pack("v*", ...$this->heightMap)
-				.  $this->biomeIds
-				.  chr(0); //border block array count
+		        .  $this->biomeIds
+		        .  chr(0); //border block array count
 		//Border block entry format: 1 byte (4 bits X, 4 bits Z). These are however useless since they crash the regular client.
 
 		$extraData = new BinaryStream();

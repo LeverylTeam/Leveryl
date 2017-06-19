@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -59,7 +59,7 @@ class PlayerInventory extends BaseInventory{
 	 * Called when a client equips a hotbar slot. This method should not be used by plugins.
 	 * This method will call PlayerItemHeldEvent.
 	 *
-	 * @param int	  $hotbarSlot Number of the hotbar slot to equip.
+	 * @param int      $hotbarSlot Number of the hotbar slot to equip.
 	 * @param int|null $inventorySlot Inventory slot to map to the specified hotbar slot. Supply null to make no change to the link.
 	 *
 	 * @return bool if the equipment change was successful, false if not.
@@ -170,7 +170,7 @@ class PlayerInventory extends BaseInventory{
 	 *
 	 * @param int  $index 0-8 index of the hotbar slot to hold
 	 * @param bool $send  Whether to send updates back to the inventory holder. This should usually be true for plugin calls.
-	 *					It should only be false to prevent feedback loops of equipment packets between client and server.
+	 *                    It should only be false to prevent feedback loops of equipment packets between client and server.
 	 */
 	public function setHeldItemIndex($index, $send = true){
 		if($index >= 0 and $index < $this->getHotbarSize()){
@@ -453,7 +453,7 @@ class PlayerInventory extends BaseInventory{
 
 
 	/**
-	 * @param int			 $index
+	 * @param int             $index
 	 * @param Player|Player[] $target
 	 */
 	public function sendArmorSlot($index, $target){
@@ -534,7 +534,7 @@ class PlayerInventory extends BaseInventory{
 	}
 
 	/**
-	 * @param int			 $index
+	 * @param int             $index
 	 * @param Player|Player[] $target
 	 */
 	public function sendSlot($index, $target){

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -334,7 +334,7 @@ class Level implements ChunkManager, Metadatable{
 		$this->chunkTickRadius = min($this->server->getViewDistance(), max(1, (int) $this->server->getProperty("chunk-ticking.tick-radius", 4)));
 		$this->chunksPerTick = (int) $this->server->getProperty("chunk-ticking.per-tick", 40);
 		$this->chunkGenerationQueueSize = (int) $this->server->getProperty("chunk-generation.queue-size", 8);
-		$this->chunkPopulationQueueSize = (int) $this->server->getProperty("chunk-generation.population-queue-size", 2);
+        $this->chunkPopulationQueueSize = (int) $this->server->getProperty("chunk-generation.population-queue-size", 2) <= 0 ? 1 : (int) $this->server->getProperty("chunk-generation.population-queue-size", 2);
 		$this->chunkTickList = [];
 		$this->clearChunksOnTick = (bool) $this->server->getProperty("chunk-ticking.clear-tick-list", true);
 		$this->cacheChunks = (bool) $this->server->getProperty("chunk-sending.cache-chunks", false);
@@ -822,8 +822,8 @@ class Level implements ChunkManager, Metadatable{
 	/**
 	 * @param Player[] $target
 	 * @param Block[]  $blocks
-	 * @param int	  $flags
-	 * @param bool	 $optimizeRebuilds
+	 * @param int      $flags
+	 * @param bool     $optimizeRebuilds
 	 */
 	public function sendBlocks(array $target, array $blocks, $flags = UpdateBlockPacket::FLAG_NONE, bool $optimizeRebuilds = false){
 		$packets = [];
@@ -1064,7 +1064,7 @@ class Level implements ChunkManager, Metadatable{
 	 * @deprecated This method will be removed in the future due to misleading/ambiguous name. Use {@link Level#scheduleDelayedBlockUpdate} instead.
 	 *
 	 * @param Vector3 $pos
-	 * @param int	 $delay
+	 * @param int     $delay
 	 */
 	public function scheduleUpdate(Vector3 $pos, int $delay){
 		$this->scheduleDelayedBlockUpdate($pos, $delay);
@@ -1075,7 +1075,7 @@ class Level implements ChunkManager, Metadatable{
 	 * Blocks will be updated with the scheduled update type.
 	 *
 	 * @param Vector3 $pos
-	 * @param int	 $delay
+	 * @param int     $delay
 	 */
 	public function scheduleDelayedBlockUpdate(Vector3 $pos, int $delay){
 		if(isset($this->scheduledBlockUpdateQueueIndex[$index = Level::blockHash($pos->x, $pos->y, $pos->z)]) and $this->scheduledBlockUpdateQueueIndex[$index] <= $delay){
@@ -1104,7 +1104,7 @@ class Level implements ChunkManager, Metadatable{
 
 	/**
 	 * @param AxisAlignedBB $bb
-	 * @param bool		  $targetFirst
+	 * @param bool          $targetFirst
 	 *
 	 * @return Block[]
 	 */
@@ -1165,9 +1165,9 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	/**
-	 * @param Entity		$entity
+	 * @param Entity        $entity
 	 * @param AxisAlignedBB $bb
-	 * @param bool		  $entities
+	 * @param bool          $entities
 	 *
 	 * @return AxisAlignedBB[]
 	 */
@@ -1302,7 +1302,7 @@ class Level implements ChunkManager, Metadatable{
 	 * Gets the Block object on the Vector3 location
 	 *
 	 * @param Vector3 $pos
-	 * @param bool	$cached
+	 * @param bool    $cached
 	 *
 	 * @return Block
 	 */
@@ -1438,13 +1438,16 @@ class Level implements ChunkManager, Metadatable{
 	 * If you are doing big changes, you might want to set this to false, then update manually.
 	 *
 	 * @param Vector3 $pos
-	 * @param Block   $block
-	 * @param bool	$direct @deprecated
-	 * @param bool	$update
+	 * @param $block
+	 * @param bool    $direct @deprecated
+	 * @param bool    $update
 	 *
 	 * @return bool Whether the block has been updated or not
 	 */
-	public function setBlock(Vector3 $pos, Block $block, bool $direct = false, bool $update = true) : bool{
+	public function setBlock(Vector3 $pos, $block, bool $direct = false, bool $update = true) : bool{
+		if(is_int ($block)){
+			$block = Block::get($block);
+		}
 		$pos = $pos->floor();
 		if($pos->y < 0 or $pos->y >= $this->provider->getWorldHeight()){
 			return false;
@@ -1502,9 +1505,9 @@ class Level implements ChunkManager, Metadatable{
 
 	/**
 	 * @param Vector3 $source
-	 * @param Item	$item
+	 * @param Item    $item
 	 * @param Vector3 $motion
-	 * @param int	 $delay
+	 * @param int     $delay
 	 */
 	public function dropItem(Vector3 $source, Item $item, Vector3 $motion = null, int $delay = 10){
 		$motion = $motion === null ? new Vector3(lcg_value() * 0.2 - 0.1, 0.2, lcg_value() * 0.2 - 0.1) : $motion;
@@ -1542,9 +1545,9 @@ class Level implements ChunkManager, Metadatable{
 	 * It'll try to lower the durability if Item is a tool, and set it to Air if broken.
 	 *
 	 * @param Vector3 $vector
-	 * @param Item	&$item (if null, can break anything)
+	 * @param Item    &$item (if null, can break anything)
 	 * @param Player  $player
-	 * @param bool	$createParticles
+	 * @param bool    $createParticles
 	 *
 	 * @return bool
 	 */
@@ -1675,13 +1678,13 @@ class Level implements ChunkManager, Metadatable{
 	 * Uses a item on a position and face, placing it or activating the block
 	 *
 	 * @param Vector3 $vector
-	 * @param Item	$item
-	 * @param int	 $face
-	 * @param float   $fx	 default 0.0
-	 * @param float   $fy	 default 0.0
-	 * @param float   $fz	 default 0.0
+	 * @param Item    $item
+	 * @param int     $face
+	 * @param float   $fx     default 0.0
+	 * @param float   $fy     default 0.0
+	 * @param float   $fz     default 0.0
 	 * @param Player  $player default null
-	 * @param bool	$playSound Whether to play a block-place sound if the block was placed successfully.
+	 * @param bool    $playSound Whether to play a block-place sound if the block was placed successfully.
 	 *
 	 * @return bool
 	 */
@@ -1873,7 +1876,7 @@ class Level implements ChunkManager, Metadatable{
 	 * Returns the entities near the current one inside the AxisAlignedBB
 	 *
 	 * @param AxisAlignedBB $bb
-	 * @param Entity		$entity
+	 * @param Entity        $entity
 	 *
 	 * @return Entity[]
 	 */

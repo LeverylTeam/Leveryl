@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -27,31 +27,31 @@ namespace pocketmine\utils;
 
 class Color{
 
-	const COLOR_DYE_BLACK = 0;//dye colors
-	const COLOR_DYE_RED = 1;
-	const COLOR_DYE_GREEN = 2;
-	const COLOR_DYE_BROWN = 3;
-	const COLOR_DYE_BLUE = 4;
-	const COLOR_DYE_PURPLE = 5;
-	const COLOR_DYE_CYAN = 6;
-	const COLOR_DYE_LIGHT_GRAY = 7;
-	const COLOR_DYE_GRAY = 8;
-	const COLOR_DYE_PINK = 9;
-	const COLOR_DYE_LIME = 10;
-	const COLOR_DYE_YELLOW = 11;
-	const COLOR_DYE_LIGHT_BLUE = 12;
-	const COLOR_DYE_MAGENTA = 13;
-	const COLOR_DYE_ORANGE = 14;
-	const COLOR_DYE_WHITE = 15;
+    const COLOR_DYE_BLACK = 0;//dye colors
+    const COLOR_DYE_RED = 1;
+    const COLOR_DYE_GREEN = 2;
+    const COLOR_DYE_BROWN = 3;
+    const COLOR_DYE_BLUE = 4;
+    const COLOR_DYE_PURPLE = 5;
+    const COLOR_DYE_CYAN = 6;
+    const COLOR_DYE_LIGHT_GRAY = 7;
+    const COLOR_DYE_GRAY = 8;
+    const COLOR_DYE_PINK = 9;
+    const COLOR_DYE_LIME = 10;
+    const COLOR_DYE_YELLOW = 11;
+    const COLOR_DYE_LIGHT_BLUE = 12;
+    const COLOR_DYE_MAGENTA = 13;
+    const COLOR_DYE_ORANGE = 14;
+    const COLOR_DYE_WHITE = 15;
 
-	private $red = 0;
-	private $green = 0;
-	private $blue = 0;
+    private $red = 0;
+    private $green = 0;
+    private $blue = 0;
 
-	/** @var \SplFixedArray */
-	public static $dyeColors = null;
+    /** @var \SplFixedArray */
+    public static $dyeColors = null;
 
-	/** @var int */
+    /** @var int */
 	protected $a, $r, $g, $b;
 	
 	public function __construct(int $r, int $g, int $b, int $a = 0xff){
@@ -183,48 +183,48 @@ class Color{
 	}
 
 
-	public static function getRGB($r, $g, $b) {
-		return new Color((int)$r, (int)$g, (int)$b);
-	}
+    public static function getRGB($r, $g, $b) {
+        return new Color((int)$r, (int)$g, (int)$b);
+    }
 
-	public static function averageColor(Color ...$colors) {
-		$tr = 0;//total red
-		$tg = 0;//green
-		$tb = 0;//blue
-		$count = 0;
-		foreach ($colors as $c) {
-			$tr += $c->getRed();
-			$tg += $c->getGreen();
-			$tb += $c->getBlue();
-			++$count;
-		}
-		return Color::getRGB($tr / $count, $tg / $count, $tb / $count);
-	}
+    public static function averageColor(Color ...$colors) {
+        $tr = 0;//total red
+        $tg = 0;//green
+        $tb = 0;//blue
+        $count = 0;
+        foreach ($colors as $c) {
+            $tr += $c->getRed();
+            $tg += $c->getGreen();
+            $tb += $c->getBlue();
+            ++$count;
+        }
+        return Color::getRGB($tr / $count, $tg / $count, $tb / $count);
+    }
 
-	public static function getDyeColor($id) {
-		if (isset(self::$dyeColors[$id])) {
-			return clone self::$dyeColors[$id];
-		}
-		return Color::getRGB(0, 0, 0);
-	}
+    public static function getDyeColor($id) {
+        if (isset(self::$dyeColors[$id])) {
+            return clone self::$dyeColors[$id];
+        }
+        return Color::getRGB(0, 0, 0);
+    }
 
-	public function getRed() {
-		return (int)$this->red;
-	}
+    public function getRed() {
+        return (int)$this->red;
+    }
 
-	public function getBlue() {
-		return (int)$this->blue;
-	}
+    public function getBlue() {
+        return (int)$this->blue;
+    }
 
-	public function getGreen() {
-		return (int)$this->green;
-	}
+    public function getGreen() {
+        return (int)$this->green;
+    }
 
-	public function getColorCode() {
-		return ($this->red << 16 | $this->green << 8 | $this->blue) & 0xffffff;
-	}
+    public function getColorCode() {
+        return ($this->red << 16 | $this->green << 8 | $this->blue) & 0xffffff;
+    }
 
-	public function __toString() {
-		return "Color(red:" . $this->red . ", green:" . $this->green . ", blue:" . $this->blue . ")";
-	}
+    public function __toString() {
+        return "Color(red:" . $this->red . ", green:" . $this->green . ", blue:" . $this->blue . ")";
+    }
 }

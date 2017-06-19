@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __	__  _____
+ *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
 
 class ButtonClickSound extends GenericSound {
-	public function __construct(Vector3 $pos) {
-		parent::__construct($pos, LevelEventPacket::EVENT_SOUND_BUTTON_CLICK);
-	}
+    public function __construct(Vector3 $pos) {
+        parent::__construct($pos, LevelEventPacket::EVENT_SOUND_BUTTON_CLICK);
+    }
 }

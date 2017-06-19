@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -133,14 +133,14 @@ class Effect{
 	protected $hasBubbles = true;
 
 	/**
-	 * @param int	$id			  Effect ID as per Minecraft PE
-	 * @param string $name			Translation key used for effect name
-	 * @param int	$r			   0-255, red balance of potion particle colour
-	 * @param int	$g			   0-255, green balance of potion particle colour
-	 * @param int	$b			   0-255, blue balance of potion particle colour
-	 * @param bool   $isBad		   Whether the effect is harmful
-	 * @param int	$defaultDuration Duration in ticks the effect will last for by default if applied without a duration.
-	 * @param bool   $hasBubbles	  Whether the effect has potion bubbles. Some do not (e.g. Instant Damage has its own particles instead of bubbles)
+	 * @param int    $id              Effect ID as per Minecraft PE
+	 * @param string $name            Translation key used for effect name
+	 * @param int    $r               0-255, red balance of potion particle colour
+	 * @param int    $g               0-255, green balance of potion particle colour
+	 * @param int    $b               0-255, blue balance of potion particle colour
+	 * @param bool   $isBad           Whether the effect is harmful
+	 * @param int    $defaultDuration Duration in ticks the effect will last for by default if applied without a duration.
+	 * @param bool   $hasBubbles      Whether the effect has potion bubbles. Some do not (e.g. Instant Damage has its own particles instead of bubbles)
 	 */
 	public function __construct($id, $name, $r, $g, $b, $isBad = false, int $defaultDuration = 300 * 20, bool $hasBubbles = true){
 		$this->id = $id;
@@ -390,8 +390,8 @@ class Effect{
 	/**
 	 * Adds this effect to the Entity, performing effect overriding as specified.
 	 *
-	 * @param Entity	  $entity
-	 * @param bool		$modify
+	 * @param Entity      $entity
+	 * @param bool        $modify
 	 * @param Effect|null $oldEffect
 	 */
 	public function add(Entity $entity, $modify = false, Effect $oldEffect = null){
