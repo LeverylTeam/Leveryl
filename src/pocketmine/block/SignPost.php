@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,20 +15,22 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- * 
+ *
  *
 */
+
+declare(strict_types=1);
 
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\level\Level;
+use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\math\Vector3;
 use pocketmine\tile\Tile;
 
 class SignPost extends Transparent{
@@ -47,7 +49,7 @@ class SignPost extends Transparent{
 		return false;
 	}
 
-	public function getName() : string{
+	public function getName(){
 		return "Sign Post";
 	}
 
@@ -57,57 +59,57 @@ class SignPost extends Transparent{
 
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-        if($face !== 0){
-        $nbt = new CompoundTag("", [
-            "id" => new StringTag("id", Tile::SIGN),
-            "x" => new IntTag("x", $block->x),
-            "y" => new IntTag("y", $block->y),
-            "z" => new IntTag("z", $block->z),
-            "Text1" => new StringTag("Text1", ""),
-            "Text2" => new StringTag("Text2", ""),
-            "Text3" => new StringTag("Text3", ""),
-            "Text4" => new StringTag("Text4", "")
-        ]);
+		if($face !== 0){
+			$nbt = new CompoundTag("", [
+				"id" => new StringTag("id", Tile::SIGN),
+				"x" => new IntTag("x", $block->x),
+				"y" => new IntTag("y", $block->y),
+				"z" => new IntTag("z", $block->z),
+				"Text1" => new StringTag("Text1", ""),
+				"Text2" => new StringTag("Text2", ""),
+				"Text3" => new StringTag("Text3", ""),
+				"Text4" => new StringTag("Text4", "")
+			]);
 
-        if($player !== null){
-            $nbt->Creator = new StringTag("Creator", $player->getRawUniqueId());
-        }
+			if($player !== null){
+				$nbt->Creator = new StringTag("Creator", $player->getRawUniqueId());
+			}
 
-        if($item->hasCustomBlockData()){
-            foreach($item->getCustomBlockData() as $key => $v){
-                $nbt->{$key} = $v;
-            }
-        }
+			if($item->hasCustomBlockData()){
+				foreach($item->getCustomBlockData() as $key => $v){
+					$nbt->{$key} = $v;
+				}
+			}
 
-        if($face === 1){
-            $this->meta = floor((($player->yaw + 180) * 16 / 360) + 0.5) & 0x0f;
-            $this->getLevel()->setBlock($block, $this, true);
-        }else {
-            $this->meta = $face;
-            $this->getLevel()->setBlock($block, new WallSign($this->meta), true);
-        }
+			if($face === 1){
+				$this->meta = floor((($player->yaw + 180) * 16 / 360) + 0.5) & 0x0f;
+				$this->getLevel()->setBlock($block, $this, true);
+			}else{
+				$this->meta = $face;
+				$this->getLevel()->setBlock($block, new WallSign($this->meta), true);
+			}
 
-        Tile::createTile(Tile::SIGN, $this->getLevel(), $nbt);
+			Tile::createTile(Tile::SIGN, $this->getLevel(), $nbt);
 
-        return true;
-
-        }
+			return true;
+		}
 
 		return false;
 	}
 
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
-			if($this->getSide(Vector3::SIDE_DOWN)->getId() === Block::AIR){
+			if($this->getSide(Vector3::SIDE_DOWN)->getId() === self::AIR){
 				$this->getLevel()->useBreakOn($this);
-				
+
 				return Level::BLOCK_UPDATE_NORMAL;
 			}
 		}
+
 		return false;
 	}
 
-	public function getDrops(Item $item) : array{
+	public function getDrops(Item $item){
 		return [
 			[Item::SIGN, 0, 1],
 		];

@@ -66,10 +66,8 @@ use pocketmine\command\defaults\TitleCommand;
 use pocketmine\command\defaults\TransferServerCommand;
 use pocketmine\command\defaults\VanillaCommand;
 use pocketmine\command\defaults\VersionCommand;
-use pocketmine\command\defaults\WeatherCommand;
 use pocketmine\command\defaults\WhitelistCommand;
 use pocketmine\event\TranslationContainer;
-use pocketmine\level\weather\Weather;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 
@@ -138,10 +136,6 @@ class SimpleCommandMap implements CommandMap{
 			$this->register("pocketmine", new MakePluginCommand("makeplugin"));
 			$this->register("pocketmine", new MakeServerCommand("makeserver"));
 		}
-
-		if($this->server->getLeverylConfigValue("Weather", true)){
-            $this->register("pocketmine", new WeatherCommand("weather"));
-        }
 	}
 
 

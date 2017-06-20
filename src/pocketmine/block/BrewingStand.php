@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __    __  _____
+ *  _____   _____   __   _   _   _____  __	__  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ class BrewingStand extends Transparent{
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
 			//TODO lock
-			if($player->isCreative() and $player->getServer()->limitedCreative){
+			if($player->isCreative() and $player->getServer()->getLeverylConfigValue("LimitedCreative", true)){
 				return true;
 			}
 			$t = $this->getLevel()->getTile($this);

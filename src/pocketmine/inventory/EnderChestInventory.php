@@ -71,10 +71,9 @@ class EnderChestInventory extends ContainerInventory {
 
 		if (count($this->getViewers()) === 1) {
 			$pk = new BlockEventPacket();
-            if(!$this->holder instanceof Position)return false;
-            $pk->x = $this->holder->getX();
-            $pk->y = $this->holder->getY();
-            $pk->z = $this->holder->getZ();
+			$pk->x = $this->holder->getX();
+			$pk->y = $this->holder->getY();
+			$pk->z = $this->holder->getZ();
 			$pk->case1 = 1;
 			$pk->case2 = 2;
 			if (($level = $this->holder->getLevel()) instanceof Level) {
@@ -86,7 +85,6 @@ class EnderChestInventory extends ContainerInventory {
 	public function onClose(Player $who) {
 		if (count($this->getViewers()) === 1) {
 			$pk = new BlockEventPacket();
-            if(!$this->holder instanceof Position)return false;
 			$pk->x = $this->holder->getX();
 			$pk->y = $this->holder->getY();
 			$pk->z = $this->holder->getZ();

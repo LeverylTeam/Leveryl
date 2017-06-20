@@ -521,12 +521,13 @@ namespace pocketmine {
 				echo "Some threads could not be stopped, performing a force-kill" . PHP_EOL . PHP_EOL;
 			}
 			kill(getmypid());
-
-            echo Terminal::$FORMAT_RESET . PHP_EOL;
 		}
 	}while(false);
 
 	$logger->shutdown();
 	$logger->join();
+
+	echo Terminal::$FORMAT_RESET . PHP_EOL;
+
 	exit($exitCode);
 }

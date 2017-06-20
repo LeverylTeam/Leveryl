@@ -1,22 +1,26 @@
 <?php
+
 /*
  *
- *  _____   _____   __   _   _   _____  __    __  _____
- * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
- * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author iTX Technologies
- * @link https://itxtech.org
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
  *
- */
+ *
+*/
+
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -27,19 +31,25 @@ use pocketmine\nbt\tag\{
 use pocketmine\Player;
 use pocketmine\tile\ItemFrame as TileItemFrame;
 use pocketmine\tile\Tile;
+
 class ItemFrame extends Flowable{
 	protected $id = Block::ITEM_FRAME_BLOCK;
+
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
-	public function getName() : string{
+
+	public function getName(){
 		return "Item Frame";
 	}
-	public function canBeActivated() : bool{
+
+	public function canBeActivated(){
 		return true;
 	}
+
 	public function onActivate(Item $item, Player $player = null){
-		if(!(($tile = $this->level->getTile($this)) instanceof TileItemFrame)){
+		$tile = $this->level->getTile($this);
+		if(!($tile instanceof TileItemFrame)){
 			$nbt = new CompoundTag("", [
 				new StringTag("id", Tile::ITEM_FRAME),
 				new IntTag("x", $this->x),
@@ -50,6 +60,7 @@ class ItemFrame extends Flowable{
 			]);
 			$tile = Tile::createTile(Tile::ITEM_FRAME, $this->getLevel(), $nbt);
 		}
+
 		if($tile->hasItem()){
 			$tile->setItemRotation(($tile->getItemRotation() + 1) % 8);
 		}else{
@@ -63,10 +74,13 @@ class ItemFrame extends Flowable{
 				}
 			}
 		}
+
 		return true;
 	}
+
 	public function onBreak(Item $item){
-		if(($tile = $this->level->getTile($this)) instanceof TileItemFrame){
+		$tile = $this->level->getTile($this);
+		if($tile instanceof TileItemFrame){
 			//TODO: add events
 			if(lcg_value() <= $tile->getItemDropChance() and $tile->getItem()->getId() !== Item::AIR){
 				$this->level->dropItem($tile->getBlock(), $tile->getItem());
@@ -74,6 +88,7 @@ class ItemFrame extends Flowable{
 		}
 		return parent::onBreak($item);
 	}
+
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			$sides = [
@@ -89,18 +104,22 @@ class ItemFrame extends Flowable{
 		}
 		return false;
 	}
+
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		if($face === 0 or $face === 1){
 			return false;
 		}
+
 		$faces = [
 			2 => 3,
 			3 => 2,
 			4 => 1,
 			5 => 0
 		];
+
 		$this->meta = $faces[$face];
 		$this->level->setBlock($block, $this, true, true);
+
 		$nbt = new CompoundTag("", [
 			new StringTag("id", Tile::ITEM_FRAME),
 			new IntTag("x", $block->x),
@@ -109,17 +128,23 @@ class ItemFrame extends Flowable{
 			new FloatTag("ItemDropChance", 1.0),
 			new ByteTag("ItemRotation", 0)
 		]);
+
 		if($item->hasCustomBlockData()){
 			foreach($item->getCustomBlockData() as $key => $v){
 				$nbt->{$key} = $v;
 			}
 		}
+
 		Tile::createTile(Tile::ITEM_FRAME, $this->getLevel(), $nbt);
+
 		return true;
+
 	}
-	public function getDrops(Item $item) : array{
+
+	public function getDrops(Item $item){
 		return [
 			[Item::ITEM_FRAME, 0, 1]
 		];
 	}
+
 }

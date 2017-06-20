@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,30 +15,30 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- * 
+ *
  *
 */
+
+declare(strict_types=1);
 
 namespace pocketmine\block;
 
 use pocketmine\event\block\BlockSpreadEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
-use pocketmine\item\enchantment\Enchantment;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\Server;
-
 
 class Mycelium extends Solid{
 
 	protected $id = self::MYCELIUM;
 
-	public function __construct(){
-
+	public function __construct($meta = 0){
+		$this->meta = $meta;
 	}
 
-	public function getName() : string{
+	public function getName(){
 		return "Mycelium";
 	}
 
@@ -46,20 +46,14 @@ class Mycelium extends Solid{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	public function getHardness() {
+	public function getHardness(){
 		return 0.6;
 	}
 
-	public function getDrops(Item $item) : array {
-		if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0){
-			return [
-				[Item::MYCELIUM, 0, 1],
-			];
-		}else{
-			return [
-				[Item::DIRT, 0, 1],
-			];
-		}
+	public function getDrops(Item $item){
+		return [
+			[Item::DIRT, 0, 1],
+		];
 	}
 
 	public function onUpdate($type){

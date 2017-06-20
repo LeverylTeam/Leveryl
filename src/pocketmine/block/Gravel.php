@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,29 +15,30 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- * 
+ *
  *
 */
+
+declare(strict_types=1);
 
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
-use pocketmine\item\enchantment\Enchantment;
 
 class Gravel extends Fallable{
 
 	protected $id = self::GRAVEL;
 
-	public function __construct(){
-
+	public function __construct($meta = 0){
+		$this->meta = $meta;
 	}
 
-	public function getName() : string{
+	public function getName(){
 		return "Gravel";
 	}
 
-	public function getHardness() {
+	public function getHardness(){
 		return 0.6;
 	}
 
@@ -45,21 +46,16 @@ class Gravel extends Fallable{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	public function getDrops(Item $item) : array {
-		$drops = [];
-		if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0){//使用精准采集附魔 不掉落燧石
-			$drops[] = [Item::GRAVEL, 0, 1];
-			return $drops;
+	public function getDrops(Item $item){
+		if(mt_rand(1, 10) === 1){
+			return [
+				[Item::FLINT, 0, 1],
+			];
 		}
-		$fortunel = $item->getEnchantmentLevel(Enchantment::FORTUNE);
-		$fortunel = $fortunel > 3 ? 3 : $fortunel;
-		$rates = [10,7,4,1];
-		if(mt_rand(1, $rates[$fortunel]) === 1){//10% 14% 25% 100%
-			$drops[] = [Item::FLINT, 0, 1];
-		}
-		if(mt_rand(1, 10) !== 1){//90%
-			$drops[] = [Item::GRAVEL, 0, 1];
-		}
-		return $drops;
+
+		return [
+			[Item::GRAVEL, 0, 1],
+		];
 	}
+
 }

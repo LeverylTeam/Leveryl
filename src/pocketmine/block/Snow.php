@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,14 +15,15 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- * 
+ *
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
-use pocketmine\item\Item;
-use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\Tool;
 
 class Snow extends Solid{
 
@@ -32,27 +33,16 @@ class Snow extends Solid{
 		$this->meta = $meta;
 	}
 
-	public function getHardness() {
+	public function getHardness(){
 		return 0.2;
 	}
 
-	public function getName() : string{
+	public function getToolType(){
+		return Tool::TYPE_SHOVEL;
+	}
+
+	public function getName(){
 		return "Snow Block";
 	}
-	
-	public function getDrops(Item $item) : array {
-		if($item->isShovel() !== false){
-			if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0){
-				return [
-					[Item::SNOW_BLOCK, 0, 1],
-				];
-			}else{
-				return [
-					[Item::SNOWBALL, 0, 4],
-				];
-			}
-		}else{
-			return [];
-		}
-	}
+
 }

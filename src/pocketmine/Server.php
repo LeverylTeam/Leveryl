@@ -107,6 +107,7 @@ use pocketmine\utils\Terminal;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 use pocketmine\utils\UUID;
+use pocketmine\utils\VersionString;
 
 /**
  * The class that manages everything
@@ -262,11 +263,7 @@ class Server{
 
 	/** @var Level */
 	private $levelDefault = null;
-	
-	// ############################################ / Leveryl Config / ############################################
-	public $limitedCreative = true;
-	// ############################################ / Leveryl Config / ############################################
-	
+
 	/**
 	 * @return string
 	 */
@@ -1487,10 +1484,6 @@ class Server{
 			$mode = $this->checkAuthentication();
 			$lang = $this->getProperty("settings.language", "eng");
 			$date = date("D, F d, Y, H:i T");
-			
-			// ############################################ / Leveryl Config / ############################################
-			$this->limitedCreative = $this->getLeverylConfigValue("LimitedCreative", true);
-			// ############################################ / Leveryl Config / ############################################
 
 			if(\Phar::running(true) === ""){
 				$package = "src";
@@ -2358,24 +2351,20 @@ class Server{
 
 				if($this->autoTickRate){
 					if($tickMs < 50 and $level->getTickRate() > $this->baseTickRate){
-						$level->setTickRate($this->getTick());
-						if($tickMs < 50 and $level->getTickRate() > $this->baseTickRate){
+						$level->setTickRate($r = $level->getTickRate() - 1);
+						if($r > $this->baseTickRate){
 							$level->tickRateCounter = $level->getTickRate();
 						}
 						$this->getLogger()->debug("Raising level \"{$level->getName()}\" tick rate to {$level->getTickRate()} ticks");
-						$this->getLogger()->debug("Server Tick: " . $this->getTick());
-                        $this->getLogger()->debug("Level Tick: " . $level->getTickRate());
 					}elseif($tickMs >= 50){
 						if($level->getTickRate() === $this->baseTickRate){
-                            $level->setTickRate($this->getTick());
+							$level->setTickRate(max($this->baseTickRate + 1, min($this->autoTickRateLimit, (int) floor($tickMs / 50))));
 							$this->getLogger()->debug(sprintf("Level \"%s\" took %gms, setting tick rate to %d ticks", $level->getName(), (int) round($tickMs, 2), $level->getTickRate()));
 						}elseif(($tickMs / $level->getTickRate()) >= 50 and $level->getTickRate() < $this->autoTickRateLimit){
 							$level->setTickRate($level->getTickRate() + 1);
 							$this->getLogger()->debug(sprintf("Level \"%s\" took %gms, setting tick rate to %d ticks", $level->getName(), (int) round($tickMs, 2), $level->getTickRate()));
 						}
 						$level->tickRateCounter = $level->getTickRate();
-                        $this->getLogger()->debug("Server Tick: " . $this->getTick());
-                        $this->getLogger()->debug("Level Tick: " . $level->getTickRate());
 					}
 				}
 			}catch(\Throwable $e){
