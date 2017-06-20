@@ -34,6 +34,7 @@ use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
@@ -527,7 +528,118 @@ class Item implements ItemIds, \JsonSerializable{
 		return null;
 	}
 
-	/**
+    /**
+     * @param int $id
+     * @param int $level
+     * @param bool $compareLevel
+     * @return bool
+     */
+    public function hasEnchantment(int $id, int $level = 1, bool $compareLevel = false): bool {
+        if ($this->hasEnchantments()) {
+            foreach ($this->getEnchantments() as $enchantment) {
+                if ($enchantment->getId() == $id) {
+                    if ($compareLevel) {
+                        if ($enchantment->getLevel() == $level) {
+                            return true;
+                        }
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param $id
+     * @return Int level|0(for null)
+     */
+    public function getEnchantmentLevel(int $id) {
+        if (!$this->hasEnchantments()) {
+            return 0;
+        }
+
+        foreach ($this->getNamedTag()->ench as $entry) {
+            if ($entry["id"] === $id) {
+                $e = Enchantment::getEnchantment($entry["id"]);
+                $e->setLevel($entry["lvl"]);
+                $E_level = $e->getLevel() > Enchantment::getEnchantMaxLevel($id) ? Enchantment::getEnchantMaxLevel($id) : $e->getLevel();
+                return $E_level;
+            }
+        }
+
+        return 0;
+    }
+
+    public function hasRepairCost(): bool {
+        if (!$this->hasCompoundTag()) {
+            return false;
+        }
+
+        $tag = $this->getNamedTag();
+        if (isset($tag->RepairCost)) {
+            $tag = $tag->RepairCost;
+            if ($tag instanceof IntTag) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getRepairCost(): int {
+        if (!$this->hasCompoundTag()) {
+            return 1;
+        }
+
+        $tag = $this->getNamedTag();
+        if (isset($tag->display)) {
+            $tag = $tag->RepairCost;
+            if ($tag instanceof IntTag) {
+                return $tag->getValue();
+            }
+        }
+
+        return 1;
+    }
+
+
+    public function setRepairCost(int $cost) {
+        if ($cost === 1) {
+            $this->clearRepairCost();
+        }
+
+        if (!($hadCompoundTag = $this->hasCompoundTag())) {
+            $tag = new CompoundTag("", []);
+        } else {
+            $tag = $this->getNamedTag();
+        }
+
+        $tag->RepairCost = new IntTag("RepairCost", $cost);
+
+        if (!$hadCompoundTag) {
+            $this->setCompoundTag($tag);
+        }
+
+        return $this;
+    }
+
+    public function clearRepairCost() {
+        if (!$this->hasCompoundTag()) {
+            return $this;
+        }
+        $tag = $this->getNamedTag();
+
+        if (isset($tag->RepairCost) and $tag->RepairCost instanceof IntTag) {
+            unset($tag->RepairCost);
+            $this->setNamedTag($tag);
+        }
+
+        return $this;
+    }
+
+    /**
 	 * @param Enchantment $ench
 	 */
 	public function addEnchantment(Enchantment $ench){
