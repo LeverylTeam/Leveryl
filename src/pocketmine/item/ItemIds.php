@@ -204,6 +204,9 @@ interface ItemIds extends BlockIds{
 
 	const SPLASH_POTION = 438;
 
+    const ELYTRA = 444;
+    const ELYTRA_WINGS = 444;
+
 	const BEETROOT = 457;
 	const BEETROOT_SEEDS = 458, BEETROOT_SEED = 458;
 	const BEETROOT_SOUP = 459;
