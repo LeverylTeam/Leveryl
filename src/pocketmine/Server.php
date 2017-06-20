@@ -2358,20 +2358,24 @@ class Server{
 
 				if($this->autoTickRate){
 					if($tickMs < 50 and $level->getTickRate() > $this->baseTickRate){
-						$level->setTickRate($r = $level->getTickRate() - 1);
-						if($r > $this->baseTickRate){
+						$level->setTickRate($this->getTick());
+						if($tickMs < 50 and $level->getTickRate() > $this->baseTickRate){
 							$level->tickRateCounter = $level->getTickRate();
 						}
 						$this->getLogger()->debug("Raising level \"{$level->getName()}\" tick rate to {$level->getTickRate()} ticks");
+						$this->getLogger()->debug("Server Tick: " . $this->getTick());
+                        $this->getLogger()->debug("Level Tick: " . $level->getTickRate());
 					}elseif($tickMs >= 50){
 						if($level->getTickRate() === $this->baseTickRate){
-							$level->setTickRate(max($this->baseTickRate + 1, min($this->autoTickRateLimit, (int) floor($tickMs / 50))));
+                            $level->setTickRate($this->getTick());
 							$this->getLogger()->debug(sprintf("Level \"%s\" took %gms, setting tick rate to %d ticks", $level->getName(), (int) round($tickMs, 2), $level->getTickRate()));
 						}elseif(($tickMs / $level->getTickRate()) >= 50 and $level->getTickRate() < $this->autoTickRateLimit){
 							$level->setTickRate($level->getTickRate() + 1);
 							$this->getLogger()->debug(sprintf("Level \"%s\" took %gms, setting tick rate to %d ticks", $level->getName(), (int) round($tickMs, 2), $level->getTickRate()));
 						}
 						$level->tickRateCounter = $level->getTickRate();
+                        $this->getLogger()->debug("Server Tick: " . $this->getTick());
+                        $this->getLogger()->debug("Level Tick: " . $level->getTickRate());
 					}
 				}
 			}catch(\Throwable $e){

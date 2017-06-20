@@ -26,6 +26,7 @@ namespace pocketmine\event\entity;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\event\Cancellable;
+use pocketmine\Player;
 
 /**
  * Called when an entity takes damage.
@@ -55,12 +56,17 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 	const CAUSE_MAGIC = 13;
 	const CAUSE_CUSTOM = 14;
 	const CAUSE_STARVATION = 15;
+    const CAUSE_LIGHTNING = 16;
 
 
 	private $cause;
 	/** @var array */
 	private $modifiers;
 	private $originals;
+    private $usedArmors = [];
+    private $thornsLevel = [];
+    private $thornsArmor;
+    private $thornsDamage = 0;
 
 
 	/**
@@ -124,6 +130,50 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 
 		return 0;
 	}
+
+    /**
+     * @return bool
+     */
+    public function useArmors() {
+        if ($this->entity instanceof Player) {
+            if ($this->entity->isSurvival() and $this->entity->isAlive()) {
+                foreach ($this->usedArmors as $index => $cost) {
+                    $i = $this->entity->getInventory()->getArmorItem($index);
+                    if ($i->isArmor()) {
+                        $this->entity->getInventory()->damageArmor($index, $cost);
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function createThornsDamage() {
+        if ($this->thornsLevel !== []) {
+            $this->thornsArmor = array_rand($this->thornsLevel);
+            $thornsL = $this->thornsLevel[$this->thornsArmor];
+            if (mt_rand(1, 100) < $thornsL * 15) {
+                $this->thornsDamage = mt_rand(1, 4);
+            }
+        }
+    }
+
+    public function getThornsDamage() {
+        return $this->thornsDamage;
+    }
+
+    /**
+     * @return bool should be used after getThornsDamage()
+     */
+    public function setThornsArmorUse() {
+        if ($this->thornsArmor === null) {
+            return false;
+        } else {
+            $this->usedArmors[$this->thornsArmor] = 3;
+            return true;
+        }
+    }
 
 	/**
 	 * @param float $damage

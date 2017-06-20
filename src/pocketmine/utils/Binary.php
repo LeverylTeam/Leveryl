@@ -79,10 +79,10 @@ class Binary{
 	/**
 	 * Writes an unsigned/signed byte
 	 *
-	 * @param int $c
+	 * @param $c
 	 * @return string
 	 */
-	public static function writeByte(int $c) : string{
+	public static function writeByte($c) : string{
 		return chr($c);
 	}
 
@@ -112,11 +112,11 @@ class Binary{
 	/**
 	 * Writes a 16-bit signed/unsigned big-endian number
 	 *
-	 * @param int $value
+	 * @param $value
 	 *
 	 * @return string
 	 */
-	public static function writeShort(int $value) : string{
+	public static function writeShort($value) : string{
 		return pack("n", $value);
 	}
 
@@ -151,7 +151,7 @@ class Binary{
 	 *
 	 * @return string
 	 */
-	public static function writeLShort(int $value) : string{
+	public static function writeLShort($value) : string{
 		return pack("v", $value);
 	}
 
@@ -169,10 +169,10 @@ class Binary{
 	/**
 	 * Writes a 3-byte big-endian number
 	 *
-	 * @param int $value
+	 * @param $value
 	 * @return string
 	 */
-	public static function writeTriad(int $value) : string{
+	public static function writeTriad($value) : string{
 		return substr(pack("N", $value), 1);
 	}
 
@@ -190,10 +190,10 @@ class Binary{
 	/**
 	 * Writes a 3-byte little-endian number
 	 *
-	 * @param int $value
+	 * @param $value
 	 * @return string
 	 */
-	public static function writeLTriad(int $value) : string{
+	public static function writeLTriad($value) : string{
 		return substr(pack("V", $value), 0, -1);
 	}
 
@@ -211,10 +211,10 @@ class Binary{
 	/**
 	 * Writes a 4-byte integer
 	 *
-	 * @param int $value
+	 * @param $value
 	 * @return string
 	 */
-	public static function writeInt(int $value) : string{
+	public static function writeInt($value) : string{
 		return pack("N", $value);
 	}
 
@@ -232,15 +232,15 @@ class Binary{
 	/**
 	 * Writes a 4-byte signed little-endian integer
 	 *
-	 * @param int $value
+	 * @param $value
 	 * @return string
 	 */
-	public static function writeLInt(int $value) : string{
+	public static function writeLInt($value) : string{
 		return pack("V", $value);
 	}
 
 	/**
-	 * Reads a 4-byte floating-point number
+	 * Reads a 4-byte floating-ponumber
 	 *
 	 * @param string $str
 	 * @return float
@@ -251,19 +251,19 @@ class Binary{
 	}
 
 	/**
-	 * Reads a 4-byte floating-point number, rounded to the specified number of decimal places.
+	 * Reads a 4-byte floating-ponumber, rounded to the specified number of decimal places.
 	 *
 	 * @param string $str
-	 * @param int $accuracy
+	 * @param $accuracy
 	 *
 	 * @return float
 	 */
-	public static function readRoundedFloat(string $str, int $accuracy){
+	public static function readRoundedFloat(string $str, $accuracy){
 		return round(self::readFloat($str), $accuracy);
 	}
 
 	/**
-	 * Writes a 4-byte floating-point number.
+	 * Writes a 4-byte floating-ponumber.
 	 *
 	 * @param float $value
 	 * @return string
@@ -273,7 +273,7 @@ class Binary{
 	}
 
 	/**
-	 * Reads a 4-byte little-endian floating-point number.
+	 * Reads a 4-byte little-endian floating-ponumber.
 	 *
 	 * @param string $str
 	 * @return float
@@ -284,19 +284,19 @@ class Binary{
 	}
 
 	/**
-	 * Reads a 4-byte little-endian floating-point number rounded to the specified number of decimal places.
+	 * Reads a 4-byte little-endian floating-ponumber rounded to the specified number of decimal places.
 	 *
 	 * @param string $str
-	 * @param int $accuracy
+	 * @param $accuracy
 	 *
 	 * @return float
 	 */
-	public static function readRoundedLFloat(string $str, int $accuracy){
+	public static function readRoundedLFloat(string $str, $accuracy){
 		return round(self::readLFloat($str), $accuracy);
 	}
 
 	/**
-	 * Writes a 4-byte little-endian floating-point number.
+	 * Writes a 4-byte little-endian floating-ponumber.
 	 *
 	 * @param float $value
 	 * @return string
@@ -306,7 +306,7 @@ class Binary{
 	}
 
 	/**
-	 * Returns a printable floating-point number.
+	 * Returns a printable floating-ponumber.
 	 *
 	 * @param float $value
 	 * @return string
@@ -316,7 +316,7 @@ class Binary{
 	}
 
 	/**
-	 * Reads an 8-byte floating-point number.
+	 * Reads an 8-byte floating-ponumber.
 	 *
 	 * @param string $str
 	 * @return float
@@ -327,7 +327,7 @@ class Binary{
 	}
 
 	/**
-	 * Writes an 8-byte floating-point number.
+	 * Writes an 8-byte floating-ponumber.
 	 *
 	 * @param float $value
 	 * @return string
@@ -337,7 +337,7 @@ class Binary{
 	}
 
 	/**
-	 * Reads an 8-byte little-endian floating-point number.
+	 * Reads an 8-byte little-endian floating-ponumber.
 	 *
 	 * @param string $str
 	 * @return float
@@ -348,7 +348,7 @@ class Binary{
 	}
 
 	/**
-	 * Writes an 8-byte floating-point little-endian number.
+	 * Writes an 8-byte floating-polittle-endian number.
 	 * @param float $value
 	 * @return string
 	 */
@@ -408,7 +408,7 @@ class Binary{
 	 *
 	 * @return int
 	 */
-	public static function readVarInt(string $buffer, int &$offset) : int{
+	public static function readVarInt(string $buffer, &$offset) : int{
 		$raw = self::readUnsignedVarInt($buffer, $offset);
 		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
 		return $temp ^ ($raw & (1 << 63));
@@ -422,9 +422,9 @@ class Binary{
 	 *
 	 * @return int
 	 *
-	 * @throws \InvalidArgumentException if the var-int did not end after 5 bytes
+	 * @throws \InvalidArgumentException if the var-did not end after 5 bytes
 	 */
-	public static function readUnsignedVarInt(string $buffer, int &$offset) : int{
+	public static function readUnsignedVarInt(string $buffer, &$offset) : int{
 		$value = 0;
 		for($i = 0; $i <= 35; $i += 7){
 			$b = ord($buffer{$offset++});
@@ -443,10 +443,10 @@ class Binary{
 	/**
 	 * Writes a 32-bit integer as a zigzag-encoded variable-length integer.
 	 *
-	 * @param int $v
+	 * @param $v
 	 * @return string
 	 */
-	public static function writeVarInt(int $v) : string{
+	public static function writeVarInt($v) : string{
 		$v = ($v << 32 >> 32);
 		return self::writeUnsignedVarInt(($v << 1) ^ ($v >> 31));
 	}
@@ -454,10 +454,10 @@ class Binary{
 	/**
 	 * Writes a 32-bit unsigned integer as a variable-length integer.
 	 *
-	 * @param int $value
+	 * @param $value
 	 * @return string up to 5 bytes
 	 */
-	public static function writeUnsignedVarInt(int $value) : string{
+	public static function writeUnsignedVarInt($value) : string{
 		$buf = "";
 		$value &= 0xffffffff;
 		for($i = 0; $i < 5; ++$i){
@@ -483,7 +483,7 @@ class Binary{
 	 *
 	 * @return int
 	 */
-	public static function readVarLong(string $buffer, int &$offset) : int{
+	public static function readVarLong(string $buffer, &$offset) : int{
 		$raw = self::readUnsignedVarLong($buffer, $offset);
 		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
 		return $temp ^ ($raw & (1 << 63));
@@ -497,7 +497,7 @@ class Binary{
 	 *
 	 * @return int
 	 */
-	public static function readUnsignedVarLong(string $buffer, int &$offset) : int{
+	public static function readUnsignedVarLong(string $buffer, &$offset) : int{
 		$value = 0;
 		for($i = 0; $i <= 63; $i += 7){
 			$b = ord($buffer{$offset++});
@@ -516,20 +516,20 @@ class Binary{
 	/**
 	 * Writes a 64-bit integer as a zigzag-encoded variable-length long.
 	 *
-	 * @param int $v
+	 * @param $v
 	 * @return string
 	 */
-	public static function writeVarLong(int $v) : string{
+	public static function writeVarLong($v) : string{
 		return self::writeUnsignedVarLong(($v << 1) ^ ($v >> 63));
 	}
 
 	/**
 	 * Writes a 64-bit unsigned integer as a variable-length long.
-	 * @param int $value
+	 * @param $value
 	 *
 	 * @return string
 	 */
-	public static function writeUnsignedVarLong(int $value) : string{
+	public static function writeUnsignedVarLong($value) : string{
 		$buf = "";
 		for($i = 0; $i < 10; ++$i){
 			if(($value >> 7) !== 0){

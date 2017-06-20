@@ -569,4 +569,11 @@ class PlayerInventory extends BaseInventory{
 		return parent::getHolder();
 	}
 
+    public function damageArmor($index, $cost) {
+        $this->slots[$this->getSize() + $index]->useOn($cost);
+        if ($this->slots[$this->getSize() + $index]->getDamage() >= $this->slots[$this->getSize() + $index]->getMaxDurability()) {
+            $this->setItem($this->getSize() + $index, Item::get(Item::AIR, 0, 0));
+        }
+        $this->sendArmorContents($this->getViewers());
+    }
 }

@@ -53,10 +53,10 @@ class Weather {
         $this->level = $level;
         $this->weatherNow = self::SUNNY;
         $this->duration = $duration;
-        if((microtime(true) - \pocketmine\START_TIME) > 10){ // Delayed... TODO: Work on a fix for this hack.
+        if((microtime(false) - \pocketmine\START_TIME) > 10){ // Delayed... TODO: Work on a fix for this hack.
             $tick = $level->getServer()->getTick();
         } else {
-            $tick = 200;
+            $tick = 620;
         }
         $this->lastUpdate = $tick;
         $this->temporalVector = new Vector3(0, 0, 0);

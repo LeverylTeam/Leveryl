@@ -29,12 +29,12 @@ use pocketmine\item\Item;
 
 class BinaryStream{
 
-	/** @var int */
+	/** @var */
 	public $offset;
 	/** @var string */
 	public $buffer;
 
-	public function __construct(string $buffer = "", int $offset = 0){
+	public function __construct(string $buffer = "", $offset = 0){
 		$this->buffer = $buffer;
 		$this->offset = $offset;
 	}
@@ -44,7 +44,7 @@ class BinaryStream{
 		$this->offset = 0;
 	}
 
-	public function setBuffer(string $buffer = "", int $offset = 0){
+	public function setBuffer(string $buffer = "", $offset = 0){
 		$this->buffer = $buffer;
 		$this->offset = $offset;
 	}
@@ -101,7 +101,7 @@ class BinaryStream{
 		return ord($this->buffer{$this->offset++});
 	}
 
-	public function putByte(int $v){
+	public function putByte($v){
 		$this->buffer .= chr($v);
 	}
 
@@ -114,7 +114,7 @@ class BinaryStream{
 		return Binary::readSignedShort($this->get(2));
 	}
 
-	public function putShort(int $v){
+	public function putShort($v){
 		$this->buffer .= Binary::writeShort($v);
 	}
 
@@ -126,7 +126,7 @@ class BinaryStream{
 		return Binary::readSignedLShort($this->get(2));
 	}
 
-	public function putLShort(int $v){
+	public function putLShort($v){
 		$this->buffer .= Binary::writeLShort($v);
 	}
 
@@ -135,7 +135,7 @@ class BinaryStream{
 		return Binary::readTriad($this->get(3));
 	}
 
-	public function putTriad(int $v){
+	public function putTriad($v){
 		$this->buffer .= Binary::writeTriad($v);
 	}
 
@@ -143,7 +143,7 @@ class BinaryStream{
 		return Binary::readLTriad($this->get(3));
 	}
 
-	public function putLTriad(int $v){
+	public function putLTriad($v){
 		$this->buffer .= Binary::writeLTriad($v);
 	}
 
@@ -152,7 +152,7 @@ class BinaryStream{
 		return Binary::readInt($this->get(4));
 	}
 
-	public function putInt(int $v){
+	public function putInt($v){
 		$this->buffer .= Binary::writeInt($v);
 	}
 
@@ -160,7 +160,7 @@ class BinaryStream{
 		return Binary::readLInt($this->get(4));
 	}
 
-	public function putLInt(int $v){
+	public function putLInt($v){
 		$this->buffer .= Binary::writeLInt($v);
 	}
 
@@ -169,7 +169,7 @@ class BinaryStream{
 		return Binary::readFloat($this->get(4));
 	}
 
-	public function getRoundedFloat(int $accuracy) : float{
+	public function getRoundedFloat($accuracy) : float{
 		return Binary::readRoundedFloat($this->get(4), $accuracy);
 	}
 
@@ -181,7 +181,7 @@ class BinaryStream{
 		return Binary::readLFloat($this->get(4));
 	}
 
-	public function getRoundedLFloat(int $accuracy) : float{
+	public function getRoundedLFloat($accuracy) : float{
 		return Binary::readRoundedLFloat($this->get(4), $accuracy);
 	}
 
@@ -313,9 +313,9 @@ class BinaryStream{
 
 	/**
 	 * Writes a 32-bit variable-length unsigned integer to the end of the buffer.
-	 * @param int $v
+	 * @param $v
 	 */
-	public function putUnsignedVarInt(int $v){
+	public function putUnsignedVarInt($v){
 		$this->put(Binary::writeUnsignedVarInt($v));
 	}
 
@@ -329,9 +329,9 @@ class BinaryStream{
 
 	/**
 	 * Writes a 32-bit zigzag-encoded variable-length integer to the end of the buffer.
-	 * @param int $v
+	 * @param $v
 	 */
-	public function putVarInt(int $v){
+	public function putVarInt($v){
 		$this->put(Binary::writeVarInt($v));
 	}
 
