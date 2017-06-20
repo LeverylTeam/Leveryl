@@ -1507,7 +1507,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$revert = false;
 
-		if(($distanceSquared / ($tickDiff ** 2)) > 100 and !$this->allowMovementCheats){
+		$inelytra = $this->getInventory()->getChestplate() instanceof Elytra;
+		$isonair = $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0)) instanceof Air;
+
+		if(($distanceSquared / ($tickDiff ** 2)) > 100 and !$this->allowMovementCheats and $inelytra and $isonair){
 			$this->server->getLogger()->warning($this->getName() . " moved too fast, reverting movement");
 			$revert = true;
 		}else{
