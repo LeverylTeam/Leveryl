@@ -10,6 +10,8 @@ This is an Advanced & Feature Rich Server Software to hopefully Replace Tesserac
 This spoon is based off of PMMP (For Stability)  
 
 # Features:
+- [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
+- [ ] EnderChests
 - [X] **Full Tesseract & PMMP PluginAPI Compatibility**
 - [X] **CustomPotions**
 - [X] **CustomEnchants**
