@@ -1492,18 +1492,18 @@ class Server{
 			}
 
 			$startupmsg = "
-§l§f╔═════════════════════════════════════════════════╗  §r§f══ Loaded: Properties and Configuration ══
-§l§f║                                                 ║    §r§cDate: §d$date
-§l§f║§r§b          __                           _         §l§f║§r    §cVersion: §d$version §cCodename: §d$code
-§l§f║§r§b         / /  _____   _____ _ __ _   _| |        §l§f║§r    §cMCPE: §d$mcpe §cProtocol: §d$protocol
-§l§f║§r§b        / /  / _ \ \ / / _ \ '__| | | | |        §l§f║ §r   §cIP: §d$ip §cPort: §d$port
-§l§f║§r§b       / /__|  __/\ V /  __/ |  | |_| | |        §l§f║ §r   §cQuery: §d$query
-§l§f║§r§b       \____/\___| \_/ \___|_|   \__, |_|        §l§f║ §r   §cSSL Extension: §d$ssl
-§l§f║§r§b                               |____/            §l§f║ §r   §cAuthentication: §d$mode
-§l§f║                                                 ║   §r §r§cAPI Version: §d$api
-§l§f║§r   §bRepository : §bGitHub.com/LeverylTeam/Leveryl  §l §f║  §r  §cLanguage: §d$lang
-§l§f║                                                 ║  §r  §cPackage: §d$package
-§l§f╚═════════════════════════════════════════════════╝  §r§f══════════════════════════════════════════";
+§r§f══ Loaded: Properties and Configuration ══§l§f╔═════════════════════════════════════════════════╗§r§f══ Loaded: Properties and Configuration ══
+§r§cDate: §d$date      §l§f║                                                 ║    §r§cDate: §d$date
+§cVersion: §d$version §cCodename: §d$code §l§f║§r§b          __                           _         §l§f║§r    §cVersion: §d$version §cCodename: §d$code
+§cMCPE: §d$mcpe §cProtocol: §d$protocol             §l§f║§r§b         / /  _____   _____ _ __ _   _| |        §l§f║§r    §cMCPE: §d$mcpe §cProtocol: §d$protocol
+§cIP: §d$ip §cPort: §d$port             §l§f║§r§b        / /  / _ \ \ / / _ \ '__| | | | |        §l§f║ §r   §cIP: §d$ip §cPort: §d$port
+§cQuery: §d$query                            §l§f║§r§b       / /__|  __/\ V /  __/ |  | |_| | |        §l§f║ §r   §cQuery: §d$query
+§cSSL Extension: §d$ssl                      §l§f║§r§b       \____/\___| \_/ \___|_|   \__, |_|        §l§f║ §r   §cSSL Extension: §d$ssl
+§cAuthentication: §d$mode     §l§f║§r§b                               |____/            §l§f║ §r   §cAuthentication: §d$mode
+§cAPI Version: §d$api                 §l§f║                                                 ║   §r §r§cAPI Version: §d$api
+§cLanguage: §d$lang                             §l§f║§r   §bRepository : §bGitHub.com/LeverylTeam/Leveryl  §l §f║  §r  §cLanguage: §d$lang
+§cPackage: §d$package                              §l§f║                                                 ║  §r  §cPackage: §d$package
+§r§f══════════════════════════════════════════§l§f╚═════════════════════════════════════════════════╝§r§f════════════════════════════════════════════";
 
 			if($this->logger instanceof MainLogger){
 				$this->logger->directSend($startupmsg);
@@ -1580,7 +1580,9 @@ class Server{
 			if(\pocketmine\DEBUG >= 0){
 				@cli_set_process_title($this->getName() . " " . $this->getPocketMineVersion());
 			}
-
+			
+			$this->logger->info(TextFormat::RED."Server Starting.......");
+            $this->logger->info(TextFormat::RED."Loading......");
 			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.networkStart", [$this->getIp() === "" ? "*" : $this->getIp(), $this->getPort()]));
 			define("BOOTUP_RANDOM", random_bytes(16));
 			$this->serverID = Utils::getMachineUniqueId($this->getIp() . $this->getPort());
