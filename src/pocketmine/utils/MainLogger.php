@@ -221,7 +221,8 @@ class MainLogger extends \AttachableThreadedLogger
 				$threadName = (new \ReflectionClass($thread))->getShortName() . " thread";
 			}
 
-			$message = TextFormat::toANSI(TextFormat::AQUA . date("H:i:s", $now) . " " . TextFormat::RESET . $color . "[" . $prefix . "] " . $message . TextFormat::RESET);
+			$message = TextFormat::toANSI(TextFormat::GREEN . "§l§6Leveryl -> " . TextFormat::RESET . TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . $color . $prefix . "> " . 
+			$message . TextFormat::RESET);
 			$cleanMessage = TextFormat::clean($message);
 
 			if (!Terminal::hasFormattingCodes()) {
