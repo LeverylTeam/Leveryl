@@ -22,6 +22,9 @@ This spoon is based off of PMMP (For Stability)
 - [X] **Console Only Commands**
 - [X] **Limited Creative**
 - [X] **Weather**  
+- [ ] Spawn Eggs
+- [ ] Working Mob Spawners
+- [ ] Toggleable MobAI
 
 ***Other List Entries are on "leveryl.yml"....***
 
