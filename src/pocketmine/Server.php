@@ -42,6 +42,7 @@ use pocketmine\event\level\LevelLoadEvent;
 use pocketmine\event\player\PlayerDataSaveEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
 use pocketmine\event\server\ServerCommandEvent;
+use pocketmine\event\server\StartupFinishEvent;
 use pocketmine\event\TextContainer;
 use pocketmine\event\Timings;
 use pocketmine\event\TimingsHandler;
@@ -2115,7 +2116,6 @@ class Server{
 		}
 
 		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.defaultGameMode", [self::getGamemodeString($this->getGamemode())]));
-
 		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.startFinished", [round(microtime(true) - \pocketmine\START_TIME, 3)]));
 
 		switch (strtolower($this->getCodename())){
@@ -2143,6 +2143,8 @@ class Server{
 				// Do nothing.
 				break;
 		}
+
+        ($ev = new StartupFinishEvent($this))->call();
 
 		$this->tickProcessor();
 		$this->forceShutdown();
