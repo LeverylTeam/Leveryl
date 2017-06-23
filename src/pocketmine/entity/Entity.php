@@ -34,6 +34,7 @@ use pocketmine\event\entity\EntityDespawnEvent;
 use pocketmine\event\entity\EntityLevelChangeEvent;
 use pocketmine\event\entity\EntityMotionEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
+use pocketmine\event\entity\EntitySlimeBlockBounceEvent;
 use pocketmine\event\entity\EntitySpawnEvent;
 use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\Timings;
@@ -1352,6 +1353,7 @@ abstract class Entity extends Location implements Metadatable{
         //Get the block directly beneath the player's feet, check if it is a slime block
         if ($this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0)) instanceof SlimeBlock) {
             $damage = 0;
+            ($ev = new EntitySlimeBlockBounceEvent($this))->call();
         }
         //TODO Improve
         if ($this instanceof Player) {
