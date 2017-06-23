@@ -19,7 +19,7 @@
  *
 */
 
-namespace pmmp\TesterPlugin;
+namespace Leveryl;
 
 abstract class Test{
 	const RESULT_WAITING = -1;

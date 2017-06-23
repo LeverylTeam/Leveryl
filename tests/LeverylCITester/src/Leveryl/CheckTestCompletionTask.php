@@ -19,7 +19,7 @@
  *
 */
 
-namespace pmmp\TesterPlugin;
+namespace Leveryl;
 
 use pocketmine\scheduler\PluginTask;
 

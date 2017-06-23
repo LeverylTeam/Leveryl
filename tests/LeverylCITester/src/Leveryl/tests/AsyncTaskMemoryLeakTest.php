@@ -19,9 +19,9 @@
  *
 */
 
-namespace pmmp\TesterPlugin\tests;
+namespace Leveryl\tests;
 
-use pmmp\TesterPlugin\Test;
+use Leveryl\Test;
 use pocketmine\scheduler\AsyncTask;
 
 class AsyncTaskMemoryLeakTest extends Test{

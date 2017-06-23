@@ -12,6 +12,9 @@ server.properties
 crashdumps/*
 resource_packs/
 
+# Cortex's Files.
+copytests.bat
+
 # Common IDEs
 .idea/
 nbproject/*
