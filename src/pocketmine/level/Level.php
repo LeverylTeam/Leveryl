@@ -2977,4 +2977,12 @@ class Level implements ChunkManager, Metadatable{
 		$pk->headYaw = $headYaw ?? $yaw;
 		$this->addChunkPacket($chunkX, $chunkZ, $pk);
 	}
+
+    public function updateGameRule($rule, $switch){
+        $this->provider->updateGameRule($rule, $switch);
+    }
+
+    public function getGameRule($rule){
+        return $this->provider->getGameRule($rule);
+    }
 }

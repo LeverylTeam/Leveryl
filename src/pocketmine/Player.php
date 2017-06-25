@@ -2720,7 +2720,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                 $this->craftingType = self::CRAFTING_SMALL;
 
                 if ($this->server->getLeverylConfigValue("NetherEnabled", true)) {
-                    if ($this->level === $this->server->getLevelByName($this->server->getLeverylConfigValue("NetherEnabled", true))) {
+                    if ($this->level === $this->server->getLevelByName($this->server->getLeverylConfigValue("NetherWorldName", true))) {
                         $this->teleport($pos = $this->server->getDefaultLevel()->getSafeSpawn());
                     }
                 }

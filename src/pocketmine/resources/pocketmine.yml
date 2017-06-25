@@ -104,7 +104,7 @@ player:
 
 level-settings:
  #The default format that levels will use when created
- default-format: pmanvil
+ default-format: gamerulanvil
  #Automatically change levels tick rate to maintain 20 ticks per second
  auto-tick-rate: true
  auto-tick-rate-limit: 20

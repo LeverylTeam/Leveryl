@@ -220,4 +220,8 @@ interface LevelProvider{
 
 	public function close();
 
+    public function updateGameRule($t, $s);
+
+    public function getGameRule($rule);
+
 }

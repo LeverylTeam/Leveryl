@@ -125,7 +125,7 @@ class Dispenser extends Solid{
 				$dispenser = Tile::createTile(Tile::DISPENSER, $this->getLevel(), $nbt);
 			}
 
-			if($player->isCreative() and $player->getServer()->limitedCreative){
+			if($player->isCreative() and $player->getServer()->getLeverylConfigValue("LimitedCreative", true)){
 				return true;
 			}
 

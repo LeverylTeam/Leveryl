@@ -264,7 +264,13 @@ class McRegion extends BaseLevelProvider{
 			"generatorName" => new StringTag("generatorName", Generator::getGeneratorName($generator)),
 			"generatorOptions" => new StringTag("generatorOptions", isset($options["preset"]) ? $options["preset"] : ""),
 			"LevelName" => new StringTag("LevelName", $name),
-			"GameRules" => new CompoundTag("GameRules", [])
+            "GameRules" => new CompoundTag("GameRules", [
+                "keepInventory" => new StringTag("KeepInventory", "true"),
+                "showDeathMessages" => new StringTag("showDeathMessages", "true"),
+                "doTileDrops" => new StringTag("doTileDrops", "true"),
+                "doFireTick" => new StringTag("doFireTick", "true"),
+                "doDaylightCycle" => new StringTag("doDaylightCycle", "true"),
+            ])
 		]);
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 		$nbt->setData(new CompoundTag("", [

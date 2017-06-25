@@ -137,4 +137,44 @@ abstract class BaseLevelProvider implements LevelProvider{
 
 		return new ChunkRequestTask($this->level, $chunk);
 	}
+
+    public function updateGameRule($t, $s)
+    {
+        switch($t){
+            case "keepInventory";
+                $this->levelData->GameRules->keepInventory = new StringTag("$t", "$s");
+                break;
+            case "showDeathMessages";
+                $this->levelData->GameRules->showDeathMessages = new StringTag("$t", "$s");
+                break;
+            case "doTileDrops";
+                $this->levelData->GameRules->doTileDrops = new StringTag("$t", "$s");
+                break;
+            case "doFireTick";
+                $this->levelData->GameRules->doFireTick = new StringTag("$t", "$s");;
+                break;
+            case "doDaylightCycle";
+                $this->levelData->GameRules->doDaylightCycle = new StringTag("$t", "$s");
+                break;
+        }
+    }
+    public function getGameRule($rule) : bool {
+        switch($rule){
+            case "keepInventory":
+                return (boolean) $this->levelData->GameRules["keepInventory"];
+                break;
+            case "showDeathMessage":
+                return (boolean) $this->levelData->GameRules["showDeathMessage"];
+                break;
+            case "doTileDrops":
+                return (boolean) $this->levelData->GameRules["doTileDrops"];
+                break;
+            case "doFireTick":
+                return (boolean) $this->levelData->GameRules["doFireTick"];
+                break;
+            case "doDaylightCycle":
+                return (boolean) $this->levelData->GameRules["doDaylightCycle"];
+                break;
+        }
+    }
 }

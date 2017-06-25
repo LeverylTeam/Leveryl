@@ -46,7 +46,6 @@ FireSpread: false
 DisableRakLib: false
 
 # Player
-KeepInventory: false
 ClearInventoryOnGameModeChange: true
 KeepExperiencePoints: false
 #### Enables / Disables Leveryl Core's AntiCheat Messages on Console

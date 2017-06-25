@@ -125,7 +125,7 @@ class Dropper extends Solid{
 				$dropper = Tile::createTile(Tile::DROPPER, $this->getLevel(), $nbt);
 			}
 
-			if($player->isCreative() and $player->getServer()->limitedCreative){
+			if($player->isCreative() and $player->getServer()->getLeverylConfigValue("LimitedCreative", true)){
 				return true;
 			}
 			$player->addWindow($dropper->getInventory());
