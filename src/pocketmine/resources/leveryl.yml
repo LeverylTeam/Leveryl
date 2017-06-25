@@ -40,9 +40,6 @@ BlockTNTExplosion: false
 
 # Game Mechanics
 Criticals: true
-Weather: false
-Lightning: false
-LightningFire: false
 FireSpread: false
 
 # Network
@@ -58,3 +55,11 @@ VerboseConsoleMessages: true
 # Miscellaneous
 DisableServerDotLog: false
 DisablePluginAPIVersionCheck: true
+
+# Weather
+Weather: true
+Lightning: true
+LightningFire: false
+WeatherDurationMin: 6000
+WeatherDurationMax: 12000
+LightningTime: 200

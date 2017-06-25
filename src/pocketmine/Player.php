@@ -215,6 +215,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	const CREATIVE = 1;
 	const ADVENTURE = 2;
 	const SPECTATOR = 3;
+    const CRAFTING_SMALL = 0;
+    const CRAFTING_BIG = 1;
+    const CRAFTING_ANVIL = 2;
+    const CRAFTING_ENCHANT = 3;
 	const VIEW = Player::SPECTATOR;
 
 	/**
@@ -331,6 +335,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public $guiscale;
 	public $controls;
 
+    private $portalTime = 0;
+    /** @var Vector3 */
+    public $fromPos = null;
+    /** @var  Position */
+    private $shouldResPos;
+
+    public $weatherData = [0, 0, 0];
 	/** @var PermissibleBase */
 	private $perm = null;
 
@@ -774,6 +785,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->unloadChunk($X, $Z, $oldLevel);
 			}
 
+            $targetLevel->getWeather()->sendWeather($this);
+
 			$this->usedChunks = [];
 			$this->level->sendTime($this);
 		}
@@ -930,6 +943,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->teleport($pos);
 
 		$this->spawnToAll();
+
+        $this->level->getWeather()->sendWeather($this);
 
 		if($this->getHealth() <= 0){
 			$pk = new RespawnPacket();
@@ -1584,6 +1599,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->server->getPluginManager()->callEvent($ev);
 
 				if(!($revert = $ev->isCancelled())){ //Yes, this is intended
+                    if ($this->server->getLeverylConfigValue("NetherEnabled", true)) {
+                        if ($this->isInsideOfPortal()) {
+                            if ($this->portalTime == 0) {
+                                $this->portalTime = $this->server->getTick();
+                            }
+                        } else {
+                            $this->portalTime = 0;
+                        }
+                    }
+
 					if($to->distanceSquared($ev->getTo()) > 0.01){ //If plugins modify the destination
 						$this->teleport($ev->getTo());
 					}else{
@@ -1686,6 +1711,53 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->timings->startTiming();
 
 		if($this->spawned){
+            if ($this->server->getLeverylConfigValue("NetherEnabled", true)) {
+                if (($this->isCreative() or $this->isSurvival() and $this->server->getTick() - $this->portalTime >= 80) and $this->portalTime > 0) {
+                    $netherLevel = null;
+                    if ($this->server->isLevelLoaded($this->server->getLeverylConfigValue("NetherWorldName", "nether")) or $this->server->loadLevel($this->server->getLeverylConfigValue("NetherWorldName", "nether"))) {
+                        $netherLevel = $this->server->getLevelByName($this->server->getLeverylConfigValue("NetherWorldName", "nether"));
+                    }
+
+                    if ($netherLevel instanceof Level) {
+                        if ($this->getLevel() !== $netherLevel) {
+                            $this->fromPos = $this->getPosition();
+                            $this->fromPos->x = ((int)$this->fromPos->x) + 0.5;
+                            $this->fromPos->z = ((int)$this->fromPos->z) + 0.5;
+                            $this->teleport($this->shouldResPos = $netherLevel->getSafeSpawn());
+                        } elseif ($this->fromPos instanceof Position) {
+                            if (!($this->getLevel()->isChunkLoaded($this->fromPos->x, $this->fromPos->z))) {
+                                $this->getLevel()->loadChunk($this->fromPos->x, $this->fromPos->z);
+                            }
+                            $add = [1, 0, -1, 0, 0, 1, 0, -1];
+                            $tempos = null;
+                            for ($j = 2; $j < 5; $j++) {
+                                for ($i = 0; $i < 4; $i++) {
+                                    if ($this->fromPos->getLevel()->getBlock($this->temporalVector->fromObjectAdd($this->fromPos, $add[$i] * $j, 0, $add[$i + 4] * $j))->getId() === Block::AIR) {
+                                        if ($this->fromPos->getLevel()->getBlock($this->temporalVector->fromObjectAdd($this->fromPos, $add[$i] * $j, 1, $add[$i + 4] * $j))->getId() === Block::AIR) {
+                                            $tempos = $this->fromPos->add($add[$i] * $j, 0, $add[$i + 4] * $j);
+                                            //$this->getLevel()->getServer()->getLogger()->debug($tempos);
+                                            break;
+                                        }
+                                    }
+                                }
+                                if ($tempos != null) {
+                                    break;
+                                }
+                            }
+                            if ($tempos === null) {
+                                $tempos = $this->fromPos->add(mt_rand(-2, 2), 0, mt_rand(-2, 2));
+                            }
+                            $this->teleport($this->shouldResPos = $tempos);
+                            $add = null;
+                            $tempos = null;
+                            $this->fromPos = null;
+                        } else {
+                            $this->teleport($this->shouldResPos = $this->server->getDefaultLevel()->getSafeSpawn());
+                        }
+                        $this->portalTime = 0;
+                    }
+                }
+            }
 			$this->processMovement($tickDiff);
 			$this->entityBaseTick($tickDiff);
 
@@ -1718,6 +1790,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 				}
 			}
+
+            if ($this->isOnFire() or $this->lastUpdate % 10 == 0) {
+                if ($this->isCreative() and !$this->isInsideOfFire()) {
+                    $this->extinguish();
+                } elseif ($this->getLevel()->getWeather()->isRainy()) {
+                    if ($this->getLevel()->canBlockSeeSky($this)) {
+                        $this->extinguish();
+                    }
+                }
+            }
 		}
 
 		$this->checkTeleportPosition();
@@ -1848,6 +1930,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->resourcePackEntries = $manager->getResourceStack();
 		$pk->mustAccept = $manager->resourcePacksRequired();
 		$this->dataPacket($pk);
+
+        $this->level->getWeather()->sendWeather($this);
 	}
 
 	protected function completeLoginSequence(){
@@ -2587,7 +2671,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	public function handlePlayerAction(PlayerActionPacket $packet) : bool{
-		if($this->spawned === false or (!$this->isAlive() and $packet->action !== PlayerActionPacket::ACTION_RESPAWN and $packet->action !== PlayerActionPacket::ACTION_DIMENSION_CHANGE)){
+		if($this->spawned === false or (!$this->isAlive() and $packet->action !== PlayerActionPacket::ACTION_RESPAWN and $packet->action !== PlayerActionPacket::ACTION_SPAWN_OVERWORLD and $packet->action !== PlayerActionPacket::ACTION_SPAWN_NETHER)){
 			return true;
 		}
 
@@ -2621,6 +2705,55 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 				$this->lastBreak = microtime(true);
 				break;
+
+            case PlayerActionPacket::ACTION_SPAWN_SAME_DIMENSION:
+            case PlayerActionPacket::ACTION_SPAWN_OVERWORLD:
+                if ($this->isAlive() or !$this->isOnline()) {
+                    break;
+                }
+
+                if ($this->server->isHardcore()) {
+                    $this->setBanned(true);
+                    break;
+                }
+
+                $this->craftingType = self::CRAFTING_SMALL;
+
+                if ($this->server->getLeverylConfigValue("NetherEnabled", true)) {
+                    if ($this->level === $this->server->getLevelByName($this->server->getLeverylConfigValue("NetherEnabled", true))) {
+                        $this->teleport($pos = $this->server->getDefaultLevel()->getSafeSpawn());
+                    }
+                }
+
+                $this->server->getPluginManager()->callEvent($ev = new PlayerRespawnEvent($this, $this->getSpawn()));
+
+                $this->teleport($ev->getRespawnPosition());
+
+                $this->setSprinting(false);
+                $this->setSneaking(false);
+                //$this->setGliding(false);
+
+                $this->extinguish();
+                $this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, 400, false);
+                $this->deadTicks = 0;
+                $this->noDamageTicks = 60;
+
+                $this->removeAllEffects();
+                $this->setHealth($this->getMaxHealth());
+
+                foreach ($this->attributeMap->getAll() as $attr) {
+                    $attr->resetToDefault();
+                }
+
+                $this->sendData($this);
+
+                $this->sendSettings();
+                $this->inventory->sendContents($this);
+                $this->inventory->sendArmorContents($this);
+
+                $this->spawnToAll();
+                $this->scheduleUpdate();
+                break;
 
 			/** @noinspection PhpMissingBreakStatementInspection */
 			case PlayerActionPacket::ACTION_ABORT_BREAK:

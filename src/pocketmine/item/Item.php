@@ -1182,4 +1182,7 @@ class Item implements ItemIds, \JsonSerializable{
 		$this->cachedNBT = null;
 	}
 
+    public function getArmorValue() {
+        return false;
+    }
 }

@@ -265,6 +265,11 @@ class Server{
 	/** @var Level */
 	private $levelDefault = null;
 
+    /** @var Level */
+	public $netherLevel;
+
+	public $startfinished;
+
 	/**
 	 * @return string
 	 */
@@ -1137,8 +1142,14 @@ class Server{
 	public function getLeverylConfig(){
 		return $this->leverylconfig;
 	}
-	
-	public function getLeverylConfigValue(string $key, $defaultValue = null){
+
+
+    /**
+     * @param string $key
+     * @param null $defaultValue
+     * @return mixed
+     */
+    public function getLeverylConfigValue(string $key, $defaultValue = null){
 		if($this->leverylconfig->exists($key)){
 			return $this->leverylconfig->get($key);
 		} else {
@@ -1397,6 +1408,7 @@ class Server{
 		self::$sleeper = new \Threaded;
 		$this->autoloader = $autoloader;
 		$this->logger = $logger;
+		$this->startfinished = false;
 
 		try{
 
@@ -1694,6 +1706,13 @@ class Server{
 
 				return;
 			}
+
+            if ($this->getLeverylConfigValue("NetherEnabled", true)) {
+                if (!$this->loadLevel($this->getLeverylConfigValue("NetherWorldName", "nether"))) {
+                    $this->generateLevel($this->getLeverylConfigValue("NetherWorldName", "nether"), time(), Generator::getGenerator("nether"));
+                }
+                $this->netherLevel = $this->getLevelByName($this->getLeverylConfigValue("NetherWorldName", "nether"));
+            }
 
 			if($this->getProperty("ticks-per.autosave", 6000) > 0){
 				$this->autoSaveTicks = (int) $this->getProperty("ticks-per.autosave", 6000);
@@ -2129,14 +2148,14 @@ class Server{
 			case "dev":
 				$this->logger->notice("-------------------- NOTICE --------------------");
 				$this->logger->notice("You're running a DEVELOPER's version of Leveryl.");
-				$this->logger->notice("		   DO NOT use in production			 ");
+				$this->logger->notice("	           DO NOT use in production            ");
 				$this->logger->notice("-------------------- NOTICE --------------------");
 				break;
 			case "experimental":
 			case "exp":
 				$this->logger->notice("--------------------- NOTICE ---------------------");
 				$this->logger->notice("You're running an EXPERIMENTAL version of Leveryl.");
-				$this->logger->notice("			DO NOT use in production			  ");
+                $this->logger->notice("	           DO NOT use in production              ");
 				$this->logger->notice("--------------------- NOTICE ---------------------");
 				break;
 			default:
@@ -2145,6 +2164,7 @@ class Server{
 		}
 
         ($ev = new StartupFinishEvent($this))->call();
+		$this->startfinished = true;
 
 		$this->tickProcessor();
 		$this->forceShutdown();

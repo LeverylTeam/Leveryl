@@ -51,6 +51,7 @@ use pocketmine\entity\Arrow;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Item as DroppedItem;
+use pocketmine\entity\Lightning;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\block\BlockUpdateEvent;
@@ -65,6 +66,7 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\Timings;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
+use pocketmine\item\NetherWart;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\format\io\BaseLevelProvider;
 use pocketmine\level\format\io\LevelProvider;
@@ -77,6 +79,7 @@ use pocketmine\level\generator\PopulationTask;
 use pocketmine\level\particle\DestroyBlockParticle;
 use pocketmine\level\particle\Particle;
 use pocketmine\level\sound\Sound;
+use pocketmine\level\weather\Weather;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Math;
 use pocketmine\math\Vector2;
@@ -239,6 +242,7 @@ class Level implements ChunkManager, Metadatable{
 		Block::RED_MUSHROOM => RedMushroom::class,
 		Block::BROWN_MUSHROOM => BrownMushroom::class,
 		Block::PUMPKIN_STEM => PumpkinStem::class,
+        Block::NETHER_WART_BLOCK => NetherWart::class,
 		Block::MELON_STEM => MelonStem::class,
 		//Block::VINE => true,
 		Block::MYCELIUM => Mycelium::class,
@@ -263,6 +267,11 @@ class Level implements ChunkManager, Metadatable{
 	private $generatorInstance;
 
 	private $closed = false;
+
+    private $dimension = self::DIMENSION_NORMAL;
+    const DIMENSION_NORMAL = 0;
+    const DIMENSION_NETHER = 1;
+    private $weather;
 
 	public static function chunkHash(int $x, int $z){
 		return (($x & 0xFFFFFFFF) << 32) | ($z & 0xFFFFFFFF);
@@ -346,11 +355,68 @@ class Level implements ChunkManager, Metadatable{
 			}
 		}
 
-		$this->timings = new LevelTimings($this);
-		$this->temporalPosition = new Position(0, 0, 0, $this);
-		$this->temporalVector = new Vector3(0, 0, 0);
-		$this->tickRate = 1;
+        $this->weather = new Weather($this, 0);
+        $this->timings = new LevelTimings($this);
+        $this->temporalPosition = new Position(0, 0, 0, $this);
+        $this->temporalVector = new Vector3(0, 0, 0);
+        $this->tickRate = 1;
+
+        if ($this->server->getLeverylConfigValue("NetherEnabled", true) and $this->server->getLeverylConfigValue("NetherWorldName", "nether") == $this->folderName) $this->setDimension(self::DIMENSION_NETHER);
+        else $this->setDimension(self::DIMENSION_NORMAL);
+
+        if ($this->server->getLeverylConfigValue("Weather", true) and $this->getDimension() == self::DIMENSION_NORMAL) {
+            $this->weather->setCanCalculate(true);
+        } else $this->weather->setCanCalculate(false);
 	}
+
+    /**
+     * @return Weather
+     */
+    public function getWeather() {
+        return $this->weather;
+    }
+
+    public function canBlockSeeSky(Vector3 $pos): bool {
+        return $this->getHighestBlockAt($pos->getFloorX(), $pos->getFloorZ()) < $pos->getY();
+    }
+
+    /**
+     * Add a lightning
+     *
+     * @param Vector3 $pos
+     * @return Lightning
+     */
+    public function spawnLightning(Vector3 $pos): Lightning {
+        $nbt = new CompoundTag("", [
+            "Pos" => new ListTag("Pos", [
+                new DoubleTag("", $pos->getX()),
+                new DoubleTag("", $pos->getY()),
+                new DoubleTag("", $pos->getZ())
+            ]),
+            "Motion" => new ListTag("Motion", [
+                new DoubleTag("", 0),
+                new DoubleTag("", 0),
+                new DoubleTag("", 0)
+            ]),
+            "Rotation" => new ListTag("Rotation", [
+                new FloatTag("", 0),
+                new FloatTag("", 0)
+            ]),
+        ]);
+
+        $lightning = new Lightning($this, $nbt);
+        $lightning->spawnToAll();
+
+        return $lightning;
+    }
+
+    public function getDimension(): int {
+        return $this->dimension;
+    }
+
+    public function setDimension(int $dimension) {
+        $this->dimension = $dimension;
+    }
 
 	public function getTickRate() : int{
 		return $this->tickRate;
@@ -688,6 +754,8 @@ class Level implements ChunkManager, Metadatable{
 			$this->sendTime();
 			$this->sendTimeTicker = 0;
 		}
+
+        $this->weather->calcWeather($currentTick);
 
 		$this->unloadChunks();
 

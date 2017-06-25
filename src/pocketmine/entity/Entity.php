@@ -27,6 +27,8 @@ declare(strict_types=1);
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
+use pocketmine\block\Fire;
+use pocketmine\block\Portal;
 use pocketmine\block\SlimeBlock;
 use pocketmine\block\Water;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -1417,16 +1419,35 @@ abstract class Entity extends Location implements Metadatable{
 		return new Location($this->x, $this->y, $this->z, $this->yaw, $this->pitch, $this->level);
 	}
 
-	public function isInsideOfWater(){
-		$block = $this->level->getBlock($this->temporalVector->setComponents(Math::floorFloat($this->x), Math::floorFloat($y = ($this->y + $this->getEyeHeight())), Math::floorFloat($this->z)));
+    public function isInsideOfWater(){
+        $block = $this->level->getBlock($this->temporalVector->setComponents(Math::floorFloat($this->x), Math::floorFloat($y = ($this->y + $this->getEyeHeight())), Math::floorFloat($this->z)));
 
-		if($block instanceof Water){
-			$f = ($block->y + 1) - ($block->getFluidHeightPercent() - 0.1111111);
-			return $y < $f;
-		}
+        if($block instanceof Water){
+            $f = ($block->y + 1) - ($block->getFluidHeightPercent() - 0.1111111);
+            return $y < $f;
+        }
 
-		return false;
-	}
+        return false;
+    }
+
+    public function isInsideOfPortal(){
+        $block = $this->level->getBlock($this->temporalVector->setComponents(Math::floorFloat($this->x), Math::floorFloat($y = ($this->y + $this->getEyeHeight())), Math::floorFloat($this->z)));
+
+        if($block instanceof Portal){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isInsideOfFire() {
+        foreach ($this->getBlocksAround() as $block) {
+            if ($block instanceof Fire) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	public function isInsideOfSolid(){
 		$block = $this->level->getBlock($this->temporalVector->setComponents(Math::floorFloat($this->x), Math::floorFloat($y = ($this->y + $this->getEyeHeight())), Math::floorFloat($this->z)));

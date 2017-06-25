@@ -337,4 +337,18 @@ class Vector3{
 		return "Vector3(x=" . $this->x . ",y=" . $this->y . ",z=" . $this->z . ")";
 	}
 
+    /**
+     * @param Vector3 $pos
+     * @param         $x
+     * @param         $y
+     * @param         $z
+     *
+     * @return $this
+     */
+    public function fromObjectAdd(Vector3 $pos, $x, $y, $z) {
+        $this->x = $pos->x + $x;
+        $this->y = $pos->y + $y;
+        $this->z = $pos->z + $z;
+        return $this;
+    }
 }
