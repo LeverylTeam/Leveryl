@@ -128,12 +128,6 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new TransferServerCommand("transferserver"));
 		$this->register("pocketmine", new GameRuleCommand("gamerule"));
 
-		if($this->server->getProperty("debug.commands", false)){
-			$this->register("pocketmine", new StatusCommand("status"));
-			$this->register("pocketmine", new GarbageCollectorCommand("gc"));
-			$this->register("pocketmine", new DumpMemoryCommand("dumpmemory"));
-		}
-
         if($this->server->getLeverylConfigValue("DevTools", true)){
             $this->register("pocketmine", new ExtractPluginCommand("extractplugin"));
             $this->register("pocketmine", new MakePluginCommand("makeplugin"));
@@ -142,6 +136,12 @@ class SimpleCommandMap implements CommandMap{
 
         if($this->server->getLeverylConfigValue("Weather", true)){
             $this->register("pocketmine", new WeatherCommand("weather"));
+        }
+
+        if($this->server->getLeverylConfigValue("DeveloperCommands", true)){
+            $this->register("pocketmine", new StatusCommand("status"));
+            $this->register("pocketmine", new GarbageCollectorCommand("gc"));
+            $this->register("pocketmine", new DumpMemoryCommand("dumpmemory"));
         }
 	}
 

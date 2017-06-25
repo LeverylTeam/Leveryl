@@ -11,6 +11,7 @@ server.properties
 /leveryl.yml
 crashdumps/*
 resource_packs/
+memoryDump_*/*
 
 # Cortex's Files.
 copytests.bat

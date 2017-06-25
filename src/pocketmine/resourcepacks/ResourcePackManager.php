@@ -71,7 +71,7 @@ class ResourcePackManager{
 
 		$this->serverForceResources = (bool) $this->resourcePacksConfig->get("force_resources", false);
 
-		$this->server->getLogger()->info("Loading resource packs...");
+		//$this->server->getLogger()->info("Loading resource packs...");
 
 		foreach($this->resourcePacksConfig->get("resource_stack", []) as $pos => $pack){
 			try{
@@ -106,7 +106,7 @@ class ResourcePackManager{
 			}
 		}
 
-		$this->server->getLogger()->debug("Successfully loaded " . count($this->resourcePacks) . " resource packs");
+		$this->server->getLogger()->info("Successfully loaded " . count($this->resourcePacks) . " resource packs");
 	}
 
 	/**

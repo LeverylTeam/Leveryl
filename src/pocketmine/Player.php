@@ -202,6 +202,7 @@ use pocketmine\resourcepacks\ResourcePack;
 use pocketmine\tile\ItemFrame;
 use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
+use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\UUID;
 
@@ -344,6 +345,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
     public $weatherData = [0, 0, 0];
 	/** @var PermissibleBase */
 	private $perm = null;
+
+	private $packetlog;
 
 	public function getLeaveMessage(){
 		return new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.left", [
