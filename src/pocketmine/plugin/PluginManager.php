@@ -238,7 +238,7 @@ class PluginManager{
 								$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.duplicateError", [$name]));
 								continue;
 							}
-							if($this->server->getLeverylConfigValue("DisablePluginAPIVersionCheck", false)) {
+							if(!$this->server->getLeverylConfigValue("DisablePluginAPIVersionCheck", false)) {
 								$compatible = false;
 								//Check multiple dependencies
 								foreach ($description->getCompatibleApis() as $version) {
