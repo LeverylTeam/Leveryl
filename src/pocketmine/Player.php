@@ -1301,7 +1301,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 			return false;
 		}
-
+		
+		if($this->server->getLeverylConfigValue("ClearInventoryOnGameModeChange", true)){
+            $this->inventory->clearAll();
+		}
+		
 		$this->gamemode = $gm;
 
 		$this->allowFlight = $this->isCreative();
