@@ -1426,15 +1426,13 @@ class Server{
 				mkdir($pluginPath, 0777);
 			}
 
-            $lconf = new Config(realpath($dataPath) . DIRECTORY_SEPARATOR . "leveryl.yml", Config::YAML, []);
-			if(!file_exists($dataPath . "plugins/Leveryl/")){
+            if(!file_exists($dataPath . "plugins/Leveryl/")){
 				if(file_exists(realpath($dataPath) . DIRECTORY_SEPARATOR . "leveryl.yml")) {
-					if ($lconf->get("DevTools")) {
+					if (($lconf = new Config(realpath($dataPath) . DIRECTORY_SEPARATOR . "leveryl.yml", Config::YAML, []))->get("DevTools")) {
 						mkdir($dataPath . "plugins/Leveryl/", 0777);
 					}
 				}
 			}
-			$lconf = null;
 
 			$this->dataPath = realpath($dataPath) . DIRECTORY_SEPARATOR;
 			$this->pluginPath = realpath($pluginPath) . DIRECTORY_SEPARATOR;
