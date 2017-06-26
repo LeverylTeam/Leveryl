@@ -92,79 +92,81 @@ class Fire extends Flowable{
     }
 
     public function onUpdate($type){
-        if($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_RANDOM or $type == Level::BLOCK_UPDATE_SCHEDULED){
-            if(!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() and !$this->canNeighborBurn()){
-                $this->getLevel()->setBlock($this, new Air(), true);
-                return Level::BLOCK_UPDATE_NORMAL;
-            }elseif($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_RANDOM){
-                $this->getLevel()->scheduleUpdate($this, $this->getTickRate() + mt_rand(0, 10));
-            }elseif($type == Level::BLOCK_UPDATE_SCHEDULED and $this->getLevel()->getServer()->getLeverylConfigValue("FireSpread", false)){
-                $forever = $this->getSide(Vector3::SIDE_DOWN)->getId() == Block::NETHERRACK;
-
-                //TODO: END
-
-                if(!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() and !$this->canNeighborBurn()){
+        if($this->getLevel()->getGameRule("doFireTick")) {
+            if ($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_RANDOM or $type == Level::BLOCK_UPDATE_SCHEDULED) {
+                if (!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() and !$this->canNeighborBurn()) {
                     $this->getLevel()->setBlock($this, new Air(), true);
-                }
+                    return Level::BLOCK_UPDATE_NORMAL;
+                } elseif ($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_RANDOM) {
+                    $this->getLevel()->scheduleUpdate($this, $this->getTickRate() + mt_rand(0, 10));
+                } elseif ($type == Level::BLOCK_UPDATE_SCHEDULED and $this->getLevel()->getServer()->getLeverylConfigValue("FireSpread", false)) {
+                    $forever = $this->getSide(Vector3::SIDE_DOWN)->getId() == Block::NETHERRACK;
 
-                if(!$forever and $this->getLevel()->getWeather()->isRainy() and
-                    ($this->getLevel()->canBlockSeeSky($this) or
-                        $this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_EAST)) or
-                        $this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_WEST)) or
-                        $this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_SOUTH)) or
-                        $this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_NORTH))
-                    )
-                ){
-                    $this->getLevel()->setBlock($this, new Air(), true);
-                }else{
-                    $meta = $this->meta;
+                    //TODO: END
 
-                    if($meta < 15){
-                        $this->meta = $meta + mt_rand(0, 3);
-                        $this->getLevel()->setBlock($this, $this, true);
+                    if (!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() and !$this->canNeighborBurn()) {
+                        $this->getLevel()->setBlock($this, new Air(), true);
                     }
 
-                    $this->getLevel()->scheduleUpdate($this, $this->getTickRate() + mt_rand(0, 10));
-
-                    if(!$forever and !$this->canNeighborBurn()){
-                        if(!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() or $meta > 3){
-                            $this->getLevel()->setBlock($this, new Air(), true);
-                        }
-                    }elseif(!$forever && !($this->getSide(Vector3::SIDE_DOWN)->getBurnAbility() > 0) && $meta >= 15 && mt_rand(0, 4) == 0){
+                    if (!$forever and $this->getLevel()->getWeather()->isRainy() and
+                        ($this->getLevel()->canBlockSeeSky($this) or
+                            $this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_EAST)) or
+                            $this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_WEST)) or
+                            $this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_SOUTH)) or
+                            $this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_NORTH))
+                        )
+                    ) {
                         $this->getLevel()->setBlock($this, new Air(), true);
-                    }else{
-                        $o = 0;
+                    } else {
+                        $meta = $this->meta;
 
-                        //TODO: decrease the o if the rainfall values are high
+                        if ($meta < 15) {
+                            $this->meta = $meta + mt_rand(0, 3);
+                            $this->getLevel()->setBlock($this, $this, true);
+                        }
 
-                        $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_EAST), 300 + $o, $meta);
-                        $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_WEST), 300 + $o, $meta);
-                        $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_DOWN), 250 + $o, $meta);
-                        $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_UP), 250 + $o, $meta);
-                        $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_SOUTH), 300 + $o, $meta);
-                        $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_NORTH), 300 + $o, $meta);
+                        $this->getLevel()->scheduleUpdate($this, $this->getTickRate() + mt_rand(0, 10));
 
-                        for($x = ($this->x - 1); $x <= ($this->x + 1); ++$x){
-                            for($z = ($this->z - 1); $z <= ($this->z + 1); ++$z){
-                                for($y = ($this->y -1); $y <= ($this->y + 4); ++$y){
-                                    $k = 100;
+                        if (!$forever and !$this->canNeighborBurn()) {
+                            if (!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() or $meta > 3) {
+                                $this->getLevel()->setBlock($this, new Air(), true);
+                            }
+                        } elseif (!$forever && !($this->getSide(Vector3::SIDE_DOWN)->getBurnAbility() > 0) && $meta >= 15 && mt_rand(0, 4) == 0) {
+                            $this->getLevel()->setBlock($this, new Air(), true);
+                        } else {
+                            $o = 0;
 
-                                    if($y > $this->y + 1){
-                                        $k += ($y - ($this->y + 1)) * 100;
-                                    }
+                            //TODO: decrease the o if the rainfall values are high
 
-                                    $chance = $this->getChanceOfNeighborsEncouragingFire($this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $z)));
+                            $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_EAST), 300 + $o, $meta);
+                            $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_WEST), 300 + $o, $meta);
+                            $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_DOWN), 250 + $o, $meta);
+                            $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_UP), 250 + $o, $meta);
+                            $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_SOUTH), 300 + $o, $meta);
+                            $this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_NORTH), 300 + $o, $meta);
 
-                                    if($chance > 0){
-                                        $t = ($chance + 40 + $this->getLevel()->getServer()->getDifficulty() * 7);
+                            for ($x = ($this->x - 1); $x <= ($this->x + 1); ++$x) {
+                                for ($z = ($this->z - 1); $z <= ($this->z + 1); ++$z) {
+                                    for ($y = ($this->y - 1); $y <= ($this->y + 4); ++$y) {
+                                        $k = 100;
 
-                                        //TODO: decrease t if the rainfall values are high
+                                        if ($y > $this->y + 1) {
+                                            $k += ($y - ($this->y + 1)) * 100;
+                                        }
 
-                                        if($t > 0 and mt_rand(0, $k) <= $t){
-                                            $damage = min(15, $meta + mt_rand(0, 5) / 4);
+                                        $chance = $this->getChanceOfNeighborsEncouragingFire($this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $z)));
 
-                                            $this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $z), new Fire($damage), true);
-                                            $this->getLevel()->scheduleUpdate($this->temporalVector, $this->getTickRate());
+                                        if ($chance > 0) {
+                                            $t = ($chance + 40 + $this->getLevel()->getServer()->getDifficulty() * 7);
+
+                                            //TODO: decrease t if the rainfall values are high
+
+                                            if ($t > 0 and mt_rand(0, $k) <= $t) {
+                                                $damage = min(15, $meta + mt_rand(0, 5) / 4);
+
+                                                $this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $z), new Fire($damage), true);
+                                                $this->getLevel()->scheduleUpdate($this->temporalVector, $this->getTickRate());
+                                            }
                                         }
                                     }
                                 }
@@ -173,8 +175,10 @@ class Fire extends Flowable{
                     }
                 }
             }
+            return 0;
+        } else {
+            return false;
         }
-        return 0;
     }
 
     public function getTickRate() : int{

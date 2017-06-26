@@ -176,5 +176,6 @@ abstract class BaseLevelProvider implements LevelProvider{
                 return (boolean) $this->levelData->GameRules["doDaylightCycle"];
                 break;
         }
+        return false;
     }
 }

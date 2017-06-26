@@ -4074,7 +4074,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$this->server->getPluginManager()->callEvent($ev = new PlayerDeathEvent($this, $this->getDrops(), new TranslationContainer($message, $params)));
 
-		if(!$ev->getKeepInventory()){
+		if(!$ev->getPlayer()->getLevel()->getGameRule("keepInventory")){
 			foreach($ev->getDrops() as $item){
 				$this->level->dropItem($this, $item);
 			}
@@ -4086,7 +4086,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 		}
 
-		if($ev->getDeathMessage() != ""){
+		if($ev->getDeathMessage() != "" || !$ev->getPlayer()->getLevel()->getGameRule("showDeathMessage")){
 			$this->server->broadcast($ev->getDeathMessage(), Server::BROADCAST_CHANNEL_USERS);
 		}
 	}
