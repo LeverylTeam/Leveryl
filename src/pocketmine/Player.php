@@ -4446,4 +4446,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return $GUIScale[$this->guiscale];
 		}
 	}
+	
+	public function getItemInHand()
+	{	
+		return $this->inventory->getItemInHand();
+	}
 }
