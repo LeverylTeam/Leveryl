@@ -16,14 +16,13 @@ This spoon is based off of PMMP (For Stability)
 - [X] **CustomPotions**
 - [X] **CustomEnchants**
 - [ ] 1.0.1 Blocks & Items
-- [X] **CommandLogger**
 - [X] **Toggleable PluginAPI Version Checking**
 - [ ] Fully Functional Nether
 - [X] **Toggleable Built-In Devtools & FolderPluginLoader**
-- [ ] Toggleable PacketLogger (May be removed in the future)
 - [X] **Console Only Commands**
 - [X] **Limited Creative**
 - [X] **Weather**  
+- [X] GameRule
 - [ ] Spawn Eggs
 - [ ] Working Mob Spawners
 - [ ] Toggleable MobAI
