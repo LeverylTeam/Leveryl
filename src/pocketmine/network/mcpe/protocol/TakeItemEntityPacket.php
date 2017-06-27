@@ -32,7 +32,7 @@ class TakeItemEntityPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::TAKE_ITEM_ENTITY_PACKET;
 
 	public $target;
-	public $eid;
+	public $entityRuntimeId;
 
 	public function decode(){
 
@@ -41,7 +41,7 @@ class TakeItemEntityPacket extends DataPacket{
 	public function encode(){
 		$this->reset();
 		$this->putEntityRuntimeId($this->target);
-		$this->putEntityRuntimeId($this->eid);
+		$this->putEntityRuntimeId($this->entityRuntimeId);
 	}
 
 	public function handle(NetworkSession $session) : bool{

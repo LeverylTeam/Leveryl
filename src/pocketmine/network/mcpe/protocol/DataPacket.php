@@ -262,10 +262,10 @@ abstract class DataPacket extends BinaryStream{
 
 	/**
 	 * Writes an EntityUniqueID
-	 * @param int|string $eid
+	 * @param int|string $entityRuntimeId
 	 */
-	public function putEntityUniqueId($eid){
-		$this->putVarLong($eid);
+	public function putEntityUniqueId($entityRuntimeId){
+		$this->putVarLong($entityRuntimeId);
 	}
 
 	/**
@@ -278,10 +278,10 @@ abstract class DataPacket extends BinaryStream{
 
 	/**
 	 * Writes an EntityUniqueID
-	 * @param int|string $eid
+	 * @param int|string $entityRuntimeId
 	 */
-	public function putEntityRuntimeId($eid){
-		$this->putUnsignedVarLong($eid);
+	public function putEntityRuntimeId($entityRuntimeId){
+		$this->putUnsignedVarLong($entityRuntimeId);
 	}
 
 	/**

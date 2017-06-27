@@ -236,6 +236,13 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::NETHER_STAR] = NetherStar::class;
 			self::$list[self::ENCHANTED_GOLDEN_APPLE] = GoldenAppleEnchanted::class;
             self::$list[self::ELYTRA] = Elytra::class;
+            self::$list[self::SHULKER_SHELL] = ShulkerShell::class;
+            self::$list[self::SUGARCANE] = Sugarcane::class;
+            self::$list[self::ENDER_PEARL] = EnderPearl::class;
+            self::$list[self::EYE_OF_ENDER] = EyeOfEnder::class;
+            self::$list[self::DRAGONS_BREATH] = DragonsBreath::class;
+            self::$list[self::SHULKER_SHELL] = ShulkerShell::class;
+            self::$list[self::POPPED_CHORUS_FRUIT] = PoppedChorusFruit::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){

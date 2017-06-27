@@ -39,7 +39,7 @@ class ClientboundMapItemDataPacket extends DataPacket{
 	public $mapId;
 	public $type;
 
-	public $eids = [];
+	public $entityRuntimeIds = [];
 	public $scale;
 	public $decorations = [];
 
@@ -57,7 +57,7 @@ class ClientboundMapItemDataPacket extends DataPacket{
 		if(($this->type & 0x08) !== 0){
 			$count = $this->getUnsignedVarInt();
 			for($i = 0; $i < $count; ++$i){
-				$this->eids[] = $this->getEntityUniqueId();
+				$this->entityRuntimeIds[] = $this->getEntityUniqueId();
 			}
 		}
 
@@ -98,7 +98,7 @@ class ClientboundMapItemDataPacket extends DataPacket{
 		$this->putEntityUniqueId($this->mapId);
 
 		$type = 0;
-		if(($eidsCount = count($this->eids)) > 0){
+		if(($entityRuntimeIdsCount = count($this->entityRuntimeIds)) > 0){
 			$type |= 0x08;
 		}
 		if(($decorationCount = count($this->decorations)) > 0){
@@ -111,9 +111,9 @@ class ClientboundMapItemDataPacket extends DataPacket{
 		$this->putUnsignedVarInt($type);
 
 		if(($type & 0x08) !== 0){ //TODO: find out what these are for
-			$this->putUnsignedVarInt($eidsCount);
-			foreach($this->eids as $eid){
-				$this->putEntityUniqueId($eid);
+			$this->putUnsignedVarInt($entityRuntimeIdsCount);
+			foreach($this->entityRuntimeIds as $entityRuntimeId){
+				$this->putEntityUniqueId($entityRuntimeId);
 			}
 		}
 

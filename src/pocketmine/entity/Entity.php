@@ -553,9 +553,9 @@ abstract class Entity extends Location implements Metadatable{
 	 * @return Entity|null
 	 */
 	public function getOwningEntity(){
-		$eid = $this->getOwningEntityId();
-		if($eid !== null){
-			return $this->server->findEntity($eid, $this->level);
+		$entityRuntimeId = $this->getOwningEntityId();
+		if($entityRuntimeId !== null){
+			return $this->server->findEntity($entityRuntimeId, $this->level);
 		}
 
 		return null;
@@ -591,9 +591,9 @@ abstract class Entity extends Location implements Metadatable{
 	 * @return Entity|null
 	 */
 	public function getTargetEntity(){
-		$eid = $this->getTargetEntityId();
-		if($eid !== null){
-			return $this->server->findEntity($eid, $this->level);
+		$entityRuntimeId = $this->getTargetEntityId();
+		if($entityRuntimeId !== null){
+			return $this->server->findEntity($entityRuntimeId, $this->level);
 		}
 
 		return null;

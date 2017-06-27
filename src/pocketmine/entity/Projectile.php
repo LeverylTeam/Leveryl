@@ -42,7 +42,11 @@ abstract class Projectile extends Entity{
 
 	public $hadCollision = false;
 
+    /** @var Entity */
+    public $shootingEntity = null;
+
 	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
+        $this->shootingEntity = $shootingEntity;
 		if($shootingEntity !== null){
 			$this->setOwningEntity($shootingEntity);
 		}

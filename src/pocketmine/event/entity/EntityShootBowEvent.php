@@ -42,10 +42,10 @@ class EntityShootBowEvent extends EntityEvent implements Cancellable{
 	/**
 	 * @param Living	 $shooter
 	 * @param Item	   $bow
-	 * @param Projectile $projectile
+	 * @param Entity $projectile
 	 * @param float	  $force
 	 */
-	public function __construct(Living $shooter, Item $bow, Projectile $projectile, $force){
+	public function __construct(Living $shooter, Item $bow, Entity $projectile, $force){
 		$this->entity = $shooter;
 		$this->bow = $bow;
 		$this->projectile = $projectile;

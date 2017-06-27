@@ -1477,7 +1477,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				$pk = new TakeItemEntityPacket();
-				$pk->eid = $this->id;
+				$pk->entityRuntimeId = $this->id;
 				$pk->target = $entity->getId();
 				$this->server->broadcastPacket($entity->getViewers(), $pk);
 
@@ -1507,7 +1507,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}
 
 						$pk = new TakeItemEntityPacket();
-						$pk->eid = $this->id;
+						$pk->entityRuntimeId = $this->id;
 						$pk->target = $entity->getId();
 						$this->server->broadcastPacket($entity->getViewers(), $pk);
 
@@ -3668,23 +3668,23 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
         }
         $this->sendTitleText($title, SetTitlePacket::TYPE_SET_TITLE);
     }
-	
-	/**
-	 * Adds a title text to the user's screen, with an optional subtitle.
-	 *
-	 * @param string $title
-	 * @param string $subtitle
-	 * @param int	$fadeIn Duration in ticks for fade-in. If -1 is given, client-sided defaults will be used.
-	 * @param int	$stay Duration in ticks to stay on screen for
-	 * @param int	$fadeOut Duration in ticks for fade-out.
-	 */
-	public function addTitle(string $title, string $subtitle = "", int $fadeIn = -1, int $stay = -1, int $fadeOut = -1){
-		$this->setTitleDuration($fadeIn, $stay, $fadeOut);
-		if($subtitle !== ""){
-			$this->addSubTitle($subtitle);
-		}
-		$this->sendTitleText($title, SetTitlePacket::TYPE_SET_TITLE);
-	}
+
+    /**
+     * Adds a title text to the user's screen, with an optional subtitle.
+     *
+     * @param string $title
+     * @param string $subtitle
+     * @param int	$fadeIn Duration in ticks for fade-in. If -1 is given, client-sided defaults will be used.
+     * @param int	$stay Duration in ticks to stay on screen for
+     * @param int	$fadeOut Duration in ticks for fade-out.
+     */
+    public function addTitle(string $title, string $subtitle = "", int $fadeIn = -1, int $stay = -1, int $fadeOut = -1){
+        $this->setTitleDuration($fadeIn, $stay, $fadeOut);
+        if($subtitle !== ""){
+            $this->addSubTitle($subtitle);
+        }
+        $this->sendTitleText($title, SetTitlePacket::TYPE_SET_TITLE);
+    }
 
 	/**
 	 * Sets the subtitle message, without sending a title.
@@ -4446,9 +4446,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return $GUIScale[$this->guiscale];
 		}
 	}
-	
+
 	public function getItemInHand()
-	{	
-		return $this->inventory->getItemInHand();
-	}
+    {
+        return $this->inventory->getItemInHand();
+    }
 }
