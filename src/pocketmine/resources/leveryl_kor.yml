@@ -1,0 +1,66 @@
+#                                    
+#     __                           _ 
+#    / /  _____   _____ _ __ _   _| |
+#   / /  / _ \ \ / / _ \ '__| | | | |
+#  / /__|  __/\ V /  __/ |  | |_| | |
+#  \____/\___| \_/ \___|_|   \__, |_|
+#                            |___/   
+#                                    
+#   Leveryl을위한 설정 파일  
+
+
+# 구성 파일 버전 (변경하지 마십시오)
+구성 버전 : 1
+
+# 지옥 [W.I.P. (작동안함)]
+NetherEnabled: true
+NetherWorldName: "nether"
+
+# 개발자 도구 (DevTools 명령, FolderPluginLoader)
+DevTools : true
+FolderPluginLoader : true
+DeveloperCommands : true
+
+
+# 관리 도구
+CommandLogger : true
+ConsoleOnlyCommands : false
+ConsoleOnlyCommandsList :
+ - /stop
+ - / op
+ - / deop
+LimitedCreative : true
+ConsoleOnlyCommandMessage : "이 명령은 Leveryl 콘솔에서만 실행할 수 있습니다."
+#### OP에 Leveryl Core의 AntiCheat 메시지 보내기
+TellOPsPlayerAntiCheatMessages : false
+
+# Emtity remove
+AutoClearEntities : false
+#### AutoClearEntitiesTimer (분)
+AutoClearEntitiesTimer : 3
+BlockTNTExplosion : false
+
+# Game Mechanics
+Criticals: true
+FireSpread: false
+
+# 네트워크
+DisableRakLib: false
+
+# 플레이어
+ClearInventoryOnGameModeChange: true
+KeepExperiencePoints: false
+#### 콘솔에서 Leveryl Core의 AntiCheat 메시지를 활성화 / 비활성화합니다.
+VerboseConsoleMessages: true
+
+# 기타
+DisableServerDotLog : false
+DisablePluginAPIVersionCheck : true
+
+# 날씨
+Weather: true
+Lightning: true
+LightningFire: false
+WeatherDurationMin: 6000
+WeatherDurationMax: 12000
+LightningTime: 200
