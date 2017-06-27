@@ -3652,6 +3652,23 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return false;
 	}
 
+    /**
+     * Sends a title text to the user's screen, with an optional subtitle.
+     *
+     * @param string $title
+     * @param string $subtitle
+     * @param int	$fadeIn Duration in ticks for fade-in. If -1 is given, client-sided defaults will be used.
+     * @param int	$stay Duration in ticks to stay on screen for
+     * @param int	$fadeOut Duration in ticks for fade-out.
+     */
+    public function sendTitle(string $title, string $subtitle = "", int $fadeIn = -1, int $stay = -1, int $fadeOut = -1){
+        $this->setTitleDuration($fadeIn, $stay, $fadeOut);
+        if($subtitle !== ""){
+            $this->addSubTitle($subtitle);
+        }
+        $this->sendTitleText($title, SetTitlePacket::TYPE_SET_TITLE);
+    }
+	
 	/**
 	 * Adds a title text to the user's screen, with an optional subtitle.
 	 *
