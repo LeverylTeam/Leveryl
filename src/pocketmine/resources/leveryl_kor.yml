@@ -34,6 +34,8 @@ ConsoleOnlyCommandMessage : "이 명령은 Leveryl 콘솔에서만 실행할 수
 #### OP에 Leveryl Core의 AntiCheat 메시지 보내기
 TellOPsPlayerAntiCheatMessages : false
 
+check-movement: false
+
 # Emtity remove
 AutoClearEntities : false
 #### AutoClearEntitiesTimer (분)
