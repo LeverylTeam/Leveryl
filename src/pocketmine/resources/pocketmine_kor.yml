@@ -125,7 +125,7 @@ chunk-sending:
  cache-chunks: false
 
 chunk-ticking:
- #Max amount of chunks processed each tick
+ #틱마다 처리되는 최대 청크 양
  per-tick: 40
  #Radius of chunks around a player to tick
  tick-radius: 3
@@ -136,9 +136,9 @@ chunk-ticking:
   #- 2 # grass
 
 chunk-generation:
- #Max. amount of chunks in the waiting queue to be generated
+ #Max. 생성 될 대기열의 청크 양
  queue-size: 8
- #Max. amount of chunks in the waiting queue to be populated
+ #Max. 채워지는 대기열의 청크 양
  population-queue-size: 8
 
 ticks-per:
@@ -148,13 +148,14 @@ ticks-per:
  cache-cleanup: 900
 
 spawn-limits:
+ #이 엔티티들의 최대 스폰량
   monsters: 70
   animals: 15
   water-animals: 5
   ambient: 15
 
 auto-report:
- #Send crash reports for processing
+ #처리를 위해 충돌 보고서 보내기
  enabled: true
  send-code: true
  send-settings: true
@@ -162,7 +163,7 @@ auto-report:
  host: crash.pocketmine.net
 
 anonymous-statistics:
- #Sends anonymous statistics for data aggregation, plugin usage tracking
+ #데이터 수집, 플러그인 사용 추적을위한 익명 통계 전송
  enabled: true
  host: stats.pocketmine.net
 
@@ -171,19 +172,19 @@ auto-updater:
  on-update:
   warn-console: true
   warn-ops: true
- #Can be development, alpha, beta or stable.
+ #개발, 알파, 베타 또는 안정적 일 수 있습니다.
  preferred-channel: stable
- #If using a development version, it will suggest changing the channel
+ #개발 버전을 사용하는 경우 채널 변경을 제안합니다.
  suggest-channels: true
  host: update.pmmp.io
 
 timings:
- #Choose the host to use for viewing your timings results.
+ #타이밍 결과를 보는 데 사용할 호스트를 선택하십시오.
  host: timings.pmmp.io
 
 console:
- #Choose whether to enable server stats reporting on the console title.
- #NOTE: The title ticker will be disabled regardless if console colours are not enabled.
+ #콘솔 제목에서 서버 통계보고를 사용할지 여부를 선택합니다.
+ #참고 : 콘솔 색상을 사용할 수없는 경우에도 제목 티커가 비활성화됩니다
  title-tick: true
 
 aliases:
