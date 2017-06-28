@@ -32,7 +32,7 @@ use pocketmine\utils\Config;
 use pocketmine\utils\Utils;
 
 class SetupWizard{
-	const DEFAULT_NAME = "Minecraft: PE Server";
+	const DEFAULT_NAME = "§l§f§oLeveryl§r§a MC:PE Server§r";
 	const DEFAULT_PORT = 19132;
 	const DEFAULT_MEMORY = 256;
 	const DEFAULT_PLAYERS = 20;
@@ -214,7 +214,7 @@ LICENSE;
 
 		$this->error($this->lang->translateString("ip_warning", ["EXTERNAL_IP" => $externalIP, "INTERNAL_IP" => $internalIP]));
 		$this->error($this->lang->get("ip_confirm"));
-		$this->readLine();
+		//$this->readLine();
 	}
 
 	private function endWizard(){
@@ -248,7 +248,11 @@ LICENSE;
 		$message = "[?] " . $message;
 
 		if($options !== "" or $default !== ""){
-			$message .= " (" . ($options === "" ? $default : $options) . ")";
+		    if($default == self::DEFAULT_NAME){
+                $message .= " (" . ($options === "" ? "Leveryl MC:PE Server" : $options) . ")";
+            } else {
+                $message .= " (" . ($options === "" ? $default : $options) . ")";
+            }
 		}
 		$message .= ": ";
 

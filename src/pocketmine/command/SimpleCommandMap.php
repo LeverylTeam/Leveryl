@@ -69,6 +69,7 @@ use pocketmine\command\defaults\VanillaCommand;
 use pocketmine\command\defaults\VersionCommand;
 use pocketmine\command\defaults\WeatherCommand;
 use pocketmine\command\defaults\WhitelistCommand;
+use pocketmine\command\defaults\WorldCommand;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
@@ -127,6 +128,7 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new ReloadCommand("reload"));
 		$this->register("pocketmine", new TransferServerCommand("transferserver"));
 		$this->register("pocketmine", new GameRuleCommand("gamerule"));
+		$this->register("pocketmine", new WorldCommand("world"));
 
         if($this->server->getLeverylConfigValue("DevTools", true)){
             $this->register("pocketmine", new ExtractPluginCommand("extractplugin"));
