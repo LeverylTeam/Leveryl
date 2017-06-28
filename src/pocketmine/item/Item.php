@@ -1168,7 +1168,9 @@ class Item implements ItemIds, \JsonSerializable{
 		}
 
 		if(isset($tag->tag) and $tag->tag instanceof CompoundTag){
-			$item->setNamedTag($tag->tag);
+			$t = clone $tag->tag;
+ 			$t->setName("");
+ 			$item->setNamedTag($t);
 		}
 
 		return $item;

@@ -848,6 +848,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 			}
 		}
+		
+		if($this->chunkLoadCount >= $this->spawnThreshold and $this->spawned === false and $this->teleportPosition === null){
+ 			$this->doFirstSpawn();
+ 		}
 	}
 
 	protected function sendNextChunk(){
@@ -874,19 +878,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->level->registerChunkLoader($this, $X, $Z, false);
 
 			if(!$this->level->populateChunk($X, $Z)){
-				if($this->spawned and $this->teleportPosition === null){
-					continue;
-				}else{
-					break;
-				}
+				continue;
 			}
 
 			unset($this->loadQueue[$index]);
 			$this->level->requestChunk($X, $Z, $this);
-		}
-
-		if($this->chunkLoadCount >= $this->spawnThreshold and $this->spawned === false and $this->teleportPosition === null){
-			$this->doFirstSpawn();
 		}
 
 		Timings::$playerChunkSendTimer->stopTiming();
@@ -4362,6 +4358,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public function onChunkChanged(Chunk $chunk){
 		if(isset($this->usedChunks[$hash = Level::chunkHash($chunk->getX(), $chunk->getZ())])){
 			$this->usedChunks[$hash] = false;
+			if(!$this->spawned){
+				$this->nextChunkOrderRun = 0;
+			}
 		}
 	}
 
