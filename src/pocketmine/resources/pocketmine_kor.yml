@@ -1,11 +1,11 @@
-# PocketMine-MP의 주요 구성 파일
+#PocketMine-MP의 주요 구성 파일
 #이 설정은 server.properties에 포함될 수없는 설정입니다.
 #이 설정 중 일부는 안전하고 다른 설정은 잘못 수정 될 수 있습니다
-# 업그레이드시이 파일에 새 설정 / 기본값이 자동으로 나타나지 않습니다.
+#업그레이드시이 파일에 새 설정 / 기본값이 자동으로 나타나지 않습니다.
 
 settings:
  # 서버 측 로컬라이제이션을위한 3 자리 언어 코드
- # https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes에서 언어 코드를 확인하십시오.
+ # https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes 에서 언어 코드를 확인하십시오.
  language: "kor"
  # 모든 문자열을 서버 로캘로 변환하거나 장치에서 처리하도록합니다.
  force-language: false
@@ -19,52 +19,52 @@ settings:
  # 눈금 측정 값이 주어진 값보다 낮거나 같을 때만 결과를 추가합니다 (기본값 20).
  profile-report-trigger: 20
  # AsyncTask 작업자 수.
- # 플러그인 비동기 작업, 세계 세대, 압축 및 웹 통신에 사용됩니다.
+ # 플러그인 비동기 작업, 세계 맵, 압축 및 웹 통신에 사용됩니다.
  # 대략 코어 수로 설정하십시오.
  # 자동으로 설정하면 코어 수를 감지하려고 시도합니다 (또는 2 사용)
  async-workers: auto
 
 memory:
-  #Global 소프트 메모리 한도 (메가 바이트). 비활성화하려면 0으로 설정하십시오.
+ #Global 소프트 메모리 한도 (메가 바이트). 비활성화하려면 0으로 설정하십시오.
  #이 기능은 메모리 부족 트리거를 유발하고 사용량이 많아지면 이벤트를 발생시켜 메모리를 비 웁니다.
  global-limit: 0
 
-  #Main 스레드 소프트 메모리 제한 (MB). 비활성화하려면 0으로 설정하십시오.
+ #Main 스레드 소프트 메모리 제한 (MB). 비활성화하려면 0으로 설정하십시오.
  #이 기능은 메모리 부족 트리거를 유발하고 사용량이 많아지면 이벤트를 발생시켜 메모리를 비 웁니다.
  main-limit: 0
 
-  #Main 스레드 하드 메모리 한계 (MB). 비활성화하려면 0으로 설정하십시오.
- # 제한을 초과하면 서버가 중지됩니다.
+ #Main 스레드 하드 메모리 한계 (MB). 비활성화하려면 0으로 설정하십시오.
+ #제한을 초과하면 서버가 중지됩니다.
  main-hard-limit: 1024
 
-  #Period 메모리를 확인하기 위해 틱 단위로 (기본값 1 초)
+ #Period 메모리를 확인하기 위해 틱 단위로 (기본값 1 초)
  check-rate: 20
 
- # 메모리가 부족한 상태에서 메모리 부족 트리거 및 이벤트 실행 시작
+ #메모리가 부족한 상태에서 메모리 부족 트리거 및 이벤트 실행 시작
  continuous-trigger: true
 
- #Only if memory.continuous-trigger is enabled. Specifies the rate in memory.check-rate steps (default 30 seconds)
+ #memory.continuous-trigger가 활성화 된 경우에만 해당됩니다. 메모리의 속도를 지정합니다. 검사 속도 단계 (기본값 30 초)
  continuous-trigger-rate: 30
 
  garbage-collection:
-  #Period in ticks to fire the garbage collector manually (default 30 minutes), set to 0 to disable
-  #This only affect the main thread. Other threads should fire their own collections
+  #Period 틱 단위로 가비지 수집기를 수동으로 시작합니다 (기본값 30 분). 사용하지 않으려면 0으로 설정합니다.
+  #이것은 오직 메인 스레드에만 영향을 미칩니다. 다른 스레드는 자체 컬렉션을 실행해야합니다.
   period: 36000
 
-  #Fire asynchronous tasks to collect garbage from workers
+  #작업자의 쓰레기 수거를 위한 긴급한 비동기 태스크
   collect-async-worker: true
 
-  #Trigger on low memory
+  #메모리 부족시 트리거
   low-memory-trigger: true
 
  max-chunks:
-  #Maximum render distance per player when low memory is triggered
+  #낮은 메모리가 트리거 될 때 플레이어 당 최대 렌더링 거리
   chunk-radius: 4
 
-  #Do chunk garbage collection on trigger
+  #트리거에서 청크 가비지 컬렉션 실행
   trigger-chunk-collect: true
 
-  #Trigger on low memory
+  #메모리 부족시 트리거
   low-memory-trigger: true
 
  world-caches:
@@ -73,54 +73,55 @@ memory:
 
 
 network:
- #Threshold for batching packets, in bytes. Only these packets will be compressed
- #Set to 0 to compress everything, -1 to disable.
+ #패킷 묶음을 위한 Threshold(바이트)입니다. 이러한 패킷만 압축됩니다.
+ #모든 것을 압축하려면 0으로 설정합니다.-1을 비활성화합니다.
  batch-threshold: 256
- #Compression level used when sending batched packets. Higher = more CPU, less bandwidth usage
+ #압축 패킷 전송 시 사용되는 압축 수준입니다. 높음=CPU, 대역 폭 사용량이 적음
  compression-level: 7
- #Use AsyncTasks for compression. Adds half/one tick delay, less CPU load on main thread
+ #압축을 위해 AsyncTasks를 사용합니다. 메인 스레드에서 CPU로드/언로드 지연, CPU부하 감소
  async-compression: false
- #Experimental, only for Windows. Tries to use UPnP to automatically port forward
+ #실험용, Windows용으로만 사용 가능. UPnP/DLNA를 사용하여 자동으로 포트 포워딩
  upnp-forwarding: false
 
 debug:
- #To enable assertion execution, set zend.assertions in your php.ini to 1
+ #실행을 활성화하려면 php.ini에서 zend.assertions를 1로 설정합니다.
  assertions:
-  #Warn if assertions are enabled in php.ini, due to assertions may impact on runtime performance if enabled.
+  #php.ini에서 주장이 활성화된 경우, 표명 법이 실행되면 런타임 성능에 영향을 미칠 수 있다.
   warn-if-enabled: true
- #If > 1, it will show debug messages in the console
+ #If> 1, 콘솔에 디버그 메시지를 표시합니다.
  level: 1
- #Enables /status, /gc
- commands: false
+ # 사용 가능 /status, /gc
+ commands: true
  
 player:
- #Choose whether to enable player data saving.
+ #플레이어 데이터 저장을 사용할지 여부를 선택합니다.
  save-player-data: true
  anti-cheat:
-  #If false, will try to prevent speed and noclip cheats. May cause movement issues with some blocks which are not yet properly implemented.
+  #움직임 뒤로당겨짐. 아직 제대로 구현되지 않은 일부 블록에서 이동 문제가 발생할 수 있습니다.
   allow-movement-cheats: false
-  #If false, times block breaks to ensure players are not cheating. May cause issues with some blocks which are not yet properly implemented.
+  #만약 잘못된다면, 플레이어들이 부정 행위를 하지 않도록 하기 위해 휴식 시간을 차단한다. 아직 제대로 구현되지 않은 일부 블록에 문제가 발생할 수 있습니다.
   allow-instabreak: false
 
 level-settings:
- #The default format that levels will use when created
+ # 만들 때 사용하게 될 맵기본 형식
  default-format: anvil
- #Automatically change levels tick rate to maintain 20 ticks per second
+ #자동으로 초당 20 틱을 유지하도록 틱 속도를 변경합니다.
+ #jadong-eulo chodang 20 tig-eul yujihadolog tig sogdoleul byeongyeonghabnida.
  auto-tick-rate: true
  auto-tick-rate-limit: 20
- #Sets the base tick rate (1 = 20 ticks per second, 2 = 10 ticks per second, etc.)
+ #기본 틱 속도를 설정합니다 (1 = 20 틱 / 초, 2 = 10 틱 / 초 등)
  base-tick-rate: 1
- #Tick all players each tick even when other settings disallow this.
+ #다른 설정을 선택하더라도 모든 플레이어가 체크 표시를 선택합니다.
  always-tick-players: false
 
 chunk-sending:
- #To change server normal render distance, change view-distance in server.properties.
- #Amount of chunks sent to players per tick
+ #서버 정상 렌더링 거리를 변경하려면 server.properties에서 view-distance를 변경하십시오.
+ #틱 단위로 보내진 청크의 양
  per-tick: 4
- #Radius of chunks that need to be sent before spawning the player
+ #플레이어를 스폰하기 전에 보낼 필요가있는 덩어리의 양
  spawn-radius: 4
- #Save a serialized copy of the chunk in memory for faster sending
- #Useful in mostly-static worlds where lots of players join at the same time
+ #빠른 전송을 위해 메모리에 청크의 직렬 사본을 저장하십시오.
+ #다수의 플레이어가 동시에 참여하는 대부분 정적 인 세계에서 유용합니다.
  cache-chunks: false
 
 chunk-ticking:
