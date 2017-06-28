@@ -69,5 +69,4 @@ LightningTime: 200
 
  inventory: 
  #모루와 관련된 문제가 있는 경우 true로 설정하세요. 인벤토리 처리를 vanila fashion (기본 방식)으로 치트 방지나 확인 없이 진행합니다. 
- allow-cheats: true 
-
+ allow-cheats: false
