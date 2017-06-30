@@ -1446,13 +1446,6 @@ class Server{
 			}
 			$this->config = new Config($this->dataPath . "pocketmine.yml", Config::YAML, []);
 			
-			//$this->logger->info("Loading leveryl.yml...");
-			if(!file_exists($this->dataPath . "leveryl.yml")){
-				$content = file_get_contents($this->filePath . "src/pocketmine/resources/leveryl.yml");
-				@file_put_contents($this->dataPath . "leveryl.yml", $content);
-			}
-			$this->leverylconfig = new Config($this->dataPath . "leveryl.yml", Config::YAML, []);
-
 			//$this->logger->info("Loading server properties...");
 			$this->properties = new Config($this->dataPath . "server.properties", Config::PROPERTIES, [
 				"motd" => "Minecraft: PE Server",
@@ -1519,6 +1512,17 @@ class Server{
 §l§f║                                                 ║  §r  §cPackage: §d$package
 §l§f╚═════════════════════════════════════════════════╝  §r§f══════════════════════════════════════════";
 
+			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
+			if(!file_exists($this->dataPath . "leveryl.yml")){
+				if(file_exists($this->filePath . "src/pocketmine/resources/leveryl_$lang.yml")){
+					$content = file_get_contents($file = $this->filePath . "src/pocketmine/resources/leveryl_$lang.yml");
+				} else {
+					$content = file_get_contents($file = $this->filePath . "src/pocketmine/resources/leveryl.yml");
+				}
+				@file_put_contents($this->dataPath . "leveryl.yml", $content);
+			}
+			$this->leverylconfig = new Config($this->dataPath . "leveryl.yml", Config::YAML, []);
+			
 			if($this->logger instanceof MainLogger){
 				$this->logger->directSend($startupmsg);
 			} else {
