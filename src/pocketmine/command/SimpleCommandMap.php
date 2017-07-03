@@ -26,16 +26,20 @@ namespace pocketmine\command;
 use pocketmine\command\defaults\BanCommand;
 use pocketmine\command\defaults\BanIpCommand;
 use pocketmine\command\defaults\BanListCommand;
+use pocketmine\command\defaults\CreateWorldCommand;
 use pocketmine\command\defaults\DefaultGamemodeCommand;
 use pocketmine\command\defaults\DeopCommand;
 use pocketmine\command\defaults\DifficultyCommand;
+use pocketmine\command\defaults\DisablePluginCommand;
 use pocketmine\command\defaults\DumpMemoryCommand;
 use pocketmine\command\defaults\EffectCommand;
+use pocketmine\command\defaults\EnablePluginCommand;
 use pocketmine\command\defaults\EnchantCommand;
 use pocketmine\command\defaults\ExtractPluginCommand;
 use pocketmine\command\defaults\GamemodeCommand;
 use pocketmine\command\defaults\GameRuleCommand;
 use pocketmine\command\defaults\GarbageCollectorCommand;
+use pocketmine\command\defaults\GenerateLevel;
 use pocketmine\command\defaults\GiveCommand;
 use pocketmine\command\defaults\HelpCommand;
 use pocketmine\command\defaults\KickCommand;
@@ -128,12 +132,17 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new ReloadCommand("reload"));
 		$this->register("pocketmine", new TransferServerCommand("transferserver"));
 		$this->register("pocketmine", new GameRuleCommand("gamerule"));
+
+		// World Commands
 		$this->register("pocketmine", new WorldCommand("world"));
+		$this->register("pocketmine", new CreateWorldCommand("createworld"));
 
         if($this->server->getLeverylConfigValue("DevTools", true)){
             $this->register("pocketmine", new ExtractPluginCommand("extractplugin"));
             $this->register("pocketmine", new MakePluginCommand("makeplugin"));
             $this->register("pocketmine", new MakeServerCommand("makeserver"));
+            $this->register("pocketmine", new DisablePluginCommand("disableplugin"));
+            $this->register("pocketmine", new EnablePluginCommand("enableplugin"));
         }
 
         if($this->server->getLeverylConfigValue("Weather", true)){
