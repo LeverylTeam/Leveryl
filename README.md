@@ -15,6 +15,8 @@ This spoon is based off of PMMP (For Stability)
 - [X] **Full Tesseract & PMMP PluginAPI Compatibility**
 - [X] **CustomPotions**
 - [X] **CustomEnchants**
+- [X] Full Implementation of **DevTools**
+- [X] Built-in **Plugin Manager**
 - [ ] 1.0.1 Blocks & Items
 - [X] **Toggleable PluginAPI Version Checking**
 - [ ] Fully Functional Nether
