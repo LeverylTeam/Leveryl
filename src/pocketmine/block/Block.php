@@ -272,6 +272,12 @@ class Block extends Position implements BlockIds, Metadatable
             self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
             self::$list[self::UNPOWERED_REPEATER_BLOCK] = UnpoweredRepeater::class;
 
+            // 1.1 Blocks (Added By @LeverylTeam)
+            self::$list[self::SHULKER_BOX] = ShulkerBox::class;
+            self::$list[self::CONCRETE] = Concrete::class;
+            self::$list[self::CONCRETE_POWDER] = ConcretePowder::class;
+            // 1.1 Blocks (Added By @LeverylTeam)
+
             foreach (self::$list as $id => $class) {
                 if ($class !== null) {
                     /** @var Block $block */

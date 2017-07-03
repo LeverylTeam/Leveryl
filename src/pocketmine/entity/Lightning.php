@@ -57,7 +57,7 @@ class Lightning extends Animal {
 
     public function spawnTo(Player $player) {
         $pk = new AddEntityPacket();
-        $pk->eid = $this->getId();
+        $pk->entityRuntimeId = $this->getId();
         $pk->type = self::NETWORK_ID;
         $pk->x = $this->x;
         $pk->y = $this->y;
@@ -84,7 +84,7 @@ class Lightning extends Animal {
     public function spawnToAll() {
         parent::spawnToAll();
 
-        if ($this->getLevel()->getServer()->lightningFire) {
+        if ($this->getLevel()->getServer()->$this->getLeverylConfigValue("LightningFire", false)) {
             $fire = ItemItem::get(ItemItem::FIRE)->getBlock();
             $oldBlock = $this->getLevel()->getBlock($this);
             if ($oldBlock instanceof Liquid) {
