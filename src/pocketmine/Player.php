@@ -4409,7 +4409,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	public function getDeviceModel(): string
 	{
-		return $this->devicemodel;
+		return $this->devicemodel ?? "null";
 	}
 
 	public function getGUIMode($mode = "string")
@@ -4421,7 +4421,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return $this->uiprofile;
 		} else {
 			$this->server->getLogger()->warning("getGUIMode() mode ERROR! There are only two modes available: (\"string\", \"int\")... Falling back to string mode.");
-			return $this->deviceos;
+			return $UI[$this->uiprofile];
 		}
 	}
 
