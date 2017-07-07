@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
+ *  ____			_		 _   __  __ _				   __  __ ____
  * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	  |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -1499,18 +1499,18 @@ class Server{
 			}
 
 			$startupmsg = "
-§l§f╔═════════════════════════════════════════════════╗  §r§f══ Loaded: Properties and Configuration ══
-§l§f║                                                 ║    §r§cDate: §d$date
-§l§f║§r§b          __                           _         §l§f║§r    §cVersion: §d$version §cCodename: §d$code
-§l§f║§r§b         / /  _____   _____ _ __ _   _| |        §l§f║§r    §cMCPE: §d$mcpe §cProtocol: §d$protocol
-§l§f║§r§b        / /  / _ \ \ / / _ \ '__| | | | |        §l§f║ §r   §cIP: §d$ip §cPort: §d$port
-§l§f║§r§b       / /__|  __/\ V /  __/ |  | |_| | |        §l§f║ §r   §cQuery: §d$query
-§l§f║§r§b       \____/\___| \_/ \___|_|   \__, |_|        §l§f║ §r   §cSSL Extension: §d$ssl
-§l§f║§r§b                               |____/            §l§f║ §r   §cAuthentication: §d$mode
-§l§f║                                                 ║   §r §r§cAPI Version: §d$api
-§l§f║§r   §bRepository : §bGitHub.com/LeverylTeam/Leveryl  §l §f║  §r  §cLanguage: §d$lang
-§l§f║                                                 ║  §r  §cPackage: §d$package
-§l§f╚═════════════════════════════════════════════════╝  §r§f══════════════════════════════════════════";
+Â§lÂ§fâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—  Â§rÂ§fâ•â• Loaded: Properties and Configuration â•â•
+Â§lÂ§fâ•‘                                                 â•‘    Â§rÂ§cDate: Â§d$date
+Â§lÂ§fâ•‘Â§rÂ§b          __                           _         Â§lÂ§fâ•‘Â§r    Â§cVersion: Â§d$version Â§cCodename: Â§d$code
+Â§lÂ§fâ•‘Â§rÂ§b         / /  _____   _____ _ __ _   _| |        Â§lÂ§fâ•‘Â§r    Â§cMCPE: Â§d$mcpe Â§cProtocol: Â§d$protocol
+Â§lÂ§fâ•‘Â§rÂ§b        / /  / _ \ \ / / _ \ '__| | | | |        Â§lÂ§fâ•‘ Â§r   Â§cIP: Â§d$ip Â§cPort: Â§d$port
+Â§lÂ§fâ•‘Â§rÂ§b       / /__|  __/\ V /  __/ |  | |_| | |        Â§lÂ§fâ•‘ Â§r   Â§cQuery: Â§d$query
+Â§lÂ§fâ•‘Â§rÂ§b       \____/\___| \_/ \___|_|   \__, |_|        Â§lÂ§fâ•‘ Â§r   Â§cSSL Extension: Â§d$ssl
+Â§lÂ§fâ•‘Â§rÂ§b                               |____/            Â§lÂ§fâ•‘ Â§r   Â§cAuthentication: Â§d$mode
+Â§lÂ§fâ•‘                                                 â•‘   Â§r Â§rÂ§cAPI Version: Â§d$api
+Â§lÂ§fâ•‘Â§r   Â§bRepository : Â§bGitHub.com/LeverylTeam/Leveryl  Â§l Â§fâ•‘  Â§r  Â§cLanguage: Â§d$lang
+Â§lÂ§fâ•‘                                                 â•‘  Â§r  Â§cPackage: Â§d$package
+Â§lÂ§fâ•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•  Â§rÂ§fâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•";
 
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(!file_exists($this->dataPath . "leveryl.yml")){
@@ -2029,8 +2029,22 @@ class Server{
 	/**
 	 * Shutdowns the server correctly
 	 */
-	public function shutdown(){
+	public function shutdown(bool $restart = false, string $msg = "") {
+		/**
+		  if ( $this->isRunning ) {
+			$killer = new ServerKiller ( 90 );
+			$killer->start();
+			$killer->kill();
+		  }
+		*/
+		$this->getPluginManager ()->callEvent ( $ev = new event\server\ServerShutdownEvent ());
+		if ( $ev->isCancelled ( true )) return;
+		
 		$this->isRunning = false;
+		if ( $msg != "" ) {
+			$this->propertyCache["settings.shutdown-message"] = $msg;
+		}
+		
 	}
 
 	public function forceShutdown(){
