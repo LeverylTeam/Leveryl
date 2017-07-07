@@ -23,7 +23,9 @@ declare(strict_types=1);
 
 namespace pocketmine\entity;
 
+use pocketmine\block\Block;
 use pocketmine\level\Level;
+use pocketmine\level\particle\DestroyBlockParticle;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
@@ -52,8 +54,11 @@ class Snowball extends Projectile{
 		$hasUpdate = parent::onUpdate($currentTick);
 
 		if($this->age > 1200 or $this->isCollided){
-			$this->kill();
-			$hasUpdate = true;
+		    if($this->isAlive()){
+                $this->getLevel()->addParticle(new DestroyBlockParticle($this, Block::get(Block::SNOW)));
+                $this->kill();
+                $hasUpdate = true;
+            }
 		}
 
 		$this->timings->stopTiming();
