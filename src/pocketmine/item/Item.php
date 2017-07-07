@@ -648,42 +648,43 @@ class Item implements ItemIds, \JsonSerializable{
     }
 
     /**
-	 * @param Enchantment $ench
-	 */
-	public function addEnchantment(Enchantment $ench){
-		if(!$this->hasCompoundTag()){
-			$tag = new CompoundTag("", []);
-		}else{
-			$tag = $this->getNamedTag();
-		}
-
-		if(!isset($tag->ench)){
-			$tag->ench = new ListTag("ench", []);
-			$tag->ench->setTagType(NBT::TAG_Compound);
-		}
-
-		$found = false;
-
-		foreach($tag->ench as $k => $entry){
-			if($entry["id"] === $ench->getId()){
-				$tag->ench->{$k} = new CompoundTag("", [
-					"id" => new ShortTag("id", $ench->getId()),
-					"lvl" => new ShortTag("lvl", $ench->getLevel())
-				]);
-				$found = true;
-				break;
-			}
-		}
-
-		if(!$found){
-			$tag->ench->{count($tag->ench) + 1} = new CompoundTag("", [
-				"id" => new ShortTag("id", $ench->getId()),
-				"lvl" => new ShortTag("lvl", $ench->getLevel())
-			]);
-		}
-
-		$this->setNamedTag($tag);
-	}
+     * @param Enchantment $ench
+     */
+    public function addEnchantment(Enchantment $ench){
+        if(!$this->hasCompoundTag()){
+            $tag = new CompoundTag("", []);
+        }else{
+            $tag = $this->getNamedTag();
+        }
+        if(!isset($tag->ench)){
+            $tag->ench = new ListTag("ench", []);
+            $tag->ench->setTagType(NBT::TAG_Compound);
+        }
+        $found = false;
+        foreach($tag->ench as $k => $entry){
+            if($entry["id"] === $ench->getId()){
+                $tag->ench->{$k} = new CompoundTag("", [
+                    new ShortTag("id", $ench->getId()),
+                    new ShortTag("lvl", $ench->getLevel())
+                ]);
+                $found = true;
+                break;
+            }
+        }
+        if(!$found){
+            $count = 0;
+            foreach($tag->ench as $key => $value){
+                if(is_numeric($key)){
+                    $count++;
+                }
+            }
+            $tag->ench->{$count + 1} = new CompoundTag("", [
+                new ShortTag("id", $ench->getId()),
+                new ShortTag("lvl", $ench->getLevel())
+            ]);
+        }
+        $this->setNamedTag($tag);
+    }
 
 	/**
 	 * @return Enchantment[]
