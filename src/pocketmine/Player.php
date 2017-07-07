@@ -35,6 +35,7 @@ use pocketmine\entity\Item as DroppedItem;
 use pocketmine\entity\Living;
 use pocketmine\entity\Projectile;
 use pocketmine\event\block\ItemFrameDropItemEvent;
+use pocketmine\event\entity\EntityCombustByEntityEvent;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -84,6 +85,7 @@ use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 use pocketmine\inventory\SimpleTransactionGroup;
 use pocketmine\item\Elytra;
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 use pocketmine\level\ChunkLoader;
 use pocketmine\level\format\Chunk;
@@ -2511,7 +2513,30 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$ev->setCancelled();
 					}
 
-					$target->attack($ev->getFinalDamage(), $ev);
+                    if($target->attack($ev->getFinalDamage(), $ev) === true){
+                        $fireAspectL = $item->getEnchantmentLevel(Enchantment::TYPE_WEAPON_FIRE_ASPECT);
+                        if($fireAspectL > 0){
+                            $fireEv = new EntityCombustByEntityEvent($this, $target, $fireAspectL * 4, $ev->getFireProtectL());
+                            Server::getInstance()->getPluginManager()->callEvent($fireEv);
+                            if(!$fireEv->isCancelled()){
+                                $target->setOnFire($fireEv->getDuration());
+                            }
+                        }
+                        //Thorns
+                        if($this->isSurvival()){
+                            $ev->createThornsDamage();
+                            if($ev->getThornsDamage() > 0){
+                                $thornsEvent = new EntityDamageByEntityEvent($target, $this, EntityDamageEvent::CAUSE_ENTITY_ATTACK, $ev->getThornsDamage(), 0);
+                                if(!$thornsEvent->isCancelled()){
+                                    if($this->attack($thornsEvent->getFinalDamage(), $thornsEvent) === true){
+                                        $thornsEvent->useArmors();
+                                        $ev->setThornsArmorUse();
+                                    }
+                                }
+                            }
+                        }
+                        $ev->useArmors();
+                    }
 
 					if($ev->isCancelled()){
 						if($item->isTool() and $this->isSurvival()){
