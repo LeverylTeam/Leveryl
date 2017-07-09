@@ -31,6 +31,7 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\tile\Tile;
+use pocketmine\tile\EnchantTable;
 
 class EnchantingTable extends Transparent{
 
@@ -48,7 +49,7 @@ class EnchantingTable extends Transparent{
 			new IntTag("y", $this->y),
 			new IntTag("z", $this->z)
 		]);
-
+		$tile = Tile::createTile(TILE::ENCHANT_TABLE, $this->getLevel(), $nbt);
 		if($item->hasCustomName()){
 			$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 		}
@@ -87,8 +88,22 @@ class EnchantingTable extends Transparent{
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
 			//TODO lock
-
-			$player->addWindow(new EnchantInventory($this));
+			$t = $this->getLevel()->getTile($this);
+			$table = null;
+			if($t instanceof EnchantTable){
+				$table = $t;
+			}else{
+				$nbt = new CompoundTag("", [
+					new ListTag("Items", []),
+					new StringTag("id", Tile::ENCHANT_TABLE),
+					new IntTag("x", $this->x),
+					new IntTag("y", $this->y),
+					new IntTag("z", $this->z)
+				]);
+				$nbt->Items->setTagType(NBT::TAG_Compound);
+				$table = Tile::createTile(TILE::ENCHANT_TABLE, $this->getLevel(), $nbt);
+			}
+			$player->addWindow($table->getInventory());
 		}
 
 		return true;
