@@ -2031,7 +2031,7 @@ class Server{
 	 * Shutdowns the server correctly
 	 */
 	public function shutdown(){
-        ($ev = new ServerShutdownEvent($this))->call();
+        ($ev = new ServerShutdownEvent())->call();
 		$this->isRunning = false;
 	}
 
