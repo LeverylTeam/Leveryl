@@ -112,18 +112,13 @@ class Flat extends Generator{
 
 		$this->floorLevel = $y = count($this->structure);
 
-		for(; $y < 0xFF; ++$y){
-			$this->structure[$y] = [0, 0];
-		}
-
-
 		$this->chunk = clone $this->level->getChunk($chunkX, $chunkZ);
 		$this->chunk->setGenerated();
 
 		for($Z = 0; $Z < 16; ++$Z){
 			for($X = 0; $X < 16; ++$X){
 				$this->chunk->setBiomeId($X, $Z, $biome);
-				for($y = 0; $y < 128; ++$y){
+                for($y = 0; $y < 256 and isset($this->structure[$y]); ++$y){
 					$this->chunk->setBlock($X, $y, $Z, ...$this->structure[$y]);
 				}
 			}

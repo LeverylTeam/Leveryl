@@ -168,13 +168,19 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 	public function setName($name){
 		$info = $this->server->getQueryInformation();
 
-		$this->interface->sendOption("name",
-			"MCPE;" . rtrim(addcslashes($name, ";"), '\\') . ";" .
-			ProtocolInfo::CURRENT_PROTOCOL . ";" .
-			ProtocolInfo::MINECRAFT_VERSION_NETWORK . ";" .
-			$info->getPlayerCount() . ";" .
-			$info->getMaxPlayerCount()
-		);
+        $this->interface->sendOption("name", implode(";",
+                [
+                    "MCPE",
+                    rtrim(addcslashes($name, ";"), '\\'),
+                    ProtocolInfo::CURRENT_PROTOCOL,
+                    ProtocolInfo::MINECRAFT_VERSION_NETWORK,
+                    $info->getPlayerCount(),
+                    $info->getMaxPlayerCount(),
+                    "0",
+                    $this->server->getName(),
+                    Server::getGamemodeName($this->server->getGamemode())
+                ]) . ";"
+        );
 	}
 
 	public function setPortCheck($name){

@@ -26,6 +26,7 @@ namespace pocketmine\command;
 use pocketmine\command\defaults\BanCommand;
 use pocketmine\command\defaults\BanIpCommand;
 use pocketmine\command\defaults\BanListCommand;
+use pocketmine\command\defaults\ClearCommand;
 use pocketmine\command\defaults\CreateWorldCommand;
 use pocketmine\command\defaults\DefaultGamemodeCommand;
 use pocketmine\command\defaults\DeopCommand;
@@ -74,6 +75,7 @@ use pocketmine\command\defaults\VersionCommand;
 use pocketmine\command\defaults\WeatherCommand;
 use pocketmine\command\defaults\WhitelistCommand;
 use pocketmine\command\defaults\WorldCommand;
+use pocketmine\command\defaults\XpCommand;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
@@ -132,6 +134,8 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new ReloadCommand("reload"));
 		$this->register("pocketmine", new TransferServerCommand("transferserver"));
 		$this->register("pocketmine", new GameRuleCommand("gamerule"));
+		$this->register("pocketmine", new ClearCommand("clear"));
+		$this->register("pocketmine", new XpCommand("xp"));
 
 		// World Commands
 		$this->register("pocketmine", new WorldCommand("world"));

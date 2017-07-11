@@ -344,6 +344,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
     /** @var  Position */
     private $shouldResPos;
 
+    protected $lastEnderPearlUse = 0;
+
     public $weatherData = [0, 0, 0];
 	/** @var PermissibleBase */
 	private $perm = null;
@@ -3617,6 +3619,125 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->guiscale = $packet->guiscale;
 			$this->controls = $packet->controls;
 		}
+
+		if($packet instanceof UseItemPacket){
+
+            if ($this->spawned === false or !$this->isAlive()) {
+                goto brk;
+            }
+
+            $blockVector = new Vector3($packet->x, $packet->y, $packet->z);
+
+            $this->craftingType = self::CRAFTING_SMALL;
+
+            if ($packet->face >= 0 and $packet->face <= 5) { //Use Block, place
+                $this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
+
+                if (!$this->canInteract($blockVector->add(0.5, 0.5, 0.5), 13) or $this->isSpectator()) {
+
+                } elseif ($this->isCreative()) {
+                    $item = $this->inventory->getItemInHand();
+                    if ($this->level->useItemOn($blockVector, $item, $packet->face, $packet->fx, $packet->fy, $packet->fz, $this, true) === true) {
+                        goto brk;
+                    }
+                } elseif (!$this->inventory->getItemInHand()->equals($packet->item)) {
+                    $this->inventory->sendHeldItem($this);
+                } else {
+                    $item = $this->inventory->getItemInHand();
+                    $oldItem = clone $item;
+                    if ($this->level->useItemOn($blockVector, $item, $packet->face, $packet->fx, $packet->fy, $packet->fz, $this, true)) {
+                        if (!$item->equals($oldItem) or $item->getCount() !== $oldItem->getCount()) {
+                            $this->inventory->setItemInHand($item);
+                            $this->inventory->sendHeldItem($this->hasSpawned);
+                        }
+                        goto brk;
+                    }
+                }
+
+                $this->inventory->sendHeldItem($this);
+
+                if ($blockVector->distanceSquared($this) > 10000) {
+                    goto brk;
+                }
+                $target = $this->level->getBlock($blockVector);
+                $block = $target->getSide($packet->face);
+
+                $this->level->sendBlocks([$this], [$target, $block], UpdateBlockPacket::FLAG_ALL_PRIORITY);
+                goto brk;
+            } elseif ($packet->face === -1) {
+                $aimPos = (new Vector3($packet->x / 32768, $packet->y / 32768, $packet->z / 32768))->normalize();
+
+                if ($this->isCreative()) {
+                    $item = $this->inventory->getItemInHand();
+                } elseif (!$this->inventory->getItemInHand()->equals($packet->item)) {
+                    $this->inventory->sendHeldItem($this);
+                    goto brk;
+                } else {
+                    $item = $this->inventory->getItemInHand();
+                }
+
+                $ev = new PlayerInteractEvent($this, $item, $aimPos, $packet->face, PlayerInteractEvent::RIGHT_CLICK_AIR);
+
+                $this->server->getPluginManager()->callEvent($ev);
+
+                if ($ev->isCancelled()) {
+                    $this->inventory->sendHeldItem($this);
+                    goto brk;
+                }
+
+                $nbt = new CompoundTag("", [
+                    "Pos" => new ListTag("Pos", [
+                        new DoubleTag("", $this->x),
+                        new DoubleTag("", $this->y + $this->getEyeHeight()),
+                        new DoubleTag("", $this->z)
+                    ]),
+                    "Motion" => new ListTag("Motion", [
+                        new DoubleTag("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
+                        new DoubleTag("", -sin($this->pitch / 180 * M_PI)),
+                        new DoubleTag("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
+                    ]),
+                    "Rotation" => new ListTag("Rotation", [
+                        new FloatTag("", $this->yaw),
+                        new FloatTag("", $this->pitch)
+                    ])
+                ]);
+
+                $entity = null;
+                $reduce = true;
+
+
+                if($item->getId() === Item::ENDER_PEARL) {
+                    if (floor(($time = microtime(true)) - $this->lastEnderPearlUse) >= 1) {
+                        $f = 1.1;
+                        $entity = Entity::createEntity("EnderPearl", $this->getLevel(), $nbt, $this);
+                        $entity->setMotion($entity->getMotion()->multiply($f));
+                        if($entity instanceof Projectile){
+                            $this->server->getPluginManager()->callEvent($ev = new ProjectileLaunchEvent($entity));
+                        }
+                        if ($ev->isCancelled()) {
+                            $entity->kill();
+                        } else {
+                            $this->lastEnderPearlUse = $time;
+                        }
+                    }
+                }
+
+
+                if ($entity instanceof Projectile and $entity->isAlive()) {
+                    if ($reduce and $this->isSurvival()) {
+                        $item->setCount($item->getCount() - 1);
+                        $this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+                    }
+                    $entity->spawnToAll();
+                    $this->level->addSound(new LaunchSound($this), $this->getViewers());
+                }
+
+                $this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, true);
+                $this->startAction = $this->server->getTick();
+            }
+        }
+
+        brk:
 
 		$timings->stopTiming();
 	}
