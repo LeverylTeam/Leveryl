@@ -56,7 +56,7 @@ class Weather {
         if($level->getServer()->startfinished) {
             $this->lastUpdate = $level->getServer()->getTick();
         } else {
-            $this->lastUpdate = (10 * 20);
+            $this->lastUpdate = 1;
         }
         $this->temporalVector = new Vector3(0, 0, 0);
     }
