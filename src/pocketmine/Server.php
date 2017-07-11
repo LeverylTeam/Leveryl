@@ -43,7 +43,6 @@ use pocketmine\event\player\PlayerDataSaveEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
 use pocketmine\event\server\ServerCommandEvent;
 use pocketmine\event\server\StartupFinishEvent;
-use pocketmine\event\server\ServerShutdownEvent;
 use pocketmine\event\TextContainer;
 use pocketmine\event\Timings;
 use pocketmine\event\TimingsHandler;
@@ -2031,7 +2030,6 @@ class Server{
 	 * Shutdowns the server correctly
 	 */
 	public function shutdown(){
-        ($ev = new ServerShutdownEvent())->call();
 		$this->isRunning = false;
 	}
 
