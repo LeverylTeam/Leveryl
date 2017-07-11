@@ -43,8 +43,8 @@ if exist bin\php\php.exe (
 ) else (
     set PHP_BINARY=php
 )
-if exist Leveryl.phar (
-    set POCKETMINE_FILE=Leveryl.phar
+if exist PocketMine-MP.phar (
+    set POCKETMINE_FILE=PocketMine-MP.phar
 ) else if exist plugins\Leveryl\Leveryl*.phar (
 	REM If a DevTools build exists
     set POCKETMINE_FILE=.\plugins\Leveryl\Leveryl*.phar
