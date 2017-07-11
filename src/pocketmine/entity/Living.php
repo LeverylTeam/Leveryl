@@ -170,6 +170,8 @@ abstract class Living extends Entity implements Damageable{
 				$this->knockBack($e, $damage, $deltaX, $deltaZ, $source->getKnockBack());
 			}
 		}
+		
+		$this->setAbsorption(intval($this->getAbsorption() + $source->getDamage(EntityDamageEvent::MODIFIER_ABSORPTION)));
 
 		$pk = new EntityEventPacket();
 		$pk->entityRuntimeId = $this->getId();
