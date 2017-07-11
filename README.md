@@ -11,6 +11,8 @@ This spoon is based off of PMMP (For Stability)
 
 # Features:
 - [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
+- [X] **EnderPearls**
+- [X] **XP System** (Still needs to be Improved)
 - [ ] EnderChests
 - [X] **Full Tesseract & PMMP PluginAPI Compatibility**
 - [X] **CustomPotions**
