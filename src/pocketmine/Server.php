@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		 _   __  __ _				   __  __ ____
+ *  ____			_		_   __  __ _				  __  __ ____
  * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	  |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -43,6 +43,7 @@ use pocketmine\event\player\PlayerDataSaveEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
 use pocketmine\event\server\ServerCommandEvent;
 use pocketmine\event\server\StartupFinishEvent;
+use pocketmine\event\server\ServerShutdownEvent;
 use pocketmine\event\TextContainer;
 use pocketmine\event\Timings;
 use pocketmine\event\TimingsHandler;
@@ -1499,18 +1500,18 @@ class Server{
 			}
 
 			$startupmsg = "
- §l§f╔═════════════════════════════════════════════════╗  §r§f══ Loaded: Properties and Configuration ══
- §l§f║                                                 ║    §r§cDate: §d$date
- §l§f║§r§b          __                           _         §l§f║§r    §cVersion: §d$version §cCodename: §d$code
- §l§f║§r§b         / /  _____   _____ _ __ _   _| |        §l§f║§r    §cMCPE: §d$mcpe §cProtocol: §d$protocol
- §l§f║§r§b        / /  / _ \ \ / / _ \ '__| | | | |        §l§f║ §r   §cIP: §d$ip §cPort: §d$port
- §l§f║§r§b       / /__|  __/\ V /  __/ |  | |_| | |        §l§f║ §r   §cQuery: §d$query
- §l§f║§r§b       \____/\___| \_/ \___|_|   \__, |_|        §l§f║ §r   §cSSL Extension: §d$ssl
- §l§f║§r§b                               |____/            §l§f║ §r   §cAuthentication: §d$mode
- §l§f║                                                 ║   §r §r§cAPI Version: §d$api
- §l§f║§r   §bRepository : §bGitHub.com/LeverylTeam/Leveryl  §l §f║  §r  §cLanguage: §d$lang
- §l§f║                                                 ║  §r  §cPackage: §d$package
- §l§f╚═════════════════════════════════════════════════╝  §r§f══════════════════════════════════════════";
+§l§f╔═════════════════════════════════════════════════╗  §r§f══ Loaded: Properties and Configuration ══
+§l§f║                                                 ║    §r§cDate: §d$date
+§l§f║§r§b          __                           _         §l§f║§r    §cVersion: §d$version §cCodename: §d$code
+§l§f║§r§b         / /  _____   _____ _ __ _   _| |        §l§f║§r    §cMCPE: §d$mcpe §cProtocol: §d$protocol
+§l§f║§r§b        / /  / _ \ \ / / _ \ '__| | | | |        §l§f║ §r   §cIP: §d$ip §cPort: §d$port
+§l§f║§r§b       / /__|  __/\ V /  __/ |  | |_| | |        §l§f║ §r   §cQuery: §d$query
+§l§f║§r§b       \____/\___| \_/ \___|_|   \__, |_|        §l§f║ §r   §cSSL Extension: §d$ssl
+§l§f║§r§b                               |____/            §l§f║ §r   §cAuthentication: §d$mode
+§l§f║                                                 ║   §r §r§cAPI Version: §d$api
+§l§f║§r   §bRepository : §bGitHub.com/LeverylTeam/Leveryl  §l §f║  §r  §cLanguage: §d$lang
+§l§f║                                                 ║  §r  §cPackage: §d$package
+§l§f╚═════════════════════════════════════════════════╝  §r§f══════════════════════════════════════════";
 
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(!file_exists($this->dataPath . "leveryl.yml")){
@@ -2029,22 +2030,9 @@ class Server{
 	/**
 	 * Shutdowns the server correctly
 	 */
-	public function shutdown(bool $restart = false, string $msg = "") {
-		/**
-		  if ( $this->isRunning ) {
-			$killer = new ServerKiller ( 90 );
-			$killer->start();
-			$killer->kill();
-		  }
-		*/
-		$this->getPluginManager ()->callEvent ( $ev = new event\server\ServerShutdownEvent ());
-		if ( $ev->isCancelled ( true )) return;
-		
+	public function shutdown(){
+        ($ev = new ServerShutdownEvent($this))->call();
 		$this->isRunning = false;
-		if ( $msg != "" ) {
-			$this->propertyCache["settings.shutdown-message"] = $msg;
-		}
-		
 	}
 
 	public function forceShutdown(){
