@@ -25,10 +25,11 @@ namespace pocketmine\inventory;
 
 use pocketmine\level\Position;
 use pocketmine\Player;
+use pocketmine\tile\EnchantTable;
 
 class EnchantInventory extends ContainerInventory{
-	public function __construct(Position $pos){
-		parent::__construct(new FakeBlockMenu($this, $pos), InventoryType::get(InventoryType::ENCHANT_TABLE));
+	public function __construct(EnchantTable $tile){
+		parent::__construct($tile, InventoryType::get(InventoryType::ENCHANT_TABLE));
 	}
 
 	/**

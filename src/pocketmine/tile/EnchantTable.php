@@ -23,12 +23,34 @@ declare(strict_types=1);
 
 namespace pocketmine\tile;
 
+
+use pocketmine\inventory\EnchantInventory;
+use pocketmine\inventory\InventoryHolder;
+use pocketmine\item\Item;
+use pocketmine\level\Level;
+use pocketmine\math\Vector3;
+use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 
-class EnchantTable extends Spawnable implements Nameable{
+class EnchantTable extends Spawnable implements InventoryHolder, Container, Nameable{
 
+	public function __construct(Level $level, CompoundTag $nbt){
+		parent::__construct($level, $nbt);
+		$this->inventory = new EnchantInventory($this);
+
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
+			$this->namedtag->Items = new ListTag("Items", []);
+			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
+		}
+
+		for($i = 0; $i < $this->getSize(); ++$i){
+			$this->inventory->setItem($i, $this->getItem($i));
+		}
+	}
+	
 
 	public function getName() : string{
 		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Enchanting Table";
@@ -61,4 +83,80 @@ class EnchantTable extends Spawnable implements Nameable{
 
 		return $c;
 	}
+	/**
+	 * @return EnchantInventory
+	 */
+	public function getInventory(){
+		return  $this->inventory;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getSize(){
+		return 3;
+	}
+
+	public function saveNBT(){
+		$this->namedtag->Items = new ListTag("Items", []);
+		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
+		for($index = 0; $index < $this->getSize(); ++$index){
+			$this->setItem($index, $this->inventory->getItem($index));
+		}
+	}
+
+	/**
+	 * @param $index
+	 *
+	 * @return int
+	 */
+	protected function getSlotIndex($index){
+		foreach($this->namedtag->Items as $i => $slot){
+			if((int) $slot["Slot"] === (int) $index){
+				return (int) $i;
+			}
+		}
+
+		return -1;
+	}
+
+	public function getItem($index){
+		$i = $this->getSlotIndex($index);
+		if($i < 0){
+			return Item::get(Item::AIR, 0, 0);
+		}else{
+			return Item::nbtDeserialize($this->namedtag->Items[$i]);
+		}
+	}
+/**
+	 * This method should not be used by plugins, use the Inventory
+	 *
+	 * @param int  $index
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
+	public function setItem($index, Item $item){
+		$i = $this->getSlotIndex($index);
+
+		$d = $item->nbtSerialize($index);
+
+		if($item->getId() === Item::AIR or $item->getCount() <= 0){
+			if($i >= 0){
+				unset($this->namedtag->Items[$i]);
+			}
+		}elseif($i < 0){
+			for($i = 0; $i <= $this->getSize(); ++$i){
+				if(!isset($this->namedtag->Items[$i])){
+					break;
+				}
+			}
+			$this->namedtag->Items[$i] = $d;
+		}else{
+			$this->namedtag->Items[$i] = $d;
+		}
+
+		return true;
+	}
+
 }
