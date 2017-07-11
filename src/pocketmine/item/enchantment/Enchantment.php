@@ -180,6 +180,13 @@ class Enchantment{
 		}
 		return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
 	}
+	
+	public static function getEffectByName($name){
+		if(defined(Enchantment::class . "::TYPE_" . strtoupper($name))){
+			return self::getEnchantment(constant(Enchantment::class . "::TYPE_" . strtoupper($name)));
+		}
+		return null;
+	}
 
 	public static function registerEnchantment($id, $name, $rarity, $activationType, $slot){
 		if(isset(self::$enchantments[$id])){
