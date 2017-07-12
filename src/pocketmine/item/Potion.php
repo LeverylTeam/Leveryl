@@ -407,4 +407,19 @@ class Potion extends Item
             return true;
         }
     }
+
+    /**
+     * @param int $id
+     * @return Effect[]
+     */
+    public static function getEffectsById(int $id) : array{
+        foreach (self::$POTION_EFFECTS[$id] as $effs) { // $effs is an array.
+            if (count($effs ?? []) === 3) { // Count
+                if ($effs[2] < 2147483646) { // So they can't make potions higher than the limit
+                    $effects[] = Effect::getEffect($effs[0])->setDuration($effs[1])->setAmplifier($effs[2]);
+                }
+            }
+        }
+        return $effects ?? [];
+    }
 }
