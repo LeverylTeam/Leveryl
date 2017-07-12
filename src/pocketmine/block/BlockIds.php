@@ -226,7 +226,7 @@ interface BlockIds{
 	const ITEM_FRAME_BLOCK = 199;
 
 	// 1.1 Blocks (Added By @LeverylTeam)
-    const SHULKER_BOX = 219;
+    const SHULKER_BOX = 218;
     const PURPLE_GLAZED_TERRACOTTA = 219;
     const WHITE_GLAZED_TERRACOTTA = 220;
     const ORANGE_GLAZED_TERRACOTTA = 221;

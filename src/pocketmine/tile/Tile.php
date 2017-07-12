@@ -36,6 +36,7 @@ use pocketmine\nbt\tag\StringTag;
 
 abstract class Tile extends Position{
 
+	const BED = "Bed";
 	const BREWING_STAND = "BrewingStand";
 	const CHEST = "Chest";
 	const ENCHANT_TABLE = "EnchantTable";
@@ -73,6 +74,7 @@ abstract class Tile extends Position{
 	public $tickTimer;
 
 	public static function init(){
+		self::registerTile(Bed::class);
 		self::registerTile(Beacon::class);
 		self::registerTile(BrewingStand::class);
 		self::registerTile(Cauldron::class);
