@@ -2167,14 +2167,14 @@ class Server{
 			case "dev":
 				$this->logger->notice("-------------------- NOTICE --------------------");
 				$this->logger->notice("You're running a DEVELOPER's version of Leveryl.");
-				$this->logger->notice("	           DO NOT use in production            ");
+				$this->logger->notice("            DO NOT use in production            ");
 				$this->logger->notice("-------------------- NOTICE --------------------");
 				break;
 			case "experimental":
 			case "exp":
 				$this->logger->notice("--------------------- NOTICE ---------------------");
 				$this->logger->notice("You're running an EXPERIMENTAL version of Leveryl.");
-                $this->logger->notice("	           DO NOT use in production              ");
+                $this->logger->notice("            DO NOT use in production              ");
 				$this->logger->notice("--------------------- NOTICE ---------------------");
 				break;
 			default:

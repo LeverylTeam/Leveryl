@@ -361,8 +361,11 @@ class Level implements ChunkManager, Metadatable{
         $this->temporalVector = new Vector3(0, 0, 0);
         $this->tickRate = 1;
 
-        if ($this->server->getLeverylConfigValue("NetherEnabled", true) and $this->server->getLeverylConfigValue("NetherWorldName", "nether") == $this->folderName) $this->setDimension(self::DIMENSION_NETHER);
-        else $this->setDimension(self::DIMENSION_NORMAL);
+        if ($this->server->getLeverylConfigValue("NetherEnabled", true) and $this->server->getLeverylConfigValue("NetherWorldName", "nether") == $this->folderName){
+            $this->setDimension(self::DIMENSION_NETHER);
+        } else {
+            $this->setDimension(self::DIMENSION_NORMAL);
+        }
 
         if ($this->server->getLeverylConfigValue("Weather", true) and $this->getDimension() == self::DIMENSION_NORMAL) {
             $this->weather->setCanCalculate(true);

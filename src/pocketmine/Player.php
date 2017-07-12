@@ -2536,9 +2536,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                 return false;
             }
         }
-
         $this->inventory->equipItem($packet->hotbarSlot, $packet->inventorySlot);
-
         $this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 
         return true;
@@ -2546,7 +2544,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
     public function handleMobArmorEquipment(MobArmorEquipmentPacket $packet): bool
     {
-        return false;
+        return true; // Unhandled... TODO: Fix this hack. (added just so it wont spam the console)
     }
 
     public function handleInteract(InteractPacket $packet): bool
@@ -2854,6 +2852,57 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                         }
                     }
                     break;
+
+                case Item::EGG:
+                    $f = 1.5;
+                    $entity = Entity::createEntity("Egg", $this->getLevel(), $nbt, $this);
+                    $entity->setMotion($entity->getMotion()->multiply($f));
+                    if ($this->isSurvival()) {
+                        $item->setCount($item->getCount() - 1);
+                        $this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+                    }
+                    if ($entity instanceof Projectile) {
+                        $this->server->getPluginManager()->callEvent($ev = new ProjectileLaunchEvent($entity));
+                        if ($ev->isCancelled()) {
+                            $entity->kill();
+                        }
+                    }
+                    break;
+
+                case Item::ENCHANTING_BOTTLE:
+                    $f = 1.1;
+                    $entity = Entity::createEntity("ThrownExpBottle", $this->getLevel(), $nbt, $this);
+                    $entity->setMotion($entity->getMotion()->multiply($f));
+                    if ($this->isSurvival()) {
+                        $item->setCount($item->getCount() - 1);
+                        $this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+                    }
+                    if ($entity instanceof Projectile) {
+                        $this->server->getPluginManager()->callEvent($ev = new ProjectileLaunchEvent($entity));
+                        if ($ev->isCancelled()) {
+                            $entity->kill();
+                        }
+                    }
+                    break;
+
+                case Item::SPLASH_POTION:
+                    if ($this->server->getLeverylConfigValue("SplashPotions", true)) {
+                        $f = 1.1;
+                        $nbt["PotionId"] = new ShortTag("PotionId", $item->getDamage());
+                        $entity = Entity::createEntity("ThrownPotion", $this->getLevel(), $nbt, $this);
+                        $entity->setMotion($entity->getMotion()->multiply($f));
+                        if ($this->isSurvival()) {
+                            $item->setCount($item->getCount() - 1);
+                            $this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+                        }
+                        if ($entity instanceof Projectile) {
+                            $this->server->getPluginManager()->callEvent($ev = new ProjectileLaunchEvent($entity));
+                            if ($ev->isCancelled()) {
+                                $entity->kill();
+                            }
+                        }
+                        break;
+                    }
             }
 
             $this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, true);
@@ -3658,9 +3707,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
         $tile = $this->level->getTile($this->temporalVector->setComponents($packet->x, $packet->y, $packet->z));
         if ($tile instanceof ItemFrame) {
-            $ev = new PlayerInteractEvent($this, $this->inventory->getItemInHand(), $tile->getBlock(), 5 - $tile->getBlock()->getDamage(), PlayerInteractEvent::LEFT_CLICK_BLOCK);
+            ($ev = new PlayerInteractEvent($this, $this->inventory->getItemInHand(), $tile->getBlock(), 5 - $tile->getBlock()->getDamage(), PlayerInteractEvent::LEFT_CLICK_BLOCK))->call();
             ($ev = new ItemFrameDropItemEvent($this, $tile->getBlock(), $tile, $tile->getItem()))->call();
-            $this->server->getPluginManager()->callEvent($ev);
 
             if ($this->isSpectator()) {
                 $ev->setCancelled();

@@ -396,13 +396,13 @@ class Potion extends Item
      */
     public static function registerPotion(int $id, string $name, array $effects, Int $color, Server $server)
     {
-        if ($id < 37) { // So it wouldn't mess with other potions
+        if (isset(self::$POTION_NAMES[$id])) { // So it wouldn't mess with other potions
             $server->getLogger()->error("[POTION] Unable to register Potion ID: " . $id);
             return false;
         } else {
             self::$POTION_NAMES[$id] = $name;
             self::$POTION_EFFECTS[$id] = $effects;
-            self::$POTION_EFFECT_ID = $color;
+            self::$POTION_EFFECT_ID[$id] = $color;
             $server->getLogger()->notice("[POTION] Successfully Registered Potion ID: " . $id);
             return true;
         }

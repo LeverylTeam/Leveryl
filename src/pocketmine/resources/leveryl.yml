@@ -40,10 +40,7 @@ BlockTNTExplosion: false
 
 # Game Mechanics
 Criticals: true
-FireSpread: false
-
-# Network
-DisableRakLib: false
+SplashPotions: true
 
 # Player
 ClearInventoryOnGameModeChange: true

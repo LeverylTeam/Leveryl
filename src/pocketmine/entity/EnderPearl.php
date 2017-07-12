@@ -57,7 +57,7 @@ class EnderPearl extends Projectile{
             if($this->isAlive()){
                 if ($this->shootingEntity instanceof Player and $this->y > 0) {
                     $this->shootingEntity->attack(5, new EntityDamageEvent($this->shootingEntity, EntityDamageEvent::CAUSE_FALL, 5));
-                    $this->shootingEntity->teleport($this->getPosition());
+                    $this->shootingEntity->teleport($this->getPosition(), $this->shootingEntity->getYaw(), $this->shootingEntity->getPitch());
                 }
                 $this->kill();
                 $hasUpdate = true;

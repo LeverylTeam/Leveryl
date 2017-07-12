@@ -271,6 +271,7 @@ class Block extends Position implements BlockIds, Metadatable
             self::$list[self::SKULL_BLOCK] = SkullBlock::class;
             self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
             self::$list[self::UNPOWERED_REPEATER_BLOCK] = UnpoweredRepeater::class;
+            self::$list[self::CAULDRON_BLOCK] = Cauldron::class;
 
             // 1.1 Blocks (Added By @LeverylTeam)
             self::$list[self::SHULKER_BOX] = ShulkerBox::class;
