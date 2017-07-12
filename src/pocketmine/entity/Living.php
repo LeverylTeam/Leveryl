@@ -93,11 +93,11 @@ abstract class Living extends Entity implements Damageable{
 		$this->attributeMap->getAttribute(Attribute::HEALTH)->setMaxValue($amount);
 	}
 
-	public function getAbsorption() : int{
-		return (int) $this->attributeMap->getAttribute(Attribute::ABSORPTION)->getValue();
+	public function getAbsorption() : float{
+		return (float) $this->attributeMap->getAttribute(Attribute::ABSORPTION)->getValue();
 	}
 
-	public function setAbsorption(int $absorption){
+	public function setAbsorption(float $absorption){
 		$this->attributeMap->getAttribute(Attribute::ABSORPTION)->setValue($absorption);
 	}
 
@@ -171,7 +171,7 @@ abstract class Living extends Entity implements Damageable{
 			}
 		}
 		
-		$this->setAbsorption(intval($this->getAbsorption() + $source->getDamage(EntityDamageEvent::MODIFIER_ABSORPTION)));
+		$this->setAbsorption($this->getAbsorption() + $source->getDamage(EntityDamageEvent::MODIFIER_ABSORPTION));
 
 		$pk = new EntityEventPacket();
 		$pk->entityRuntimeId = $this->getId();
