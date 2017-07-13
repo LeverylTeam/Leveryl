@@ -53,11 +53,7 @@ class Weather {
         $this->level = $level;
         $this->weatherNow = self::SUNNY;
         $this->duration = $duration;
-        if($level->getServer()->startfinished) {
-            $this->lastUpdate = $level->getServer()->getTick();
-        } else {
-            $this->lastUpdate = 1;
-        }
+        $this->lastUpdate = $level->getServer()->getTick();
         $this->temporalVector = new Vector3(0, 0, 0);
     }
 

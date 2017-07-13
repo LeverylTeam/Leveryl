@@ -51,6 +51,8 @@ VerboseConsoleMessages: true
 # Miscellaneous
 DisableServerDotLog: false
 DisablePluginAPIVersionCheck: true
+#### WARNING: COMMANDS WOULD SOMETIMES BE A PROBLEM IF THIS IS ENABLED.
+AllowUserNamesWithSpaces: false
 
 # Weather
 Weather: true

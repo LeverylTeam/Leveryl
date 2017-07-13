@@ -37,7 +37,9 @@ use pocketmine\nbt\tag\StringTag;
 
 class EnchantTable extends Spawnable implements InventoryHolder, Container, Nameable{
 
-	public function __construct(Level $level, CompoundTag $nbt){
+    public $inventory;
+
+    public function __construct(Level $level, CompoundTag $nbt){
 		parent::__construct($level, $nbt);
 		$this->inventory = new EnchantInventory($this);
 

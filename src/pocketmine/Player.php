@@ -235,7 +235,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
     {
         $lname = strtolower($name);
         $len = strlen($name);
-        return $lname !== "rcon" and $lname !== "console" and $len >= 1 and $len <= 16 and preg_match("/[^A-Za-z0-9_]/", $name) === 0;
+        if(self::getServer()->getLeverylConfigValue("AllowUserNamesWithSpaces", false)){
+            return $lname !== "rcon" and $lname !== "console" and $len >= 1 and $len <= 16 and preg_match("/[^A-Za-z0-9_\s]/", $name) === 0;
+        } else {
+            return $lname !== "rcon" and $lname !== "console" and $len >= 1 and $len <= 16 and preg_match("/[^A-Za-z0-9_]/", $name) === 0;
+        }
     }
 
     /**

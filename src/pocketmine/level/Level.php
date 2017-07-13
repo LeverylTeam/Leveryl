@@ -52,6 +52,7 @@ use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Item as DroppedItem;
 use pocketmine\entity\Lightning;
+use pocketmine\entity\XPOrb;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\block\BlockUpdateEvent;
@@ -91,6 +92,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\ListTag;
+use pocketmine\nbt\tag\LongTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\mcpe\protocol\BatchPacket;
@@ -880,6 +882,41 @@ class Level implements ChunkManager, Metadatable{
 			}
 		}
 	}
+
+    /**
+     * Add an experience orb
+     *
+     * @param Vector3 $pos
+     * @param int $exp
+     * @return bool|XPOrb
+     */
+    public function spawnXPOrb(Vector3 $pos, int $exp = 1) {
+        if ($exp > 0) {
+            $nbt = new CompoundTag("", [
+                "Pos" => new ListTag("Pos", [
+                    new DoubleTag("", $pos->getX()),
+                    new DoubleTag("", $pos->getY() + 0.5),
+                    new DoubleTag("", $pos->getZ())
+                ]),
+                "Motion" => new ListTag("Motion", [
+                    new DoubleTag("", 0),
+                    new DoubleTag("", 0),
+                    new DoubleTag("", 0)
+                ]),
+                "Rotation" => new ListTag("Rotation", [
+                    new FloatTag("", 0),
+                    new FloatTag("", 0)
+                ]),
+                "Experience" => new LongTag("Experience", $exp),
+            ]);
+
+            $expOrb = new XPOrb($this, $nbt);
+            $expOrb->spawnToAll();
+
+            return $expOrb;
+        }
+        return false;
+    }
 
 	public function sendBlockExtraData(int $x, int $y, int $z, int $id, int $data, array $targets = null){
 		$pk = new LevelEventPacket;

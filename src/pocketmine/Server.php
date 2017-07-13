@@ -640,7 +640,7 @@ class Server{
 	/**
 	 * @return int
 	 */
-	public function getTick() : int{
+	public function getTick() {
 		return $this->tickCounter;
 	}
 
