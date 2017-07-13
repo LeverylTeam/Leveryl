@@ -60,6 +60,7 @@ use pocketmine\command\defaults\SaveOffCommand;
 use pocketmine\command\defaults\SaveOnCommand;
 use pocketmine\command\defaults\SayCommand;
 use pocketmine\command\defaults\SeedCommand;
+use pocketmine\command\defaults\SetBlockCommand;
 use pocketmine\command\defaults\SetWorldSpawnCommand;
 use pocketmine\command\defaults\SpawnpointCommand;
 use pocketmine\command\defaults\StatusCommand;
@@ -136,6 +137,7 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new GameRuleCommand("gamerule"));
 		$this->register("pocketmine", new ClearCommand("clear"));
 		$this->register("pocketmine", new XpCommand("xp"));
+		$this->register("pocketmine", new SetBlockCommand("setblock"));
 
 		// World Commands
 		$this->register("pocketmine", new WorldCommand("world"));

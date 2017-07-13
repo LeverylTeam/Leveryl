@@ -27,6 +27,7 @@ use pocketmine\block\Block;
 use pocketmine\block\Fire;
 use pocketmine\block\Solid;
 use pocketmine\level\Level;
+use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\Player;
 
 class FlintSteel extends Tool{
@@ -41,6 +42,7 @@ class FlintSteel extends Tool{
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
 		if($block->getId() === self::AIR and ($target instanceof Solid)){
 			$level->setBlock($block, new Fire(), true);
+            $player->getLevel()->broadcastLevelSoundEvent($player, LevelSoundEventPacket::SOUND_IGNITE);
 			if(($player->gamemode & 0x01) === 0 and $this->useOn($block)){
 				if($this->getDamage() >= $this->getMaxDurability()){
 					$player->getInventory()->setItemInHand(new Item(Item::AIR, 0, 0));

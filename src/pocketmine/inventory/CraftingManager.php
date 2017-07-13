@@ -461,4 +461,6 @@ class CraftingManager{
 			$this->registerBrewingRecipe(new BrewingRecipe(Item::get(Item::SPLASH_POTION, $potion, 1), Item::get(Item::GUNPOWDER, 0, 1), Item::get(Item::POTION, $potion, 1)));
 		}
 	}
+
+	
 }

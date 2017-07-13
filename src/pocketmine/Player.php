@@ -2493,6 +2493,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                     } else {
                         $this->inventory->sendContents($this);
                     }
+
+                    $this->level->broadcastLevelSoundEvent($this->add(0, 2, 0), LevelSoundEventPacket::SOUND_BURP);
                 }
                 break;
             default:
@@ -2795,7 +2797,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                 return true;
             }
 
-            $nbt = new CompoundTag("", [
+            /*$nbt = new CompoundTag("", [
                 "Pos" => new ListTag("Pos", [
                     new DoubleTag("", $this->x),
                     new DoubleTag("", $this->y + $this->getEyeHeight()),
@@ -2810,6 +2812,22 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                     new FloatTag("", $this->yaw),
                     new FloatTag("", $this->pitch)
                 ])
+            ]);*/
+            $nbt = new CompoundTag("", [
+                new ListTag("Pos", [
+                    new DoubleTag("", $this->x),
+                    new DoubleTag("", $this->y + $this->getEyeHeight()),
+                    new DoubleTag("", $this->z)
+                ]),
+                new ListTag("Motion", [
+                    new DoubleTag("", $aimPos->x),
+                    new DoubleTag("", $aimPos->y),
+                    new DoubleTag("", $aimPos->z)
+                ]),
+                new ListTag("Rotation", [
+                    new FloatTag("", $this->yaw),
+                    new FloatTag("", $this->pitch)
+                ]),
             ]);
 
             switch ($item->getId()) {
@@ -3042,6 +3060,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                         }
 
                         $this->server->getPluginManager()->callEvent($ev);
+                        $this->getLevel()->broadcastLevelSoundEvent($this, LevelSoundEventPacket::SOUND_BOW);
 
                         if ($ev->isCancelled()) {
                             $ev->getProjectile()->kill();
@@ -3260,6 +3279,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
             return true;
         }
 
+        if($this->server->getLeverylConfigValue("LimitedCreative", true) && $this->isCreative()){
+            return true;
+        }
+
         if ($packet->item->getId() === Item::AIR) {
             // Windows 10 Edition drops the contents of the crafting grid on container close - including air.
             return true;
@@ -3277,9 +3300,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
             return true;
         }
 
-        $this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
         $motion = $this->getDirectionVector()->multiply(0.4);
-
+        $this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
         $this->level->dropItem($this->add(0, 1.3, 0), $ev->getItem(), $motion, 40);
 
         $this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
