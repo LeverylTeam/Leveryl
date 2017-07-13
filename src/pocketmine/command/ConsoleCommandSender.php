@@ -34,6 +34,9 @@ class ConsoleCommandSender implements CommandSender{
 
 	private $perm;
 
+    /** @var int|null */
+    protected $lineHeight = null;
+
 	public function __construct(){
 		$this->perm = new PermissibleBase($this);
 	}
@@ -136,5 +139,16 @@ class ConsoleCommandSender implements CommandSender{
 	public function setOp($value){
 
 	}
+
+    public function getScreenLineHeight() : int{
+        return $this->lineHeight ?? PHP_INT_MAX;
+    }
+
+    public function setScreenLineHeight(int $height = null){
+        if($height !== null and $height < 1){
+            throw new \InvalidArgumentException("Line height must be at least 1");
+        }
+        $this->lineHeight = $height;
+    }
 
 }

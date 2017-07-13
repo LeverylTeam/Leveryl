@@ -256,6 +256,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
     /** @var SourceInterface */
     protected $interface;
 
+    /** @var int|null */
+	protected $lineHeight = null;
+
     /** @var bool */
     public $playedBefore;
     public $spawned = false;
@@ -4798,4 +4801,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
     {
         return $this->inventory->getItemInHand();
     }
+
+    public function getScreenLineHeight() : int{
+        return $this->lineHeight ?? 7;
+ 	}
+
+	public function setScreenLineHeight(int $height = null){
+        if($height !== null and $height < 1){
+        	throw new \InvalidArgumentException("Line height must be at least 1");
+ 		}
+ 		$this->lineHeight = $height;
+ 	}
 }
