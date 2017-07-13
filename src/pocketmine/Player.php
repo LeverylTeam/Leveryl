@@ -231,7 +231,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
      *
      * @return bool
      */
-    public static function isValidUserName(string $name): bool
+   /* public static function isValidUserName(string $name): bool
     {
         $lname = strtolower($name);
         $len = strlen($name);
@@ -240,7 +240,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
         } else {
             return $lname !== "rcon" and $lname !== "console" and $len >= 1 and $len <= 16 and preg_match("/[^A-Za-z0-9_]/", $name) === 0;
         }
-    }
+    } */
 
     /**
      * Checks the length of a supplied skin bitmap and returns whether the length is valid.
@@ -2164,10 +2164,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
         $this->uuid = UUID::fromString($packet->clientUUID);
         $this->rawUUID = $this->uuid->toBinary();
 
-        if (!Player::isValidUserName($packet->username)) {
+        /*if (!Player::isValidUserName($packet->username)) {
             $this->close("", "disconnectionScreen.invalidName");
             return true;
-        }
+        }*/
 
         if (!Player::isValidSkin($packet->skin)) {
             $this->close("", "disconnectionScreen.invalidSkin");
