@@ -46,7 +46,22 @@ class SetupWizard{
 	}
 
 	public function run(){
+        $this->writeLine("     __                           _ ");
+        $this->writeLine("    / /  _____   _____ _ __ _   _| |");
+        $this->writeLine("   / /  / _ \ \ / / _ \ '__| | | | |");
+        $this->writeLine("  / /__|  __/\ V /  __/ |  | |_| | |");
+        $this->writeLine("  \____/\___| \_/ \___|_|   \__, |_|");
+        $this->writeLine("                            |___/   ");
+        $this->writeLine();
+        $this->writeLine(" This program is free software: you can redistribute it and/or modify");
+        $this->writeLine(" it under the terms of the GNU Lesser General Public License as published by");
+        $this->writeLine(" the Free Software Foundation, either version 3 of the License, or");
+        $this->writeLine(" (at your option) any later version.");
+        $this->writeLine();
+        $this->writeLine("----------------------------------------------------------------------------");
+        $this->writeLine();
 		$this->message("Leveryl set-up wizard");
+        $this->notice("Press the [ENTER] Key to use the Default Value.");
 
 		$langs = BaseLang::getLanguageList();
 		if(empty($langs)){
@@ -56,7 +71,7 @@ class SetupWizard{
 
 		$this->message("Please select a language");
 		foreach($langs as $short => $native){
-			$this->writeLine(" $native => $short");
+			$this->message(" $native => $short");
 		}
 
 		do{
@@ -79,7 +94,6 @@ class SetupWizard{
 			return true;
 		}
 
-		$this->writeLine();
 		$this->welcome();
 		$this->generateBaseConfig();
 		$this->generateUserFiles();
@@ -92,20 +106,16 @@ class SetupWizard{
 	}
 
 	private function showLicense(){
-		$this->message($this->lang->get("welcome_to_pocketmine"));
-		echo <<<LICENSE
-
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU Lesser General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-LICENSE;
-		$this->writeLine();
+		$this->notice("Please accept the license below before you continue: ");
+		$this->message(" ----- + The GNU LGPL License + ----- ");
+        $this->message("This program is free software: you can redistribute it and/or modify");
+        $this->message("it under the terms of the GNU Lesser General Public License as published by");
+        $this->message("the Free Software Foundation, either version 3 of the License, or");
+        $this->message("(at your option) any later version.");
+        $this->message(" ----- + The GNU LGPL License + ----- ");
 		if(strtolower($this->getInput($this->lang->get("accept_license"), "n", "y/N")) !== "y"){
-			$this->error($this->lang->get("you_have_to_accept_the_license"));
+			$this->error("You have to Accept the License before you continue.");
 			sleep(5);
-
 			return false;
 		}
 
@@ -212,20 +222,14 @@ LICENSE;
 		}
 		$internalIP = gethostbyname(trim(`hostname`));
 
-		$this->error($this->lang->translateString("ip_warning", ["EXTERNAL_IP" => $externalIP, "INTERNAL_IP" => $internalIP]));
-		$this->error($this->lang->get("ip_confirm"));
-		//$this->readLine();
+		$this->notice($this->lang->translateString("ip_warning", ["EXTERNAL_IP" => $externalIP, "INTERNAL_IP" => $internalIP]));
+		$this->notice($this->lang->get("ip_confirm"));
+		$this->readLine();
 	}
 
 	private function endWizard(){
 		$this->message($this->lang->get("you_have_finished"));
-		$this->message($this->lang->get("pocketmine_plugins"));
 		$this->message($this->lang->get("pocketmine_will_start"));
-
-		$this->writeLine();
-		$this->writeLine();
-
-		sleep(4);
 	}
 
 	private function writeLine(string $line = ""){
@@ -237,15 +241,19 @@ LICENSE;
 	}
 
 	private function message(string $message){
-		$this->writeLine("[*] " . $message);
+		$this->writeLine(date("H:i:s", time()) . " [INFO] " . $message);
 	}
 
 	private function error(string $message){
-		$this->writeLine("[!] " . $message);
+		$this->writeLine(date("H:i:s", time()) . " [ERROR] " .  $message);
+	}
+
+	private function notice(string $message){
+		$this->writeLine(date("H:i:s", time()) . " [NOTICE] " .  $message);
 	}
 
 	private function getInput(string $message, string $default = "", string $options = ""){
-		$message = "[?] " . $message;
+		$message = date("H:i:s", time()) . " [INPUT] " . $message;
 
 		if($options !== "" or $default !== ""){
 		    if($default == self::DEFAULT_NAME){
