@@ -1523,7 +1523,7 @@ class Server{
 §l§f║§r§b        / /  / _ \ \ / / _ \ '__| | | | |        §l§f║ §r   §cIP: §d$ip §cPort: §d$port
 §l§f║§r§b       / /__|  __/\ V /  __/ |  | |_| | |        §l§f║ §r   §cQuery: §d$query
 §l§f║§r§b       \____/\___| \_/ \___|_|   \__, |_|        §l§f║ §r   §cSSL Extension: §d$ssl
-§l§f║§r§b                               |____/            §l§f║ §r   §cAuthentication: §d$mode
+§l§f║§r§b                                |____/           §l§f║ §r   §cAuthentication: §d$mode
 §l§f║                                                 ║   §r §r§cAPI Version: §d$api
 §l§f║§r   §bRepository : §bGitHub.com/LeverylTeam/Leveryl  §l §f║  §r  §cLanguage: §d$lang
 §l§f║                                                 ║  §r  §cPackage: §d$package
