@@ -111,6 +111,7 @@ use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 use pocketmine\utils\UUID;
 use pocketmine\utils\VersionString;
+use pocketmine\wizard\SetupWizard;
 
 /**
  * The class that manages everything
@@ -572,7 +573,7 @@ class Server{
 	 * @return string
 	 */
 	public function getMotd() : string{
-		return $this->getConfigString("motd", "Minecraft: PE Server");
+		return $this->getConfigString("motd", SetupWizard::DEFAULT_NAME);
 	}
 
 	/**
@@ -1464,7 +1465,7 @@ class Server{
 			
 			//$this->logger->info("Loading server properties...");
 			$this->properties = new Config($this->dataPath . "server.properties", Config::PROPERTIES, [
-				"motd" => "Minecraft: PE Server",
+				"motd" => SetupWizard::DEFAULT_NAME,
 				"server-port" => 19132,
 				"white-list" => false,
 				"announce-player-achievements" => true,
