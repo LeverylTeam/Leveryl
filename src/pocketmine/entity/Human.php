@@ -246,7 +246,12 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	}
 
 	public function setXpLevel(int $level){
-		$this->attributeMap->getAttribute(Attribute::EXPERIENCE_LEVEL)->setValue($level);
+        $this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $level, $this->getXpProgress()));
+        if (!$ev->isCancelled()) {
+            $this->attributeMap->getAttribute(Attribute::EXPERIENCE_LEVEL)->setValue($ev->getExpLevel());
+            return true;
+        }
+        return false;
 	}
 
 	public function getXpProgress() : float{
@@ -628,7 +633,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
     }
 
     public function getFilledXp(): int {
-        return self::getLevelXpRequirement($this->getXpLevel()) * $this->getXpProgress();
+        return intval(self::getLevelXpRequirement($this->getXpLevel()) * $this->getXpProgress());
     }
 
     public function getXpSeed(): int {
