@@ -76,7 +76,7 @@ class Cauldron extends Solid{
             new IntTag("z", $block->z),
             new ShortTag("PotionId", 0xffff),
             new ByteTag("SplashPotion", 0),
-            new ListTag("Items", [])
+            //new ListTag("Items", [])
         ]);
 
         if($item->hasCustomBlockData()){

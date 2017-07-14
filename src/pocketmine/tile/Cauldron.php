@@ -39,9 +39,9 @@ class Cauldron extends Spawnable {
         if (!isset($nbt->SplashPotion) or !($nbt->SplashPotion instanceof ByteTag)) {
             $nbt->SplashPotion = new ByteTag("SplashPotion", 0);
         }
-        if (!isset($nbt->Items) or !($nbt->Items instanceof ListTag)) {
+        /*if (!isset($nbt->Items) or !($nbt->Items instanceof ListTag)) {
             $nbt->Items = new ListTag("Items", []);
-        }
+        }*/
         parent::__construct($level, $nbt);
     }
 
@@ -119,7 +119,7 @@ class Cauldron extends Spawnable {
             new IntTag("z", (Int)$this->z),
             new ShortTag("PotionId", $this->namedtag["PotionId"]),
             new ByteTag("SplashPotion", $this->namedtag["SplashPotion"]),
-            new ListTag("Items", $this->namedtag["Items"])//unused?
+            //new ListTag("Items", $this->namedtag["Items"])//unused?
         ]);
 
         if ($this->getPotionId() === 0xffff and $this->isCustomColor()) {

@@ -31,7 +31,7 @@ class SpellSound extends Sound {
 
 	public function __construct(Vector3 $pos, $r = 0, $g = 0, $b = 0) {
 		parent::__construct($pos->x, $pos->y, $pos->z);
-		$this->id = (int)LevelEventPacket::EVENT_SOUND_SPELL;
+		$this->id = (int)LevelEventPacket::EVENT_CAULDRON_FILL_POTION;
 		$this->color = ($r << 16 | $g << 8 | $b) & 0xffffff;
 	}
 
