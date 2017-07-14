@@ -11,10 +11,12 @@ if(Test-Path "bin\php\php.exe"){
 
 if(Test-Path "PocketMine-MP.phar"){
 	$file = "PocketMine-MP.phar"
+}elseif(Test-Path "Leveryl*.phar"){
+	$file = "Leveryl*.phar"
 }elseif(Test-Path "src\pocketmine\PocketMine.php"){
 	$file = "src\pocketmine\PocketMine.php"
 }else{
-	echo "Couldn't find a valid PocketMine-MP installation"
+	echo "Couldn't find a valid Leveryl installation"
 	pause
 	exit 1
 }
@@ -33,8 +35,8 @@ while($Loop){
 		echo ("Restarted " + $loops + " times")
 	}
 	$loops++
-	echo "To escape the loop, press CTRL+C now. Otherwise, wait 5 seconds for the server to restart."
+	echo "To escape the loop, press CTRL+C now. Otherwise, wait 2 seconds for the server to restart."
 	echo ""
-	Start-Sleep 5
+	Start-Sleep 2
 	StartServer
 }
