@@ -199,22 +199,22 @@ class ParticleCommand extends VanillaCommand{
 				return new HappyVillagerParticle($pos);
 			case "angryvillager":
 				return new AngryVillagerParticle($pos);
-			case "forcefield":
-				return new BlockForceFieldParticle($pos, $data ?? 0);
+            case "forcefield":
+                return new BlockForceFieldParticle($pos, $data ?? 0);
 
 		}
 
-		if(substr($name, 0, 10) === "iconcrack_"){
+        if(strpos($name, "iconcrack_") === 0){
 			$d = explode("_", $name);
 			if(count($d) === 3){
 				return new ItemBreakParticle($pos, Item::get((int) $d[1], (int) $d[2]));
 			}
-		}elseif(substr($name, 0, 11) === "blockcrack_"){
+        }elseif(strpos($name, "blockcrack_") === 0){
 			$d = explode("_", $name);
 			if(count($d) === 2){
 				return new TerrainParticle($pos, Block::get($d[1] & 0xff, $d[1] >> 12));
 			}
-		}elseif(substr($name, 0, 10) === "blockdust_"){
+        }elseif(strpos($name, "blockdust_") === 0){
 			$d = explode("_", $name);
 			if(count($d) >= 4){
 				return new DustParticle($pos, $d[1] & 0xff, $d[2] & 0xff, $d[3] & 0xff, isset($d[4]) ? $d[4] & 0xff : 255);

@@ -89,8 +89,9 @@ class Chunk{
 	 * @param CompoundTag[] $tiles
 	 * @param string		$biomeIds
 	 * @param int[]		 $heightMap
+     * @param int[]      $extraData
 	 */
-	public function __construct(int $chunkX, int $chunkZ, array $subChunks = [], array $entities = [], array $tiles = [], string $biomeIds = "", array $heightMap = []){
+    public function __construct(int $chunkX, int $chunkZ, array $subChunks = [], array $entities = [], array $tiles = [], string $biomeIds = "", array $heightMap = [], array $extraData = []){
 		$this->x = $chunkX;
 		$this->z = $chunkZ;
 
@@ -126,7 +127,7 @@ class Chunk{
 		if(strlen($biomeIds) === 256){
 			$this->biomeIds = $biomeIds;
 		}else{
-			assert(strlen($biomeIds) === 0, "Wrong BiomeIds value count, expected 256, got " . strlen($biomeIds));
+            assert($biomeIds === "", "Wrong BiomeIds value count, expected 256, got " . strlen($biomeIds));
 			$this->biomeIds = str_repeat("\x00", 256);
 		}
 

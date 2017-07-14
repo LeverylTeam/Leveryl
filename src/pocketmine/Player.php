@@ -212,7 +212,7 @@ use pocketmine\utils\UUID;
 /**
  * Main class that handles networking, recovery, and packet sending to the server part
  */
-class Player extends Human implements CommandSender, InventoryHolder, ChunkLoader, IPlayer, NetworkSession
+class Player extends Human implements CommandSender, ChunkLoader, IPlayer, NetworkSession
 {
 
     const SURVIVAL = 0;
@@ -771,13 +771,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
      */
     public function hasAchievement($achievementId)
     {
-        if (!isset(Achievement::$list[$achievementId]) or !isset($this->achievements)) {
-            $this->achievements = [];
-
+        if (!isset(Achievement::$list[$achievementId])) {
             return false;
         }
 
-        return isset($this->achievements[$achievementId]) and $this->achievements[$achievementId] != false;
+        return isset($this->achievements[$achievementId]) and $this->achievements[$achievementId] !== false;
     }
 
     /**
@@ -871,7 +869,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
     private function unloadChunk($x, $z, Level $level = null)
     {
-        $level = $level === null ? $this->level : $level;
+        $level = $level ?? $this->level;
         $index = Level::chunkHash($x, $z);
         if (isset($this->usedChunks[$index])) {
             foreach ($level->getChunkEntities($x, $z) as $entity) {
@@ -1685,7 +1683,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
         $from = new Location($this->lastX, $this->lastY, $this->lastZ, $this->lastYaw, $this->lastPitch, $this->level);
         $to = $this->getLocation();
 
-        $delta = pow($this->lastX - $to->x, 2) + pow($this->lastY - $to->y, 2) + pow($this->lastZ - $to->z, 2);
+        $delta = (($this->lastX - $to->x) ** 2) + (($this->lastY - $to->y) ** 2) + (($this->lastZ - $to->z) ** 2);
         $deltaAngle = abs($this->lastYaw - $to->yaw) + abs($this->lastPitch - $to->pitch);
 
         if (!$revert and ($delta > 0.0001 or $deltaAngle > 1.0)) {
@@ -1731,7 +1729,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                 }
             }
 
-            $this->speed = ($to->subtract($from))->divide($tickDiff);
+            $this->speed = $to->subtract($from)->divide($tickDiff);
         } elseif ($distanceSquared == 0) {
             $this->speed = new Vector3(0, 0, 0);
         }
@@ -2027,7 +2025,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
         /** @var ByteTag $achievement */
         foreach ($this->namedtag->Achievements as $achievement) {
-            $this->achievements[$achievement->getName()] = $achievement->getValue() > 0 ? true : false;
+            $this->achievements[$achievement->getName()] = $achievement->getValue() !== 0;
         }
 
         $this->namedtag->lastPlayed = new LongTag("lastPlayed", (int)floor(microtime(true) * 1000));
@@ -3060,7 +3058,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                         $diff = ($this->server->getTick() - $this->startAction);
                         $p = $diff / 20;
                         $f = min((($p ** 2) + $p * 2) / 3, 1) * 2;
-                        $ev = new EntityShootBowEvent($this, $bow, Entity::createEntity("Arrow", $this->getLevel(), $nbt, $this, $f == 2 ? true : false), $f);
+                        $ev = new EntityShootBowEvent($this, $bow, Entity::createEntity("Arrow", $this->getLevel(), $nbt, $this, $f == 2), $f);
 
                         if ($f < 0.1 or $diff < 5) {
                             $ev->setCancelled();
@@ -4469,8 +4467,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
     public function sendPosition(Vector3 $pos, $yaw = null, $pitch = null, $mode = MovePlayerPacket::MODE_NORMAL, array $targets = null)
     {
-        $yaw = $yaw === null ? $this->yaw : $yaw;
-        $pitch = $pitch === null ? $this->pitch : $pitch;
+        $yaw = $yaw ?? $this->yaw;
+        $pitch = $pitch ?? $this->pitch;
 
         $pk = new MovePlayerPacket();
         $pk->entityRuntimeId = $this->getId();
