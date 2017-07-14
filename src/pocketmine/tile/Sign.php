@@ -55,15 +55,26 @@ class Sign extends Spawnable{
 		unset($this->namedtag->Creator);
 	}
 
-	public function setText($line1 = "", $line2 = "", $line3 = "", $line4 = ""){
-		$this->namedtag->Text1 = new StringTag("Text1", $line1);
-		$this->namedtag->Text2 = new StringTag("Text2", $line2);
-		$this->namedtag->Text3 = new StringTag("Text3", $line3);
-		$this->namedtag->Text4 = new StringTag("Text4", $line4);
-		$this->onChanged();
-
-		return true;
-	}
+    public function setText($line1 = null, $line2 = null, $line3 = null, $line4 = null){
+        if($line1 !== null) {
+            /** @noinspection PhpStrictTypeCheckingInspection */
+            $this->namedtag->Text1 = new StringTag("Text1", $line1);
+        }
+        if($line2 !== null) {
+            /** @noinspection PhpStrictTypeCheckingInspection */
+            $this->namedtag->Text2 = new StringTag("Text2", $line2);
+        }
+        if($line3 !== null) {
+            /** @noinspection PhpStrictTypeCheckingInspection */
+            $this->namedtag->Text3 = new StringTag("Text3", $line3);
+        }
+        if($line4 !== null) {
+            /** @noinspection PhpStrictTypeCheckingInspection */
+            $this->namedtag->Text4 = new StringTag("Text4", $line4);
+        }
+        $this->onChanged();
+        return true;
+    }
 
 	public function getText(){
 		return [
