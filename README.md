@@ -30,7 +30,7 @@ This spoon is based off of PMMP (For Stability)
 - [X] **Limited Creative**
 - [X] **Weather**  
 - [X] GameRule
-- [ ] Spawn Eggs
+- [X] Spawn Eggs **(Only For some Mobs (for now))**
 - [ ] Working Mob Spawners
 - [ ] Toggleable MobAI
 
