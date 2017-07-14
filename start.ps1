@@ -1,5 +1,5 @@
 ﻿param (
-	[switch]$Loop = $false
+	[switch]$Loop = $true
 )
 
 if(Test-Path "bin\php\php.exe"){
@@ -13,8 +13,8 @@ if(Test-Path "PocketMine-MP.phar"){
 	$file = "PocketMine-MP.phar"
 }elseif(Test-Path "Leveryl*.phar"){
 	$file = "Leveryl*.phar"
-}elseif(Test-Path "src\pocketmine\PocketMine.php"){
-	$file = "src\pocketmine\PocketMine.php"
+}elseif(Test-Path ".\src\pocketmine\PocketMine.php"){
+	$file = ".\src\pocketmine\PocketMine.php"
 }else{
 	echo "Couldn't find a valid Leveryl installation"
 	pause
