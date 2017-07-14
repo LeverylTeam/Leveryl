@@ -180,7 +180,7 @@ class Cauldron extends Solid{
                         $player->getInventory()->setItemInHand(Item::get(Item::AIR));
                     }*/
                 }
-                $tile->setCustomColor($color);
+                $tile->setCustomColor($color->getRed(), $color->getGreen(), $color->getBlue());
                 $this->getLevel()->addSound(new SplashSound($this->add(0.5, 1, 0.5)));
                 $this->update();
                 break;

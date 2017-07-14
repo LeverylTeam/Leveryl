@@ -103,6 +103,7 @@ use pocketmine\scheduler\SendUsageTask;
 use pocketmine\scheduler\ServerScheduler;
 use pocketmine\tile\Tile;
 use pocketmine\utils\Binary;
+use pocketmine\utils\Color;
 use pocketmine\utils\Config;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\Terminal;
@@ -641,7 +642,7 @@ class Server{
 	 * @return int
 	 */
 	public function getTick() {
-		return $this->tickCounter;
+		return $this->tickCounter ?? 1;
 	}
 
 	/**
@@ -1640,6 +1641,7 @@ class Server{
 			Biome::init();
 			Effect::init();
 			Attribute::init();
+            Color::init();
 			$this->craftingManager = new CraftingManager();
 
 			$this->resourceManager = new ResourcePackManager($this, $this->getDataPath() . "resource_packs" . DIRECTORY_SEPARATOR);

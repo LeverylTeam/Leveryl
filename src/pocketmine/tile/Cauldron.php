@@ -67,38 +67,38 @@ class Cauldron extends Spawnable {
         $this->onChanged();
     }
 
-    public function getCustomColor() {//
+    public function getCustomColor() {
         if ($this->isCustomColor()) {
             $color = $this->namedtag["CustomColor"];
-            $green = ($color >> 8) & 0xff;
-            $red = ($color >> 16) & 0xff;
-            $blue = ($color) & 0xff;
-            return Color::getRGB($red, $green, $blue);
+            $green = $color >> 8;
+            $red = $color >> 16;
+            $blue = $color;
+            return new Color($red, $green, $blue);
         }
         return null;
     }
 
     public function getCustomColorRed() {
-        return ($this->namedtag["CustomColor"] >> 16) & 0xff;
+        return $this->namedtag["CustomColor"] >> 16;
     }
 
     public function getCustomColorGreen() {
-        return ($this->namedtag["CustomColor"] >> 8) & 0xff;
+        return $this->namedtag["CustomColor"] >> 8;
     }
 
     public function getCustomColorBlue() {
-        return ($this->namedtag["CustomColor"]) & 0xff;
+        return $this->namedtag["CustomColor"];
     }
 
     public function isCustomColor() {
         return isset($this->namedtag->CustomColor);
     }
 
-    public function setCustomColor($r, $g = 0xff, $b = 0xff) {
+    public function setCustomColor($r, $g, $b) {
         if ($r instanceof Color) {
-            $color = ($r->getRed() << 16 | $r->getGreen() << 8 | $r->getBlue()) & 0xffffff;
+            $color = $r->getRed() << 16 | $r->getGreen() << 8 | $r->getBlue();
         } else {
-            $color = ($r << 16 | $g << 8 | $b) & 0xffffff;
+            $color = $r << 16 | $g << 8 | $b;
         }
         $this->namedtag->CustomColor = new IntTag("CustomColor", $color);
         $this->onChanged();
