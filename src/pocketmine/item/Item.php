@@ -239,6 +239,7 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::ENCHANTING_BOTTLE] = EnchantingBottle::class;
             self::$list[self::ELYTRA] = Elytra::class;
             self::$list[self::SHULKER_SHELL] = ShulkerShell::class;
+            self::$list[self::CAULDRON] = Cauldron::class;
             self::$list[self::SUGARCANE] = Sugarcane::class;
             self::$list[self::ENDER_PEARL] = EnderPearl::class;
             self::$list[self::EYE_OF_ENDER] = EyeOfEnder::class;
