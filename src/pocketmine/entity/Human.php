@@ -617,7 +617,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
             $progress = $values[1];
         }
 
-        $this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $level, $progress));
+        $this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, intval($level), $progress));
         if (!$ev->isCancelled()) {
             $this->totalXp = $xp;
             $this->setXpLevel($ev->getExpLevel());

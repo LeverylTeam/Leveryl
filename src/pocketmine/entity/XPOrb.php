@@ -22,7 +22,9 @@
 namespace pocketmine\entity;
 
 use pocketmine\event\player\PlayerPickupExpOrbEvent;
+use pocketmine\level\Level;
 use pocketmine\level\sound\ExpPickupSound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -111,7 +113,7 @@ class XPOrb extends Entity {
                         $this->kill();
                         $this->close();
                         if ($this->getExperience() > 0) {
-                            $this->level->addSound(new ExpPickupSound($target, mt_rand(0, 1000)));
+                            $target->getLevel()->addSound(new ExpPickupSound($target, mt_rand(0, 1000)));
                             $target->addXp($this->getExperience());
                             $target->resetXpCooldown();
                         }

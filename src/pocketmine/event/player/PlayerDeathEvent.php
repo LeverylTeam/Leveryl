@@ -34,6 +34,7 @@ class PlayerDeathEvent extends EntityDeathEvent{
 	/** @var TextContainer|string */
 	private $deathMessage;
 	private $keepInventory = false;
+	private $keepExperience = false;
 
 	/**
 	 * @param Player			   $entity
@@ -43,6 +44,7 @@ class PlayerDeathEvent extends EntityDeathEvent{
 	public function __construct(Player $entity, array $drops, $deathMessage){
 		parent::__construct($entity, $drops);
 		$this->deathMessage = $deathMessage;
+		$this->keepExperience = $entity->getServer()->getLeverylConfigValue("KeepExperiencePoints", false);
 	}
 
 	/**
@@ -73,12 +75,20 @@ class PlayerDeathEvent extends EntityDeathEvent{
 		$this->deathMessage = $deathMessage;
 	}
 
-	public function getKeepInventory(){
-		return $this->keepInventory;
-	}
+    public function getKeepInventory(){
+        return $this->keepInventory;
+    }
 
-	public function setKeepInventory($keepInventory){
-		$this->keepInventory = (bool) $keepInventory;
-	}
+    public function setKeepInventory(bool $keepInventory){
+        $this->keepInventory = $keepInventory;
+    }
+
+    public function getKeepExperience(){
+        return $this->keepExperience;
+    }
+
+    public function setKeepExperience(bool $keepExperience){
+        $this->keepExperience = $keepExperience;
+    }
 
 }

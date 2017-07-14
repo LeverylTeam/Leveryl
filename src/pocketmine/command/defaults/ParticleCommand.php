@@ -36,6 +36,7 @@ use pocketmine\level\particle\EnchantmentTableParticle;
 use pocketmine\level\particle\EnchantParticle;
 use pocketmine\level\particle\ExplodeParticle;
 use pocketmine\level\particle\FlameParticle;
+use pocketmine\level\particle\FloatingTextParticle;
 use pocketmine\level\particle\HappyVillagerParticle;
 use pocketmine\level\particle\HeartParticle;
 use pocketmine\level\particle\HugeExplodeParticle;
@@ -201,6 +202,11 @@ class ParticleCommand extends VanillaCommand{
 				return new AngryVillagerParticle($pos);
             case "forcefield":
                 return new BlockForceFieldParticle($pos, $data ?? 0);
+            case "floatingtext":
+                if($data !== null and $data !== ""){
+                    return new FloatingTextParticle($pos, $data);
+                }
+                break;
 
 		}
 

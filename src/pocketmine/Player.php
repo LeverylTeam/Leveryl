@@ -4428,7 +4428,13 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
             }
         }
 
-        if ($ev->getDeathMessage() != "" || !$ev->getPlayer()->getLevel()->getGameRule("showDeathMessage")) {
+        if (!$ev->getKeepExperience()) {
+            $exp = min(91, $this->getTotalXp()); //Max 7 levels of exp dropped
+            $this->getLevel()->spawnXPOrb($this->add(0, 0.2, 0), $exp);
+            $this->setTotalXp(0, true);
+        }
+
+        if ($ev->getDeathMessage() != "" && !$ev->getPlayer()->getLevel()->getGameRule("showDeathMessage")) {
             $this->server->broadcast($ev->getDeathMessage(), Server::BROADCAST_CHANNEL_USERS);
         }
     }
