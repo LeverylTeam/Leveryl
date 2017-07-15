@@ -122,9 +122,7 @@ class XPOrb extends Entity {
             }
         }
 
-        if($target instanceof Entity){
-            $this->move($this->motionX, $this->motionY, $this->motionZ, $target->getLevel());
-        }
+        $this->move($this->motionX, $this->motionY, $this->motionZ);
 
         $this->updateMovement();
 

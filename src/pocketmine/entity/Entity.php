@@ -1543,7 +1543,7 @@ abstract class Entity extends Location implements Metadatable{
 		return true;
 	}
 
-	public function move($dx, $dy, $dz, Level $lvl = null){
+	public function move($dx, $dy, $dz){
 
 		if($dx == 0 and $dz == 0 and $dy == 0){
 			return true;
@@ -1608,11 +1608,7 @@ abstract class Entity extends Location implements Metadatable{
 
 			assert(abs($dx) <= 20 and abs($dy) <= 20 and abs($dz) <= 20, "Movement distance is excessive: dx=$dx, dy=$dy, dz=$dz");
 
-			if($lvl === null){
-			    $list = $this->getLevel()->getCollisionCubes($this, $this->getLevel()->getTickRate() > 1 ? $this->boundingBox->getOffsetBoundingBox($dx, $dy, $dz) : $this->boundingBox->addCoord($dx, $dy, $dz), false);
-            } else {
-                $list = $lvl->getCollisionCubes($this, $lvl->getTickRate() > 1 ? $this->boundingBox->getOffsetBoundingBox($dx, $dy, $dz) : $this->boundingBox->addCoord($dx, $dy, $dz), false);
-            }
+			$list = $this->getLevel()->getCollisionCubes($this, $this->getLevel()->getTickRate() > 1 ? $this->boundingBox->getOffsetBoundingBox($dx, $dy, $dz) : $this->boundingBox->addCoord($dx, $dy, $dz), false);
 
 			foreach($list as $bb){
 				$dy = $bb->calculateYOffset($this->boundingBox, $dy);
