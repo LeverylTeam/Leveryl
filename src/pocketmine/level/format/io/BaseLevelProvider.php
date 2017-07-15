@@ -163,19 +163,29 @@ abstract class BaseLevelProvider implements LevelProvider{
             if (count($this->levelData->GameRules) == 5) {
                 switch ($rule) {
                     case "keepInventory":
-                        return (boolean)$this->levelData->GameRules["keepInventory"];
+                        if(isset($this->levelData->GameRules[$rule])){
+                            return (boolean)$this->levelData->GameRules[$rule];
+                        }
                         break;
                     case "showDeathMessage":
-                        return (boolean)$this->levelData->GameRules["showDeathMessage"];
+                        if(isset($this->levelData->GameRules[$rule])){
+                            return (boolean)$this->levelData->GameRules[$rule];
+                        }
                         break;
                     case "doTileDrops":
-                        return (boolean)$this->levelData->GameRules["doTileDrops"];
+                        if(isset($this->levelData->GameRules[$rule])){
+                            return (boolean)$this->levelData->GameRules[$rule];
+                        }
                         break;
                     case "doFireTick":
-                        return (boolean)$this->levelData->GameRules["doFireTick"];
+                        if(isset($this->levelData->GameRules[$rule])){
+                            return (boolean)$this->levelData->GameRules[$rule];
+                        }
                         break;
                     case "doDaylightCycle":
-                        return (boolean)$this->levelData->GameRules["doDaylightCycle"];
+                        if(isset($this->levelData->GameRules[$rule])){
+                            return (boolean)$this->levelData->GameRules[$rule];
+                        }
                         break;
                 }
             } else {
