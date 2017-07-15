@@ -159,34 +159,22 @@ abstract class BaseLevelProvider implements LevelProvider{
         }
     }
     public function getGameRule($rule) : bool {
-	    if(count($this->levelData->GameRules) == 5){
-            switch($rule){
-                case "keepInventory":
-                    return (boolean) $this->levelData->GameRules["keepInventory"];
-                    break;
-                case "showDeathMessage":
-                    return (boolean) $this->levelData->GameRules["showDeathMessage"];
-                    break;
-                case "doTileDrops":
-                    return (boolean) $this->levelData->GameRules["doTileDrops"];
-                    break;
-                case "doFireTick":
-                    return (boolean) $this->levelData->GameRules["doFireTick"];
-                    break;
-                case "doDaylightCycle":
-                    return (boolean) $this->levelData->GameRules["doDaylightCycle"];
-                    break;
-            }
-	    } else {
-	        // Overwrite the NBT data cuz it's probably invalid.
-            $this->levelData->GameRules = []; // Remove Everything from the GameRules CompoundTag.
-            $this->levelData->GameRules = [
-                "keepInventory" => new StringTag("KeepInventory", "true"),
-                "showDeathMessages" => new StringTag("showDeathMessages", "true"),
-                "doTileDrops" => new StringTag("doTileDrops", "true"),
-                "doFireTick" => new StringTag("doFireTick", "true"),
-                "doDaylightCycle" => new StringTag("doDaylightCycle", "true")
-            ]; // Re-set the GameRules CompoundTag
+        switch($rule){
+            case "keepInventory":
+                return (boolean) $this->levelData->GameRules["keepInventory"];
+                break;
+            case "showDeathMessage":
+                return (boolean) $this->levelData->GameRules["showDeathMessage"];
+                break;
+            case "doTileDrops":
+                return (boolean) $this->levelData->GameRules["doTileDrops"];
+                break;
+            case "doFireTick":
+                return (boolean) $this->levelData->GameRules["doFireTick"];
+                break;
+            case "doDaylightCycle":
+                return (boolean) $this->levelData->GameRules["doDaylightCycle"];
+                break;
         }
         return false;
     }
