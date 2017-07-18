@@ -174,21 +174,21 @@ class Enchantment{
 	 * @param int $id
 	 * @return $this
 	 */
-	public static function getEnchantment($id){
+	public static function getEnchantment(Int $id){
 		if(isset(self::$enchantments[$id])){
 			return clone self::$enchantments[(int) $id];
 		}
 		return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
 	}
 	
-	public static function getEffectByName($name){
+	public static function getEffectByName(String $name){
 		if(defined(Enchantment::class . "::TYPE_" . strtoupper($name))){
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_" . strtoupper($name)));
 		}
 		return null;
 	}
 
-	public static function registerEnchantment($id, $name, $rarity, $activationType, $slot){
+	public static function registerEnchantment(Int $id, String $name, Int $rarity, Int $activationType, Int $slot){
 		if(isset(self::$enchantments[$id])){
 			Server::getInstance()->getLogger()->debug("Unable to register enchantment with id $id.");
 			return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
@@ -198,7 +198,7 @@ class Enchantment{
 	}
 
 
-	public static function getEnchantmentByName($name){
+	public static function getEnchantmentByName(String $name){
 		if(defined(Enchantment::class . "::TYPE_" . strtoupper($name))){
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_" . strtoupper($name)));
 		}elseif(defined(Enchantment::class . "::TYPE_WEAPON_" . strtoupper($name))){
@@ -341,7 +341,7 @@ class Enchantment{
 	private $activationType;
 	private $slot;
 
-	private function __construct($id, $name, $rarity, $activationType, $slot){
+	private function __construct(Int $id, String $name, Int $rarity, Int $activationType, Int $slot){
 		$this->id = (int) $id;
 		$this->name = (string) $name;
 		$this->rarity = (int) $rarity;
