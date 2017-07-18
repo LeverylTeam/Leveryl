@@ -2089,6 +2089,20 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
             return;
         }
 
+        foreach ($this->server->getOnlinePlayers() as $p) {
+            if ($p !== $this and strtolower($p->getName()) === strtolower($this->getName())) {
+                if ($p->kick("logged in from another location") === false) {
+                    $this->close($this->getLeaveMessage(), "Logged in from another location");
+                    return;
+                }
+            } elseif ($p->loggedIn and $this->getUniqueId()->equals($p->getUniqueId())) {
+                if ($p->kick("logged in from another location") === false) {
+                    $this->close($this->getLeaveMessage(), "Logged in from another location");
+                    return;
+                }
+            }
+        }
+
         $this->level->sendTime($this);
 
         $this->sendAttributes(true);
