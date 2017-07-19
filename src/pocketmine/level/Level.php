@@ -1208,6 +1208,15 @@ const Y_MAX = 0x100;
 						$blockId = $subChunk->getBlockId($x, $y, $z);
 						if(isset($this->randomTickBlocks[$blockId])){
 							$class = $this->randomTickBlocks[$blockId];
+							if($class == "pocketmine\item\NetherWart"){
+                                $block = new \pocketmine\block\NetherWart($subChunk->getBlockData($x, $y, $z));
+                                $block->x = $chunkX * 16 + $x;
+                                $block->y = ($Y << 4) + $y;
+                                $block->z = $chunkZ * 16 + $z;
+                                $block->level = $this;
+                                $block->onUpdate(self::BLOCK_UPDATE_RANDOM);
+							    continue;
+                            }
 							/** @var Block $block */
 							$block = new $class($subChunk->getBlockData($x, $y, $z));
 							$block->x = $chunkX * 16 + $x;
