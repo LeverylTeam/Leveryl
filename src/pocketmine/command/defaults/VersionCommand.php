@@ -47,14 +47,7 @@ class VersionCommand extends VanillaCommand{
 		}
 
 		if(count($args) === 0){
-			$sender->sendMessage(new TranslationContainer("pocketmine.server.info.extended", [
-				$sender->getServer()->getName(),
-				$sender->getServer()->getPocketMineVersion(),
-				$sender->getServer()->getCodename(),
-				$sender->getServer()->getApiVersion(),
-				$sender->getServer()->getVersion(),
-				ProtocolInfo::CURRENT_PROTOCOL
-			]));
+			$sender->sendMessage("§f----- §aServer information§f -----§r\n§aThis server is running " . $sender->getServer()->getName() . "-v" . $sender->getServer()->getPocketMineVersion() . "§r\n§aCodename: §f" . $sender->getServer()->getCodename() . "§r\n§aPHP Version: §f" . phpversion() . "§r\n§aAPI: §f" . $sender->getServer()->getApiVersion() . "§r\n§aTarget Client: §f" . $sender->getServer()->getVersion() . "§r\n§aProtocol Version:§f " . ProtocolInfo::CURRENT_PROTOCOL . "§r\n§aGitHub Repository§f: https://github.com/LeverylTeam/Leveryl§r");
 		}else{
 			$pluginName = implode(" ", $args);
 			$exactPlugin = $sender->getServer()->getPluginManager()->getPlugin($pluginName);
