@@ -1515,6 +1515,18 @@ class Server{
 				$package = "phar";
 			}
 
+
+
+$startupmsg = "      §8##§7\§b    _                           _§r
+     §8##§7 /§b   | | _____   _____ _ __ _   _| |§r
+    §8##§7 /§b    | |/ _ \ \ / / _ \ '__| | | | |§r
+   §8##§7 /§b     | |  __/\ V /  __/ |  | |_| | |§r
+  §8##§7 /§b      |_|\___| \_/ \___|_|   \__, |_|§r
+ §8#§7# /§b                              |___/§r
+§8#########§7\ §bGitHub.com/LeverylTeam/Leveryl§r
+§7\________/§r";
+
+			/*
 			$startupmsg = "
 §l§f╔═════════════════════════════════════════════════╗  §r§f══ Loaded: Properties and Configuration ══
 §l§f║                                                 ║    §r§cDate: §d$date
@@ -1528,7 +1540,7 @@ class Server{
 §l§f║§r   §bRepository : §bGitHub.com/LeverylTeam/Leveryl  §l §f║  §r  §cLanguage: §d$lang
 §l§f║                                                 ║  §r  §cPackage: §d$package
 §l§f╚═════════════════════════════════════════════════╝  §r§f══════════════════════════════════════════";
-
+*/
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(!file_exists($this->dataPath . "leveryl.yml")){
 				if(file_exists($this->filePath . "src/pocketmine/resources/leveryl_$lang.yml")){
@@ -1616,7 +1628,7 @@ class Server{
 				@cli_set_process_title($this->getName() . " " . $this->getPocketMineVersion());
 			}
 
-			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.networkStart", [$this->getIp() === "" ? "*" : $this->getIp(), $this->getPort()]));
+			//$this->logger->info($this->getLanguage()->translateString("pocketmine.server.networkStart", [$this->getIp() === "" ? "*" : $this->getIp(), $this->getPort()]));
 			define("BOOTUP_RANDOM", random_bytes(16));
 			$this->serverID = Utils::getMachineUniqueId($this->getIp() . $this->getPort());
 
@@ -1626,7 +1638,7 @@ class Server{
 			$this->network = new Network($this);
 			$this->network->setName($this->getMotd());
 
-			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.license", [$this->getName()]));
+			//$this->logger->info($this->getLanguage()->translateString("pocketmine.server.license", [$this->getName()]));
 
 			Timings::init();
 
@@ -2156,7 +2168,7 @@ class Server{
 			$this->dispatchSignals = true;
 		}
 
-		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.defaultGameMode", [self::getGamemodeString($this->getGamemode())]));
+		//$this->logger->info($this->getLanguage()->translateString("pocketmine.server.defaultGameMode", [self::getGamemodeString($this->getGamemode())]));
 		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.startFinished", [round(microtime(true) - \pocketmine\START_TIME, 3)]));
 
 		switch (strtolower($this->getCodename())){
