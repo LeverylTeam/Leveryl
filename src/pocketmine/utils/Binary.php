@@ -762,4 +762,13 @@ class Binary
 
         throw new \InvalidArgumentException("Value too large to be encoded as a VarLong");
     }
+
+    public static function writeUnsignedVarLong($value)
+    {
+        if (PHP_INT_SIZE === 8) {
+            return self::writeUnsignedVarLong_64($value);
+        } else {
+            return self::writeUnsignedVarLong_32($value);
+        }
+    }
 }

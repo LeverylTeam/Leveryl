@@ -1523,7 +1523,7 @@ $startupmsg = "       §8##§7\§b    _                           _§r
    §8##§7 /§b     | |  __/\ V /  __/ |  | |_| | |§r
   §8##§7 /§b      |_|\___| \_/ \___|_|   \__, |_|§r
  §8##§7 /§b                              |___/§r
-§8#########§7\ §bGitHub.com/LeverylTeam/Leveryl§r
+§8#########§7\   §bGitHub.com/LeverylTeam/Leveryl§r
 §7\________/§r";
 
 			/*
