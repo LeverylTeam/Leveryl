@@ -1628,7 +1628,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
         $inelytra = $this->getInventory()->getChestplate() instanceof Elytra;
 
-        if (($distanceSquared / ($tickDiff ** 2)) > 100 and !$this->allowMovementCheats and !$inelytra) {
+        if (($distanceSquared / ($tickDiff ** 2)) > 100 and !$this->allowMovementCheats and !$inelytra and !$this->hasEffect(Effect::JUMP)) {
             $this->server->getLogger()->warning($this->getName() . " moved too fast, reverting movement");
             $revert = true;
         } else {
