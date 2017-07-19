@@ -19,19 +19,13 @@
  *
  */
 
-namespace pocketmine\inventory;
+namespace pocketmine\item;
 
-use pocketmine\tile\Hopper;
+use pocketmine\block\Block;
 
-class HopperInventory extends ContainerInventory {
-    public function __construct(Hopper $tile) {
-        parent::__construct($tile, InventoryType::get(InventoryType::HOPPER));
-    }
-
-    /**
-     * @return InventoryHolder|Hopper
-     */
-    public function getHolder() {
-        return $this->holder;
-    }
+class Hopper extends Item{
+	public function __construct($meta = 0, $count = 1){
+		$this->block = Block::get(Block::HOPPER_BLOCK);
+		parent::__construct(self::HOPPER, 0, $count, "Hopper");
+	}
 }

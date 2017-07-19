@@ -35,8 +35,6 @@ while($Loop){
 		echo ("Restarted " + $loops + " times")
 	}
 	$loops++
-	echo "To escape the loop, press CTRL+C now. Otherwise, wait 2 seconds for the server to restart."
-	echo ""
-	Start-Sleep 2
+	echo "To escape the loop, press CTRL+C now."
 	StartServer
 }

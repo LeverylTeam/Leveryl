@@ -246,6 +246,7 @@ class Item implements ItemIds, \JsonSerializable{
             self::$list[self::DRAGONS_BREATH] = DragonsBreath::class;
             self::$list[self::SHULKER_SHELL] = ShulkerShell::class;
             self::$list[self::POPPED_CHORUS_FRUIT] = PoppedChorusFruit::class;
+            self::$list[self::HOPPER] = Hopper::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){

@@ -2551,7 +2551,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
             $item = $this->inventory->getItem($packet->inventorySlot);
 
-            if (!$item->equals($packet->item)) {
+            if ($item->getId() != $packet->item->getId() && $item->getId() != Item::AIR) {
                 $this->server->getLogger()->debug("Tried to equip " . $packet->item . " but have " . $item . " in target slot");
                 $this->inventory->sendContents($this);
                 return false;

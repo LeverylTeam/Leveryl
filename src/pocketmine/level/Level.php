@@ -1852,13 +1852,13 @@ const Y_MAX = 0x100;
 		}
 
 		if($player === null or $player->isSurvival()){
-		    if($this->getGameRule("doTileDrops")) {
+		    //if($this->getGameRule("doTileDrops")) {
                 foreach ($drops as $drop) {
                     if ($drop->getCount() > 0) {
                         $this->dropItem($vector->add(0.5, 0.5, 0.5), $drop);
                     }
                 }
-            }
+            //} TODO: Fix this. (GameRule Problem)
 		}
 
 		return true;

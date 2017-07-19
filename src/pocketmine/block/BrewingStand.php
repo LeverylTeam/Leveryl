@@ -115,6 +115,18 @@ class BrewingStand extends Transparent{
 		return true;
 	}
 
+
+    public function onBreak(Item $item){
+        $tile = $this->level->getTile($this);
+        if($tile instanceof TileBrewingStand){
+            foreach ($tile->getInventory()->getContents() as $item){
+                $tile->level->dropItem($tile->getBlock(), $item);
+            }
+        }
+        $this->getLevel()->setBlock($this, new Air(), true, true);
+        return parent::onBreak($item);
+    }
+
 	public function getDrops(Item $item) : array {
 		$drops = [];
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
