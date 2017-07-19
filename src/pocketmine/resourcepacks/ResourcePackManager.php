@@ -105,9 +105,8 @@ class ResourcePackManager{
 				$this->server->getLogger()->logException($e);
 			}
 		}
-		if(count($this->resourcePacks) > 0){
-			$this->server->getLogger()->info("Successfully loaded " . count($this->resourcePacks) . " resource packs");
-		}
+
+		$this->server->getLogger()->info("Successfully loaded " . count($this->resourcePacks) . " resource packs");
 	}
 
 	/**

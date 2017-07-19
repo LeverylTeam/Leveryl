@@ -404,22 +404,31 @@ namespace pocketmine {
 		return rtrim(str_replace(["\\", ".php", "phar://", rtrim(str_replace(["\\", "phar://"], ["/", ""], \pocketmine\PATH), "/"), rtrim(str_replace(["\\", "phar://"], ["/", ""], \pocketmine\PLUGIN_PATH), "/")], ["/", "", "", "", ""], $path), "/");
 	}
 
-    $errors = 0;
+	$exitCode = 0;
 
-    if(php_sapi_name() !== "cli"){
-        $logger->critical("You must run Leveryl using the CLI.");
-        ++$errors;
-    }
+	do{
+		$errors = 0;
 
-    $pthreads_version = phpversion("pthreads");
-    if(substr_count($pthreads_version, ".") < 2){
-        $pthreads_version = "0.$pthreads_version";
-    }
+		if(PHP_INT_SIZE < 8){
+			$logger->critical("Running PocketMine-MP with 32-bit systems/PHP is no longer supported. Please upgrade to a 64-bit system or use a 64-bit PHP binary.");
+			$exitCode = 1;
+			break;
+		}
 
-    if(version_compare($pthreads_version, "3.1.5") < 0){
-        $logger->critical("pthreads >= 3.1.5 is required, while you have $pthreads_version.");
-        ++$errors;
-    }
+		if(php_sapi_name() !== "cli"){
+			$logger->critical("You must run PocketMine-MP using the CLI.");
+			++$errors;
+		}
+
+		$pthreads_version = phpversion("pthreads");
+		if(substr_count($pthreads_version, ".") < 2){
+			$pthreads_version = "0.$pthreads_version";
+		}
+		if(version_compare($pthreads_version, "3.1.5") < 0){
+			$logger->critical("pthreads >= 3.1.5 is required, while you have $pthreads_version.");
+			++$errors;
+		}
+
 		if(extension_loaded("pocketmine")){
 			if(version_compare(phpversion("pocketmine"), "0.0.1") < 0){
 				$logger->critical("You have the native PocketMine extension, but your version is lower than 0.0.1.");
@@ -453,9 +462,8 @@ namespace pocketmine {
 
 		if($errors > 0){
 			$logger->critical("Please use the installer provided on the homepage, or recompile PHP again.");
-            $logger->shutdown();
-            $logger->join();
-            exit(1); //Exit with error
+			$exitCode = 1;
+			break;
 		}
 
 		$gitHash = str_repeat("00", 20);
@@ -482,9 +490,8 @@ namespace pocketmine {
 		if(!file_exists(\pocketmine\DATA . "server.properties") and !isset($opts["no-wizard"])){
 			$installer = new SetupWizard();
 			if(!$installer->run()){
-                $logger->shutdown();
-                $logger->join();
-                exit(-1);
+				$exitCode = -1;
+				break;
 			}
 		}
 
@@ -515,11 +522,12 @@ namespace pocketmine {
 			}
 			kill(getmypid());
 		}
+	}while(false);
 
 	$logger->shutdown();
 	$logger->join();
 
 	echo Terminal::$FORMAT_RESET . PHP_EOL;
 
-	exit(1);
+	exit($exitCode);
 }

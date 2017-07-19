@@ -122,7 +122,7 @@ class Level implements ChunkManager, Metadatable{
 const Y_MAX = 0x100;
 	const BLOCK_UPDATE_NORMAL = 1;
 	const BLOCK_UPDATE_RANDOM = 2;
-	const BLOCK_UPDATE_SCHEDULED = 3; //256
+		const BLOCK_UPDATE_SCHEDULED = 3; //256
 	const BLOCK_UPDATE_WEAK = 4;
 	const BLOCK_UPDATE_TOUCH = 5;
 	const TIME_DAY = 0;
@@ -365,7 +365,7 @@ const Y_MAX = 0x100;
 	}
 
 	public static function chunkHash(int $x, int $z){
-		return PHP_INT_SIZE === 8 ? (($x & 0xFFFFFFFF) << 32) | ($z & 0xFFFFFFFF) : $x . ":" . $z;
+		return (($x & 0xFFFFFFFF) << 32) | ($z & 0xFFFFFFFF);
 	}
 
 	/**
@@ -777,7 +777,7 @@ const Y_MAX = 0x100;
 	}
 
 	public static function blockHash(int $x, int $y, int $z){
-        return PHP_INT_SIZE === 8 ? (($x & 0xFFFFFFF) << 36) | (($y & Level::Y_MASK) << 28) | ($z & 0xFFFFFFF) : $x . ":" . $y . ":" . $z;
+		return (($x & 0xFFFFFFF) << 36) | (($y & Level::Y_MASK) << 28) | ($z & 0xFFFFFFF);
 	}
 
 	public function close(){
@@ -1144,27 +1144,14 @@ const Y_MAX = 0x100;
 	 * @param int|null   $z
 	 */
 	public static function getXZ($hash, &$x, &$z){
-        if(PHP_INT_SIZE === 8){
-            $x = $hash >> 32;
-            $z = ($hash & 0xFFFFFFFF) << 32 >> 32;
-        } else {
-            $hash = explode(":", $hash);
-            $x = (int) $hash[0];
-            $z = (int) $hash[1];
-        }
+		$x = $hash >> 32;
+		$z = ($hash & 0xFFFFFFFF) << 32 >> 32;
 	}
 
 	public static function getBlockXYZ($hash, &$x, &$y, &$z){
-        if(PHP_INT_SIZE === 8){
-            $x = $hash >> 36;
-            $y = ($hash >> 28) & Level::Y_MASK; //it's always positive
-            $z = ($hash & 0xFFFFFFF) << 36 >> 36;
-        } else {
-            $hash = explode(":", $hash);
-            $x = (int) $hash[0];
-            $y = (int) $hash[1];
-            $z = (int) $hash[2];
-        }
+		$x = $hash >> 36;
+		$y = ($hash >> 28) & Level::Y_MASK; //it's always positive
+		$z = ($hash & 0xFFFFFFF) << 36 >> 36;
 	}
 
 	private function tickChunks(){

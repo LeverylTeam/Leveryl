@@ -1979,18 +1979,15 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
             return;
         }
 
-		// Lmfao @thebigsmileXD
-		// https://github.com/ClearSkyTeam/PocketMine-MP/blob/0b1946d09cee32efc892839129f7117dd5700c8f/src/pocketmine/Player.php#L1756-L1770
-		// https://github.com/LeverylTeam/Leveryl/commit/45f408518e9a1230475ff3f32a3cc976e683c09f
         foreach ($this->server->getOnlinePlayers() as $p) {
             if ($p !== $this and $p->iusername === $this->iusername) {
-                if ($p->kick("Logged in from another location") === false) {
+                if ($p->kick("logged in from another location") === false) {
                     $this->close($this->getLeaveMessage(), "Logged in from another location");
 
                     return;
                 }
             } elseif ($p->loggedIn and $this->getUniqueId()->equals($p->getUniqueId())) {
-                if ($p->kick("Logged in from another location") === false) {
+                if ($p->kick("logged in from another location") === false) {
                     $this->close($this->getLeaveMessage(), "Logged in from another location");
 
                     return;

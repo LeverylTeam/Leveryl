@@ -2,7 +2,7 @@
   <img src="https://github.com/LeverylTeam/Leveryl/blob/master/assets/banner.png">
 </p>
 
-## Warning: 32-Bit support is Very Experimental.
+## Warning: 32-Bit support is Deprecated!!!
 
 # Introduction:
 This is an Advanced & Feature Rich Server Software to hopefully Replace Tesseract.  
