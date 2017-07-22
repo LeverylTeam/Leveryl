@@ -1959,7 +1959,7 @@ class Level implements ChunkManager, Metadatable
 	 *
 	 * @param Vector3 $pos
 	 * @param int $exp
-	 * @return bool|XPOrb
+	 * @return bool|Entity
 	 */
 	public function spawnXPOrb(Vector3 $pos, int $exp = 1)
 	{
@@ -1982,10 +1982,12 @@ class Level implements ChunkManager, Metadatable
 				"Experience" => new LongTag("Experience", $exp),
 			]);
 
-			$expOrb = new XPOrb($this, $nbt);
-			$expOrb->spawnToAll();
+			$entity = Entity::createEntity(XPOrb::NETWORK_ID, $this, $nbt);
+			if($entity instanceof Entity) {
+				$entity->spawnToAll();
 
-			return $expOrb;
+				return $entity;
+			}
 		}
 
 		return false;

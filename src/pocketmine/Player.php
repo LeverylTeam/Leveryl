@@ -4316,6 +4316,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 		$this->namedtag["playerGameType"] = $this->gamemode;
 		$this->namedtag["lastPlayed"] = (int)floor(microtime(true) * 1000);
+		$this->namedtag["Health"] = new ShortTag("Health", intval($this->getHealth()));
+		$this->namedtag["MaxHealth"] = new ShortTag("MaxHealth", intval($this->getMaxHealth()));
 
 		if($this->username != "" and $this->namedtag instanceof CompoundTag) {
 			$this->server->saveOfflinePlayerData($this->username, $this->namedtag, $async);

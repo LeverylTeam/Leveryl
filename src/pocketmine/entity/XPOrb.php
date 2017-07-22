@@ -17,6 +17,7 @@
  * @author iTX Technologies
  * @link https://itxtech.org
  *
+ * Modified for Leveryl.
  */
 
 namespace pocketmine\entity;
@@ -82,7 +83,7 @@ class XPOrb extends Entity
 			}
 		}
 
-		if($target !== null) {
+		if($target instanceof Player) {
 			$moveSpeed = 0.7;
 			$motX = ($target->getX() - $this->x) / 8;
 			$motY = ($target->getY() + $target->getEyeHeight() - $this->y) / 8;
@@ -97,19 +98,10 @@ class XPOrb extends Entity
 				$this->motionZ = $motZ / $motSqrt * $motC * $moveSpeed;
 			}
 
-			$this->motionY -= $this->gravity;
-
-			if($this->checkObstruction($this->x, $this->y, $this->z)) {
-				$hasUpdate = true;
-			}
-
-			if($this->isInsideOfSolid()) {
-				$this->setPosition($target);
-			}
-
-			if($minDistance <= 1.3) {
+			/** @noinspection PhpUndefinedVariableInspection */ // $dist can't be undefined. cuz of line 69.
+			if($dist <= 1.3) {
 				if($target->canPickupXp()) {
-					$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new PlayerPickupExpOrbEvent($target, $this->getExperience()));
+					$target->getServer()->getPluginManager()->callEvent($ev = new PlayerPickupExpOrbEvent($target, $this->getExperience()));
 					if(!$ev->isCancelled()) {
 						$this->kill();
 						$this->close();
@@ -118,6 +110,7 @@ class XPOrb extends Entity
 							$target->addXp($this->getExperience());
 							$target->resetXpCooldown();
 						}
+						return true;
 					}
 				}
 			}

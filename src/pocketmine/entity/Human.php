@@ -539,18 +539,30 @@ class Human extends Creature implements ProjectileSource, InventoryHolder
 				}
 			}
 
-			//EnderChest Inventory
-			$this->namedtag->EnderChestInventory = new ListTag("EnderChestInventory", []);
-			if($this->enderChestInventory !== null) {
-				for($slot = 0; $slot < $this->enderChestInventory->getSize(); $slot++) {
-					if(($item = $this->enderChestInventory->getItem($slot)) instanceof ItemItem) {
-						$this->namedtag->EnderChestInventory[$slot] = $item->nbtSerialize($slot);
-					}
-				}
-			}
-
 			$this->namedtag->SelectedInventorySlot = new IntTag("SelectedInventorySlot", $this->inventory->getHeldItemIndex());
 		}
+
+		//EnderChest Inventory
+		$this->namedtag->EnderChestInventory = new ListTag("EnderChestInventory", []);
+		if($this->enderChestInventory !== null) {
+			for($slot = 0; $slot < $this->enderChestInventory->getSize(); $slot++) {
+				if(($item = $this->enderChestInventory->getItem($slot)) instanceof ItemItem) {
+					$this->namedtag->EnderChestInventory[$slot] = $item->nbtSerialize($slot);
+				}
+			}
+		}
+
+		//Xp
+		$this->namedtag->XpLevel = new IntTag("XpLevel", $this->getXpLevel());
+		$this->namedtag->XpTotal = new IntTag("XpTotal", $this->getTotalXp());
+		$this->namedtag->XpP = new FloatTag("XpP", $this->getXpProgress());
+		$this->namedtag->XpSeed = new IntTag("XpSeed", $this->getXpSeed());
+
+		//Food
+		$this->namedtag->foodLevel = new IntTag("foodLevel", intval($this->getFood()));
+		$this->namedtag->foodExhaustionLevel = new FloatTag("foodExhaustionLevel", $this->getExhaustion());
+		$this->namedtag->foodSaturationLevel = new FloatTag("foodSaturationLevel", $this->getSaturation());
+		$this->namedtag->foodTickTimer = new IntTag("foodTickTimer", $this->foodTickTimer);
 
 		if(strlen($this->getSkinData()) > 0) {
 			$this->namedtag->Skin = new CompoundTag("Skin", [

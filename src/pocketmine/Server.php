@@ -831,6 +831,8 @@ class Server
 			new ByteTag("OnGround", 1),
 			new ByteTag("Invulnerable", 0),
 			new StringTag("NameTag", $name),
+			new ShortTag("Health", 20),
+			new ShortTag("MaxHealth", 20),
 		]);
 		$nbt->Pos->setTagType(NBT::TAG_Double);
 		$nbt->Inventory->setTagType(NBT::TAG_Compound);
