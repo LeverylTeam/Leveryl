@@ -1515,14 +1515,7 @@ class Server{
 				$package = "phar";
 			}
 
-            $startupmsg = "        §8##§7\§b    _                           _§r
-      §8##§7 /§b   | | _____   _____ _ __ _   _| |§r
-     §8##§7 /§b    | |/ _ \ \ / / _ \ '__| | | | |§r
-    §8##§7 /§b     | |  __/\ V /  __/ |  | |_| | |§r
-   §8##§7 /§b      |_|\___| \_/ \___|_|   \__, |_|§r
-  §8##§7 /§b                              |___/§r
- §8#########§7\ §bGitHub.com/LeverylTeam/Leveryl§r
- §7\________/§r";
+            $startupmsg = "        §8##§7\§b    _                           _ §r\n      §8##§7 /§b   | | _____   _____ _ __ _   _| |§r\n     §8##§7 /§b    | |/ _ \ \ / / _ \ '__| | | | |§r\n    §8##§7 /§b     | |  __/\ V /  __/ |  | |_| | |§r\n   §8##§7 /§b      |_|\___| \_/ \___|_|   \__, |_|§r\n  §8##§7 /§b                              |___/   §r\n §8#########§7\ §bGitHub.com/LeverylTeam/Leveryl  §r\n §7\________/§r";
 
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(!file_exists($this->dataPath . "leveryl.yml")){

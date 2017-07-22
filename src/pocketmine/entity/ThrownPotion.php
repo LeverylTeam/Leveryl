@@ -63,11 +63,13 @@ class ThrownPotion extends Projectile {
             $this->hasSplashed = true;
             $color = Potion::getColor($this->getPotionId());
             $this->getLevel()->addParticle(new SpellParticle($this, $color[0], $color[1], $color[2]));
-            $players = $this->getViewers();
-            foreach ($players as $p) {
-                if ($p->distance($this) <= 6) {
-                    foreach (Potion::getEffectsById($this->getPotionId()) as $effect) {
-                        $p->addEffect($effect);
+            $rad = 6;
+            foreach ($this->getLevel()->getNearbyEntities($this->getBoundingBox()->grow($rad, $rad, $rad)) as $nearby) {
+                if ($nearby instanceof Player || $nearby instanceof Creature) {
+                    if(!($nearby instanceof Lightning)) {
+                        foreach (Potion::getEffectsById($this->getPotionId()) as $effect) {
+                            $nearby->addEffect($effect);
+                        }
                     }
                 }
             }
