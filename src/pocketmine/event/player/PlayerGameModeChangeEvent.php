@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\player;
 
@@ -29,18 +29,21 @@ use pocketmine\Player;
 /**
  * Called when a player has its gamemode changed
  */
-class PlayerGameModeChangeEvent extends PlayerEvent implements Cancellable{
+class PlayerGameModeChangeEvent extends PlayerEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	/** @var int */
 	protected $gamemode;
 
-	public function __construct(Player $player, $newGamemode){
+	public function __construct(Player $player, $newGamemode)
+	{
 		$this->player = $player;
-		$this->gamemode = (int) $newGamemode;
+		$this->gamemode = (int)$newGamemode;
 	}
 
-	public function getNewGamemode(){
+	public function getNewGamemode()
+	{
 		return $this->gamemode;
 	}
 

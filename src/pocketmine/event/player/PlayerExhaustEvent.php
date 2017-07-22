@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\player;
 
@@ -27,7 +27,8 @@ use pocketmine\entity\Human;
 use pocketmine\event\Cancellable;
 use pocketmine\Player;
 
-class PlayerExhaustEvent extends PlayerEvent implements Cancellable{
+class PlayerExhaustEvent extends PlayerEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	const CAUSE_ATTACK = 1;
@@ -47,7 +48,8 @@ class PlayerExhaustEvent extends PlayerEvent implements Cancellable{
 	/** @var int */
 	private $cause;
 
-	public function __construct(Human $human, float $amount, int $cause){
+	public function __construct(Human $human, float $amount, int $cause)
+	{
 		$this->player = $human;
 		$this->amount = $amount;
 		$this->cause = $cause;
@@ -56,15 +58,18 @@ class PlayerExhaustEvent extends PlayerEvent implements Cancellable{
 	/**
 	 * @return Human|Player
 	 */
-	public function getPlayer(){
+	public function getPlayer()
+	{
 		return $this->player;
 	}
 
-	public function getAmount() : float{
+	public function getAmount(): float
+	{
 		return $this->amount;
 	}
 
-	public function setAmount(float $amount){
+	public function setAmount(float $amount)
+	{
 		$this->amount = $amount;
 	}
 
@@ -72,7 +77,8 @@ class PlayerExhaustEvent extends PlayerEvent implements Cancellable{
 	 * Returns an int cause of the exhaustion - one of the constants at the top of this class.
 	 * @return int
 	 */
-	public function getCause() : int{
+	public function getCause(): int
+	{
 		return $this->cause;
 	}
 }

@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event;
 
@@ -28,7 +28,8 @@ use pocketmine\entity\Living;
 use pocketmine\plugin\PluginManager;
 use pocketmine\Server;
 
-class TimingsHandler{
+class TimingsHandler
+{
 
 	/** @var TimingsHandler[] */
 	private static $HANDLERS = [];
@@ -46,25 +47,27 @@ class TimingsHandler{
 	private $violations = 0;
 
 	/**
-	 * @param string		 $name
+	 * @param string $name
 	 * @param TimingsHandler $parent
 	 */
-	public function __construct($name, TimingsHandler $parent = null){
+	public function __construct($name, TimingsHandler $parent = null)
+	{
 		$this->name = $name;
-		if($parent !== null){
+		if($parent !== null) {
 			$this->parent = $parent;
 		}
 
 		self::$HANDLERS[spl_object_hash($this)] = $this;
 	}
 
-	public static function printTimings($fp){
+	public static function printTimings($fp)
+	{
 		fwrite($fp, "Minecraft" . PHP_EOL);
 
-		foreach(self::$HANDLERS as $timings){
+		foreach(self::$HANDLERS as $timings) {
 			$time = $timings->totalTime;
 			$count = $timings->count;
-			if($count === 0){
+			if($count === 0) {
 				continue;
 			}
 
@@ -78,10 +81,10 @@ class TimingsHandler{
 
 		$entities = 0;
 		$livingEntities = 0;
-		foreach(Server::getInstance()->getLevels() as $level){
+		foreach(Server::getInstance()->getLevels() as $level) {
 			$entities += count($level->getEntities());
-			foreach($level->getEntities() as $e){
-				if($e instanceof Living){
+			foreach($level->getEntities() as $e) {
+				if($e instanceof Living) {
 					++$livingEntities;
 				}
 			}
@@ -91,28 +94,30 @@ class TimingsHandler{
 		fwrite($fp, "# LivingEntities " . $livingEntities . PHP_EOL);
 	}
 
-	public static function reload(){
-		if(Server::getInstance()->getPluginManager()->useTimings()){
-			foreach(self::$HANDLERS as $timings){
+	public static function reload()
+	{
+		if(Server::getInstance()->getPluginManager()->useTimings()) {
+			foreach(self::$HANDLERS as $timings) {
 				$timings->reset();
 			}
 			TimingsCommand::$timingStart = microtime(true);
 		}
 	}
 
-	public static function tick($measure = true){
-		if(PluginManager::$useTimings){
-			if($measure){
-				foreach(self::$HANDLERS as $timings){
-					if($timings->curTickTotal > 0.05){
+	public static function tick($measure = true)
+	{
+		if(PluginManager::$useTimings) {
+			if($measure) {
+				foreach(self::$HANDLERS as $timings) {
+					if($timings->curTickTotal > 0.05) {
 						$timings->violations += round($timings->curTickTotal / 0.05);
 					}
 					$timings->curTickTotal = 0;
 					$timings->curCount = 0;
 					$timings->timingDepth = 0;
 				}
-			}else{
-				foreach(self::$HANDLERS as $timings){
+			} else {
+				foreach(self::$HANDLERS as $timings) {
 					$timings->totalTime -= $timings->curTickTotal;
 					$timings->count -= $timings->curCount;
 
@@ -124,18 +129,20 @@ class TimingsHandler{
 		}
 	}
 
-	public function startTiming(){
-		if(PluginManager::$useTimings and ++$this->timingDepth === 1){
+	public function startTiming()
+	{
+		if(PluginManager::$useTimings and ++$this->timingDepth === 1) {
 			$this->start = microtime(true);
-			if($this->parent !== null and ++$this->parent->timingDepth === 1){
+			if($this->parent !== null and ++$this->parent->timingDepth === 1) {
 				$this->parent->start = $this->start;
 			}
 		}
 	}
 
-	public function stopTiming(){
-		if(PluginManager::$useTimings){
-			if(--$this->timingDepth !== 0 or $this->start === 0){
+	public function stopTiming()
+	{
+		if(PluginManager::$useTimings) {
+			if(--$this->timingDepth !== 0 or $this->start === 0) {
 				return;
 			}
 
@@ -145,13 +152,14 @@ class TimingsHandler{
 			++$this->curCount;
 			++$this->count;
 			$this->start = 0;
-			if($this->parent !== null){
+			if($this->parent !== null) {
 				$this->parent->stopTiming();
 			}
 		}
 	}
 
-	public function reset(){
+	public function reset()
+	{
 		$this->count = 0;
 		$this->curCount = 0;
 		$this->violations = 0;
@@ -161,7 +169,8 @@ class TimingsHandler{
 		$this->timingDepth = 0;
 	}
 
-	public function remove(){
+	public function remove()
+	{
 		unset(self::$HANDLERS[spl_object_hash($this)]);
 	}
 

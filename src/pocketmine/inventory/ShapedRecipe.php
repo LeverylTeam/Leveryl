@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\inventory;
 
@@ -28,7 +28,8 @@ use pocketmine\math\Vector2;
 use pocketmine\Server;
 use pocketmine\utils\UUID;
 
-class ShapedRecipe implements Recipe{
+class ShapedRecipe implements Recipe
+{
 	/** @var Item */
 	private $output;
 
@@ -44,14 +45,15 @@ class ShapedRecipe implements Recipe{
 
 	/**
 	 * @param Item $result
-	 * @param int  $height
-	 * @param int  $width
+	 * @param int $height
+	 * @param int $width
 	 *
 	 * @throws \Exception
 	 */
-	public function __construct(Item $result, $height, $width){
-		for($h = 0; $h < $height; $h++){
-			if($width === 0 or $width > 3){
+	public function __construct(Item $result, $height, $width)
+	{
+		for($h = 0; $h < $height; $h++) {
+			if($width === 0 or $width > 3) {
 				throw new \InvalidStateException("Crafting rows should be 1, 2, 3 wide, not $width");
 			}
 			$this->ingredients[] = array_fill(0, $width, null);
@@ -60,44 +62,52 @@ class ShapedRecipe implements Recipe{
 		$this->output = clone $result;
 	}
 
-	public function getWidth(){
+	public function getWidth()
+	{
 		return count($this->ingredients[0]);
 	}
 
-	public function getHeight(){
+	public function getHeight()
+	{
 		return count($this->ingredients);
 	}
 
-	public function getResult(){
+	public function getResult()
+	{
 		return $this->output;
 	}
 
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 
-	public function setId(UUID $id){
-		if($this->id !== null){
+	public function setId(UUID $id)
+	{
+		if($this->id !== null) {
 			throw new \InvalidStateException("Id is already set");
 		}
 
 		$this->id = $id;
 	}
 
-	public function addIngredient($x, $y, Item $item){
+	public function addIngredient($x, $y, Item $item)
+	{
 		$this->ingredients[$y][$x] = clone $item;
+
 		return $this;
 	}
 
 	/**
 	 * @param string $key
-	 * @param Item   $item
+	 * @param Item $item
 	 *
 	 * @return $this
 	 * @throws \Exception
 	 */
-	public function setIngredient($key, Item $item){
-		if(!array_key_exists($key, $this->shape)){
+	public function setIngredient($key, Item $item)
+	{
+		if(!array_key_exists($key, $this->shape)) {
 			throw new \Exception("Symbol does not appear in the shape: " . $key);
 		}
 
@@ -106,8 +116,9 @@ class ShapedRecipe implements Recipe{
 		return $this;
 	}
 
-	protected function fixRecipe($key, $item){
-		foreach($this->shapeItems[$key] as $entry){
+	protected function fixRecipe($key, $item)
+	{
+		foreach($this->shapeItems[$key] as $entry) {
 			$this->ingredients[$entry->y][$entry->x] = clone $item;
 		}
 	}
@@ -115,14 +126,15 @@ class ShapedRecipe implements Recipe{
 	/**
 	 * @return Item[][]
 	 */
-	public function getIngredientMap(){
+	public function getIngredientMap()
+	{
 		$ingredients = [];
-		foreach($this->ingredients as $y => $row){
+		foreach($this->ingredients as $y => $row) {
 			$ingredients[$y] = [];
-			foreach($row as $x => $ingredient){
-				if($ingredient !== null){
+			foreach($row as $x => $ingredient) {
+				if($ingredient !== null) {
 					$ingredients[$y][$x] = clone $ingredient;
-				}else{
+				} else {
 					$ingredients[$y][$x] = Item::get(Item::AIR);
 				}
 			}
@@ -136,18 +148,21 @@ class ShapedRecipe implements Recipe{
 	 * @param $y
 	 * @return null|Item
 	 */
-	public function getIngredient($x, $y){
-        return $this->ingredients[$y][$x] ?? Item::get(Item::AIR);
+	public function getIngredient($x, $y)
+	{
+		return $this->ingredients[$y][$x] ?? Item::get(Item::AIR);
 	}
 
 	/**
 	 * @return string[]
 	 */
-	public function getShape(){
+	public function getShape()
+	{
 		return $this->shape;
 	}
 
-	public function registerToCraftingManager(){
+	public function registerToCraftingManager()
+	{
 		Server::getInstance()->getCraftingManager()->registerShapedRecipe($this);
 	}
 }

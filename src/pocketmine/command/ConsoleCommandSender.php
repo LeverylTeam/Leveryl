@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\command;
 
@@ -30,14 +30,16 @@ use pocketmine\plugin\Plugin;
 use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 
-class ConsoleCommandSender implements CommandSender{
+class ConsoleCommandSender implements CommandSender
+{
 
 	private $perm;
 
-    /** @var int|null */
-    protected $lineHeight = null;
+	/** @var int|null */
+	protected $lineHeight = null;
 
-	public function __construct(){
+	public function __construct()
+	{
 		$this->perm = new PermissibleBase($this);
 	}
 
@@ -46,7 +48,8 @@ class ConsoleCommandSender implements CommandSender{
 	 *
 	 * @return bool
 	 */
-	public function isPermissionSet($name){
+	public function isPermissionSet($name)
+	{
 		return $this->perm->isPermissionSet($name);
 	}
 
@@ -55,18 +58,20 @@ class ConsoleCommandSender implements CommandSender{
 	 *
 	 * @return bool
 	 */
-	public function hasPermission($name){
+	public function hasPermission($name)
+	{
 		return $this->perm->hasPermission($name);
 	}
 
 	/**
 	 * @param Plugin $plugin
 	 * @param string $name
-	 * @param bool   $value
+	 * @param bool $value
 	 *
 	 * @return \pocketmine\permission\PermissionAttachment
 	 */
-	public function addAttachment(Plugin $plugin, $name = null, $value = null){
+	public function addAttachment(Plugin $plugin, $name = null, $value = null)
+	{
 		return $this->perm->addAttachment($plugin, $name, $value);
 	}
 
@@ -75,46 +80,52 @@ class ConsoleCommandSender implements CommandSender{
 	 *
 	 * @return void
 	 */
-	public function removeAttachment(PermissionAttachment $attachment){
+	public function removeAttachment(PermissionAttachment $attachment)
+	{
 		$this->perm->removeAttachment($attachment);
 	}
 
-	public function recalculatePermissions(){
+	public function recalculatePermissions()
+	{
 		$this->perm->recalculatePermissions();
 	}
 
 	/**
 	 * @return \pocketmine\permission\PermissionAttachmentInfo[]
 	 */
-	public function getEffectivePermissions(){
+	public function getEffectivePermissions()
+	{
 		return $this->perm->getEffectivePermissions();
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isPlayer(){
+	public function isPlayer()
+	{
 		return false;
 	}
 
 	/**
 	 * @return \pocketmine\Server
 	 */
-	public function getServer(){
+	public function getServer()
+	{
 		return Server::getInstance();
 	}
 
 	/**
 	 * @param TextContainer|string $message
 	 */
-	public function sendMessage($message){
-		if($message instanceof TextContainer){
+	public function sendMessage($message)
+	{
+		if($message instanceof TextContainer) {
 			$message = $this->getServer()->getLanguage()->translate($message);
-		}else{
+		} else {
 			$message = $this->getServer()->getLanguage()->translateString($message);
 		}
 
-		foreach(explode("\n", trim($message)) as $line){
+		foreach(explode("\n", trim($message)) as $line) {
 			MainLogger::getLogger()->info($line);
 		}
 	}
@@ -122,33 +133,38 @@ class ConsoleCommandSender implements CommandSender{
 	/**
 	 * @return string
 	 */
-	public function getName(){
+	public function getName()
+	{
 		return "CONSOLE";
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isOp(){
+	public function isOp()
+	{
 		return true;
 	}
 
 	/**
 	 * @param bool $value
 	 */
-	public function setOp($value){
+	public function setOp($value)
+	{
 
 	}
 
-    public function getScreenLineHeight() : int{
-        return $this->lineHeight ?? PHP_INT_MAX;
-    }
+	public function getScreenLineHeight(): int
+	{
+		return $this->lineHeight ?? PHP_INT_MAX;
+	}
 
-    public function setScreenLineHeight(int $height = null){
-        if($height !== null and $height < 1){
-            throw new \InvalidArgumentException("Line height must be at least 1");
-        }
-        $this->lineHeight = $height;
-    }
+	public function setScreenLineHeight(int $height = null)
+	{
+		if($height !== null and $height < 1) {
+			throw new \InvalidArgumentException("Line height must be at least 1");
+		}
+		$this->lineHeight = $height;
+	}
 
 }

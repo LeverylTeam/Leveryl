@@ -19,14 +19,15 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class Prismarine extends Solid{
+class Prismarine extends Solid
+{
 
 	const NORMAL = 0;
 	const DARK = 1;
@@ -34,33 +35,39 @@ class Prismarine extends Solid{
 
 	protected $id = self::PRISMARINE;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 1.5;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		static $names = [
 			self::NORMAL => "Prismarine",
-			self::DARK => "Dark Prismarine",
+			self::DARK   => "Dark Prismarine",
 			self::BRICKS => "Prismarine Bricks",
 		];
+
 		return $names[$this->meta & 0x03] ?? "Unknown";
 	}
 
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getDrops(Item $item){
-		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+	public function getDrops(Item $item)
+	{
+		if($item->isPickaxe() >= Tool::TIER_WOODEN) {
 			return [
 				[$this->id, $this->meta & 0x03, 1],
 			];
-		}else{
+		} else {
 			return [];
 		}
 	}

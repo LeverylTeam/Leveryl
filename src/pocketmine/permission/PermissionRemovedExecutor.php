@@ -19,12 +19,13 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\permission;
 
 
-interface PermissionRemovedExecutor{
+interface PermissionRemovedExecutor
+{
 
 	/**
 	 * @param PermissionAttachment $attachment

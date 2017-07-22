@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level\format\io;
 
@@ -35,7 +35,8 @@ use pocketmine\nbt\tag\LongTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\scheduler\AsyncTask;
 
-abstract class BaseLevelProvider implements LevelProvider{
+abstract class BaseLevelProvider implements LevelProvider
+{
 	/** @var Level */
 	protected $level;
 	/** @var string */
@@ -43,163 +44,181 @@ abstract class BaseLevelProvider implements LevelProvider{
 	/** @var CompoundTag */
 	protected $levelData;
 
-	public function __construct(Level $level, string $path){
+	public function __construct(Level $level, string $path)
+	{
 		$this->level = $level;
 		$this->path = $path;
-		if(!file_exists($this->path)){
+		if(!file_exists($this->path)) {
 			mkdir($this->path, 0777, true);
 		}
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 		$nbt->readCompressed(file_get_contents($this->getPath() . "level.dat"));
 		$levelData = $nbt->getData();
-		if($levelData->Data instanceof CompoundTag){
+		if($levelData->Data instanceof CompoundTag) {
 			$this->levelData = $levelData->Data;
-		}else{
+		} else {
 			throw new LevelException("Invalid level.dat");
 		}
 
-		if(!isset($this->levelData->generatorName)){
-			$this->levelData->generatorName = new StringTag("generatorName", (string) Generator::getGenerator("DEFAULT"));
+		if(!isset($this->levelData->generatorName)) {
+			$this->levelData->generatorName = new StringTag("generatorName", (string)Generator::getGenerator("DEFAULT"));
 		}
 
-		if(!isset($this->levelData->generatorOptions)){
+		if(!isset($this->levelData->generatorOptions)) {
 			$this->levelData->generatorOptions = new StringTag("generatorOptions", "");
 		}
 	}
 
-	public function getPath() : string{
+	public function getPath(): string
+	{
 		return $this->path;
 	}
 
-	public function getServer(){
+	public function getServer()
+	{
 		return $this->level->getServer();
 	}
 
-	public function getLevel(){
+	public function getLevel()
+	{
 		return $this->level;
 	}
 
-	public function getName() : string{
-		return (string) $this->levelData["LevelName"];
+	public function getName(): string
+	{
+		return (string)$this->levelData["LevelName"];
 	}
 
-	public function getTime(){
+	public function getTime()
+	{
 		return $this->levelData["Time"];
 	}
 
-	public function setTime($value){
+	public function setTime($value)
+	{
 		$this->levelData->Time = new LongTag("Time", $value);
 	}
 
-	public function getSeed(){
+	public function getSeed()
+	{
 		return $this->levelData["RandomSeed"];
 	}
 
-	public function setSeed($value){
+	public function setSeed($value)
+	{
 		$this->levelData->RandomSeed = new LongTag("RandomSeed", $value);
 	}
 
-	public function getSpawn() : Vector3{
-		return new Vector3((float) $this->levelData["SpawnX"], (float) $this->levelData["SpawnY"], (float) $this->levelData["SpawnZ"]);
+	public function getSpawn(): Vector3
+	{
+		return new Vector3((float)$this->levelData["SpawnX"], (float)$this->levelData["SpawnY"], (float)$this->levelData["SpawnZ"]);
 	}
 
-	public function setSpawn(Vector3 $pos){
-		$this->levelData->SpawnX = new IntTag("SpawnX", (int) $pos->x);
-		$this->levelData->SpawnY = new IntTag("SpawnY", (int) $pos->y);
-		$this->levelData->SpawnZ = new IntTag("SpawnZ", (int) $pos->z);
+	public function setSpawn(Vector3 $pos)
+	{
+		$this->levelData->SpawnX = new IntTag("SpawnX", (int)$pos->x);
+		$this->levelData->SpawnY = new IntTag("SpawnY", (int)$pos->y);
+		$this->levelData->SpawnZ = new IntTag("SpawnZ", (int)$pos->z);
 	}
 
-	public function doGarbageCollection(){
+	public function doGarbageCollection()
+	{
 
 	}
 
 	/**
 	 * @return CompoundTag
 	 */
-	public function getLevelData() : CompoundTag{
+	public function getLevelData(): CompoundTag
+	{
 		return $this->levelData;
 	}
 
-	public function saveLevelData(){
+	public function saveLevelData()
+	{
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 		$nbt->setData(new CompoundTag("", [
-			"Data" => $this->levelData
+			"Data" => $this->levelData,
 		]));
 		$buffer = $nbt->writeCompressed();
 		file_put_contents($this->getPath() . "level.dat", $buffer);
 	}
 
-	public function requestChunkTask(int $x, int $z) : AsyncTask{
+	public function requestChunkTask(int $x, int $z): AsyncTask
+	{
 		$chunk = $this->getChunk($x, $z, false);
-		if(!($chunk instanceof Chunk)){
+		if(!($chunk instanceof Chunk)) {
 			throw new ChunkException("Invalid Chunk sent");
 		}
 
 		return new ChunkRequestTask($this->level, $chunk);
 	}
 
-    public function updateGameRule($t, $s)
-    {
-        switch($t){
-            case "keepInventory";
-                $this->levelData->GameRules->keepInventory = new StringTag("$t", "$s");
-                break;
-            case "showDeathMessages";
-                $this->levelData->GameRules->showDeathMessages = new StringTag("$t", "$s");
-                break;
-            case "doTileDrops";
-                $this->levelData->GameRules->doTileDrops = new StringTag("$t", "$s");
-                break;
-            case "doFireTick";
-                $this->levelData->GameRules->doFireTick = new StringTag("$t", "$s");;
-                break;
-            case "doDaylightCycle";
-                $this->levelData->GameRules->doDaylightCycle = new StringTag("$t", "$s");
-                break;
-        }
-    }
-    public function getGameRule($rule) : bool {
-	    if(isset($this->levelData->GameRules)) {
-            if (count($this->levelData->GameRules) == 5) {
-                switch ($rule) {
-                    case "keepInventory":
-                        if(isset($this->levelData->GameRules[$rule])){
-                            return (boolean)$this->levelData->GameRules[$rule];
-                        }
-                        break;
-                    case "showDeathMessage":
-                        if(isset($this->levelData->GameRules[$rule])){
-                            return (boolean)$this->levelData->GameRules[$rule];
-                        }
-                        break;
-                    case "doTileDrops":
-                        if(isset($this->levelData->GameRules[$rule])){
-                            return (boolean)$this->levelData->GameRules[$rule];
-                        }
-                        break;
-                    case "doFireTick":
-                        if(isset($this->levelData->GameRules[$rule])){
-                            return (boolean)$this->levelData->GameRules[$rule];
-                        }
-                        break;
-                    case "doDaylightCycle":
-                        if(isset($this->levelData->GameRules[$rule])){
-                            return (boolean)$this->levelData->GameRules[$rule];
-                        }
-                        break;
-                }
-            } else {
-                // Overwrite the NBT data cuz it's probably invalid.
-                $this->levelData->GameRules = []; // Remove Everything from the GameRules CompoundTag.
-                $this->levelData->GameRules = [
-                    "keepInventory" => new StringTag("KeepInventory", "true"),
-                    "showDeathMessages" => new StringTag("showDeathMessages", "true"),
-                    "doTileDrops" => new StringTag("doTileDrops", "true"),
-                    "doFireTick" => new StringTag("doFireTick", "true"),
-                    "doDaylightCycle" => new StringTag("doDaylightCycle", "true")
-                ]; // Re-set the GameRules CompoundTag
-            }
-        }
-        return false;
-    }
+	public function updateGameRule($t, $s)
+	{
+		switch($t) {
+			case "keepInventory";
+				$this->levelData->GameRules->keepInventory = new StringTag("$t", "$s");
+				break;
+			case "showDeathMessages";
+				$this->levelData->GameRules->showDeathMessages = new StringTag("$t", "$s");
+				break;
+			case "doTileDrops";
+				$this->levelData->GameRules->doTileDrops = new StringTag("$t", "$s");
+				break;
+			case "doFireTick";
+				$this->levelData->GameRules->doFireTick = new StringTag("$t", "$s");;
+				break;
+			case "doDaylightCycle";
+				$this->levelData->GameRules->doDaylightCycle = new StringTag("$t", "$s");
+				break;
+		}
+	}
+
+	public function getGameRule($rule): bool
+	{
+		if(isset($this->levelData->GameRules)) {
+			if(count($this->levelData->GameRules) == 5) {
+				switch($rule) {
+					case "keepInventory":
+						if(isset($this->levelData->GameRules[$rule])) {
+							return (boolean)$this->levelData->GameRules[$rule];
+						}
+						break;
+					case "showDeathMessage":
+						if(isset($this->levelData->GameRules[$rule])) {
+							return (boolean)$this->levelData->GameRules[$rule];
+						}
+						break;
+					case "doTileDrops":
+						if(isset($this->levelData->GameRules[$rule])) {
+							return (boolean)$this->levelData->GameRules[$rule];
+						}
+						break;
+					case "doFireTick":
+						if(isset($this->levelData->GameRules[$rule])) {
+							return (boolean)$this->levelData->GameRules[$rule];
+						}
+						break;
+					case "doDaylightCycle":
+						if(isset($this->levelData->GameRules[$rule])) {
+							return (boolean)$this->levelData->GameRules[$rule];
+						}
+						break;
+				}
+			} else {
+				// Overwrite the NBT data cuz it's probably invalid.
+				$this->levelData->GameRules = []; // Remove Everything from the GameRules CompoundTag.
+				$this->levelData->GameRules = [
+					"keepInventory"     => new StringTag("KeepInventory", "true"),
+					"showDeathMessages" => new StringTag("showDeathMessages", "true"),
+					"doTileDrops"       => new StringTag("doTileDrops", "true"),
+					"doFireTick"        => new StringTag("doFireTick", "true"),
+					"doDaylightCycle"   => new StringTag("doDaylightCycle", "true"),
+				]; // Re-set the GameRules CompoundTag
+			}
+		}
+
+		return false;
+	}
 }

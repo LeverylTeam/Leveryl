@@ -19,11 +19,12 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /**
  * All the Tile classes and related classes
  */
+
 namespace pocketmine\tile;
 
 use pocketmine\event\Timings;
@@ -34,7 +35,8 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 
-abstract class Tile extends Position{
+abstract class Tile extends Position
+{
 
 	const BED = "Bed";
 	const BREWING_STAND = "BrewingStand";
@@ -73,7 +75,8 @@ abstract class Tile extends Position{
 	/** @var \pocketmine\event\TimingsHandler */
 	public $tickTimer;
 
-	public static function init(){
+	public static function init()
+	{
 		self::registerTile(Bed::class);
 		self::registerTile(Beacon::class);
 		self::registerTile(BrewingStand::class);
@@ -92,16 +95,18 @@ abstract class Tile extends Position{
 	}
 
 	/**
-	 * @param string	  $type
-	 * @param Level	   $level
+	 * @param string $type
+	 * @param Level $level
 	 * @param CompoundTag $nbt
-	 * @param			 $args
+	 * @param             $args
 	 *
 	 * @return Tile
 	 */
-	public static function createTile($type, Level $level, CompoundTag $nbt, ...$args){
-		if(isset(self::$knownTiles[$type])){
+	public static function createTile($type, Level $level, CompoundTag $nbt, ...$args)
+	{
+		if(isset(self::$knownTiles[$type])) {
 			$class = self::$knownTiles[$type];
+
 			return new $class($level, $nbt, ...$args);
 		}
 
@@ -113,11 +118,13 @@ abstract class Tile extends Position{
 	 *
 	 * @return bool
 	 */
-	public static function registerTile($className){
+	public static function registerTile($className)
+	{
 		$class = new \ReflectionClass($className);
-		if(is_a($className, Tile::class, true) and !$class->isAbstract()){
+		if(is_a($className, Tile::class, true) and !$class->isAbstract()) {
 			self::$knownTiles[$class->getShortName()] = $className;
 			self::$shortNames[$className] = $class->getShortName();
+
 			return true;
 		}
 
@@ -129,11 +136,13 @@ abstract class Tile extends Position{
 	 *
 	 * @return string
 	 */
-	public function getSaveId(){
+	public function getSaveId()
+	{
 		return self::$shortNames[static::class];
 	}
 
-	public function __construct(Level $level, CompoundTag $nbt){
+	public function __construct(Level $level, CompoundTag $nbt)
+	{
 		$this->timings = Timings::getTileEntityTimings($this);
 
 		$this->namedtag = $nbt;
@@ -145,33 +154,36 @@ abstract class Tile extends Position{
 		$this->name = "";
 		$this->lastUpdate = microtime(true);
 		$this->id = Tile::$tileCount++;
-		$this->x = (int) $this->namedtag["x"];
-		$this->y = (int) $this->namedtag["y"];
-		$this->z = (int) $this->namedtag["z"];
+		$this->x = (int)$this->namedtag["x"];
+		$this->y = (int)$this->namedtag["y"];
+		$this->z = (int)$this->namedtag["z"];
 
 		$this->chunk->addTile($this);
 		$this->getLevel()->addTile($this);
 		$this->tickTimer = Timings::getTileEntityTimings($this);
 	}
 
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 
-	public function saveNBT(){
+	public function saveNBT()
+	{
 		$this->namedtag->id = new StringTag("id", $this->getSaveId());
 		$this->namedtag->x = new IntTag("x", $this->x);
 		$this->namedtag->y = new IntTag("y", $this->y);
 		$this->namedtag->z = new IntTag("z", $this->z);
 	}
 
-	public function getCleanedNBT(){
+	public function getCleanedNBT()
+	{
 		$this->saveNBT();
 		$tag = clone $this->namedtag;
 		unset($tag->x, $tag->y, $tag->z, $tag->id);
-		if($tag->getCount() > 0){
+		if($tag->getCount() > 0) {
 			return $tag;
-		}else{
+		} else {
 			return null;
 		}
 	}
@@ -179,31 +191,36 @@ abstract class Tile extends Position{
 	/**
 	 * @return \pocketmine\block\Block
 	 */
-	public function getBlock(){
+	public function getBlock()
+	{
 		return $this->level->getBlock($this);
 	}
 
-	public function onUpdate(){
+	public function onUpdate()
+	{
 		return false;
 	}
 
-	final public function scheduleUpdate(){
+	final public function scheduleUpdate()
+	{
 		$this->level->updateTiles[$this->id] = $this;
 	}
 
-	public function __destruct(){
+	public function __destruct()
+	{
 		$this->close();
 	}
 
-	public function close(){
-		if(!$this->closed){
+	public function close()
+	{
+		if(!$this->closed) {
 			$this->closed = true;
 			unset($this->level->updateTiles[$this->id]);
-			if($this->chunk instanceof Chunk){
+			if($this->chunk instanceof Chunk) {
 				$this->chunk->removeTile($this);
 				$this->chunk = null;
 			}
-			if(($level = $this->getLevel()) instanceof Level){
+			if(($level = $this->getLevel()) instanceof Level) {
 				$level->removeTile($this);
 				$this->setLevel(null);
 			}
@@ -212,7 +229,8 @@ abstract class Tile extends Position{
 		}
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return $this->name;
 	}
 

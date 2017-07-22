@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class PlayerListPacket extends DataPacket{
+class PlayerListPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::PLAYER_LIST_PACKET;
 
 	const TYPE_ADD = 0;
@@ -39,45 +40,50 @@ class PlayerListPacket extends DataPacket{
 	public $entries = [];
 	public $type;
 
-	public function clean(){
+	public function clean()
+	{
 		$this->entries = [];
+
 		return parent::clean();
 	}
 
-	public function decode(){
+	public function decode()
+	{
 		$this->type = $this->getByte();
 		$count = $this->getUnsignedVarInt();
-		for($i = 0; $i < $count; ++$i){
-			if($this->type === self::TYPE_ADD){
+		for($i = 0; $i < $count; ++$i) {
+			if($this->type === self::TYPE_ADD) {
 				$this->entries[$i][0] = $this->getUUID();
 				$this->entries[$i][1] = $this->getEntityUniqueId();
 				$this->entries[$i][2] = $this->getString();
 				$this->entries[$i][3] = $this->getString();
 				$this->entries[$i][4] = $this->getString();
-			}else{
+			} else {
 				$this->entries[$i][0] = $this->getUUID();
 			}
 		}
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putByte($this->type);
 		$this->putUnsignedVarInt(count($this->entries));
-		foreach($this->entries as $d){
-			if($this->type === self::TYPE_ADD){
+		foreach($this->entries as $d) {
+			if($this->type === self::TYPE_ADD) {
 				$this->putUUID($d[0]);
 				$this->putEntityUniqueId($d[1]);
 				$this->putString($d[2]);
 				$this->putString($d[3]);
 				$this->putString($d[4]);
-			}else{
+			} else {
 				$this->putUUID($d[0]);
 			}
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handlePlayerList($this);
 	}
 

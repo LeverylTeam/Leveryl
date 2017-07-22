@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,23 +28,27 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class TakeItemEntityPacket extends DataPacket{
+class TakeItemEntityPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::TAKE_ITEM_ENTITY_PACKET;
 
 	public $target;
 	public $entityRuntimeId;
 
-	public function decode(){
+	public function decode()
+	{
 
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putEntityRuntimeId($this->target);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleTakeItemEntity($this);
 	}
 }

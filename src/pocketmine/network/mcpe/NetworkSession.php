@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 
 namespace pocketmine\network\mcpe;
@@ -55,6 +55,7 @@ use pocketmine\network\mcpe\protocol\DataPacket;
 use pocketmine\network\mcpe\protocol\DisconnectPacket;
 use pocketmine\network\mcpe\protocol\DropItemPacket;
 use pocketmine\network\mcpe\protocol\EntityEventPacket;
+use pocketmine\network\mcpe\protocol\EntityFallPacket;
 use pocketmine\network\mcpe\protocol\ExplodePacket;
 use pocketmine\network\mcpe\protocol\FullChunkDataPacket;
 use pocketmine\network\mcpe\protocol\HurtArmorPacket;
@@ -71,7 +72,6 @@ use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
 use pocketmine\network\mcpe\protocol\MoveEntityPacket;
 use pocketmine\network\mcpe\protocol\MovePlayerPacket;
 use pocketmine\network\mcpe\protocol\PlayerActionPacket;
-use pocketmine\network\mcpe\protocol\EntityFallPacket;
 use pocketmine\network\mcpe\protocol\PlayerInputPacket;
 use pocketmine\network\mcpe\protocol\PlayerListPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
@@ -112,7 +112,8 @@ use pocketmine\network\mcpe\protocol\UpdateTradePacket;
 use pocketmine\network\mcpe\protocol\UseItemPacket;
 use pocketmine\Server;
 
-interface NetworkSession{
+interface NetworkSession
+{
 
 	/**
 	 * @return Server
@@ -121,177 +122,177 @@ interface NetworkSession{
 
 	public function handleDataPacket(DataPacket $pk);
 
-	public function handleLogin(LoginPacket $packet) : bool;
+	public function handleLogin(LoginPacket $packet): bool;
 
-	public function handlePlayStatus(PlayStatusPacket $packet) : bool;
+	public function handlePlayStatus(PlayStatusPacket $packet): bool;
 
-	public function handleServerToClientHandshake(ServerToClientHandshakePacket $packet) : bool;
+	public function handleServerToClientHandshake(ServerToClientHandshakePacket $packet): bool;
 
-	public function handleClientToServerHandshake(ClientToServerHandshakePacket $packet) : bool;
+	public function handleClientToServerHandshake(ClientToServerHandshakePacket $packet): bool;
 
-	public function handleDisconnect(DisconnectPacket $packet) : bool;
+	public function handleDisconnect(DisconnectPacket $packet): bool;
 
-	public function handleResourcePacksInfo(ResourcePacksInfoPacket $packet) : bool;
+	public function handleResourcePacksInfo(ResourcePacksInfoPacket $packet): bool;
 
-	public function handleResourcePackStack(ResourcePackStackPacket $packet) : bool;
+	public function handleResourcePackStack(ResourcePackStackPacket $packet): bool;
 
-	public function handleResourcePackClientResponse(ResourcePackClientResponsePacket $packet) : bool;
+	public function handleResourcePackClientResponse(ResourcePackClientResponsePacket $packet): bool;
 
-	public function handleText(TextPacket $packet) : bool;
+	public function handleText(TextPacket $packet): bool;
 
-	public function handleSetTime(SetTimePacket $packet) : bool;
+	public function handleSetTime(SetTimePacket $packet): bool;
 
-	public function handleStartGame(StartGamePacket $packet) : bool;
+	public function handleStartGame(StartGamePacket $packet): bool;
 
-	public function handleAddPlayer(AddPlayerPacket $packet) : bool;
+	public function handleAddPlayer(AddPlayerPacket $packet): bool;
 
-	public function handleAddEntity(AddEntityPacket $packet) : bool;
+	public function handleAddEntity(AddEntityPacket $packet): bool;
 
-	public function handleRemoveEntity(RemoveEntityPacket $packet) : bool;
+	public function handleRemoveEntity(RemoveEntityPacket $packet): bool;
 
-	public function handleAddItemEntity(AddItemEntityPacket $packet) : bool;
+	public function handleAddItemEntity(AddItemEntityPacket $packet): bool;
 
-	public function handleAddHangingEntity(AddHangingEntityPacket $packet) : bool;
+	public function handleAddHangingEntity(AddHangingEntityPacket $packet): bool;
 
-	public function handleTakeItemEntity(TakeItemEntityPacket $packet) : bool;
+	public function handleTakeItemEntity(TakeItemEntityPacket $packet): bool;
 
-	public function handleMoveEntity(MoveEntityPacket $packet) : bool;
+	public function handleMoveEntity(MoveEntityPacket $packet): bool;
 
-	public function handleMovePlayer(MovePlayerPacket $packet) : bool;
+	public function handleMovePlayer(MovePlayerPacket $packet): bool;
 
-	public function handleRiderJump(RiderJumpPacket $packet) : bool;
+	public function handleRiderJump(RiderJumpPacket $packet): bool;
 
-	public function handleRemoveBlock(RemoveBlockPacket $packet) : bool;
+	public function handleRemoveBlock(RemoveBlockPacket $packet): bool;
 
-	public function handleUpdateBlock(UpdateBlockPacket $packet) : bool;
+	public function handleUpdateBlock(UpdateBlockPacket $packet): bool;
 
-	public function handleAddPainting(AddPaintingPacket $packet) : bool;
+	public function handleAddPainting(AddPaintingPacket $packet): bool;
 
-	public function handleExplode(ExplodePacket $packet) : bool;
+	public function handleExplode(ExplodePacket $packet): bool;
 
-	public function handleLevelSoundEvent(LevelSoundEventPacket $packet) : bool;
+	public function handleLevelSoundEvent(LevelSoundEventPacket $packet): bool;
 
-	public function handleLevelEvent(LevelEventPacket $packet) : bool;
+	public function handleLevelEvent(LevelEventPacket $packet): bool;
 
-	public function handleBlockEvent(BlockEventPacket $packet) : bool;
+	public function handleBlockEvent(BlockEventPacket $packet): bool;
 
-	public function handleEntityEvent(EntityEventPacket $packet) : bool;
+	public function handleEntityEvent(EntityEventPacket $packet): bool;
 
-	public function handleMobEffect(MobEffectPacket $packet) : bool;
+	public function handleMobEffect(MobEffectPacket $packet): bool;
 
-	public function handleUpdateAttributes(UpdateAttributesPacket $packet) : bool;
+	public function handleUpdateAttributes(UpdateAttributesPacket $packet): bool;
 
-	public function handleMobEquipment(MobEquipmentPacket $packet) : bool;
+	public function handleMobEquipment(MobEquipmentPacket $packet): bool;
 
-	public function handleMobArmorEquipment(MobArmorEquipmentPacket $packet) : bool;
+	public function handleMobArmorEquipment(MobArmorEquipmentPacket $packet): bool;
 
-	public function handleInteract(InteractPacket $packet) : bool;
+	public function handleInteract(InteractPacket $packet): bool;
 
-	public function handleBlockPickRequest(BlockPickRequestPacket $packet) : bool;
+	public function handleBlockPickRequest(BlockPickRequestPacket $packet): bool;
 
-	public function handleUseItem(UseItemPacket $packet) : bool;
+	public function handleUseItem(UseItemPacket $packet): bool;
 
-	public function handlePlayerAction(PlayerActionPacket $packet) : bool;
+	public function handlePlayerAction(PlayerActionPacket $packet): bool;
 
-	public function handleEntityFall(EntityFallPacket $packet) : bool;
+	public function handleEntityFall(EntityFallPacket $packet): bool;
 
-	public function handleHurtArmor(HurtArmorPacket $packet) : bool;
+	public function handleHurtArmor(HurtArmorPacket $packet): bool;
 
-	public function handleSetEntityData(SetEntityDataPacket $packet) : bool;
+	public function handleSetEntityData(SetEntityDataPacket $packet): bool;
 
-	public function handleSetEntityMotion(SetEntityMotionPacket $packet) : bool;
+	public function handleSetEntityMotion(SetEntityMotionPacket $packet): bool;
 
-	public function handleSetEntityLink(SetEntityLinkPacket $packet) : bool;
+	public function handleSetEntityLink(SetEntityLinkPacket $packet): bool;
 
-	public function handleSetHealth(SetHealthPacket $packet) : bool;
+	public function handleSetHealth(SetHealthPacket $packet): bool;
 
-	public function handleSetSpawnPosition(SetSpawnPositionPacket $packet) : bool;
+	public function handleSetSpawnPosition(SetSpawnPositionPacket $packet): bool;
 
-	public function handleAnimate(AnimatePacket $packet) : bool;
+	public function handleAnimate(AnimatePacket $packet): bool;
 
-	public function handleRespawn(RespawnPacket $packet) : bool;
+	public function handleRespawn(RespawnPacket $packet): bool;
 
-	public function handleDropItem(DropItemPacket $packet) : bool;
+	public function handleDropItem(DropItemPacket $packet): bool;
 
-	public function handleInventoryAction(InventoryActionPacket $packet) : bool;
+	public function handleInventoryAction(InventoryActionPacket $packet): bool;
 
-	public function handleContainerOpen(ContainerOpenPacket $packet) : bool;
+	public function handleContainerOpen(ContainerOpenPacket $packet): bool;
 
-	public function handleContainerClose(ContainerClosePacket $packet) : bool;
+	public function handleContainerClose(ContainerClosePacket $packet): bool;
 
-	public function handleContainerSetSlot(ContainerSetSlotPacket $packet) : bool;
+	public function handleContainerSetSlot(ContainerSetSlotPacket $packet): bool;
 
-	public function handleContainerSetData(ContainerSetDataPacket $packet) : bool;
+	public function handleContainerSetData(ContainerSetDataPacket $packet): bool;
 
-	public function handleContainerSetContent(ContainerSetContentPacket $packet) : bool;
+	public function handleContainerSetContent(ContainerSetContentPacket $packet): bool;
 
-	public function handleCraftingData(CraftingDataPacket $packet) : bool;
+	public function handleCraftingData(CraftingDataPacket $packet): bool;
 
-	public function handleCraftingEvent(CraftingEventPacket $packet) : bool;
+	public function handleCraftingEvent(CraftingEventPacket $packet): bool;
 
-	public function handleAdventureSettings(AdventureSettingsPacket $packet) : bool;
+	public function handleAdventureSettings(AdventureSettingsPacket $packet): bool;
 
-	public function handleBlockEntityData(BlockEntityDataPacket $packet) : bool;
+	public function handleBlockEntityData(BlockEntityDataPacket $packet): bool;
 
-	public function handlePlayerInput(PlayerInputPacket $packet) : bool;
+	public function handlePlayerInput(PlayerInputPacket $packet): bool;
 
-	public function handleFullChunkData(FullChunkDataPacket $packet) : bool;
+	public function handleFullChunkData(FullChunkDataPacket $packet): bool;
 
-	public function handleSetCommandsEnabled(SetCommandsEnabledPacket $packet) : bool;
+	public function handleSetCommandsEnabled(SetCommandsEnabledPacket $packet): bool;
 
-	public function handleSetDifficulty(SetDifficultyPacket $packet) : bool;
+	public function handleSetDifficulty(SetDifficultyPacket $packet): bool;
 
-	public function handleChangeDimension(ChangeDimensionPacket $packet) : bool;
+	public function handleChangeDimension(ChangeDimensionPacket $packet): bool;
 
-	public function handleSetPlayerGameType(SetPlayerGameTypePacket $packet) : bool;
+	public function handleSetPlayerGameType(SetPlayerGameTypePacket $packet): bool;
 
-	public function handlePlayerList(PlayerListPacket $packet) : bool;
+	public function handlePlayerList(PlayerListPacket $packet): bool;
 
 	//public function handleTelemetryEvent(EventPacket $packet) : bool; //TODO
 
-	public function handleSpawnExperienceOrb(SpawnExperienceOrbPacket $packet) : bool;
+	public function handleSpawnExperienceOrb(SpawnExperienceOrbPacket $packet): bool;
 
-	public function handleClientboundMapItemData(ClientboundMapItemDataPacket $packet) : bool;
+	public function handleClientboundMapItemData(ClientboundMapItemDataPacket $packet): bool;
 
-	public function handleMapInfoRequest(MapInfoRequestPacket $packet) : bool; //TODO
+	public function handleMapInfoRequest(MapInfoRequestPacket $packet): bool; //TODO
 
-	public function handleRequestChunkRadius(RequestChunkRadiusPacket $packet) : bool;
+	public function handleRequestChunkRadius(RequestChunkRadiusPacket $packet): bool;
 
-	public function handleChunkRadiusUpdated(ChunkRadiusUpdatedPacket $packet) : bool;
+	public function handleChunkRadiusUpdated(ChunkRadiusUpdatedPacket $packet): bool;
 
-	public function handleItemFrameDropItem(ItemFrameDropItemPacket $packet) : bool;
+	public function handleItemFrameDropItem(ItemFrameDropItemPacket $packet): bool;
 
-	public function handleReplaceItemInSlot(ReplaceItemInSlotPacket $packet) : bool;
+	public function handleReplaceItemInSlot(ReplaceItemInSlotPacket $packet): bool;
 
 	//public function handleGameRulesChanged(GameRulesChangedPacket $packet) : bool; //TODO
 
 	//public function handleCamera(CameraPacket $packet) : bool; //edu only :(
 
-	public function handleAddItem(AddItemPacket $packet) : bool;
+	public function handleAddItem(AddItemPacket $packet): bool;
 
-	public function handleBossEvent(BossEventPacket $packet) : bool;
+	public function handleBossEvent(BossEventPacket $packet): bool;
 
-	public function handleShowCredits(ShowCreditsPacket $packet) : bool;
+	public function handleShowCredits(ShowCreditsPacket $packet): bool;
 
-	public function handleAvailableCommands(AvailableCommandsPacket $packet) : bool;
+	public function handleAvailableCommands(AvailableCommandsPacket $packet): bool;
 
-	public function handleCommandStep(CommandStepPacket $packet) : bool;
+	public function handleCommandStep(CommandStepPacket $packet): bool;
 
-	public function handleCommandBlockUpdate(CommandBlockUpdatePacket $packet) : bool;
+	public function handleCommandBlockUpdate(CommandBlockUpdatePacket $packet): bool;
 
-	public function handleUpdateTrade(UpdateTradePacket $packet) : bool;
+	public function handleUpdateTrade(UpdateTradePacket $packet): bool;
 
-	public function handleResourcePackDataInfo(ResourcePackDataInfoPacket $packet) : bool;
+	public function handleResourcePackDataInfo(ResourcePackDataInfoPacket $packet): bool;
 
-	public function handleResourcePackChunkData(ResourcePackChunkDataPacket $packet) : bool;
+	public function handleResourcePackChunkData(ResourcePackChunkDataPacket $packet): bool;
 
-	public function handleResourcePackChunkRequest(ResourcePackChunkRequestPacket $packet) : bool;
+	public function handleResourcePackChunkRequest(ResourcePackChunkRequestPacket $packet): bool;
 
-	public function handleTransfer(TransferPacket $packet) : bool;
+	public function handleTransfer(TransferPacket $packet): bool;
 
-	public function handlePlaySound(PlaySoundPacket $packet) : bool;
+	public function handlePlaySound(PlaySoundPacket $packet): bool;
 
-	public function handleStopSound(StopSoundPacket $packet) : bool;
+	public function handleStopSound(StopSoundPacket $packet): bool;
 
-	public function handleSetTitle(SetTitlePacket $packet) : bool;
+	public function handleSetTitle(SetTitlePacket $packet): bool;
 }

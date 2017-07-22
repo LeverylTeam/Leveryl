@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class AddPaintingPacket extends DataPacket{
+class AddPaintingPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::ADD_PAINTING_PACKET;
 
 	public $entityUniqueId = null; //TODO
@@ -39,7 +40,8 @@ class AddPaintingPacket extends DataPacket{
 	public $direction;
 	public $title;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->entityUniqueId = $this->getEntityUniqueId();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->getBlockPosition($this->x, $this->y, $this->z);
@@ -47,7 +49,8 @@ class AddPaintingPacket extends DataPacket{
 		$this->title = $this->getString();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
@@ -56,7 +59,8 @@ class AddPaintingPacket extends DataPacket{
 		$this->putString($this->title);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleAddPainting($this);
 	}
 

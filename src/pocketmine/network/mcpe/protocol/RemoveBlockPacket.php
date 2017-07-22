@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,23 +28,27 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class RemoveBlockPacket extends DataPacket{
+class RemoveBlockPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::REMOVE_BLOCK_PACKET;
 
 	public $x;
 	public $y;
 	public $z;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->getBlockPosition($this->x, $this->y, $this->z);
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putBlockPosition($this->x, $this->y, $this->z);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleRemoveBlock($this);
 	}
 

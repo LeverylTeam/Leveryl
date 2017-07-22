@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level\generator\biome;
 
@@ -38,7 +38,8 @@ use pocketmine\level\generator\normal\biome\TaigaBiome;
 use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
-abstract class Biome{
+abstract class Biome
+{
 
 	const OCEAN = 0;
 	const PLAINS = 1;
@@ -78,12 +79,14 @@ abstract class Biome{
 	protected $rainfall = 0.5;
 	protected $temperature = 0.5;
 
-	protected static function register($id, Biome $biome){
-		self::$biomes[(int) $id] = $biome;
-		$biome->setId((int) $id);
+	protected static function register($id, Biome $biome)
+	{
+		self::$biomes[(int)$id] = $biome;
+		$biome->setId((int)$id);
 	}
 
-	public static function init(){
+	public static function init()
+	{
 		self::register(self::OCEAN, new OceanBiome());
 		self::register(self::PLAINS, new PlainBiome());
 		self::register(self::DESERT, new DesertBiome());
@@ -106,50 +109,60 @@ abstract class Biome{
 	 *
 	 * @return Biome
 	 */
-	public static function getBiome($id){
+	public static function getBiome($id)
+	{
 		return self::$biomes[$id] ?? self::$biomes[self::OCEAN];
 	}
 
-	public function clearPopulators(){
+	public function clearPopulators()
+	{
 		$this->populators = [];
 	}
 
-	public function addPopulator(Populator $populator){
+	public function addPopulator(Populator $populator)
+	{
 		$this->populators[] = $populator;
 	}
 
-	public function populateChunk(ChunkManager $level, $chunkX, $chunkZ, Random $random){
-		foreach($this->populators as $populator){
+	public function populateChunk(ChunkManager $level, $chunkX, $chunkZ, Random $random)
+	{
+		foreach($this->populators as $populator) {
 			$populator->populate($level, $chunkX, $chunkZ, $random);
 		}
 	}
 
-	public function getPopulators(){
+	public function getPopulators()
+	{
 		return $this->populators;
 	}
 
-	public function setId($id){
-		if(!$this->registered){
+	public function setId($id)
+	{
+		if(!$this->registered) {
 			$this->registered = true;
 			$this->id = $id;
 		}
 	}
 
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 
 	abstract public function getName();
 
-	public function getMinElevation(){
+	public function getMinElevation()
+	{
 		return $this->minElevation;
 	}
 
-	public function getMaxElevation(){
+	public function getMaxElevation()
+	{
 		return $this->maxElevation;
 	}
 
-	public function setElevation($min, $max){
+	public function setElevation($min, $max)
+	{
 		$this->minElevation = $min;
 		$this->maxElevation = $max;
 	}
@@ -157,22 +170,26 @@ abstract class Biome{
 	/**
 	 * @return Block[]
 	 */
-	public function getGroundCover(){
+	public function getGroundCover()
+	{
 		return $this->groundCover;
 	}
 
 	/**
 	 * @param Block[] $covers
 	 */
-	public function setGroundCover(array $covers){
+	public function setGroundCover(array $covers)
+	{
 		$this->groundCover = $covers;
 	}
 
-	public function getTemperature(){
+	public function getTemperature()
+	{
 		return $this->temperature;
 	}
 
-	public function getRainfall(){
+	public function getRainfall()
+	{
 		return $this->rainfall;
 	}
 }

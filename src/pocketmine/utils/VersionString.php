@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\utils;
 
@@ -27,85 +27,97 @@ namespace pocketmine\utils;
 /**
  * Manages PocketMine-MP version strings, and compares them
  */
-class VersionString{
+class VersionString
+{
 	private $major;
 	private $build;
 	private $minor;
 	private $development = false;
 
-	public function __construct($version = \pocketmine\VERSION){
-		if(is_int($version)){
+	public function __construct($version = \pocketmine\VERSION)
+	{
+		if(is_int($version)) {
 			$this->minor = $version & 0x1F;
 			$this->major = ($version >> 5) & 0x0F;
 			$this->generation = ($version >> 9) & 0x0F;
-		}else{
+		} else {
 			$version = preg_split("/([A-Za-z]*)[ _\\-]?([0-9]*)\\.([0-9]*)\\.{0,1}([0-9]*)(dev|)(-[\\0-9]{1,}|)/", $version, -1, PREG_SPLIT_DELIM_CAPTURE);
-			$this->generation = isset($version[2]) ? (int) $version[2] : 0; //0-15
-			$this->major = isset($version[3]) ? (int) $version[3] : 0; //0-15
-			$this->minor = isset($version[4]) ? (int) $version[4] : 0; //0-31
-            $this->development = $version[5] === "dev";
-			if($version[6] !== ""){
-                $this->build = (int) (substr($version[6], 1));
-			}else{
+			$this->generation = isset($version[2]) ? (int)$version[2] : 0; //0-15
+			$this->major = isset($version[3]) ? (int)$version[3] : 0; //0-15
+			$this->minor = isset($version[4]) ? (int)$version[4] : 0; //0-31
+			$this->development = $version[5] === "dev";
+			if($version[6] !== "") {
+				$this->build = (int)(substr($version[6], 1));
+			} else {
 				$this->build = 0;
 			}
 		}
 	}
 
-	public function getNumber(){
-		return (int) (($this->generation << 9) + ($this->major << 5) + $this->minor);
+	public function getNumber()
+	{
+		return (int)(($this->generation << 9) + ($this->major << 5) + $this->minor);
 	}
 
-	public function getGeneration(){
+	public function getGeneration()
+	{
 		return $this->generation;
 	}
 
-	public function getMajor(){
+	public function getMajor()
+	{
 		return $this->major;
 	}
 
-	public function getMinor(){
+	public function getMinor()
+	{
 		return $this->minor;
 	}
 
-	public function getRelease(){
+	public function getRelease()
+	{
 		return $this->generation . "." . $this->major . ($this->minor > 0 ? "." . $this->minor : "");
 	}
 
-	public function getBuild(){
+	public function getBuild()
+	{
 		return $this->build;
 	}
 
-	public function isDev(){
+	public function isDev()
+	{
 		return $this->development === true;
 	}
 
-	public function get($build = false){
+	public function get($build = false)
+	{
 		return $this->getRelease() . ($this->development === true ? "dev" : "") . (($this->build > 0 and $build === true) ? "-" . $this->build : "");
 	}
 
-	public function __toString(){
+	public function __toString()
+	{
 		return $this->get();
 	}
 
-	public function compare($target, $diff = false){
-		if(($target instanceof VersionString) === false){
+	public function compare($target, $diff = false)
+	{
+		if(($target instanceof VersionString) === false) {
 			$target = new VersionString($target);
 		}
 		$number = $this->getNumber();
 		$tNumber = $target->getNumber();
-		if($diff === true){
+		if($diff === true) {
 			return $tNumber - $number;
 		}
-		if($number > $tNumber){
+		if($number > $tNumber) {
 			return -1; //Target is older
-		}elseif($number < $tNumber){
+		} elseif($number < $tNumber) {
 			return 1; //Target is newer
-		}elseif($target->getBuild() > $this->getBuild()){
+		} elseif($target->getBuild() > $this->getBuild()) {
 			return 1;
-		}elseif($target->getBuild() < $this->getBuild()){
+		} elseif($target->getBuild() < $this->getBuild()) {
 			return -1;
-		}else{
+		} else {
 			return 0; //Same version
 		}
 	}

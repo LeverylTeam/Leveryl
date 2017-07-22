@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\command\defaults;
 
@@ -27,9 +27,11 @@ use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 
-class StatusCommand extends VanillaCommand{
+class StatusCommand extends VanillaCommand
+{
 
-	public function __construct($name){
+	public function __construct($name)
+	{
 		parent::__construct(
 			$name,
 			"%pocketmine.command.status.description",
@@ -38,8 +40,9 @@ class StatusCommand extends VanillaCommand{
 		$this->setPermission("pocketmine.command.status");
 	}
 
-	public function execute(CommandSender $sender, $currentAlias, array $args){
-		if(!$this->testPermission($sender)){
+	public function execute(CommandSender $sender, $currentAlias, array $args)
+	{
+		if(!$this->testPermission($sender)) {
 			return true;
 		}
 
@@ -56,11 +59,11 @@ class StatusCommand extends VanillaCommand{
 		$hours = null;
 		$days = null;
 
-		if($time >= 60){
+		if($time >= 60) {
 			$minutes = floor(($time % 3600) / 60);
-			if($time >= 3600){
+			if($time >= 3600) {
 				$hours = floor(($time % (3600 * 24)) / 3600);
-				if($time >= 3600 * 24){
+				if($time >= 3600 * 24) {
 					$days = floor($time / (3600 * 24));
 				}
 			}
@@ -70,16 +73,16 @@ class StatusCommand extends VanillaCommand{
 				($hours !== null ?
 					($days !== null ?
 						"$days days "
-					: "") . "$hours hours "
+						: "") . "$hours hours "
 					: "") . "$minutes minutes "
-			: "") . "$seconds seconds";
+				: "") . "$seconds seconds";
 
 		$sender->sendMessage(TextFormat::GOLD . "Uptime: " . TextFormat::RED . $uptime);
 
 		$tpsColor = TextFormat::GREEN;
-		if($server->getTicksPerSecond() < 17){
+		if($server->getTicksPerSecond() < 17) {
 			$tpsColor = TextFormat::GOLD;
-		}elseif($server->getTicksPerSecond() < 12){
+		} elseif($server->getTicksPerSecond() < 12) {
 			$tpsColor = TextFormat::RED;
 		}
 
@@ -97,11 +100,11 @@ class StatusCommand extends VanillaCommand{
 		$sender->sendMessage(TextFormat::GOLD . "Heap memory: " . TextFormat::RED . number_format(round(($rUsage[0] / 1024) / 1024, 2)) . " MB.");
 		$sender->sendMessage(TextFormat::GOLD . "Maximum memory (system): " . TextFormat::RED . number_format(round(($mUsage[2] / 1024) / 1024, 2)) . " MB.");
 
-		if($server->getProperty("memory.global-limit") > 0){
+		if($server->getProperty("memory.global-limit") > 0) {
 			$sender->sendMessage(TextFormat::GOLD . "Maximum memory (manager): " . TextFormat::RED . number_format(round($server->getProperty("memory.global-limit"), 2)) . " MB.");
 		}
 
-		foreach($server->getLevels() as $level){
+		foreach($server->getLevels() as $level) {
 			$levelName = $level->getFolderName() !== $level->getName() ? " (" . $level->getName() . ")" : "";
 			$timeColor = ($level->getTickRate() > 1 or $level->getTickRateTime() > 40) ? TextFormat::RED : TextFormat::YELLOW;
 			$tickRate = $level->getTickRate() > 1 ? " (tick rate " . $level->getTickRate() . ")" : "";

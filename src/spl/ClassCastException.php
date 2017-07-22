@@ -15,6 +15,7 @@
  * GNU General Public License for more details.
 */
 
-class ClassCastException extends InvalidArgumentException{
+class ClassCastException extends InvalidArgumentException
+{
 
 }

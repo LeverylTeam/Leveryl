@@ -19,19 +19,22 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /**
  * Methods for working with binary strings
  */
+
 namespace pocketmine\utils;
 
 
-class Binary{
+class Binary
+{
 	const BIG_ENDIAN = 0x00;
 	const LITTLE_ENDIAN = 0x01;
 
-	private static function checkLength($str, $expect){
+	private static function checkLength($str, $expect)
+	{
 		assert(($len = strlen($str)) === $expect, "Expected $expect bytes, got $len");
 	}
 
@@ -41,7 +44,8 @@ class Binary{
 	 * @param string $b
 	 * @return bool
 	 */
-	public static function readBool(string $b) : bool{
+	public static function readBool(string $b): bool
+	{
 		return $b !== "\x00";
 	}
 
@@ -51,7 +55,8 @@ class Binary{
 	 * @param bool $b
 	 * @return string
 	 */
-	public static function writeBool(bool $b) : string{
+	public static function writeBool(bool $b): string
+	{
 		return $b ? "\x01" : "\x00";
 	}
 
@@ -61,8 +66,10 @@ class Binary{
 	 * @param string $c
 	 * @return int
 	 */
-	public static function readByte(string $c) : int{
+	public static function readByte(string $c): int
+	{
 		self::checkLength($c, 1);
+
 		return ord($c{0});
 	}
 
@@ -72,7 +79,8 @@ class Binary{
 	 * @param string $c
 	 * @return int
 	 */
-	public static function readSignedByte(string $c) : int{
+	public static function readSignedByte(string $c): int
+	{
 		return ord($c{0}) << 56 >> 56;
 	}
 
@@ -82,7 +90,8 @@ class Binary{
 	 * @param $c
 	 * @return string
 	 */
-	public static function writeByte($c) : string{
+	public static function writeByte($c): string
+	{
 		return chr($c);
 	}
 
@@ -92,8 +101,10 @@ class Binary{
 	 * @param string $str
 	 * @return int
 	 */
-	public static function readShort(string $str) : int{
+	public static function readShort(string $str): int
+	{
 		self::checkLength($str, 2);
+
 		return unpack("n", $str)[1];
 	}
 
@@ -104,8 +115,10 @@ class Binary{
 	 *
 	 * @return int
 	 */
-	public static function readSignedShort(string $str) : int{
+	public static function readSignedShort(string $str): int
+	{
 		self::checkLength($str, 2);
+
 		return unpack("n", $str)[1] << 48 >> 48;
 	}
 
@@ -116,7 +129,8 @@ class Binary{
 	 *
 	 * @return string
 	 */
-	public static function writeShort($value) : string{
+	public static function writeShort($value): string
+	{
 		return pack("n", $value);
 	}
 
@@ -127,20 +141,24 @@ class Binary{
 	 *
 	 * @return int
 	 */
-	public static function readLShort(string $str) : int{
+	public static function readLShort(string $str): int
+	{
 		self::checkLength($str, 2);
+
 		return unpack("v", $str)[1];
 	}
 
 	/**
 	 * Reads a 16-bit signed little-endian number
 	 *
-	 * @param	  $str
+	 * @param      $str
 	 *
 	 * @return int
 	 */
-	public static function readSignedLShort(string $str) : int{
+	public static function readSignedLShort(string $str): int
+	{
 		self::checkLength($str, 2);
+
 		return unpack("v", $str)[1] << 48 >> 48;
 	}
 
@@ -151,7 +169,8 @@ class Binary{
 	 *
 	 * @return string
 	 */
-	public static function writeLShort($value) : string{
+	public static function writeLShort($value): string
+	{
 		return pack("v", $value);
 	}
 
@@ -161,8 +180,10 @@ class Binary{
 	 * @param string $str
 	 * @return int
 	 */
-	public static function readTriad(string $str) : int{
+	public static function readTriad(string $str): int
+	{
 		self::checkLength($str, 3);
+
 		return unpack("N", "\x00" . $str)[1];
 	}
 
@@ -172,7 +193,8 @@ class Binary{
 	 * @param $value
 	 * @return string
 	 */
-	public static function writeTriad($value) : string{
+	public static function writeTriad($value): string
+	{
 		return substr(pack("N", $value), 1);
 	}
 
@@ -182,8 +204,10 @@ class Binary{
 	 * @param string $str
 	 * @return int
 	 */
-	public static function readLTriad(string $str) : int{
+	public static function readLTriad(string $str): int
+	{
 		self::checkLength($str, 3);
+
 		return unpack("V", $str . "\x00")[1];
 	}
 
@@ -193,7 +217,8 @@ class Binary{
 	 * @param $value
 	 * @return string
 	 */
-	public static function writeLTriad($value) : string{
+	public static function writeLTriad($value): string
+	{
 		return substr(pack("V", $value), 0, -1);
 	}
 
@@ -203,8 +228,10 @@ class Binary{
 	 * @param string $str
 	 * @return int
 	 */
-	public static function readInt(string $str) : int{
+	public static function readInt(string $str): int
+	{
 		self::checkLength($str, 4);
+
 		return unpack("N", $str)[1] << 32 >> 32;
 	}
 
@@ -214,7 +241,8 @@ class Binary{
 	 * @param $value
 	 * @return string
 	 */
-	public static function writeInt($value) : string{
+	public static function writeInt($value): string
+	{
 		return pack("N", $value);
 	}
 
@@ -224,8 +252,10 @@ class Binary{
 	 * @param string $str
 	 * @return int
 	 */
-	public static function readLInt(string $str) : int{
+	public static function readLInt(string $str): int
+	{
 		self::checkLength($str, 4);
+
 		return unpack("V", $str)[1] << 32 >> 32;
 	}
 
@@ -235,7 +265,8 @@ class Binary{
 	 * @param $value
 	 * @return string
 	 */
-	public static function writeLInt($value) : string{
+	public static function writeLInt($value): string
+	{
 		return pack("V", $value);
 	}
 
@@ -245,8 +276,10 @@ class Binary{
 	 * @param string $str
 	 * @return float
 	 */
-	public static function readFloat(string $str) : float{
+	public static function readFloat(string $str): float
+	{
 		self::checkLength($str, 4);
+
 		return (ENDIANNESS === self::BIG_ENDIAN ? unpack("f", $str)[1] : unpack("f", strrev($str))[1]);
 	}
 
@@ -258,7 +291,8 @@ class Binary{
 	 *
 	 * @return float
 	 */
-	public static function readRoundedFloat(string $str, $accuracy){
+	public static function readRoundedFloat(string $str, $accuracy)
+	{
 		return round(self::readFloat($str), $accuracy);
 	}
 
@@ -268,7 +302,8 @@ class Binary{
 	 * @param float $value
 	 * @return string
 	 */
-	public static function writeFloat(float $value) : string{
+	public static function writeFloat(float $value): string
+	{
 		return ENDIANNESS === self::BIG_ENDIAN ? pack("f", $value) : strrev(pack("f", $value));
 	}
 
@@ -278,8 +313,10 @@ class Binary{
 	 * @param string $str
 	 * @return float
 	 */
-	public static function readLFloat(string $str) : float{
+	public static function readLFloat(string $str): float
+	{
 		self::checkLength($str, 4);
+
 		return (ENDIANNESS === self::BIG_ENDIAN ? unpack("f", strrev($str))[1] : unpack("f", $str)[1]);
 	}
 
@@ -291,7 +328,8 @@ class Binary{
 	 *
 	 * @return float
 	 */
-	public static function readRoundedLFloat(string $str, $accuracy){
+	public static function readRoundedLFloat(string $str, $accuracy)
+	{
 		return round(self::readLFloat($str), $accuracy);
 	}
 
@@ -301,7 +339,8 @@ class Binary{
 	 * @param float $value
 	 * @return string
 	 */
-	public static function writeLFloat(float $value) : string{
+	public static function writeLFloat(float $value): string
+	{
 		return ENDIANNESS === self::BIG_ENDIAN ? strrev(pack("f", $value)) : pack("f", $value);
 	}
 
@@ -311,7 +350,8 @@ class Binary{
 	 * @param float $value
 	 * @return string
 	 */
-	public static function printFloat(float $value){
+	public static function printFloat(float $value)
+	{
 		return preg_replace("/(\\.\\d+?)0+$/", "$1", sprintf("%F", $value));
 	}
 
@@ -321,8 +361,10 @@ class Binary{
 	 * @param string $str
 	 * @return float
 	 */
-	public static function readDouble(string $str) : float{
+	public static function readDouble(string $str): float
+	{
 		self::checkLength($str, 8);
+
 		return ENDIANNESS === self::BIG_ENDIAN ? unpack("d", $str)[1] : unpack("d", strrev($str))[1];
 	}
 
@@ -332,7 +374,8 @@ class Binary{
 	 * @param float $value
 	 * @return string
 	 */
-	public static function writeDouble(float $value) : string{
+	public static function writeDouble(float $value): string
+	{
 		return ENDIANNESS === self::BIG_ENDIAN ? pack("d", $value) : strrev(pack("d", $value));
 	}
 
@@ -342,8 +385,10 @@ class Binary{
 	 * @param string $str
 	 * @return float
 	 */
-	public static function readLDouble(string $str) : float{
+	public static function readLDouble(string $str): float
+	{
 		self::checkLength($str, 8);
+
 		return ENDIANNESS === self::BIG_ENDIAN ? unpack("d", strrev($str))[1] : unpack("d", $str)[1];
 	}
 
@@ -352,7 +397,8 @@ class Binary{
 	 * @param float $value
 	 * @return string
 	 */
-	public static function writeLDouble(float $value) : string{
+	public static function writeLDouble(float $value): string
+	{
 		return ENDIANNESS === self::BIG_ENDIAN ? strrev(pack("d", $value)) : pack("d", $value);
 	}
 
@@ -363,9 +409,11 @@ class Binary{
 	 * @param string $x
 	 * @return int|string
 	 */
-	public static function readLong(string $x){
+	public static function readLong(string $x)
+	{
 		self::checkLength($x, 8);
 		$int = unpack("N*", $x);
+
 		return ($int[1] << 32) | $int[2];
 	}
 
@@ -375,7 +423,8 @@ class Binary{
 	 * @param int|string $value
 	 * @return string
 	 */
-	public static function writeLong($value) : string{
+	public static function writeLong($value): string
+	{
 		return pack("NN", $value >> 32, $value & 0xFFFFFFFF);
 	}
 
@@ -385,7 +434,8 @@ class Binary{
 	 * @param string $str
 	 * @return int|string
 	 */
-	public static function readLLong(string $str){
+	public static function readLLong(string $str)
+	{
 		return self::readLong(strrev($str));
 	}
 
@@ -395,7 +445,8 @@ class Binary{
 	 * @param int|string $value
 	 * @return string
 	 */
-	public static function writeLLong($value) : string{
+	public static function writeLLong($value): string
+	{
 		return strrev(self::writeLong($value));
 	}
 
@@ -404,13 +455,15 @@ class Binary{
 	 * Reads a 32-bit zigzag-encoded variable-length integer.
 	 *
 	 * @param string $buffer
-	 * @param int	&$offset
+	 * @param int &$offset
 	 *
 	 * @return int
 	 */
-	public static function readVarInt(string $buffer, &$offset) : int{
+	public static function readVarInt(string $buffer, &$offset): int
+	{
 		$raw = self::readUnsignedVarInt($buffer, $offset);
 		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
+
 		return $temp ^ ($raw & (1 << 63));
 	}
 
@@ -418,21 +471,22 @@ class Binary{
 	 * Reads a 32-bit variable-length unsigned integer.
 	 *
 	 * @param string $buffer
-	 * @param int	&$offset
+	 * @param int &$offset
 	 *
 	 * @return int
 	 *
 	 * @throws \InvalidArgumentException if the var-did not end after 5 bytes
 	 */
-	public static function readUnsignedVarInt(string $buffer, &$offset) : int{
+	public static function readUnsignedVarInt(string $buffer, &$offset): int
+	{
 		$value = 0;
-		for($i = 0; $i <= 35; $i += 7){
+		for($i = 0; $i <= 35; $i += 7) {
 			$b = ord($buffer{$offset++});
 			$value |= (($b & 0x7f) << $i);
 
-			if(($b & 0x80) === 0){
+			if(($b & 0x80) === 0) {
 				return $value;
-			}elseif(!isset($buffer{$offset})){
+			} elseif(!isset($buffer{$offset})) {
 				throw new \UnexpectedValueException("Expected more bytes, none left to read");
 			}
 		}
@@ -446,8 +500,10 @@ class Binary{
 	 * @param $v
 	 * @return string
 	 */
-	public static function writeVarInt($v) : string{
+	public static function writeVarInt($v): string
+	{
 		$v = ($v << 32 >> 32);
+
 		return self::writeUnsignedVarInt(($v << 1) ^ ($v >> 31));
 	}
 
@@ -457,14 +513,16 @@ class Binary{
 	 * @param $value
 	 * @return string up to 5 bytes
 	 */
-	public static function writeUnsignedVarInt($value) : string{
+	public static function writeUnsignedVarInt($value): string
+	{
 		$buf = "";
 		$value &= 0xffffffff;
-		for($i = 0; $i < 5; ++$i){
-			if(($value >> 7) !== 0){
+		for($i = 0; $i < 5; ++$i) {
+			if(($value >> 7) !== 0) {
 				$buf .= chr($value | 0x80);
-			}else{
+			} else {
 				$buf .= chr($value & 0x7f);
+
 				return $buf;
 			}
 
@@ -479,13 +537,15 @@ class Binary{
 	 * Reads a 64-bit zigzag-encoded variable-length integer.
 	 *
 	 * @param string $buffer
-	 * @param int	&$offset
+	 * @param int &$offset
 	 *
 	 * @return int
 	 */
-	public static function readVarLong(string $buffer, &$offset) : int{
+	public static function readVarLong(string $buffer, &$offset): int
+	{
 		$raw = self::readUnsignedVarLong($buffer, $offset);
 		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
+
 		return $temp ^ ($raw & (1 << 63));
 	}
 
@@ -493,19 +553,20 @@ class Binary{
 	 * Reads a 64-bit unsigned variable-length integer.
 	 *
 	 * @param string $buffer
-	 * @param int	&$offset
+	 * @param int &$offset
 	 *
 	 * @return int
 	 */
-	public static function readUnsignedVarLong(string $buffer, &$offset) : int{
+	public static function readUnsignedVarLong(string $buffer, &$offset): int
+	{
 		$value = 0;
-		for($i = 0; $i <= 63; $i += 7){
+		for($i = 0; $i <= 63; $i += 7) {
 			$b = ord($buffer{$offset++});
 			$value |= (($b & 0x7f) << $i);
 
-			if(($b & 0x80) === 0){
+			if(($b & 0x80) === 0) {
 				return $value;
-			}elseif(!isset($buffer{$offset})){
+			} elseif(!isset($buffer{$offset})) {
 				throw new \UnexpectedValueException("Expected more bytes, none left to read");
 			}
 		}
@@ -519,7 +580,8 @@ class Binary{
 	 * @param $v
 	 * @return string
 	 */
-	public static function writeVarLong($v) : string{
+	public static function writeVarLong($v): string
+	{
 		return self::writeUnsignedVarLong(($v << 1) ^ ($v >> 63));
 	}
 
@@ -529,13 +591,15 @@ class Binary{
 	 *
 	 * @return string
 	 */
-	public static function writeUnsignedVarLong($value) : string{
+	public static function writeUnsignedVarLong($value): string
+	{
 		$buf = "";
-		for($i = 0; $i < 10; ++$i){
-			if(($value >> 7) !== 0){
+		for($i = 0; $i < 10; ++$i) {
+			if(($value >> 7) !== 0) {
 				$buf .= chr($value | 0x80); //Let chr() take the last byte of this, it's faster than adding another & 0x7f.
-			}else{
+			} else {
 				$buf .= chr($value & 0x7f);
+
 				return $buf;
 			}
 

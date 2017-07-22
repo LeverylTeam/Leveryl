@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\tile;
 
@@ -29,10 +29,12 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\BlockEntityDataPacket;
 use pocketmine\Player;
 
-abstract class Spawnable extends Tile{
+abstract class Spawnable extends Tile
+{
 
-	public function spawnTo(Player $player){
-		if($this->closed){
+	public function spawnTo(Player $player)
+	{
+		if($this->closed) {
 			return false;
 		}
 
@@ -48,27 +50,30 @@ abstract class Spawnable extends Tile{
 		return true;
 	}
 
-	public function __construct(Level $level, CompoundTag $nbt){
+	public function __construct(Level $level, CompoundTag $nbt)
+	{
 		parent::__construct($level, $nbt);
 		$this->spawnToAll();
 	}
 
-	public function spawnToAll(){
-		if($this->closed){
+	public function spawnToAll()
+	{
+		if($this->closed) {
 			return;
 		}
 
-		foreach($this->getLevel()->getChunkPlayers($this->chunk->getX(), $this->chunk->getZ()) as $player){
-			if($player->spawned === true){
+		foreach($this->getLevel()->getChunkPlayers($this->chunk->getX(), $this->chunk->getZ()) as $player) {
+			if($player->spawned === true) {
 				$this->spawnTo($player);
 			}
 		}
 	}
 
-	protected function onChanged(){
+	protected function onChanged()
+	{
 		$this->spawnToAll();
 
-		if($this->chunk !== null){
+		if($this->chunk !== null) {
 			$this->chunk->setChanged();
 			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
 		}
@@ -84,11 +89,12 @@ abstract class Spawnable extends Tile{
 	 * for example when writing on a sign.
 	 *
 	 * @param CompoundTag $nbt
-	 * @param Player	  $player
+	 * @param Player $player
 	 *
 	 * @return bool indication of success, will respawn the tile to the player if false.
 	 */
-	public function updateCompoundTag(CompoundTag $nbt, Player $player) : bool{
+	public function updateCompoundTag(CompoundTag $nbt, Player $player): bool
+	{
 		return false;
 	}
 }

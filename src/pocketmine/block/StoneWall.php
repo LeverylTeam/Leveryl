@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -27,37 +27,44 @@ use pocketmine\item\Tool;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
 
-class StoneWall extends Transparent{
+class StoneWall extends Transparent
+{
 	const NONE_MOSSY_WALL = 0;
 	const MOSSY_WALL = 1;
 
 	protected $id = self::STONE_WALL;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function isSolid(){
+	public function isSolid()
+	{
 		return false;
 	}
 
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 2;
 	}
 
-	public function getName(){
-		if($this->meta === 0x01){
+	public function getName()
+	{
+		if($this->meta === 0x01) {
 			return "Mossy Cobblestone Wall";
 		}
 
 		return "Cobblestone Wall";
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox()
+	{
 
 		$north = $this->canConnect($this->getSide(Vector3::SIDE_NORTH));
 		$south = $this->canConnect($this->getSide(Vector3::SIDE_SOUTH));
@@ -69,10 +76,10 @@ class StoneWall extends Transparent{
 		$w = $west ? 0 : 0.25;
 		$e = $east ? 1 : 0.75;
 
-		if($north and $south and !$west and !$east){
+		if($north and $south and !$west and !$east) {
 			$w = 0.3125;
 			$e = 0.6875;
-		}elseif(!$north and !$south and $west and $east){
+		} elseif(!$north and !$south and $west and $east) {
 			$n = 0.3125;
 			$s = 0.6875;
 		}
@@ -87,7 +94,8 @@ class StoneWall extends Transparent{
 		);
 	}
 
-	public function canConnect(Block $block){
+	public function canConnect(Block $block)
+	{
 		return ($block->getId() !== self::COBBLE_WALL and $block->getId() !== self::FENCE_GATE) ? $block->isSolid() and !$block->isTransparent() : true;
 	}
 

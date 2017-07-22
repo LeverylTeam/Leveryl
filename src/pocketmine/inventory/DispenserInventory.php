@@ -23,15 +23,18 @@ namespace pocketmine\inventory;
 
 use pocketmine\tile\Dispenser;
 
-class DispenserInventory extends ContainerInventory {
-	public function __construct(Dispenser $tile) {
+class DispenserInventory extends ContainerInventory
+{
+	public function __construct(Dispenser $tile)
+	{
 		parent::__construct($tile, InventoryType::get(InventoryType::DISPENSER));
 	}
 
 	/**
 	 * @return InventoryHolder|Dispenser
 	 */
-	public function getHolder() {
+	public function getHolder()
+	{
 		return $this->holder;
 	}
 }

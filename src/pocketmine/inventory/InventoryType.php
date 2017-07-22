@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\inventory;
 
@@ -28,7 +28,8 @@ use pocketmine\network\mcpe\protocol\types\WindowTypes;
 /**
  * Saves all the information regarding default inventory sizes and types
  */
-class InventoryType{
+class InventoryType
+{
 
 	//NOTE: Do not confuse these with the network IDs.
 	const CHEST = 0;
@@ -58,41 +59,44 @@ class InventoryType{
 	 *
 	 * @return InventoryType
 	 */
-	public static function get($index){
+	public static function get($index)
+	{
 		return isset(static::$default[$index]) ? static::$default[$index] : null;
 	}
 
-	public static function init(){
-		if(count(static::$default) > 0){
+	public static function init()
+	{
+		if(count(static::$default) > 0) {
 			return;
 		}
 
 		//TODO: move network stuff out of here
 		//TODO: move inventory data to json
 		static::$default = [
-			static::CHEST =>		 new InventoryType(27, "Chest", WindowTypes::CONTAINER),
-			static::DOUBLE_CHEST =>  new InventoryType(27 + 27, "Double Chest", WindowTypes::CONTAINER),
-			static::PLAYER =>		new InventoryType(36 + 4, "Player", WindowTypes::INVENTORY), //36 CONTAINER, 4 ARMOR
-			static::CRAFTING =>	  new InventoryType(5, "Crafting", WindowTypes::INVENTORY), //yes, the use of INVENTORY is intended! 4 CRAFTING slots, 1 RESULT
-			static::WORKBENCH =>	 new InventoryType(10, "Crafting", WindowTypes::WORKBENCH), //9 CRAFTING slots, 1 RESULT
-			static::FURNACE =>	   new InventoryType(3, "Furnace", WindowTypes::FURNACE), //2 INPUT, 1 OUTPUT
+			static::CHEST         => new InventoryType(27, "Chest", WindowTypes::CONTAINER),
+			static::DOUBLE_CHEST  => new InventoryType(27 + 27, "Double Chest", WindowTypes::CONTAINER),
+			static::PLAYER        => new InventoryType(36 + 4, "Player", WindowTypes::INVENTORY), //36 CONTAINER, 4 ARMOR
+			static::CRAFTING      => new InventoryType(5, "Crafting", WindowTypes::INVENTORY), //yes, the use of INVENTORY is intended! 4 CRAFTING slots, 1 RESULT
+			static::WORKBENCH     => new InventoryType(10, "Crafting", WindowTypes::WORKBENCH), //9 CRAFTING slots, 1 RESULT
+			static::FURNACE       => new InventoryType(3, "Furnace", WindowTypes::FURNACE), //2 INPUT, 1 OUTPUT
 			static::ENCHANT_TABLE => new InventoryType(2, "Enchant", WindowTypes::ENCHANTMENT), //1 INPUT/OUTPUT, 1 LAPIS
 			static::BREWING_STAND => new InventoryType(4, "Brewing", WindowTypes::BREWING_STAND), //1 INPUT, 3 POTION
-			static::ANVIL =>		 new InventoryType(3, "Anvil", WindowTypes::ANVIL), //2 INPUT, 1 OUTP
-			static::DISPENSER =>	 new InventoryType(9, "Dispenser", 6), //9 CONTAINER
-			static::DROPPER =>	   new InventoryType(9, "Dropper", 7), //9 CONTAINER
-			static::HOPPER =>		new InventoryType(5, "Hopper", 8), //5 CONTAINER
-			static::ENDER_CHEST =>   new InventoryType(27, "Ender Chest", 0),
-			static::BEACON =>		new InventoryType(0, "Beacon", 13)
+			static::ANVIL         => new InventoryType(3, "Anvil", WindowTypes::ANVIL), //2 INPUT, 1 OUTP
+			static::DISPENSER     => new InventoryType(9, "Dispenser", 6), //9 CONTAINER
+			static::DROPPER       => new InventoryType(9, "Dropper", 7), //9 CONTAINER
+			static::HOPPER        => new InventoryType(5, "Hopper", 8), //5 CONTAINER
+			static::ENDER_CHEST   => new InventoryType(27, "Ender Chest", 0),
+			static::BEACON        => new InventoryType(0, "Beacon", 13),
 		];
 	}
 
 	/**
-	 * @param int	$defaultSize
+	 * @param int $defaultSize
 	 * @param string $defaultTitle
-	 * @param int	$typeId
+	 * @param int $typeId
 	 */
-	private function __construct($defaultSize, $defaultTitle, $typeId = 0){
+	private function __construct($defaultSize, $defaultTitle, $typeId = 0)
+	{
 		$this->size = $defaultSize;
 		$this->title = $defaultTitle;
 		$this->typeId = $typeId;
@@ -101,21 +105,24 @@ class InventoryType{
 	/**
 	 * @return int
 	 */
-	public function getDefaultSize(){
+	public function getDefaultSize()
+	{
 		return $this->size;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getDefaultTitle(){
+	public function getDefaultTitle()
+	{
 		return $this->title;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getNetworkType(){
+	public function getNetworkType()
+	{
 		return $this->typeId;
 	}
 }

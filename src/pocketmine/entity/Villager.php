@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\entity;
 
@@ -27,7 +27,8 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Villager extends Creature implements NPC, Ageable{
+class Villager extends Creature implements NPC, Ageable
+{
 	const PROFESSION_FARMER = 0;
 	const PROFESSION_LIBRARIAN = 1;
 	const PROFESSION_PRIEST = 2;
@@ -41,18 +42,21 @@ class Villager extends Creature implements NPC, Ageable{
 	public $length = 0.6;
 	public $height = 1.8;
 
-	public function getName(){
+	public function getName()
+	{
 		return "Villager";
 	}
 
-	protected function initEntity(){
+	protected function initEntity()
+	{
 		parent::initEntity();
-		if(!isset($this->namedtag->Profession)){
+		if(!isset($this->namedtag->Profession)) {
 			$this->setProfession(self::PROFESSION_GENERIC);
 		}
 	}
 
-	public function spawnTo(Player $player){
+	public function spawnTo(Player $player)
+	{
 		$pk = new AddEntityPacket();
 		$pk->entityRuntimeId = $this->getId();
 		$pk->type = Villager::NETWORK_ID;
@@ -75,15 +79,18 @@ class Villager extends Creature implements NPC, Ageable{
 	 *
 	 * @param $profession
 	 */
-	public function setProfession($profession){
+	public function setProfession($profession)
+	{
 		$this->namedtag->Profession = new IntTag("Profession", $profession);
 	}
 
-	public function getProfession(){
+	public function getProfession()
+	{
 		return $this->namedtag["Profession"];
 	}
 
-	public function isBaby(){
+	public function isBaby()
+	{
 		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_BABY);
 	}
 }

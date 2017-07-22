@@ -6,14 +6,16 @@
  * WARNING: Do not include this file
  *
  */
-class WeakRef{
+class WeakRef
+{
 
 	/**
 	 * Constructs a new weak reference.
 	 *
 	 * @param object $object
 	 */
-	public function __construct($object = null){
+	public function __construct($object = null)
+	{
 	}
 
 	/**
@@ -22,7 +24,8 @@ class WeakRef{
 	 *
 	 * @return bool
 	 */
-	public function acquire(){
+	public function acquire()
+	{
 	}
 
 	/**
@@ -30,7 +33,8 @@ class WeakRef{
 	 *
 	 * @return object
 	 */
-	public function get(){
+	public function get()
+	{
 	}
 
 	/**
@@ -39,7 +43,8 @@ class WeakRef{
 	 *
 	 * @return bool
 	 */
-	public function release(){
+	public function release()
+	{
 	}
 
 	/**
@@ -47,16 +52,19 @@ class WeakRef{
 	 *
 	 * @return bool
 	 */
-	public function valid(){
+	public function valid()
+	{
 	}
 }
 
-class WeakMap implements Countable, ArrayAccess, Iterator{
+class WeakMap implements Countable, ArrayAccess, Iterator
+{
 
 	/**
 	 * Constructs a new map
 	 */
-	public function __construct(){
+	public function __construct()
+	{
 	}
 
 	/**
@@ -64,7 +72,8 @@ class WeakMap implements Countable, ArrayAccess, Iterator{
 	 *
 	 * @return int
 	 */
-	public function count(){
+	public function count()
+	{
 	}
 
 	/**
@@ -72,7 +81,8 @@ class WeakMap implements Countable, ArrayAccess, Iterator{
 	 *
 	 * @return mixed
 	 */
-	public function current(){
+	public function current()
+	{
 	}
 
 	/**
@@ -80,13 +90,15 @@ class WeakMap implements Countable, ArrayAccess, Iterator{
 	 *
 	 * @return mixed
 	 */
-	public function key(){
+	public function key()
+	{
 	}
 
 	/**
 	 * Advances to the next map element.
 	 */
-	public function next(){
+	public function next()
+	{
 	}
 
 	/**
@@ -96,7 +108,8 @@ class WeakMap implements Countable, ArrayAccess, Iterator{
 	 *
 	 * @return bool
 	 */
-	public function offsetExists($object){
+	public function offsetExists($object)
+	{
 	}
 
 	/**
@@ -106,7 +119,8 @@ class WeakMap implements Countable, ArrayAccess, Iterator{
 	 *
 	 * @return mixed
 	 */
-	public function offsetGet($object){
+	public function offsetGet($object)
+	{
 	}
 
 	/**
@@ -114,9 +128,10 @@ class WeakMap implements Countable, ArrayAccess, Iterator{
 	 * If the key already existed in the map, the old value is replaced with the new.
 	 *
 	 * @param object $object
-	 * @param mixed  $value
+	 * @param mixed $value
 	 */
-	public function offsetSet($object, $value){
+	public function offsetSet($object, $value)
+	{
 	}
 
 	/**
@@ -124,13 +139,15 @@ class WeakMap implements Countable, ArrayAccess, Iterator{
 	 *
 	 * @param object $object
 	 */
-	public function offsetUnset($object){
+	public function offsetUnset($object)
+	{
 	}
 
 	/**
 	 * Rewinds the iterator to the beginning of the map.
 	 */
-	public function rewind(){
+	public function rewind()
+	{
 	}
 
 	/**
@@ -138,6 +155,7 @@ class WeakMap implements Countable, ArrayAccess, Iterator{
 	 *
 	 * @return bool
 	 */
-	public function valid(){
+	public function valid()
+	{
 	}
 }

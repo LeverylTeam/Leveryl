@@ -2,11 +2,11 @@
 
 /**
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,19 +19,21 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\entity;
 
 use pocketmine\entity\Item;
 
-class ItemSpawnEvent extends EntityEvent{
+class ItemSpawnEvent extends EntityEvent
+{
 	public static $handlerList = null;
 
 	/**
 	 * @param Item $item
 	 */
-	public function __construct(Item $item){
+	public function __construct(Item $item)
+	{
 		$this->entity = $item;
 
 	}
@@ -39,7 +41,8 @@ class ItemSpawnEvent extends EntityEvent{
 	/**
 	 * @return Item
 	 */
-	public function getEntity(){
+	public function getEntity()
+	{
 		return $this->entity;
 	}
 

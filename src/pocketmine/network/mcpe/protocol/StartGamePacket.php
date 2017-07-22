@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class StartGamePacket extends DataPacket{
+class StartGamePacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::START_GAME_PACKET;
 
 	public $entityUniqueId;
@@ -60,7 +61,8 @@ class StartGamePacket extends DataPacket{
 	public $unknownBool = false;
 	public $currentTick = 0;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->entityUniqueId = $this->getEntityUniqueId();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->playerGamemode = $this->getVarInt();
@@ -80,7 +82,8 @@ class StartGamePacket extends DataPacket{
 		$this->lightningLevel = $this->getLFloat();
 		$this->commandsEnabled = $this->getBool();
 		$this->isTexturePacksRequired = $this->getBool();
-		/*$gameRulesCount = */$this->getUnsignedVarInt(); //TODO
+		/*$gameRulesCount = */
+		$this->getUnsignedVarInt(); //TODO
 		$this->levelId = $this->getString();
 		$this->worldName = $this->getString();
 		$this->premiumWorldTemplateId = $this->getString();
@@ -89,7 +92,8 @@ class StartGamePacket extends DataPacket{
 
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putEntityUniqueId($this->entityUniqueId);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
@@ -118,7 +122,8 @@ class StartGamePacket extends DataPacket{
 		$this->putLLong($this->currentTick);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleStartGame($this);
 	}
 

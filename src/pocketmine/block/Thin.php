@@ -19,19 +19,22 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
 use pocketmine\math\AxisAlignedBB;
 
-abstract class Thin extends Transparent{
+abstract class Thin extends Transparent
+{
 
-	public function isSolid(){
+	public function isSolid()
+	{
 		return false;
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox()
+	{
 
 		$f = 0.4375;
 		$f1 = 0.5625;
@@ -43,24 +46,24 @@ abstract class Thin extends Transparent{
 		$flag2 = $this->canConnect($this->getSide(4));
 		$flag3 = $this->canConnect($this->getSide(5));
 
-		if((!$flag2 or !$flag3) and ($flag2 or $flag3 or $flag or $flag1)){
-			if($flag2 and !$flag3){
+		if((!$flag2 or !$flag3) and ($flag2 or $flag3 or $flag or $flag1)) {
+			if($flag2 and !$flag3) {
 				$f = 0;
-			}elseif(!$flag2 and $flag3){
+			} elseif(!$flag2 and $flag3) {
 				$f1 = 1;
 			}
-		}else{
+		} else {
 			$f = 0;
 			$f1 = 1;
 		}
 
-		if((!$flag or !$flag1) and ($flag2 or $flag3 or $flag or $flag1)){
-			if($flag and !$flag1){
+		if((!$flag or !$flag1) and ($flag2 or $flag3 or $flag or $flag1)) {
+			if($flag and !$flag1) {
 				$f2 = 0;
-			}elseif(!$flag and $flag1){
+			} elseif(!$flag and $flag1) {
 				$f3 = 1;
 			}
-		}else{
+		} else {
 			$f2 = 0;
 			$f3 = 1;
 		}
@@ -76,7 +79,8 @@ abstract class Thin extends Transparent{
 	}
 
 
-	public function canConnect(Block $block){
+	public function canConnect(Block $block)
+	{
 		return $block->isSolid() or $block->getId() === $this->getId() or $block->getId() === self::GLASS_PANE or $block->getId() === self::GLASS;
 	}
 

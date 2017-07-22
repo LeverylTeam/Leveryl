@@ -19,16 +19,18 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
 
-class TitleCommand extends VanillaCommand{
+class TitleCommand extends VanillaCommand
+{
 
-	public function __construct($name){
+	public function __construct($name)
+	{
 		parent::__construct(
 			$name,
 			"%pocketmine.command.title.description",
@@ -37,23 +39,26 @@ class TitleCommand extends VanillaCommand{
 		$this->setPermission("pocketmine.command.title");
 	}
 
-	public function execute(CommandSender $sender, $currentAlias, array $args){
-		if(!$this->testPermission($sender)){
+	public function execute(CommandSender $sender, $currentAlias, array $args)
+	{
+		if(!$this->testPermission($sender)) {
 			return true;
 		}
 
-		if(count($args) < 2){
+		if(count($args) < 2) {
 			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+
 			return true;
 		}
 
 		$player = $sender->getServer()->getPlayer($args[0]);
-		if($player === null){
+		if($player === null) {
 			$sender->sendMessage(new TranslationContainer("commands.generic.player.notFound"));
+
 			return true;
 		}
 
-		switch($args[1]){
+		switch($args[1]) {
 			case "clear":
 				$player->removeTitles();
 				break;
@@ -61,32 +66,36 @@ class TitleCommand extends VanillaCommand{
 				$player->resetTitles();
 				break;
 			case "title":
-				if(count($args) < 3){
+				if(count($args) < 3) {
 					$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+
 					return false;
 				}
 
 				$player->addTitle(implode(" ", array_slice($args, 2)));
 				break;
 			case "subtitle":
-				if(count($args) < 3){
+				if(count($args) < 3) {
 					$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+
 					return false;
 				}
 
 				$player->addSubTitle(implode(" ", array_slice($args, 2)));
 				break;
 			case "actionbar":
-				if(count($args) < 3){
+				if(count($args) < 3) {
 					$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+
 					return false;
 				}
 
 				$player->addActionBarMessage(implode(" ", array_slice($args, 2)));
 				break;
 			case "times":
-				if(count($args) < 4){
+				if(count($args) < 4) {
 					$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+
 					return false;
 				}
 
@@ -94,6 +103,7 @@ class TitleCommand extends VanillaCommand{
 				break;
 			default:
 				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+
 				return false;
 		}
 

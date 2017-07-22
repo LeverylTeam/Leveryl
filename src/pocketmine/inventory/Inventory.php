@@ -19,17 +19,19 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /**
  * Handles the creation of virtual inventories or mapped to an InventoryHolder
  */
+
 namespace pocketmine\inventory;
 
 use pocketmine\item\Item;
 use pocketmine\Player;
 
-interface Inventory{
+interface Inventory
+{
 	const MAX_STACK = 64;
 
 	public function getSize();
@@ -57,7 +59,7 @@ interface Inventory{
 	 * If a plugin refuses the update or $index is invalid, it'll return false
 	 * If a source Player is specified, it won't send a Inventory update to it
 	 *
-	 * @param int  $index
+	 * @param int $index
 	 * @param Item $item
 	 *
 	 * @return bool
@@ -111,7 +113,7 @@ interface Inventory{
 	public function sendContents($target);
 
 	/**
-	 * @param int			 $index
+	 * @param int $index
 	 * @param Player|Player[] $target
 	 */
 	public function sendSlot($index, $target);
@@ -214,7 +216,7 @@ interface Inventory{
 	public function onClose(Player $who);
 
 	/**
-	 * @param int  $index
+	 * @param int $index
 	 * @param Item $before
 	 */
 	public function onSlotChange($index, $before);

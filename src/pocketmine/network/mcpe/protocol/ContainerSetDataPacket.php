@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,27 +28,31 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class ContainerSetDataPacket extends DataPacket{
+class ContainerSetDataPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::CONTAINER_SET_DATA_PACKET;
 
 	public $windowid;
 	public $property;
 	public $value;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->windowid = $this->getByte();
 		$this->property = $this->getVarInt();
 		$this->value = $this->getVarInt();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putByte($this->windowid);
 		$this->putVarInt($this->property);
 		$this->putVarInt($this->value);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleContainerSetData($this);
 	}
 

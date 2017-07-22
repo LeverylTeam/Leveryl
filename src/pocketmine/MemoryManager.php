@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine;
 
@@ -28,7 +28,8 @@ use pocketmine\event\Timings;
 use pocketmine\scheduler\GarbageCollectionTask;
 use pocketmine\utils\Utils;
 
-class MemoryManager{
+class MemoryManager
+{
 
 	/** @var Server */
 	private $server;
@@ -56,23 +57,25 @@ class MemoryManager{
 	private $chunkCache;
 	private $cacheTrigger;
 
-	public function __construct(Server $server){
+	public function __construct(Server $server)
+	{
 		$this->server = $server;
 
 		$this->init();
 	}
 
-	private function init(){
-		$this->memoryLimit = ((int) $this->server->getProperty("memory.main-limit", 0)) * 1024 * 1024;
+	private function init()
+	{
+		$this->memoryLimit = ((int)$this->server->getProperty("memory.main-limit", 0)) * 1024 * 1024;
 
 		$defaultMemory = 1024;
 
-		if(preg_match("/([0-9]+)([KMGkmg])/", $this->server->getConfigString("memory-limit", ""), $matches) > 0){
-			$m = (int) $matches[1];
-			if($m <= 0){
+		if(preg_match("/([0-9]+)([KMGkmg])/", $this->server->getConfigString("memory-limit", ""), $matches) > 0) {
+			$m = (int)$matches[1];
+			if($m <= 0) {
 				$defaultMemory = 0;
-			}else{
-				switch(strtoupper($matches[2])){
+			} else {
+				switch(strtoupper($matches[2])) {
 					case "K":
 						$defaultMemory = $m / 1024;
 						break;
@@ -89,38 +92,40 @@ class MemoryManager{
 			}
 		}
 
-		$hardLimit = ((int) $this->server->getProperty("memory.main-hard-limit", $defaultMemory));
+		$hardLimit = ((int)$this->server->getProperty("memory.main-hard-limit", $defaultMemory));
 
-		if($hardLimit <= 0){
+		if($hardLimit <= 0) {
 			ini_set("memory_limit", '-1');
-		}else{
+		} else {
 			ini_set("memory_limit", $hardLimit . "M");
 		}
 
-		$this->globalMemoryLimit = ((int) $this->server->getProperty("memory.global-limit", 0)) * 1024 * 1024;
-		$this->checkRate = (int) $this->server->getProperty("memory.check-rate", 20);
-		$this->continuousTrigger = (bool) $this->server->getProperty("memory.continuous-trigger", true);
-		$this->continuousTriggerRate = (int) $this->server->getProperty("memory.continuous-trigger-rate", 30);
+		$this->globalMemoryLimit = ((int)$this->server->getProperty("memory.global-limit", 0)) * 1024 * 1024;
+		$this->checkRate = (int)$this->server->getProperty("memory.check-rate", 20);
+		$this->continuousTrigger = (bool)$this->server->getProperty("memory.continuous-trigger", true);
+		$this->continuousTriggerRate = (int)$this->server->getProperty("memory.continuous-trigger-rate", 30);
 
-		$this->garbageCollectionPeriod = (int) $this->server->getProperty("memory.garbage-collection.period", 36000);
-		$this->garbageCollectionTrigger = (bool) $this->server->getProperty("memory.garbage-collection.low-memory-trigger", true);
-		$this->garbageCollectionAsync = (bool) $this->server->getProperty("memory.garbage-collection.collect-async-worker", true);
+		$this->garbageCollectionPeriod = (int)$this->server->getProperty("memory.garbage-collection.period", 36000);
+		$this->garbageCollectionTrigger = (bool)$this->server->getProperty("memory.garbage-collection.low-memory-trigger", true);
+		$this->garbageCollectionAsync = (bool)$this->server->getProperty("memory.garbage-collection.collect-async-worker", true);
 
-		$this->chunkRadiusOverride = (int) $this->server->getProperty("memory.max-chunks.chunk-radius", 4);
-		$this->chunkCollect = (bool) $this->server->getProperty("memory.max-chunks.trigger-chunk-collect", true);
-		$this->chunkTrigger = (bool) $this->server->getProperty("memory.max-chunks.low-memory-trigger", true);
+		$this->chunkRadiusOverride = (int)$this->server->getProperty("memory.max-chunks.chunk-radius", 4);
+		$this->chunkCollect = (bool)$this->server->getProperty("memory.max-chunks.trigger-chunk-collect", true);
+		$this->chunkTrigger = (bool)$this->server->getProperty("memory.max-chunks.low-memory-trigger", true);
 
-		$this->chunkCache = (bool) $this->server->getProperty("memory.world-caches.disable-chunk-cache", true);
-		$this->cacheTrigger = (bool) $this->server->getProperty("memory.world-caches.low-memory-trigger", true);
+		$this->chunkCache = (bool)$this->server->getProperty("memory.world-caches.disable-chunk-cache", true);
+		$this->cacheTrigger = (bool)$this->server->getProperty("memory.world-caches.low-memory-trigger", true);
 
 		gc_enable();
 	}
 
-	public function isLowMemory(){
+	public function isLowMemory()
+	{
 		return $this->lowMemory;
 	}
 
-	public function canUseChunkCache(){
+	public function canUseChunkCache()
+	{
 		return !($this->lowMemory and $this->chunkTrigger);
 	}
 
@@ -131,21 +136,23 @@ class MemoryManager{
 	 *
 	 * @return int
 	 */
-	public function getViewDistance(int $distance) : int{
+	public function getViewDistance(int $distance): int
+	{
 		return $this->lowMemory ? min($this->chunkRadiusOverride, $distance) : $distance;
 	}
 
-	public function trigger($memory, $limit, $global = false, $triggerCount = 0){
+	public function trigger($memory, $limit, $global = false, $triggerCount = 0)
+	{
 		$this->server->getLogger()->debug(sprintf("[Memory Manager] %sLow memory triggered, limit %gMB, using %gMB",
 			$global ? "Global " : "", round(($limit / 1024) / 1024, 2), round(($memory / 1024) / 1024, 2)));
-		if($this->cacheTrigger){
-			foreach($this->server->getLevels() as $level){
+		if($this->cacheTrigger) {
+			foreach($this->server->getLevels() as $level) {
 				$level->clearCache(true);
 			}
 		}
 
-		if($this->chunkTrigger and $this->chunkCollect){
-			foreach($this->server->getLevels() as $level){
+		if($this->chunkTrigger and $this->chunkCollect) {
+			foreach($this->server->getLevels() as $level) {
 				$level->doChunkGarbageCollection();
 			}
 		}
@@ -154,43 +161,44 @@ class MemoryManager{
 		$this->server->getPluginManager()->callEvent($ev);
 
 		$cycles = 0;
-		if($this->garbageCollectionTrigger){
+		if($this->garbageCollectionTrigger) {
 			$cycles = $this->triggerGarbageCollector();
 		}
 
 		$this->server->getLogger()->debug(sprintf("[Memory Manager] Freed %gMB, $cycles cycles", round(($ev->getMemoryFreed() / 1024) / 1024, 2)));
 	}
 
-	public function check(){
+	public function check()
+	{
 		Timings::$memoryManagerTimer->startTiming();
 
-		if(($this->memoryLimit > 0 or $this->globalMemoryLimit > 0) and ++$this->checkTicker >= $this->checkRate){
+		if(($this->memoryLimit > 0 or $this->globalMemoryLimit > 0) and ++$this->checkTicker >= $this->checkRate) {
 			$this->checkTicker = 0;
 			$memory = Utils::getMemoryUsage(true);
 			$trigger = false;
-			if($this->memoryLimit > 0 and $memory[0] > $this->memoryLimit){
+			if($this->memoryLimit > 0 and $memory[0] > $this->memoryLimit) {
 				$trigger = 0;
-			}elseif($this->globalMemoryLimit > 0 and $memory[1] > $this->globalMemoryLimit){
+			} elseif($this->globalMemoryLimit > 0 and $memory[1] > $this->globalMemoryLimit) {
 				$trigger = 1;
 			}
 
-			if($trigger !== false){
-				if($this->lowMemory and $this->continuousTrigger){
-					if(++$this->continuousTriggerTicker >= $this->continuousTriggerRate){
+			if($trigger !== false) {
+				if($this->lowMemory and $this->continuousTrigger) {
+					if(++$this->continuousTriggerTicker >= $this->continuousTriggerRate) {
 						$this->continuousTriggerTicker = 0;
 						$this->trigger($memory[$trigger], $this->memoryLimit, $trigger > 0, ++$this->continuousTriggerCount);
 					}
-				}else{
+				} else {
 					$this->lowMemory = true;
 					$this->continuousTriggerCount = 0;
 					$this->trigger($memory[$trigger], $this->memoryLimit, $trigger > 0);
 				}
-			}else{
+			} else {
 				$this->lowMemory = false;
 			}
 		}
 
-		if($this->garbageCollectionPeriod > 0 and ++$this->garbageCollectionTicker >= $this->garbageCollectionPeriod){
+		if($this->garbageCollectionPeriod > 0 and ++$this->garbageCollectionTicker >= $this->garbageCollectionPeriod) {
 			$this->garbageCollectionTicker = 0;
 			$this->triggerGarbageCollector();
 		}
@@ -198,12 +206,13 @@ class MemoryManager{
 		Timings::$memoryManagerTimer->stopTiming();
 	}
 
-	public function triggerGarbageCollector(){
+	public function triggerGarbageCollector()
+	{
 		Timings::$garbageCollectorTimer->startTiming();
 
-		if($this->garbageCollectionAsync){
+		if($this->garbageCollectionAsync) {
 			$size = $this->server->getScheduler()->getAsyncTaskPoolSize();
-			for($i = 0; $i < $size; ++$i){
+			for($i = 0; $i < $size; ++$i) {
 				$this->server->getScheduler()->scheduleAsyncTaskToWorker(new GarbageCollectionTask(), $i);
 			}
 		}
@@ -215,12 +224,13 @@ class MemoryManager{
 		return $cycles;
 	}
 
-	public function dumpServerMemory($outputFolder, $maxNesting, $maxStringSize){
+	public function dumpServerMemory($outputFolder, $maxNesting, $maxStringSize)
+	{
 		$hardLimit = ini_get('memory_limit');
 		ini_set('memory_limit', '-1');
 		gc_disable();
 
-		if(!file_exists($outputFolder)){
+		if(!file_exists($outputFolder)) {
 			mkdir($outputFolder, 0777, true);
 		}
 
@@ -239,15 +249,15 @@ class MemoryManager{
 		$instanceCounts = [];
 
 		$staticCount = 0;
-		foreach($this->server->getLoader()->getClasses() as $className){
+		foreach($this->server->getLoader()->getClasses() as $className) {
 			$reflection = new \ReflectionClass($className);
 			$staticProperties[$className] = [];
-			foreach($reflection->getProperties() as $property){
-				if(!$property->isStatic() or $property->getDeclaringClass()->getName() !== $className){
+			foreach($reflection->getProperties() as $property) {
+				if(!$property->isStatic() or $property->getDeclaringClass()->getName() !== $className) {
 					continue;
 				}
 
-				if(!$property->isPublic()){
+				if(!$property->isPublic()) {
 					$property->setAccessible(true);
 				}
 
@@ -255,7 +265,7 @@ class MemoryManager{
 				$this->continueDump($property->getValue(), $staticProperties[$className][$property->getName()], $objects, $refCounts, 0, $maxNesting, $maxStringSize);
 			}
 
-			if(count($staticProperties[$className]) === 0){
+			if(count($staticProperties[$className]) === 0) {
 				unset($staticProperties[$className]);
 			}
 		}
@@ -264,18 +274,18 @@ class MemoryManager{
 
 		$this->continueDump($this->server, $data, $objects, $refCounts, 0, $maxNesting, $maxStringSize);
 
-		do{
+		do {
 			$continue = false;
-			foreach($objects as $hash => $object){
-				if(!is_object($object)){
+			foreach($objects as $hash => $object) {
+				if(!is_object($object)) {
 					continue;
 				}
 				$continue = true;
 
 				$className = get_class($object);
-				if(!isset($instanceCounts[$className])){
+				if(!isset($instanceCounts[$className])) {
 					$instanceCounts[$className] = 1;
-				}else{
+				} else {
 					$instanceCounts[$className]++;
 				}
 
@@ -285,23 +295,23 @@ class MemoryManager{
 
 				$info = [
 					"information" => "$hash@$className",
-					"properties" => []
+					"properties"  => [],
 				];
 
-				if($reflection->getParentClass()){
+				if($reflection->getParentClass()) {
 					$info["parent"] = $reflection->getParentClass()->getName();
 				}
 
-				if(count($reflection->getInterfaceNames()) > 0){
+				if(count($reflection->getInterfaceNames()) > 0) {
 					$info["implements"] = implode(", ", $reflection->getInterfaceNames());
 				}
 
-				foreach($reflection->getProperties() as $property){
-					if($property->isStatic()){
+				foreach($reflection->getProperties() as $property) {
+					if($property->isStatic()) {
 						continue;
 					}
 
-					if(!$property->isPublic()){
+					if(!$property->isPublic()) {
 						$property->setAccessible(true);
 					}
 					$this->continueDump($property->getValue($object), $info["properties"][$property->getName()], $objects, $refCounts, 0, $maxNesting, $maxStringSize);
@@ -311,7 +321,7 @@ class MemoryManager{
 			}
 
 			echo "[Dump] Wrote " . count($objects) . " objects\n";
-		}while($continue);
+		} while($continue);
 
 		fclose($obData);
 
@@ -328,16 +338,18 @@ class MemoryManager{
 		gc_enable();
 	}
 
-	private function continueDump($from, &$data, &$objects, &$refCounts, $recursion, $maxNesting, $maxStringSize){
-		if($maxNesting <= 0){
+	private function continueDump($from, &$data, &$objects, &$refCounts, $recursion, $maxNesting, $maxStringSize)
+	{
+		if($maxNesting <= 0) {
 			$data = "(error) NESTING LIMIT REACHED";
+
 			return;
 		}
 
 		--$maxNesting;
 
-		if(is_object($from)){
-			if(!isset($objects[$hash = spl_object_hash($from)])){
+		if(is_object($from)) {
+			if(!isset($objects[$hash = spl_object_hash($from)])) {
 				$objects[$hash] = $from;
 				$refCounts[$hash] = 0;
 			}
@@ -345,20 +357,21 @@ class MemoryManager{
 			++$refCounts[$hash];
 
 			$data = "(object) $hash@" . get_class($from);
-		}elseif(is_array($from)){
-			if($recursion >= 5){
+		} elseif(is_array($from)) {
+			if($recursion >= 5) {
 				$data = "(error) ARRAY RECURSION LIMIT REACHED";
+
 				return;
 			}
 			$data = [];
-			foreach($from as $key => $value){
+			foreach($from as $key => $value) {
 				$this->continueDump($value, $data[$key], $objects, $refCounts, $recursion + 1, $maxNesting, $maxStringSize);
 			}
-		}elseif(is_string($from)){
-			$data = "(string) len(". strlen($from) .") " . substr(Utils::printable($from), 0, $maxStringSize);
-		}elseif(is_resource($from)){
+		} elseif(is_string($from)) {
+			$data = "(string) len(" . strlen($from) . ") " . substr(Utils::printable($from), 0, $maxStringSize);
+		} elseif(is_resource($from)) {
 			$data = "(resource) " . print_r($from, true);
-		}else{
+		} else {
 			$data = $from;
 		}
 	}

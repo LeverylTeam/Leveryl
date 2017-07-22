@@ -2,11 +2,11 @@
 
 /**
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\inventory;
 
@@ -29,7 +29,8 @@ use pocketmine\inventory\Recipe;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
-class CraftItemEvent extends Event implements Cancellable{
+class CraftItemEvent extends Event implements Cancellable
+{
 	public static $handlerList = null;
 
 	/** @var Item[] */
@@ -42,10 +43,11 @@ class CraftItemEvent extends Event implements Cancellable{
 
 	/**
 	 * @param \pocketmine\Player $player
-	 * @param Item[]			 $input
-	 * @param Recipe			 $recipe
+	 * @param Item[] $input
+	 * @param Recipe $recipe
 	 */
-	public function __construct(Player $player, array $input, Recipe $recipe){
+	public function __construct(Player $player, array $input, Recipe $recipe)
+	{
 		$this->player = $player;
 		$this->input = $input;
 		$this->recipe = $recipe;
@@ -54,9 +56,10 @@ class CraftItemEvent extends Event implements Cancellable{
 	/**
 	 * @return Item[]
 	 */
-	public function getInput(){
+	public function getInput()
+	{
 		$items = [];
-		foreach($this->input as $i => $item){
+		foreach($this->input as $i => $item) {
 			$items[$i] = clone $item;
 		}
 
@@ -66,14 +69,16 @@ class CraftItemEvent extends Event implements Cancellable{
 	/**
 	 * @return Recipe
 	 */
-	public function getRecipe(){
+	public function getRecipe()
+	{
 		return $this->recipe;
 	}
 
 	/**
 	 * @return \pocketmine\Player
 	 */
-	public function getPlayer(){
+	public function getPlayer()
+	{
 		return $this->player;
 	}
 }

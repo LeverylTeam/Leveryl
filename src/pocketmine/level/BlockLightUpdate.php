@@ -19,18 +19,21 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level;
 
 
-class BlockLightUpdate extends LightUpdate{
+class BlockLightUpdate extends LightUpdate
+{
 
-	public function getLight(int $x, int $y, int $z) : int{
+	public function getLight(int $x, int $y, int $z): int
+	{
 		return $this->level->getBlockLightAt($x, $y, $z);
 	}
 
-	public function setLight(int $x, int $y, int $z, int $level){
+	public function setLight(int $x, int $y, int $z, int $level)
+	{
 		$this->level->setBlockLightAt($x, $y, $z, $level);
 	}
 }

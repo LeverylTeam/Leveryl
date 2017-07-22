@@ -15,6 +15,7 @@
  * GNU General Public License for more details.
 */
 
-class ThreadException extends RuntimeException{
+class ThreadException extends RuntimeException
+{
 
 }

@@ -15,6 +15,7 @@
  * GNU General Public License for more details.
 */
 
-class UndefinedPropertyException extends LogicException{
+class UndefinedPropertyException extends LogicException
+{
 
 }

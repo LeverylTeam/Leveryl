@@ -19,14 +19,16 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\math;
 
 
-abstract class VectorMath{
+abstract class VectorMath
+{
 
-	public static function getDirection2D($azimuth){
+	public static function getDirection2D($azimuth)
+	{
 		return new Vector2(cos($azimuth), sin($azimuth));
 	}
 

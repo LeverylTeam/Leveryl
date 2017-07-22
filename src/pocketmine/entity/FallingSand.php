@@ -19,12 +19,11 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
-use pocketmine\block\Liquid;
 use pocketmine\event\entity\EntityBlockChangeEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item as ItemItem;
@@ -34,7 +33,8 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class FallingSand extends Entity{
+class FallingSand extends Entity
+{
 	const NETWORK_ID = 66;
 
 	public $width = 0.98;
@@ -50,47 +50,52 @@ class FallingSand extends Entity{
 
 	public $canCollide = false;
 
-	protected function initEntity(){
+	protected function initEntity()
+	{
 		parent::initEntity();
-		if(isset($this->namedtag->TileID)){
+		if(isset($this->namedtag->TileID)) {
 			$this->blockId = $this->namedtag["TileID"];
-		}elseif(isset($this->namedtag->Tile)){
+		} elseif(isset($this->namedtag->Tile)) {
 			$this->blockId = $this->namedtag["Tile"];
 			$this->namedtag["TileID"] = new IntTag("TileID", $this->blockId);
 		}
 
-		if(isset($this->namedtag->Data)){
+		if(isset($this->namedtag->Data)) {
 			$this->damage = $this->namedtag["Data"];
 		}
 
-		if($this->blockId === 0){
+		if($this->blockId === 0) {
 			$this->close();
+
 			return;
 		}
 
 		$this->setDataProperty(self::DATA_VARIANT, self::DATA_TYPE_INT, $this->getBlock() | ($this->getDamage() << 8));
 	}
 
-	public function canCollideWith(Entity $entity){
+	public function canCollideWith(Entity $entity)
+	{
 		return false;
 	}
 
-	public function attack($damage, EntityDamageEvent $source){
-		if($source->getCause() === EntityDamageEvent::CAUSE_VOID){
+	public function attack($damage, EntityDamageEvent $source)
+	{
+		if($source->getCause() === EntityDamageEvent::CAUSE_VOID) {
 			parent::attack($damage, $source);
 		}
 	}
 
-	public function onUpdate($currentTick){
+	public function onUpdate($currentTick)
+	{
 
-		if($this->closed){
+		if($this->closed) {
 			return false;
 		}
 
 		$this->timings->startTiming();
 
 		$tickDiff = $currentTick - $this->lastUpdate;
-		if($tickDiff <= 0 and !$this->justCreated){
+		if($tickDiff <= 0 and !$this->justCreated) {
 			return true;
 		}
 
@@ -98,7 +103,7 @@ class FallingSand extends Entity{
 
 		$hasUpdate = $this->entityBaseTick($tickDiff);
 
-		if($this->isAlive()){
+		if($this->isAlive()) {
 			$this->motionY -= $this->gravity;
 
 			$this->move($this->motionX, $this->motionY, $this->motionZ);
@@ -111,15 +116,15 @@ class FallingSand extends Entity{
 
 			$pos = (new Vector3($this->x - 0.5, $this->y, $this->z - 0.5))->floor();
 
-			if($this->onGround){
+			if($this->onGround) {
 				$this->kill();
 				$block = $this->level->getBlock($pos);
-				if($block->getId() > 0 and $block->isTransparent() and !$block->canBeReplaced()){
+				if($block->getId() > 0 and $block->isTransparent() and !$block->canBeReplaced()) {
 					//FIXME: anvils are supposed to destroy torches
 					$this->getLevel()->dropItem($this, ItemItem::get($this->getBlock(), $this->getDamage(), 1));
-				}else{
+				} else {
 					$this->server->getPluginManager()->callEvent($ev = new EntityBlockChangeEvent($this, $block, Block::get($this->getBlock(), $this->getDamage())));
-					if(!$ev->isCancelled()){
+					if(!$ev->isCancelled()) {
 						$this->getLevel()->setBlock($pos, $ev->getTo(), true);
 					}
 				}
@@ -132,20 +137,24 @@ class FallingSand extends Entity{
 		return $hasUpdate or !$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
 	}
 
-	public function getBlock(){
+	public function getBlock()
+	{
 		return $this->blockId;
 	}
 
-	public function getDamage(){
+	public function getDamage()
+	{
 		return $this->damage;
 	}
 
-	public function saveNBT(){
+	public function saveNBT()
+	{
 		$this->namedtag->TileID = new IntTag("TileID", $this->blockId);
 		$this->namedtag->Data = new ByteTag("Data", $this->damage);
 	}
 
-	public function spawnTo(Player $player){
+	public function spawnTo(Player $player)
+	{
 		$pk = new AddEntityPacket();
 		$pk->type = FallingSand::NETWORK_ID;
 		$pk->entityRuntimeId = $this->getId();

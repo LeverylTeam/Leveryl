@@ -19,17 +19,20 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\item;
 
 
-class DiamondSword extends Tool{
-	public function __construct($meta = 0, $count = 1){
+class DiamondSword extends Tool
+{
+	public function __construct($meta = 0, $count = 1)
+	{
 		parent::__construct(self::DIAMOND_SWORD, $meta, $count, "Diamond Sword");
 	}
 
-	public function isSword(){
+	public function isSword()
+	{
 		return Tool::TIER_DIAMOND;
 	}
 }

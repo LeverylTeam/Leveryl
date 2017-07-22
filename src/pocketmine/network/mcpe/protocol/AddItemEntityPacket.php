@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class AddItemEntityPacket extends DataPacket{
+class AddItemEntityPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::ADD_ITEM_ENTITY_PACKET;
 
 	public $entityUniqueId = null; //TODO
@@ -42,7 +43,8 @@ class AddItemEntityPacket extends DataPacket{
 	public $speedZ = 0.0;
 	public $metadata = [];
 
-	public function decode(){
+	public function decode()
+	{
 		$this->entityUniqueId = $this->getEntityUniqueId();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->item = $this->getSlot();
@@ -51,7 +53,8 @@ class AddItemEntityPacket extends DataPacket{
 		$this->metadata = $this->getEntityMetadata();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
@@ -61,7 +64,8 @@ class AddItemEntityPacket extends DataPacket{
 		$this->putEntityMetadata($this->metadata);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleAddItemEntity($this);
 	}
 

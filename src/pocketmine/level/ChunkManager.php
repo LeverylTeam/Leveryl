@@ -19,13 +19,14 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level;
 
 use pocketmine\level\format\Chunk;
 
-interface ChunkManager{
+interface ChunkManager
+{
 	/**
 	 * Gets the raw block id.
 	 *
@@ -35,7 +36,7 @@ interface ChunkManager{
 	 *
 	 * @return int 0-255
 	 */
-	public function getBlockIdAt(int $x, int $y, int $z) : int;
+	public function getBlockIdAt(int $x, int $y, int $z): int;
 
 	/**
 	 * Sets the raw block id.
@@ -56,7 +57,7 @@ interface ChunkManager{
 	 *
 	 * @return int 0-15
 	 */
-	public function getBlockDataAt(int $x, int $y, int $z) : int;
+	public function getBlockDataAt(int $x, int $y, int $z): int;
 
 	/**
 	 * Sets the raw block metadata.
@@ -77,8 +78,8 @@ interface ChunkManager{
 	public function getChunk(int $chunkX, int $chunkZ);
 
 	/**
-	 * @param int   $chunkX
-	 * @param int   $chunkZ
+	 * @param int $chunkX
+	 * @param int $chunkZ
 	 * @param Chunk $chunk
 	 */
 	public function setChunk(int $chunkX, int $chunkZ, Chunk $chunk = null);

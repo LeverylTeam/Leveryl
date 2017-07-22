@@ -18,26 +18,29 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\entity;
 
 use pocketmine\entity\Entity;
 
-class EntitySlimeBlockBounceEvent extends EntityEvent{
+class EntitySlimeBlockBounceEvent extends EntityEvent
+{
 	public static $handlerList = null;
 
 	/**
 	 * @param Entity $entity
 	 */
-	public function __construct(Entity $entity){
+	public function __construct(Entity $entity)
+	{
 		$this->entity = $entity;
 	}
 
 	/**
 	 * @return Entity
 	 */
-	public function getEntity(){
+	public function getEntity()
+	{
 		return $this->entity;
 	}
 }

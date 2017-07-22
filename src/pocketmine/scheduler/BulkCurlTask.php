@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\scheduler;
 
@@ -32,7 +32,8 @@ use pocketmine\utils\Utils;
  *
  * @package pocketmine\scheduler
  */
-class BulkCurlTask extends AsyncTask{
+class BulkCurlTask extends AsyncTask
+{
 	private $operations;
 
 	/**
@@ -42,21 +43,23 @@ class BulkCurlTask extends AsyncTask{
 	 * "timeout", "extraHeaders" and "extraOpts". Documentation of these options are same as those in
 	 * {@link Utils::simpleCurl}.
 	 *
-	 * @param array	  $operations
+	 * @param array $operations
 	 * @param mixed|null $complexData
 	 */
-	public function __construct(array $operations, $complexData = null){
+	public function __construct(array $operations, $complexData = null)
+	{
 		parent::__construct($complexData);
 		$this->operations = serialize($operations);
 	}
 
-	public function onRun(){
+	public function onRun()
+	{
 		$operations = unserialize($this->operations);
 		$results = [];
-		foreach($operations as $op){
-			try{
+		foreach($operations as $op) {
+			try {
 				$results[] = Utils::simpleCurl($op["page"], $op["timeout"] ?? 10, $op["extraHeaders"] ?? [], $op["extraOpts"] ?? []);
-			}catch(\RuntimeException $e){
+			} catch(\RuntimeException $e) {
 				$results[] = $e;
 			}
 		}

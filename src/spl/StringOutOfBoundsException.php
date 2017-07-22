@@ -15,6 +15,7 @@
  * GNU General Public License for more details.
 */
 
-class StringOutOfBoundsException extends OutOfBoundsException{
+class StringOutOfBoundsException extends OutOfBoundsException
+{
 
 }

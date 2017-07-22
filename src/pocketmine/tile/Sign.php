@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\tile;
 
@@ -31,75 +31,83 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
-class Sign extends Spawnable{
+class Sign extends Spawnable
+{
 
-	public function __construct(Level $level, CompoundTag $nbt){
-		if(!isset($nbt->Text1)){
+	public function __construct(Level $level, CompoundTag $nbt)
+	{
+		if(!isset($nbt->Text1)) {
 			$nbt->Text1 = new StringTag("Text1", "");
 		}
-		if(!isset($nbt->Text2)){
+		if(!isset($nbt->Text2)) {
 			$nbt->Text2 = new StringTag("Text2", "");
 		}
-		if(!isset($nbt->Text3)){
+		if(!isset($nbt->Text3)) {
 			$nbt->Text3 = new StringTag("Text3", "");
 		}
-		if(!isset($nbt->Text4)){
+		if(!isset($nbt->Text4)) {
 			$nbt->Text4 = new StringTag("Text4", "");
 		}
 
 		parent::__construct($level, $nbt);
 	}
 
-	public function saveNBT(){
+	public function saveNBT()
+	{
 		parent::saveNBT();
 		unset($this->namedtag->Creator);
 	}
 
-    public function setText($line1 = null, $line2 = null, $line3 = null, $line4 = null){
-        if($line1 !== null) {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            $this->namedtag->Text1 = new StringTag("Text1", $line1);
-        }
-        if($line2 !== null) {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            $this->namedtag->Text2 = new StringTag("Text2", $line2);
-        }
-        if($line3 !== null) {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            $this->namedtag->Text3 = new StringTag("Text3", $line3);
-        }
-        if($line4 !== null) {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            $this->namedtag->Text4 = new StringTag("Text4", $line4);
-        }
-        $this->onChanged();
-        return true;
-    }
+	public function setText($line1 = null, $line2 = null, $line3 = null, $line4 = null)
+	{
+		if($line1 !== null) {
+			/** @noinspection PhpStrictTypeCheckingInspection */
+			$this->namedtag->Text1 = new StringTag("Text1", $line1);
+		}
+		if($line2 !== null) {
+			/** @noinspection PhpStrictTypeCheckingInspection */
+			$this->namedtag->Text2 = new StringTag("Text2", $line2);
+		}
+		if($line3 !== null) {
+			/** @noinspection PhpStrictTypeCheckingInspection */
+			$this->namedtag->Text3 = new StringTag("Text3", $line3);
+		}
+		if($line4 !== null) {
+			/** @noinspection PhpStrictTypeCheckingInspection */
+			$this->namedtag->Text4 = new StringTag("Text4", $line4);
+		}
+		$this->onChanged();
 
-	public function getText(){
+		return true;
+	}
+
+	public function getText()
+	{
 		return [
 			$this->namedtag["Text1"],
 			$this->namedtag["Text2"],
 			$this->namedtag["Text3"],
-			$this->namedtag["Text4"]
+			$this->namedtag["Text4"],
 		];
 	}
 
-	public function getSpawnCompound(){
+	public function getSpawnCompound()
+	{
 		return new CompoundTag("", [
 			new StringTag("id", Tile::SIGN),
 			$this->namedtag->Text1,
 			$this->namedtag->Text2,
 			$this->namedtag->Text3,
 			$this->namedtag->Text4,
-			new IntTag("x", (int) $this->x),
-			new IntTag("y", (int) $this->y),
-			new IntTag("z", (int) $this->z)
+			new IntTag("x", (int)$this->x),
+			new IntTag("y", (int)$this->y),
+			new IntTag("z", (int)$this->z),
 		]);
 	}
 
-	public function updateCompoundTag(CompoundTag $nbt, Player $player) : bool{
-		if($nbt["id"] !== Tile::SIGN){
+	public function updateCompoundTag(CompoundTag $nbt, Player $player): bool
+	{
+		if($nbt["id"] !== Tile::SIGN) {
 			return false;
 		}
 
@@ -107,19 +115,20 @@ class Sign extends Spawnable{
 			TextFormat::clean($nbt["Text1"], ($removeFormat = $player->getRemoveFormat())),
 			TextFormat::clean($nbt["Text2"], $removeFormat),
 			TextFormat::clean($nbt["Text3"], $removeFormat),
-			TextFormat::clean($nbt["Text4"], $removeFormat)
+			TextFormat::clean($nbt["Text4"], $removeFormat),
 		]);
 
-		if(!isset($this->namedtag->Creator) or $this->namedtag["Creator"] !== $player->getRawUniqueId()){
+		if(!isset($this->namedtag->Creator) or $this->namedtag["Creator"] !== $player->getRawUniqueId()) {
 			$ev->setCancelled();
 		}
 
 		$this->level->getServer()->getPluginManager()->callEvent($ev);
 
-		if(!$ev->isCancelled()){
+		if(!$ev->isCancelled()) {
 			$this->setText(...$ev->getLines());
+
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}

@@ -24,102 +24,101 @@ namespace pocketmine\command\defaults;
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
-use pocketmine\utils\TextFormat;
 
 class GameRuleCommand extends VanillaCommand
 {
 
-    public function __construct($name)
-    {
-        parent::__construct(
-            $name,
-            "%pocketmine.command.gamerule.description",
-            "%pocketmine.command.gamerule.usage"
-        );
-        $this->setPermission("pocketmine.command.gamerule");
-    }
+	public function __construct($name)
+	{
+		parent::__construct(
+			$name,
+			"%pocketmine.command.gamerule.description",
+			"%pocketmine.command.gamerule.usage"
+		);
+		$this->setPermission("pocketmine.command.gamerule");
+	}
 
-    public function execute(CommandSender $sender, $currentAlias, array $args)
-    {
-        if (!$this->testPermission($sender)) {
-            return true;
-        }
-        if (!isset($args[0], $args[1])) {
-            $sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
-        } else {
-            switch($args[0]){
+	public function execute(CommandSender $sender, $currentAlias, array $args)
+	{
+		if(!$this->testPermission($sender)) {
+			return true;
+		}
+		if(!isset($args[0], $args[1])) {
+			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+		} else {
+			switch($args[0]) {
 
-                case "keepInventory":
-                    if(in_array(strtolower($args[1]), array("true", "false"))){
-                        if($sender instanceof Player){
-                            $sender->getLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
-                        } else {
-                            $sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
-                        }
-                    } else {
-                        $sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
-                    }
-                    break;
+				case "keepInventory":
+					if(in_array(strtolower($args[1]), ["true", "false"])) {
+						if($sender instanceof Player) {
+							$sender->getLevel()->updateGameRule($args[0], $args[1]);
+							$sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
+						} else {
+							$sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
+							$sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
+						}
+					} else {
+						$sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
+					}
+					break;
 
-                case "showDeathMessages":
-                    if(in_array(strtolower($args[1]), array("true", "false"))){
-                        if($sender instanceof Player){
-                            $sender->getLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
-                        } else {
-                            $sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
-                        }
-                    } else {
-                        $sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
-                    }
-                    break;
+				case "showDeathMessages":
+					if(in_array(strtolower($args[1]), ["true", "false"])) {
+						if($sender instanceof Player) {
+							$sender->getLevel()->updateGameRule($args[0], $args[1]);
+							$sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
+						} else {
+							$sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
+							$sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
+						}
+					} else {
+						$sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
+					}
+					break;
 
-                case "doTileDrops":
-                    if(in_array(strtolower($args[1]), array("true", "false"))){
-                        if($sender instanceof Player){
-                            $sender->getLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
-                        } else {
-                            $sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
-                        }
-                    } else {
-                        $sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
-                    }
-                    break;
+				case "doTileDrops":
+					if(in_array(strtolower($args[1]), ["true", "false"])) {
+						if($sender instanceof Player) {
+							$sender->getLevel()->updateGameRule($args[0], $args[1]);
+							$sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
+						} else {
+							$sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
+							$sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
+						}
+					} else {
+						$sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
+					}
+					break;
 
-                case "doFireTick":
-                    if(in_array(strtolower($args[1]), array("true", "false"))){
-                        if($sender instanceof Player){
-                            $sender->getLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
-                        } else {
-                            $sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
-                        }
-                    } else {
-                        $sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
-                    }
-                    break;
+				case "doFireTick":
+					if(in_array(strtolower($args[1]), ["true", "false"])) {
+						if($sender instanceof Player) {
+							$sender->getLevel()->updateGameRule($args[0], $args[1]);
+							$sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
+						} else {
+							$sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
+							$sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
+						}
+					} else {
+						$sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
+					}
+					break;
 
-                case "doDaylightCycle":
-                    if(in_array(strtolower($args[1]), array("true", "false"))){
-                        if($sender instanceof Player){
-                            $sender->getLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
-                        } else {
-                            $sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
-                        }
-                    } else {
-                        $sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
-                    }
-                    break;
+				case "doDaylightCycle":
+					if(in_array(strtolower($args[1]), ["true", "false"])) {
+						if($sender instanceof Player) {
+							$sender->getLevel()->updateGameRule($args[0], $args[1]);
+							$sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
+						} else {
+							$sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
+							$sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
+						}
+					} else {
+						$sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
+					}
+					break;
 
-            }
-        }
-    }
+			}
+		}
+	}
 }

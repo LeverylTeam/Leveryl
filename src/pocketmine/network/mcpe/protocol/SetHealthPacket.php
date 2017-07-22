@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,21 +28,25 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class SetHealthPacket extends DataPacket{
+class SetHealthPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::SET_HEALTH_PACKET;
 
 	public $health;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->health = $this->getVarInt();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putVarInt($this->health);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleSetHealth($this);
 	}
 

@@ -19,16 +19,18 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /**
  * Event related classes
  */
+
 namespace pocketmine\event;
 
 use pocketmine\Server;
 
-abstract class Event{
+abstract class Event
+{
 
 	/**
 	 * Any callable event must declare the static variable
@@ -44,8 +46,9 @@ abstract class Event{
 	/**
 	 * @return string
 	 */
-	final public function getEventName(){
-        return $this->eventName ?? get_class($this);
+	final public function getEventName()
+	{
+		return $this->eventName ?? get_class($this);
 	}
 
 	/**
@@ -53,8 +56,9 @@ abstract class Event{
 	 *
 	 * @throws \BadMethodCallException
 	 */
-	public function isCancelled(){
-		if(!($this instanceof Cancellable)){
+	public function isCancelled()
+	{
+		if(!($this instanceof Cancellable)) {
 			throw new \BadMethodCallException("Event is not Cancellable");
 		}
 
@@ -67,27 +71,30 @@ abstract class Event{
 	 *
 	 * @throws \BadMethodCallException
 	 */
-	public function setCancelled($value = true){
-		if(!($this instanceof Cancellable)){
+	public function setCancelled($value = true)
+	{
+		if(!($this instanceof Cancellable)) {
 			throw new \BadMethodCallException("Event is not Cancellable");
 		}
 
 		/** @var Event $this */
-		$this->isCancelled = (bool) $value;
+		$this->isCancelled = (bool)$value;
 	}
 
 	/**
 	 * @return HandlerList
 	 */
-	public function getHandlers(){
-		if(static::$handlerList === null){
+	public function getHandlers()
+	{
+		if(static::$handlerList === null) {
 			static::$handlerList = new HandlerList();
 		}
 
 		return static::$handlerList;
 	}
 
-	public function call(){
+	public function call()
+	{
 		Server::getInstance()->getPluginManager()->callEvent($this);
 	}
 

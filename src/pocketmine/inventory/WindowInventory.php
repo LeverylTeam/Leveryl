@@ -2,7 +2,7 @@
 
 /**
  *
- *  ____	   _						  _
+ *  ____       _                          _
  * |  _ \ _ __(_)___ _ __ ___   __ _ _ __(_)_ __   ___
  * | |_) | '__| / __| '_ ` _ \ / _` | '__| | '_ \ / _ \
  * |  __/| |  | \__ \ | | | | | (_| | |  | | | | |  __/
@@ -22,31 +22,30 @@
 namespace pocketmine\inventory;
 
 use pocketmine\block\Block;
-use pocketmine\inventory\CustomInventory;
-use pocketmine\Player;
 use pocketmine\math\Vector3;
-use pocketmine\inventory\InventoryType;
-use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\StringTag;
-use pocketmine\tile\Tile;
-use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\NBT;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\mcpe\protocol\BlockEntityDataPacket;
-use pocketmine\inventory\InventoryHolder;
+use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
+use pocketmine\Player;
+use pocketmine\tile\Tile;
 
-class WindowInventory extends CustomInventory{
+class WindowInventory extends CustomInventory
+{
 
 	protected $customName = "";
 	protected $tile;
 	protected $block;
 	protected $oldID;
 
-	public function __construct(Player $player, $size = 27, $name = "") {
+	public function __construct(Player $player, $size = 27, $name = "")
+	{
 		$this->tile = Tile::CHEST;
 		$this->block = 54;
 		$type = InventoryType::get(InventoryType::CHEST);
-		switch($size){
+		switch($size) {
 			case 5:
 				$this->tile = Tile::HOPPER;
 				$this->block = 154;
@@ -85,7 +84,8 @@ class WindowInventory extends CustomInventory{
 		parent::__construct($holder, $type);
 	}
 
-	public function onOpen(Player $who){
+	public function onOpen(Player $who)
+	{
 		$this->holder = $holder = new WindowHolder($who->getFloorX(), $who->getFloorY(), $who->getFloorZ(), $this);
 		$this->oldID[$who->getName()] = $who->getLevel()->getBlockIdAt($holder->x, $holder->y, $holder->z);
 		$pk = new UpdateBlockPacket();
@@ -98,11 +98,11 @@ class WindowInventory extends CustomInventory{
 		$who->dataPacket($pk);
 		$c = new CompoundTag("", [
 			new StringTag("id", $this->tile),
-			new IntTag("x", (int) $holder->x),
-			new IntTag("y", (int) $holder->y),
-			new IntTag("z", (int) $holder->z)
+			new IntTag("x", (int)$holder->x),
+			new IntTag("y", (int)$holder->y),
+			new IntTag("z", (int)$holder->z),
 		]);
-		if($this->name !== ""){
+		if($this->name !== "") {
 			$c->CustomName = new StringTag("CustomName", $this->customName);
 		}
 		$nbt = new NBT(NBT::LITTLE_ENDIAN);
@@ -117,7 +117,8 @@ class WindowInventory extends CustomInventory{
 		$this->sendContents($who);
 	}
 
-	public function onClose(Player $who){
+	public function onClose(Player $who)
+	{
 		$holder = $this->holder;
 		$pk = new UpdateBlockPacket();
 		$pk->x = $holder->x;
@@ -127,7 +128,7 @@ class WindowInventory extends CustomInventory{
 		$pk->blockData = $who->getLevel()->getBlockDataAt($holder->x, $holder->y, $holder->z);
 		$pk->flags = UpdateBlockPacket::FLAG_ALL;
 		$who->dataPacket($pk);
-		$who->getLevel()->setBlock(new Vector3($holder->x,$holder->y,$holder->z), $this->oldID[$who->getName()]);
+		$who->getLevel()->setBlock(new Vector3($holder->x, $holder->y, $holder->z), $this->oldID[$who->getName()]);
 		$this->oldID[$who->getName()] = 0;
 		parent::onClose($who);
 	}

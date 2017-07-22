@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,7 +27,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class InventoryActionPacket extends DataPacket{
+class InventoryActionPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::INVENTORY_ACTION_PACKET;
 
 	const ACTION_GIVE_ITEM = 0;
@@ -38,14 +39,16 @@ class InventoryActionPacket extends DataPacket{
 	public $enchantmentId = 0;
 	public $enchantmentLevel = 0;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->actionId = $this->getUnsignedVarInt();
 		$this->item = $this->getSlot();
 		$this->enchantmentId = $this->getVarInt();
 		$this->enchantmentLevel = $this->getVarInt();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putUnsignedVarInt($this->actionId);
 		$this->putSlot($this->item);
@@ -53,7 +56,8 @@ class InventoryActionPacket extends DataPacket{
 		$this->putVarInt($this->enchantmentLevel);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleInventoryAction($this);
 	}
 }

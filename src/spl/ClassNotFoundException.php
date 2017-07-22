@@ -15,6 +15,7 @@
  * GNU General Public License for more details.
 */
 
-class ClassNotFoundException extends LogicException{
+class ClassNotFoundException extends LogicException
+{
 
 }

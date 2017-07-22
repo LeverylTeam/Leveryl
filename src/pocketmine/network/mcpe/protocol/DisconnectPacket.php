@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,30 +28,35 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class DisconnectPacket extends DataPacket{
+class DisconnectPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::DISCONNECT_PACKET;
 
 	public $hideDisconnectionScreen = false;
 	public $message;
 
-	public function canBeSentBeforeLogin() : bool{
+	public function canBeSentBeforeLogin(): bool
+	{
 		return true;
 	}
 
-	public function decode(){
+	public function decode()
+	{
 		$this->hideDisconnectionScreen = $this->getBool();
 		$this->message = $this->getString();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putBool($this->hideDisconnectionScreen);
-		if(!$this->hideDisconnectionScreen){
+		if(!$this->hideDisconnectionScreen) {
 			$this->putString($this->message);
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleDisconnect($this);
 	}
 

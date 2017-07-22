@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\nbt\tag;
 
@@ -27,29 +27,34 @@ use pocketmine\nbt\NBT;
 
 #include <rules/NBT.h>
 
-class LongTag extends NamedTag{
+class LongTag extends NamedTag
+{
 
 	/**
 	 * LongTag constructor.
 	 *
 	 * @param string $name
-	 * @param int	$value
+	 * @param int $value
 	 */
-	public function __construct(string $name = "", int $value = 0){
+	public function __construct(string $name = "", int $value = 0)
+	{
 		parent::__construct($name, $value);
 	}
 
-	public function getType(){
+	public function getType()
+	{
 		return NBT::TAG_Long;
 	}
 
 	//TODO: check if this also changed to varint
 
-	public function read(NBT $nbt, bool $network = false){
+	public function read(NBT $nbt, bool $network = false)
+	{
 		$this->value = $nbt->getLong();
 	}
 
-	public function write(NBT $nbt, bool $network = false){
+	public function write(NBT $nbt, bool $network = false)
+	{
 		$nbt->putLong($this->value);
 	}
 }

@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\inventory;
 
@@ -29,20 +29,22 @@ namespace pocketmine\inventory;
  *
  * TODO: add small matrix inventory
  */
-class CraftingInventory extends BaseInventory{
+class CraftingInventory extends BaseInventory
+{
 
 	/** @var Inventory */
 	private $resultInventory;
 
 	/**
 	 * @param InventoryHolder $holder
-	 * @param Inventory	   $resultInventory
-	 * @param InventoryType   $inventoryType
+	 * @param Inventory $resultInventory
+	 * @param InventoryType $inventoryType
 	 *
 	 * @throws \Exception
 	 */
-	public function __construct(InventoryHolder $holder, Inventory $resultInventory, InventoryType $inventoryType){
-		if($inventoryType->getDefaultTitle() !== "Crafting"){
+	public function __construct(InventoryHolder $holder, Inventory $resultInventory, InventoryType $inventoryType)
+	{
+		if($inventoryType->getDefaultTitle() !== "Crafting") {
 			throw new \InvalidStateException("Invalid Inventory type, expected CRAFTING or WORKBENCH");
 		}
 		$this->resultInventory = $resultInventory;
@@ -52,11 +54,13 @@ class CraftingInventory extends BaseInventory{
 	/**
 	 * @return Inventory
 	 */
-	public function getResultInventory(){
+	public function getResultInventory()
+	{
 		return $this->resultInventory;
 	}
 
-	public function getSize(){
+	public function getSize()
+	{
 		return $this->getResultInventory()->getSize() + parent::getSize();
 	}
 }

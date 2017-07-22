@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -29,52 +29,64 @@ use pocketmine\item\Item;
 /**
  * Air block
  */
-class Air extends Transparent{
+class Air extends Transparent
+{
 
 	protected $id = self::AIR;
 	protected $meta = 0;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Air";
 	}
 
-	public function canPassThrough(){
+	public function canPassThrough()
+	{
 		return true;
 	}
 
-	public function isBreakable(Item $item){
+	public function isBreakable(Item $item)
+	{
 		return false;
 	}
 
-	public function canBeFlowedInto(){
+	public function canBeFlowedInto()
+	{
 		return true;
 	}
 
-	public function canBeReplaced(){
+	public function canBeReplaced()
+	{
 		return true;
 	}
 
-	public function canBePlaced(){
+	public function canBePlaced()
+	{
 		return false;
 	}
 
-	public function isSolid(){
+	public function isSolid()
+	{
 		return false;
 	}
 
-	public function getBoundingBox(){
+	public function getBoundingBox()
+	{
 		return null;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return -1;
 	}
 
-	public function getResistance(){
+	public function getResistance()
+	{
 		return 0;
 	}
 

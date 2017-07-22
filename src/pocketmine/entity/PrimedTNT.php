@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\entity;
 
@@ -31,7 +31,8 @@ use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
 use pocketmine\Player;
 
-class PrimedTNT extends Entity implements Explosive{
+class PrimedTNT extends Entity implements Explosive
+{
 	const NETWORK_ID = 65;
 
 	public $width = 0.98;
@@ -48,18 +49,20 @@ class PrimedTNT extends Entity implements Explosive{
 	public $canCollide = false;
 
 
-	public function attack($damage, EntityDamageEvent $source){
-		if($source->getCause() === EntityDamageEvent::CAUSE_VOID){
+	public function attack($damage, EntityDamageEvent $source)
+	{
+		if($source->getCause() === EntityDamageEvent::CAUSE_VOID) {
 			parent::attack($damage, $source);
 		}
 	}
 
-	protected function initEntity(){
+	protected function initEntity()
+	{
 		parent::initEntity();
 
-		if(isset($this->namedtag->Fuse)){
+		if(isset($this->namedtag->Fuse)) {
 			$this->fuse = $this->namedtag["Fuse"];
-		}else{
+		} else {
 			$this->fuse = 80;
 		}
 
@@ -70,29 +73,32 @@ class PrimedTNT extends Entity implements Explosive{
 	}
 
 
-	public function canCollideWith(Entity $entity){
+	public function canCollideWith(Entity $entity)
+	{
 		return false;
 	}
 
-	public function saveNBT(){
+	public function saveNBT()
+	{
 		parent::saveNBT();
 		$this->namedtag->Fuse = new ByteTag("Fuse", $this->fuse);
 	}
 
-	public function onUpdate($currentTick){
+	public function onUpdate($currentTick)
+	{
 
-		if($this->closed){
+		if($this->closed) {
 			return false;
 		}
 
 		$this->timings->startTiming();
 
 		$tickDiff = $currentTick - $this->lastUpdate;
-		if($tickDiff <= 0 and !$this->justCreated){
+		if($tickDiff <= 0 and !$this->justCreated) {
 			return true;
 		}
 
-		if($this->fuse % 5 === 0){ //don't spam it every tick, it's not necessary
+		if($this->fuse % 5 === 0) { //don't spam it every tick, it's not necessary
 			$this->setDataProperty(self::DATA_FUSE_LENGTH, self::DATA_TYPE_INT, $this->fuse);
 		}
 
@@ -100,7 +106,7 @@ class PrimedTNT extends Entity implements Explosive{
 
 		$hasUpdate = $this->entityBaseTick($tickDiff);
 
-		if($this->isAlive()){
+		if($this->isAlive()) {
 
 			$this->motionY -= $this->gravity;
 
@@ -114,7 +120,7 @@ class PrimedTNT extends Entity implements Explosive{
 
 			$this->updateMovement();
 
-			if($this->onGround){
+			if($this->onGround) {
 				$this->motionY *= -0.5;
 				$this->motionX *= 0.7;
 				$this->motionZ *= 0.7;
@@ -122,7 +128,7 @@ class PrimedTNT extends Entity implements Explosive{
 
 			$this->fuse -= $tickDiff;
 
-			if($this->fuse <= 0){
+			if($this->fuse <= 0) {
 				$this->kill();
 				$this->explode();
 			}
@@ -133,19 +139,21 @@ class PrimedTNT extends Entity implements Explosive{
 		return $hasUpdate or $this->fuse >= 0 or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
 	}
 
-	public function explode(){
+	public function explode()
+	{
 		$this->server->getPluginManager()->callEvent($ev = new ExplosionPrimeEvent($this, 4));
 
-		if(!$ev->isCancelled()){
+		if(!$ev->isCancelled()) {
 			$explosion = new Explosion($this, $ev->getForce(), $this);
-			if($ev->isBlockBreaking()){
+			if($ev->isBlockBreaking()) {
 				$explosion->explodeA();
 			}
 			$explosion->explodeB();
 		}
 	}
 
-	public function spawnTo(Player $player){
+	public function spawnTo(Player $player)
+	{
 		$pk = new AddEntityPacket();
 		$pk->type = PrimedTNT::NETWORK_ID;
 		$pk->entityRuntimeId = $this->getId();

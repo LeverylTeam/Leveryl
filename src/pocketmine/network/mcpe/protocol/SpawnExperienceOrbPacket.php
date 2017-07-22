@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class SpawnExperienceOrbPacket extends DataPacket{
+class SpawnExperienceOrbPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::SPAWN_EXPERIENCE_ORB_PACKET;
 
 	public $x;
@@ -36,18 +37,21 @@ class SpawnExperienceOrbPacket extends DataPacket{
 	public $z;
 	public $amount;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->getVector3f($this->x, $this->y, $this->z);
 		$this->amount = $this->getVarInt();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putVarInt($this->amount);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleSpawnExperienceOrb($this);
 	}
 }

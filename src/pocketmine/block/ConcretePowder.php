@@ -18,52 +18,58 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
 use pocketmine\item\Tool;
 use pocketmine\level\Level;
 
-class ConcretePowder extends Fallable{
+class ConcretePowder extends Fallable
+{
 
 	protected $id = self::CONCRETE_POWDER;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Concrete Powder";
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 0.5;
 	}
 
-    public function onUpdate($type)
-    {
-        if($type === Level::BLOCK_UPDATE_NORMAL){
-            for($s = 0; $s <= 6; ++$s){
-                $side = $this->getSide($s);
-                if($side instanceof Water){
-                    $this->getLevel()->setBlock($this, new Concrete(), true);
-                }
-            }
-            return Level::BLOCK_UPDATE_NORMAL;
-        }elseif($type === Level::BLOCK_UPDATE_RANDOM){
-            for($s = 0; $s <= 6; ++$s){
-                $side = $this->getSide($s);
-                if($side instanceof Water){
-                    $this->getLevel()->setBlock($this, new Concrete(), true);
-                }
-            }
-        }
+	public function onUpdate($type)
+	{
+		if($type === Level::BLOCK_UPDATE_NORMAL) {
+			for($s = 0; $s <= 6; ++$s) {
+				$side = $this->getSide($s);
+				if($side instanceof Water) {
+					$this->getLevel()->setBlock($this, new Concrete(), true);
+				}
+			}
 
-        return false;
-    }
+			return Level::BLOCK_UPDATE_NORMAL;
+		} elseif($type === Level::BLOCK_UPDATE_RANDOM) {
+			for($s = 0; $s <= 6; ++$s) {
+				$side = $this->getSide($s);
+				if($side instanceof Water) {
+					$this->getLevel()->setBlock($this, new Concrete(), true);
+				}
+			}
+		}
+
+		return false;
+	}
 }

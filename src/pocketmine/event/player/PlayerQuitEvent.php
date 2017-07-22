@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\player;
 
@@ -29,17 +29,19 @@ use pocketmine\Player;
 /**
  * Called when a player leaves the server
  */
-class PlayerQuitEvent extends PlayerEvent{
+class PlayerQuitEvent extends PlayerEvent
+{
 	public static $handlerList = null;
 
 	/** @var TranslationContainer|string */
 	protected $quitMessage;
 
 	/**
-	 * @param Player					  $player
+	 * @param Player $player
 	 * @param TranslationContainer|string $quitMessage
 	 */
-	public function __construct(Player $player, $quitMessage){
+	public function __construct(Player $player, $quitMessage)
+	{
 		$this->player = $player;
 		$this->quitMessage = $quitMessage;
 	}
@@ -47,14 +49,16 @@ class PlayerQuitEvent extends PlayerEvent{
 	/**
 	 * @param TranslationContainer|string $quitMessage
 	 */
-	public function setQuitMessage($quitMessage){
+	public function setQuitMessage($quitMessage)
+	{
 		$this->quitMessage = $quitMessage;
 	}
 
 	/**
 	 * @return TranslationContainer|string
 	 */
-	public function getQuitMessage(){
+	public function getQuitMessage()
+	{
 		return $this->quitMessage;
 	}
 }

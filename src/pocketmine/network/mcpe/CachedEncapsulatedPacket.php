@@ -19,17 +19,19 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe;
 
 use raklib\protocol\EncapsulatedPacket;
 
-class CachedEncapsulatedPacket extends EncapsulatedPacket{
+class CachedEncapsulatedPacket extends EncapsulatedPacket
+{
 
 	private $internalData = null;
 
-	public function toBinary($internal = false){
-        return $this->internalData ?? ($this->internalData = parent::toBinary($internal));
+	public function toBinary($internal = false)
+	{
+		return $this->internalData ?? ($this->internalData = parent::toBinary($internal));
 	}
 }

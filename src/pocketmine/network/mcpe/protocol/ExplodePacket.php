@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -29,7 +29,8 @@ namespace pocketmine\network\mcpe\protocol;
 use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\NetworkSession;
 
-class ExplodePacket extends DataPacket{
+class ExplodePacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::EXPLODE_PACKET;
 
 	public $x;
@@ -40,35 +41,40 @@ class ExplodePacket extends DataPacket{
 	/** @var Vector3[] */
 	public $records = [];
 
-	public function clean(){
+	public function clean()
+	{
 		$this->records = [];
+
 		return parent::clean();
 	}
 
-	public function decode(){
+	public function decode()
+	{
 		$this->getVector3f($this->x, $this->y, $this->z);
-		$this->radius = (float) ($this->getVarInt() / 32);
+		$this->radius = (float)($this->getVarInt() / 32);
 		$count = $this->getUnsignedVarInt();
-		for($i = 0; $i < $count; ++$i){
+		for($i = 0; $i < $count; ++$i) {
 			$x = $y = $z = null;
 			$this->getSignedBlockPosition($x, $y, $z);
 			$this->records[$i] = new Vector3($x, $y, $z);
 		}
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putVector3f($this->x, $this->y, $this->z);
-		$this->putVarInt((int) ($this->radius * 32));
+		$this->putVarInt((int)($this->radius * 32));
 		$this->putUnsignedVarInt(count($this->records));
-		if(count($this->records) > 0){
-			foreach($this->records as $record){
+		if(count($this->records) > 0) {
+			foreach($this->records as $record) {
 				$this->putSignedBlockPosition($record->x, $record->y, $record->z);
 			}
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleExplode($this);
 	}
 

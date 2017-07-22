@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 
 namespace pocketmine\network\mcpe\protocol;
@@ -29,7 +29,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class PlaySoundPacket extends DataPacket{
+class PlaySoundPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::PLAY_SOUND_PACKET;
 
 	public $soundName;
@@ -39,14 +40,16 @@ class PlaySoundPacket extends DataPacket{
 	public $volume;
 	public $pitch;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->soundName = $this->getString();
 		$this->getBlockPosition($this->x, $this->y, $this->z);
 		$this->volume = $this->getLFloat();
 		$this->pitch = $this->getLFloat();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putString($this->soundName);
 		$this->putBlockPosition($this->x, $this->y, $this->z);
@@ -54,7 +57,8 @@ class PlaySoundPacket extends DataPacket{
 		$this->putLFloat($this->pitch);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handlePlaySound($this);
 	}
 }

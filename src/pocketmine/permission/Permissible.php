@@ -19,13 +19,14 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\permission;
 
 use pocketmine\plugin\Plugin;
 
-interface Permissible extends ServerOperator{
+interface Permissible extends ServerOperator
+{
 
 	/**
 	 * Checks if this instance has a permission overridden
@@ -48,7 +49,7 @@ interface Permissible extends ServerOperator{
 	/**
 	 * @param Plugin $plugin
 	 * @param string $name
-	 * @param bool   $value
+	 * @param bool $value
 	 *
 	 * @return PermissionAttachment
 	 */

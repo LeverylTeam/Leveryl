@@ -24,27 +24,32 @@ namespace pocketmine\block;
 use pocketmine\item\Item;
 
 
-class PoweredRepeater extends Solid {
+class PoweredRepeater extends Solid
+{
 	protected $id = self::POWERED_REPEATER_BLOCK;
 
 	const ACTION_ACTIVATE = "Repeater Activate";
 	const ACTION_DEACTIVATE = "Repeater Deactivate";
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getName() : string{
+	public function getName(): string
+	{
 		return "Powered Repeater";
 	}
 
-	public function canBeActivated() : bool{
+	public function canBeActivated(): bool
+	{
 		return true;
 	}
 
-	public function getDrops(Item $item) : array{
+	public function getDrops(Item $item): array
+	{
 		return [
-			[Item::REPEATER, 0, 1]
+			[Item::REPEATER, 0, 1],
 		];
 	}
 }

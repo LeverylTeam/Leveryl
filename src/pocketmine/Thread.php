@@ -19,47 +19,53 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine;
 
 /**
  * This class must be extended by all custom threading classes
  */
-abstract class Thread extends \Thread{
+abstract class Thread extends \Thread
+{
 
 	/** @var \ClassLoader */
 	protected $classLoader;
 	protected $isKilled = false;
 
-	public function getClassLoader(){
+	public function getClassLoader()
+	{
 		return $this->classLoader;
 	}
 
-	public function setClassLoader(\ClassLoader $loader = null){
-		if($loader === null){
+	public function setClassLoader(\ClassLoader $loader = null)
+	{
+		if($loader === null) {
 			$loader = Server::getInstance()->getLoader();
 		}
 		$this->classLoader = $loader;
 	}
 
-	public function registerClassLoader(){
-		if(!interface_exists("ClassLoader", false)){
+	public function registerClassLoader()
+	{
+		if(!interface_exists("ClassLoader", false)) {
 			require(\pocketmine\PATH . "src/spl/ClassLoader.php");
 			require(\pocketmine\PATH . "src/spl/BaseClassLoader.php");
 		}
-		if($this->classLoader !== null){
+		if($this->classLoader !== null) {
 			$this->classLoader->register(true);
 		}
 	}
 
-	public function start(int $options = PTHREADS_INHERIT_ALL){
+	public function start(int $options = PTHREADS_INHERIT_ALL)
+	{
 		ThreadManager::getInstance()->add($this);
 
-		if(!$this->isRunning() and !$this->isJoined() and !$this->isTerminated()){
-			if($this->getClassLoader() === null){
+		if(!$this->isRunning() and !$this->isJoined() and !$this->isTerminated()) {
+			if($this->getClassLoader() === null) {
 				$this->setClassLoader();
 			}
+
 			return parent::start($options);
 		}
 
@@ -69,13 +75,14 @@ abstract class Thread extends \Thread{
 	/**
 	 * Stops the thread using the best way possible. Try to stop it yourself before calling this.
 	 */
-	public function quit(){
+	public function quit()
+	{
 		$this->isKilled = true;
 
 		$this->notify();
 
-		if(!$this->isJoined()){
-			if(!$this->isTerminated()){
+		if(!$this->isJoined()) {
+			if(!$this->isTerminated()) {
 				$this->join();
 			}
 		}
@@ -83,7 +90,8 @@ abstract class Thread extends \Thread{
 		ThreadManager::getInstance()->remove($this);
 	}
 
-	public function getThreadName(){
+	public function getThreadName()
+	{
 		return (new \ReflectionClass($this))->getShortName();
 	}
 }

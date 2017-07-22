@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -31,24 +31,28 @@ use pocketmine\math\Vector3;
 use pocketmine\Player;
 
 
-abstract class Door extends Transparent{
+abstract class Door extends Transparent
+{
 
-	public function canBeActivated(){
+	public function canBeActivated()
+	{
 		return true;
 	}
 
-	public function isSolid(){
+	public function isSolid()
+	{
 		return false;
 	}
 
-	private function getFullDamage(){
+	private function getFullDamage()
+	{
 		$damage = $this->getDamage();
 		$isUp = ($damage & 0x08) > 0;
 
-		if($isUp){
+		if($isUp) {
 			$down = $this->getSide(Vector3::SIDE_DOWN)->getDamage();
 			$up = $damage;
-		}else{
+		} else {
 			$down = $damage;
 			$up = $this->getSide(Vector3::SIDE_UP)->getDamage();
 		}
@@ -58,7 +62,8 @@ abstract class Door extends Transparent{
 		return $down & 0x07 | ($isUp ? 8 : 0) | ($isRight ? 0x10 : 0);
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox()
+	{
 
 		$f = 0.1875;
 		$damage = $this->getFullDamage();
@@ -76,9 +81,9 @@ abstract class Door extends Transparent{
 		$isOpen = (($damage & 0x04) > 0);
 		$isRight = (($damage & 0x10) > 0);
 
-		if($j === 0){
-			if($isOpen){
-				if(!$isRight){
+		if($j === 0) {
+			if($isOpen) {
+				if(!$isRight) {
 					$bb->setBounds(
 						$this->x,
 						$this->y,
@@ -87,7 +92,7 @@ abstract class Door extends Transparent{
 						$this->y + 1,
 						$this->z + $f
 					);
-				}else{
+				} else {
 					$bb->setBounds(
 						$this->x,
 						$this->y,
@@ -97,7 +102,7 @@ abstract class Door extends Transparent{
 						$this->z + 1
 					);
 				}
-			}else{
+			} else {
 				$bb->setBounds(
 					$this->x,
 					$this->y,
@@ -107,9 +112,9 @@ abstract class Door extends Transparent{
 					$this->z + 1
 				);
 			}
-		}elseif($j === 1){
-			if($isOpen){
-				if(!$isRight){
+		} elseif($j === 1) {
+			if($isOpen) {
+				if(!$isRight) {
 					$bb->setBounds(
 						$this->x + 1 - $f,
 						$this->y,
@@ -118,7 +123,7 @@ abstract class Door extends Transparent{
 						$this->y + 1,
 						$this->z + 1
 					);
-				}else{
+				} else {
 					$bb->setBounds(
 						$this->x,
 						$this->y,
@@ -128,7 +133,7 @@ abstract class Door extends Transparent{
 						$this->z + 1
 					);
 				}
-			}else{
+			} else {
 				$bb->setBounds(
 					$this->x,
 					$this->y,
@@ -138,9 +143,9 @@ abstract class Door extends Transparent{
 					$this->z + $f
 				);
 			}
-		}elseif($j === 2){
-			if($isOpen){
-				if(!$isRight){
+		} elseif($j === 2) {
+			if($isOpen) {
+				if(!$isRight) {
 					$bb->setBounds(
 						$this->x,
 						$this->y,
@@ -149,7 +154,7 @@ abstract class Door extends Transparent{
 						$this->y + 1,
 						$this->z + 1
 					);
-				}else{
+				} else {
 					$bb->setBounds(
 						$this->x,
 						$this->y,
@@ -159,7 +164,7 @@ abstract class Door extends Transparent{
 						$this->z + $f
 					);
 				}
-			}else{
+			} else {
 				$bb->setBounds(
 					$this->x + 1 - $f,
 					$this->y,
@@ -169,9 +174,9 @@ abstract class Door extends Transparent{
 					$this->z + 1
 				);
 			}
-		}elseif($j === 3){
-			if($isOpen){
-				if(!$isRight){
+		} elseif($j === 3) {
+			if($isOpen) {
+				if(!$isRight) {
 					$bb->setBounds(
 						$this->x,
 						$this->y,
@@ -180,7 +185,7 @@ abstract class Door extends Transparent{
 						$this->y + 1,
 						$this->z + 1
 					);
-				}else{
+				} else {
 					$bb->setBounds(
 						$this->x + 1 - $f,
 						$this->y,
@@ -190,7 +195,7 @@ abstract class Door extends Transparent{
 						$this->z + 1
 					);
 				}
-			}else{
+			} else {
 				$bb->setBounds(
 					$this->x,
 					$this->y,
@@ -205,11 +210,12 @@ abstract class Door extends Transparent{
 		return $bb;
 	}
 
-	public function onUpdate($type){
-		if($type === Level::BLOCK_UPDATE_NORMAL){
-			if($this->getSide(0)->getId() === self::AIR){ //Replace with common break method
+	public function onUpdate($type)
+	{
+		if($type === Level::BLOCK_UPDATE_NORMAL) {
+			if($this->getSide(0)->getId() === self::AIR) { //Replace with common break method
 				$this->getLevel()->setBlock($this, new Air(), false);
-				if($this->getSide(1) instanceof Door){
+				if($this->getSide(1) instanceof Door) {
 					$this->getLevel()->setBlock($this->getSide(1), new Air(), false);
 				}
 
@@ -220,11 +226,12 @@ abstract class Door extends Transparent{
 		return false;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-		if($face === 1){
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
+	{
+		if($face === 1) {
 			$blockUp = $this->getSide(1);
 			$blockDown = $this->getSide(0);
-			if($blockUp->canBeReplaced() === false or $blockDown->isTransparent() === true){
+			if($blockUp->canBeReplaced() === false or $blockDown->isTransparent() === true) {
 				return false;
 			}
 			$direction = $player instanceof Player ? $player->getDirection() : 0;
@@ -234,31 +241,33 @@ abstract class Door extends Transparent{
 				2 => 2,
 				3 => 5,
 			];
-            $next = $this->getSide($face[($direction + 2) % 4]);
+			$next = $this->getSide($face[($direction + 2) % 4]);
 			$next2 = $this->getSide($face[$direction]);
 			$metaUp = 0x08;
-			if($next->getId() === $this->getId() or ($next2->isTransparent() === false and $next->isTransparent() === true)){ //Door hinge
+			if($next->getId() === $this->getId() or ($next2->isTransparent() === false and $next->isTransparent() === true)) { //Door hinge
 				$metaUp |= 0x01;
 			}
 
 			$this->setDamage($player->getDirection() & 0x03);
 			$this->getLevel()->setBlock($block, $this, true, true); //Bottom
 			$this->getLevel()->setBlock($blockUp, $b = Block::get($this->getId(), $metaUp), true); //Top
+
 			return true;
 		}
 
 		return false;
 	}
 
-	public function onBreak(Item $item){
-		if(($this->getDamage() & 0x08) === 0x08){
+	public function onBreak(Item $item)
+	{
+		if(($this->getDamage() & 0x08) === 0x08) {
 			$down = $this->getSide(0);
-			if($down->getId() === $this->getId()){
+			if($down->getId() === $this->getId()) {
 				$this->getLevel()->setBlock($down, new Air(), true);
 			}
-		}else{
+		} else {
 			$up = $this->getSide(1);
-			if($up->getId() === $this->getId()){
+			if($up->getId() === $this->getId()) {
 				$this->getLevel()->setBlock($up, new Air(), true);
 			}
 		}
@@ -267,27 +276,29 @@ abstract class Door extends Transparent{
 		return true;
 	}
 
-	public function onActivate(Item $item, Player $player = null){
-		if(($this->getDamage() & 0x08) === 0x08){ //Top
+	public function onActivate(Item $item, Player $player = null)
+	{
+		if(($this->getDamage() & 0x08) === 0x08) { //Top
 			$down = $this->getSide(0);
-			if($down->getId() === $this->getId()){
+			if($down->getId() === $this->getId()) {
 				$meta = $down->getDamage() ^ 0x04;
 				$this->getLevel()->setBlock($down, Block::get($this->getId(), $meta), true);
 				$players = $this->getLevel()->getChunkPlayers($this->x >> 4, $this->z >> 4);
-				if($player instanceof Player){
+				if($player instanceof Player) {
 					unset($players[$player->getLoaderId()]);
 				}
 
 				$this->level->addSound(new DoorSound($this));
+
 				return true;
 			}
 
 			return false;
-		}else{
+		} else {
 			$this->meta ^= 0x04;
 			$this->getLevel()->setBlock($this, $this, true);
 			$players = $this->getLevel()->getChunkPlayers($this->x >> 4, $this->z >> 4);
-			if($player instanceof Player){
+			if($player instanceof Player) {
 				unset($players[$player->getLoaderId()]);
 			}
 			$this->level->addSound(new DoorSound($this));

@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level;
 
@@ -37,7 +37,8 @@ use pocketmine\math\Vector3;
  * WARNING: When moving this object around in the world or destroying it,
  * be sure to free the existing references from Level, otherwise you'll leak memory.
  */
-interface ChunkLoader{
+interface ChunkLoader
+{
 
 	/**
 	 * Returns the ChunkLoader id.

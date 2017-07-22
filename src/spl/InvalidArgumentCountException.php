@@ -15,6 +15,7 @@
  * GNU General Public License for more details.
 */
 
-class InvalidArgumentCountException extends InvalidArgumentException{
+class InvalidArgumentCountException extends InvalidArgumentException
+{
 
 }

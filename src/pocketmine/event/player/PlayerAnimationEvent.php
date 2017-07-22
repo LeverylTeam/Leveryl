@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\player;
 
@@ -29,7 +29,8 @@ use pocketmine\Player;
 /**
  * Called when a player does an animation
  */
-class PlayerAnimationEvent extends PlayerEvent implements Cancellable{
+class PlayerAnimationEvent extends PlayerEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	const ARM_SWING = 1;
@@ -38,9 +39,10 @@ class PlayerAnimationEvent extends PlayerEvent implements Cancellable{
 
 	/**
 	 * @param Player $player
-	 * @param int	$animation
+	 * @param int $animation
 	 */
-	public function __construct(Player $player, $animation = self::ARM_SWING){
+	public function __construct(Player $player, $animation = self::ARM_SWING)
+	{
 		$this->player = $player;
 		$this->animationType = $animation;
 	}
@@ -48,7 +50,8 @@ class PlayerAnimationEvent extends PlayerEvent implements Cancellable{
 	/**
 	 * @return int
 	 */
-	public function getAnimationType(){
+	public function getAnimationType()
+	{
 		return $this->animationType;
 	}
 

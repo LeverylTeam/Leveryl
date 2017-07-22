@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\command\defaults;
 
@@ -29,9 +29,11 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
-class DeopCommand extends VanillaCommand{
+class DeopCommand extends VanillaCommand
+{
 
-	public function __construct($name){
+	public function __construct($name)
+	{
 		parent::__construct(
 			$name,
 			"%pocketmine.command.deop.description",
@@ -40,12 +42,13 @@ class DeopCommand extends VanillaCommand{
 		$this->setPermission("pocketmine.command.op.take");
 	}
 
-	public function execute(CommandSender $sender, $currentAlias, array $args){
-		if(!$this->testPermission($sender)){
+	public function execute(CommandSender $sender, $currentAlias, array $args)
+	{
+		if(!$this->testPermission($sender)) {
 			return true;
 		}
 
-		if(count($args) === 0){
+		if(count($args) === 0) {
 			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
 
 			return false;
@@ -55,7 +58,7 @@ class DeopCommand extends VanillaCommand{
 
 		$player = $sender->getServer()->getOfflinePlayer($name);
 		$player->setOp(false);
-		if($player instanceof Player){
+		if($player instanceof Player) {
 			$player->sendMessage(TextFormat::GRAY . "You are no longer op!");
 		}
 		Command::broadcastCommandMessage($sender, new TranslationContainer("commands.deop.success", [$player->getName()]));

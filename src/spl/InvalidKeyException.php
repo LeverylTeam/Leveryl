@@ -15,6 +15,7 @@
  * GNU General Public License for more details.
 */
 
-class InvalidKeyException extends InvalidArgumentException{
+class InvalidKeyException extends InvalidArgumentException
+{
 
 }

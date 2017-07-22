@@ -18,34 +18,39 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
 use pocketmine\item\Tool;
 
-class ShulkerBox extends Transparent {
+class ShulkerBox extends Transparent
+{
 
-    protected $id = self::SHULKER_BOX;
+	protected $id = self::SHULKER_BOX;
 
-    public function __construct($meta = 0){
-        $this->meta = $meta;
-    }
+	public function __construct($meta = 0)
+	{
+		$this->meta = $meta;
+	}
 
-    public function getToolType(){
-        return Tool::TYPE_PICKAXE;
-    }
+	public function getToolType()
+	{
+		return Tool::TYPE_PICKAXE;
+	}
 
-    public function getName(){
-        return "Shulker Box";
-    }
+	public function getName()
+	{
+		return "Shulker Box";
+	}
 
-    public function getHardness(){
-        return 6;
-    }
+	public function getHardness()
+	{
+		return 6;
+	}
 
-    public function getResistance()
-    {
-        return 30;
-    }
+	public function getResistance()
+	{
+		return 30;
+	}
 }

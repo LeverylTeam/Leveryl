@@ -19,13 +19,15 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level\generator\normal\biome;
 
-class SwampBiome extends GrassyBiome{
+class SwampBiome extends GrassyBiome
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		parent::__construct();
 
 		$this->setElevation(62, 63);
@@ -34,7 +36,8 @@ class SwampBiome extends GrassyBiome{
 		$this->rainfall = 0.9;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Swamp";
 	}
 }

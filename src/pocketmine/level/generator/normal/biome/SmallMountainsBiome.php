@@ -19,20 +19,23 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level\generator\normal\biome;
 
 
-class SmallMountainsBiome extends MountainsBiome{
+class SmallMountainsBiome extends MountainsBiome
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		parent::__construct();
 
 		$this->setElevation(63, 97);
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Small Mountains";
 	}
 }

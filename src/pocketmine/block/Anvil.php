@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -28,7 +28,8 @@ use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\Player;
 
-class Anvil extends Fallable{
+class Anvil extends Fallable
+{
 
 	const TYPE_NORMAL = 0;
 	const TYPE_SLIGHTLY_DAMAGED = 4;
@@ -36,59 +37,70 @@ class Anvil extends Fallable{
 
 	protected $id = self::ANVIL;
 
-	public function isSolid(){
+	public function isSolid()
+	{
 		return false;
 	}
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated()
+	{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 5;
 	}
 
-	public function getResistance(){
+	public function getResistance()
+	{
 		return 6000;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		static $names = [
-			self::TYPE_NORMAL => "Anvil",
+			self::TYPE_NORMAL           => "Anvil",
 			self::TYPE_SLIGHTLY_DAMAGED => "Slightly Damaged Anvil",
-			self::TYPE_VERY_DAMAGED => "Very Damaged Anvil"
+			self::TYPE_VERY_DAMAGED     => "Very Damaged Anvil",
 		];
+
 		return $names[$this->meta & 0x0c] ?? "Anvil";
 	}
 
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function onActivate(Item $item, Player $player = null){
-		if($player instanceof Player){
+	public function onActivate(Item $item, Player $player = null)
+	{
+		if($player instanceof Player) {
 			$player->addWindow(new AnvilInventory($this));
 		}
 
 		return true;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
+	{
 		$direction = ($player !== null ? $player->getDirection() : 0) & 0x03;
 		$this->meta = ($this->meta & 0x0c) | $direction;
 		$this->getLevel()->setBlock($block, $this, true, true);
 	}
 
-	public function getDrops(Item $item){
-		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+	public function getDrops(Item $item)
+	{
+		if($item->isPickaxe() >= Tool::TIER_WOODEN) {
 			return [
 				[$this->id, $this->meta & 0x0c, 1],
 			];
-		}else{
+		} else {
 			return [];
 		}
 	}

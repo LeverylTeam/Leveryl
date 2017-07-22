@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\block;
 
@@ -30,7 +30,8 @@ use pocketmine\Player;
 /**
  * Called when a sign is changed by a player.
  */
-class SignChangeEvent extends BlockEvent implements Cancellable{
+class SignChangeEvent extends BlockEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	/** @var \pocketmine\Player */
@@ -39,11 +40,12 @@ class SignChangeEvent extends BlockEvent implements Cancellable{
 	private $lines = [];
 
 	/**
-	 * @param Block	$theBlock
-	 * @param Player   $thePlayer
+	 * @param Block $theBlock
+	 * @param Player $thePlayer
 	 * @param string[] $theLines
 	 */
-	public function __construct(Block $theBlock, Player $thePlayer, array $theLines){
+	public function __construct(Block $theBlock, Player $thePlayer, array $theLines)
+	{
 		parent::__construct($theBlock);
 		$this->player = $thePlayer;
 		$this->lines = $theLines;
@@ -52,14 +54,16 @@ class SignChangeEvent extends BlockEvent implements Cancellable{
 	/**
 	 * @return Player
 	 */
-	public function getPlayer(){
+	public function getPlayer()
+	{
 		return $this->player;
 	}
 
 	/**
 	 * @return string[]
 	 */
-	public function getLines(){
+	public function getLines()
+	{
 		return $this->lines;
 	}
 
@@ -68,15 +72,17 @@ class SignChangeEvent extends BlockEvent implements Cancellable{
 	 *
 	 * @return string
 	 */
-	public function getLine($index){
+	public function getLine($index)
+	{
 		return $this->lines[$index];
 	}
 
 	/**
-	 * @param int	$index 0-3
+	 * @param int $index 0-3
 	 * @param string $line
 	 */
-	public function setLine($index, $line){
+	public function setLine($index, $line)
+	{
 		$this->lines[$index] = $line;
 	}
 }

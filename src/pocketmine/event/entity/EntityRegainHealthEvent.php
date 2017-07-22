@@ -2,11 +2,11 @@
 
 /**
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,14 +19,15 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\entity;
 
 use pocketmine\entity\Entity;
 use pocketmine\event\Cancellable;
 
-class EntityRegainHealthEvent extends EntityEvent implements Cancellable{
+class EntityRegainHealthEvent extends EntityEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	const CAUSE_REGEN = 0;
@@ -41,30 +42,34 @@ class EntityRegainHealthEvent extends EntityEvent implements Cancellable{
 
 	/**
 	 * @param Entity $entity
-	 * @param float  $amount
-	 * @param int	$regainReason
+	 * @param float $amount
+	 * @param int $regainReason
 	 */
-	public function __construct(Entity $entity, $amount, $regainReason){
+	public function __construct(Entity $entity, $amount, $regainReason)
+	{
 		$this->entity = $entity;
 		$this->amount = $amount;
-		$this->reason = (int) $regainReason;
+		$this->reason = (int)$regainReason;
 	}
 
 	/**
 	 * @return float
 	 */
-	public function getAmount(){
+	public function getAmount()
+	{
 		return $this->amount;
 	}
 
 	/**
 	 * @param float $amount
 	 */
-	public function setAmount($amount){
+	public function setAmount($amount)
+	{
 		$this->amount = $amount;
 	}
 
-	public function getRegainReason(){
+	public function getRegainReason()
+	{
 		return $this->reason;
 	}
 

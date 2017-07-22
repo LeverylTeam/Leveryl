@@ -19,31 +19,35 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\nbt\tag;
 
 
-abstract class NamedTag extends Tag{
+abstract class NamedTag extends Tag
+{
 
 	protected $__name;
 
 	/**
 	 * @param string $name
-	 * @param mixed  $value
+	 * @param mixed $value
 	 */
-	public function __construct(string $name = "", $value = null){
+	public function __construct(string $name = "", $value = null)
+	{
 		$this->__name = ($name === null or $name === false) ? "" : $name;
-		if($value !== null){
+		if($value !== null) {
 			$this->setValue($value);
 		}
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return $this->__name;
 	}
 
-	public function setName($name){
+	public function setName($name)
+	{
 		$this->__name = $name;
 	}
 }

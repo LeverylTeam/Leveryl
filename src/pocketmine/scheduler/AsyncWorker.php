@@ -19,23 +19,26 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\scheduler;
 
 use pocketmine\Worker;
 
-class AsyncWorker extends Worker{
+class AsyncWorker extends Worker
+{
 
 	private $logger;
 	private $id;
 
-	public function __construct(\ThreadedLogger $logger, $id){
+	public function __construct(\ThreadedLogger $logger, $id)
+	{
 		$this->logger = $logger;
 		$this->id = $id;
 	}
 
-	public function run(){
+	public function run()
+	{
 		$this->registerClassLoader();
 		gc_enable();
 		ini_set("memory_limit", '-1');
@@ -44,11 +47,13 @@ class AsyncWorker extends Worker{
 		$store = [];
 	}
 
-	public function handleException(\Throwable $e){
+	public function handleException(\Throwable $e)
+	{
 		$this->logger->logException($e);
 	}
 
-	public function getThreadName(){
+	public function getThreadName()
+	{
 		return "Asynchronous Worker #" . $this->id;
 	}
 }

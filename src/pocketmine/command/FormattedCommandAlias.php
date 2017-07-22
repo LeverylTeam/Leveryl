@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\command;
 
@@ -27,30 +27,33 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 
-class FormattedCommandAlias extends Command{
+class FormattedCommandAlias extends Command
+{
 	private $formatStrings = [];
 
 	/**
-	 * @param string   $alias
+	 * @param string $alias
 	 * @param string[] $formatStrings
 	 */
-	public function __construct($alias, array $formatStrings){
+	public function __construct($alias, array $formatStrings)
+	{
 		parent::__construct($alias);
 		$this->formatStrings = $formatStrings;
 	}
 
-	public function execute(CommandSender $sender, $commandLabel, array $args){
+	public function execute(CommandSender $sender, $commandLabel, array $args)
+	{
 
 		$commands = [];
 		$result = false;
 
-		foreach($this->formatStrings as $formatString){
-			try{
+		foreach($this->formatStrings as $formatString) {
+			try {
 				$commands[] = $this->buildCommand($formatString, $args);
-			}catch(\Throwable $e){
-				if($e instanceof \InvalidArgumentException){
+			} catch(\Throwable $e) {
+				if($e instanceof \InvalidArgumentException) {
 					$sender->sendMessage(TextFormat::RED . $e->getMessage());
-				}else{
+				} else {
 					$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.generic.exception"));
 					$sender->getServer()->getLogger()->logException($e);
 				}
@@ -59,32 +62,33 @@ class FormattedCommandAlias extends Command{
 			}
 		}
 
-		foreach($commands as $command){
+		foreach($commands as $command) {
 			$result |= Server::getInstance()->dispatchCommand($sender, $command);
 		}
 
-		return (bool) $result;
+		return (bool)$result;
 	}
 
 	/**
 	 * @param string $formatString
-	 * @param array  $args
+	 * @param array $args
 	 *
 	 * @return string
 	 * @throws \InvalidArgumentException
 	 */
-	private function buildCommand($formatString, array $args){
+	private function buildCommand($formatString, array $args)
+	{
 		$index = strpos($formatString, '$');
-		while($index !== false){
+		while($index !== false) {
 			$start = $index;
-			if($index > 0 and $formatString{$start - 1} === "\\"){
+			if($index > 0 and $formatString{$start - 1} === "\\") {
 				$formatString = substr($formatString, 0, $start - 1) . substr($formatString, $start);
 				$index = strpos($formatString, '$', $index);
 				continue;
 			}
 
 			$required = false;
-			if($formatString{$index + 1} == '$'){
+			if($formatString{$index + 1} == '$') {
 				$required = true;
 
 				++$index;
@@ -94,17 +98,17 @@ class FormattedCommandAlias extends Command{
 
 			$argStart = $index;
 
-			while($index < strlen($formatString) and self::inRange(ord($formatString{$index}) - 48, 0, 9)){
+			while($index < strlen($formatString) and self::inRange(ord($formatString{$index}) - 48, 0, 9)) {
 				++$index;
 			}
 
-			if($argStart === $index){
+			if($argStart === $index) {
 				throw new \InvalidArgumentException("Invalid replacement token");
 			}
 
-            $position = (int) (substr($formatString, $argStart, $index));
+			$position = (int)(substr($formatString, $argStart, $index));
 
-			if($position === 0){
+			if($position === 0) {
 				throw new \InvalidArgumentException("Invalid replacement token");
 			}
 
@@ -112,27 +116,27 @@ class FormattedCommandAlias extends Command{
 
 			$rest = false;
 
-			if($index < strlen($formatString) and $formatString{$index} === "-"){
+			if($index < strlen($formatString) and $formatString{$index} === "-") {
 				$rest = true;
 				++$index;
 			}
 
 			$end = $index;
 
-			if($required and $position >= count($args)){
+			if($required and $position >= count($args)) {
 				throw new \InvalidArgumentException("Missing required argument " . ($position + 1));
 			}
 
 			$replacement = "";
-			if($rest and $position < count($args)){
-				for($i = $position; $i < count($args); ++$i){
-					if($i !== $position){
+			if($rest and $position < count($args)) {
+				for($i = $position; $i < count($args); ++$i) {
+					if($i !== $position) {
 						$replacement .= " ";
 					}
 
 					$replacement .= $args[$i];
 				}
-			}elseif($position < count($args)){
+			} elseif($position < count($args)) {
 				$replacement .= $args[$position];
 			}
 
@@ -153,7 +157,8 @@ class FormattedCommandAlias extends Command{
 	 *
 	 * @return bool
 	 */
-	private static function inRange($i, $j, $k){
+	private static function inRange($i, $j, $k)
+	{
 		return $i >= $j and $i <= $k;
 	}
 

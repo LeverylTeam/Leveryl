@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level\generator\normal;
 
@@ -45,7 +45,8 @@ use pocketmine\level\Level;
 use pocketmine\math\Vector3 as Vector3;
 use pocketmine\utils\Random;
 
-class Normal extends Generator{
+class Normal extends Generator
+{
 
 	/** @var Populator[] */
 	private $populators = [];
@@ -67,22 +68,24 @@ class Normal extends Generator{
 	private static $GAUSSIAN_KERNEL = null;
 	private static $SMOOTH_SIZE = 2;
 
-	public function __construct(array $options = []){
-		if(self::$GAUSSIAN_KERNEL === null){
+	public function __construct(array $options = [])
+	{
+		if(self::$GAUSSIAN_KERNEL === null) {
 			self::generateKernel();
 		}
 	}
 
-	private static function generateKernel(){
+	private static function generateKernel()
+	{
 		self::$GAUSSIAN_KERNEL = [];
 
 		$bellSize = 1 / self::$SMOOTH_SIZE;
 		$bellHeight = 2 * self::$SMOOTH_SIZE;
 
-		for($sx = -self::$SMOOTH_SIZE; $sx <= self::$SMOOTH_SIZE; ++$sx){
+		for($sx = -self::$SMOOTH_SIZE; $sx <= self::$SMOOTH_SIZE; ++$sx) {
 			self::$GAUSSIAN_KERNEL[$sx + self::$SMOOTH_SIZE] = [];
 
-			for($sz = -self::$SMOOTH_SIZE; $sz <= self::$SMOOTH_SIZE; ++$sz){
+			for($sz = -self::$SMOOTH_SIZE; $sz <= self::$SMOOTH_SIZE; ++$sz) {
 				$bx = $bellSize * $sx;
 				$bz = $bellSize * $sz;
 				self::$GAUSSIAN_KERNEL[$sx + self::$SMOOTH_SIZE][$sz + self::$SMOOTH_SIZE] = $bellHeight * exp(-($bx * $bx + $bz * $bz) / 2);
@@ -90,69 +93,73 @@ class Normal extends Generator{
 		}
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "normal";
 	}
 
-	public function getSettings(){
+	public function getSettings()
+	{
 		return [];
 	}
 
-	public function pickBiome($x, $z){
+	public function pickBiome($x, $z)
+	{
 		$hash = $x * 2345803 ^ $z * 9236449 ^ $this->level->getSeed();
 		$hash *= $hash + 223;
 		$xNoise = $hash >> 20 & 3;
 		$zNoise = $hash >> 22 & 3;
-		if($xNoise == 3){
+		if($xNoise == 3) {
 			$xNoise = 1;
 		}
-		if($zNoise == 3){
+		if($zNoise == 3) {
 			$zNoise = 1;
 		}
 
 		return $this->selector->pickBiome($x + $xNoise - 1, $z + $zNoise - 1);
 	}
 
-	public function init(ChunkManager $level, Random $random){
+	public function init(ChunkManager $level, Random $random)
+	{
 		$this->level = $level;
 		$this->random = $random;
 		$this->random->setSeed($this->level->getSeed());
 		$this->noiseBase = new Simplex($this->random, 4, 1 / 4, 1 / 32);
 		$this->random->setSeed($this->level->getSeed());
-		$this->selector = new BiomeSelector($this->random, function($temperature, $rainfall){
-			if($rainfall < 0.25){
-				if($temperature < 0.7){
+		$this->selector = new BiomeSelector($this->random, function($temperature, $rainfall) {
+			if($rainfall < 0.25) {
+				if($temperature < 0.7) {
 					return Biome::OCEAN;
-				}elseif($temperature < 0.85){
+				} elseif($temperature < 0.85) {
 					return Biome::RIVER;
-				}else{
+				} else {
 					return Biome::SWAMP;
 				}
-			}elseif($rainfall < 0.60){
-				if($temperature < 0.25){
+			} elseif($rainfall < 0.60) {
+				if($temperature < 0.25) {
 					return Biome::ICE_PLAINS;
-				}elseif($temperature < 0.75){
+				} elseif($temperature < 0.75) {
 					return Biome::PLAINS;
-				}else{
+				} else {
 					return Biome::DESERT;
 				}
-			}elseif($rainfall < 0.80){
-				if($temperature < 0.25){
+			} elseif($rainfall < 0.80) {
+				if($temperature < 0.25) {
 					return Biome::TAIGA;
-				}elseif($temperature < 0.75){
+				} elseif($temperature < 0.75) {
 					return Biome::FOREST;
-				}else{
+				} else {
 					return Biome::BIRCH_FOREST;
 				}
-			}else{
-                //FIXME: This will always cause River to be used since the rainfall is always greater than 0.8 if we
-                //reached this branch. However I don't think that substituting temperature for rainfall is correct given
-                //that mountain biomes are supposed to be pretty cold.
-				if($rainfall < 0.25){
+			} else {
+				//FIXME: This will always cause River to be used since the rainfall is always greater than 0.8 if we
+				//reached this branch. However I don't think that substituting temperature for rainfall is correct given
+				//that mountain biomes are supposed to be pretty cold.
+				if($rainfall < 0.25) {
 					return Biome::MOUNTAINS;
-				}elseif($rainfall < 0.70){
+				} elseif($rainfall < 0.70) {
 					return Biome::SMALL_MOUNTAINS;
-				}else{
+				} else {
 					return Biome::RIVER;
 				}
 			}
@@ -184,12 +191,13 @@ class Normal extends Generator{
 			new OreType(new GoldOre(), 2, 8, 0, 32),
 			new OreType(new DiamondOre(), 1, 7, 0, 16),
 			new OreType(new Dirt(), 20, 32, 0, 128),
-			new OreType(new Gravel(), 10, 16, 0, 128)
+			new OreType(new Gravel(), 10, 16, 0, 128),
 		]);
 		$this->populators[] = $ores;
 	}
 
-	public function generateChunk($chunkX, $chunkZ){
+	public function generateChunk($chunkX, $chunkZ)
+	{
 		$this->random->setSeed(0xdeadbeef ^ ($chunkX << 8) ^ $chunkZ ^ $this->level->getSeed());
 
 		$noise = Generator::getFastNoise3D($this->noiseBase, 16, 128, 16, 4, 8, 4, $chunkX * 16, 0, $chunkZ * 16);
@@ -198,8 +206,8 @@ class Normal extends Generator{
 
 		$biomeCache = [];
 
-		for($x = 0; $x < 16; ++$x){
-			for($z = 0; $z < 16; ++$z){
+		for($x = 0; $x < 16; ++$x) {
+			for($z = 0; $z < 16; ++$z) {
 				$minSum = 0;
 				$maxSum = 0;
 				$weightSum = 0;
@@ -207,18 +215,18 @@ class Normal extends Generator{
 				$biome = $this->pickBiome($chunkX * 16 + $x, $chunkZ * 16 + $z);
 				$chunk->setBiomeId($x, $z, $biome->getId());
 
-				for($sx = -self::$SMOOTH_SIZE; $sx <= self::$SMOOTH_SIZE; ++$sx){
-					for($sz = -self::$SMOOTH_SIZE; $sz <= self::$SMOOTH_SIZE; ++$sz){
+				for($sx = -self::$SMOOTH_SIZE; $sx <= self::$SMOOTH_SIZE; ++$sx) {
+					for($sz = -self::$SMOOTH_SIZE; $sz <= self::$SMOOTH_SIZE; ++$sz) {
 
 						$weight = self::$GAUSSIAN_KERNEL[$sx + self::$SMOOTH_SIZE][$sz + self::$SMOOTH_SIZE];
 
-						if($sx === 0 and $sz === 0){
+						if($sx === 0 and $sz === 0) {
 							$adjacent = $biome;
-						}else{
+						} else {
 							$index = Level::chunkHash($chunkX * 16 + $x + $sx, $chunkZ * 16 + $z + $sz);
-							if(isset($biomeCache[$index])){
+							if(isset($biomeCache[$index])) {
 								$adjacent = $biomeCache[$index];
-							}else{
+							} else {
 								$biomeCache[$index] = $adjacent = $this->pickBiome($chunkX * 16 + $x + $sx, $chunkZ * 16 + $z + $sz);
 							}
 						}
@@ -235,30 +243,31 @@ class Normal extends Generator{
 
 				$smoothHeight = ($maxSum - $minSum) / 2;
 
-				for($y = 0; $y < 128; ++$y){
-					if($y === 0){
+				for($y = 0; $y < 128; ++$y) {
+					if($y === 0) {
 						$chunk->setBlockId($x, $y, $z, Block::BEDROCK);
 						continue;
 					}
 					$noiseValue = $noise[$x][$z][$y] - 1 / $smoothHeight * ($y - $smoothHeight - $minSum);
 
-					if($noiseValue > 0){
+					if($noiseValue > 0) {
 						$chunk->setBlockId($x, $y, $z, Block::STONE);
-					}elseif($y <= $this->waterHeight){
+					} elseif($y <= $this->waterHeight) {
 						$chunk->setBlockId($x, $y, $z, Block::STILL_WATER);
 					}
 				}
 			}
 		}
 
-		foreach($this->generationPopulators as $populator){
+		foreach($this->generationPopulators as $populator) {
 			$populator->populate($this->level, $chunkX, $chunkZ, $this->random);
 		}
 	}
 
-	public function populateChunk($chunkX, $chunkZ){
+	public function populateChunk($chunkX, $chunkZ)
+	{
 		$this->random->setSeed(0xdeadbeef ^ ($chunkX << 8) ^ $chunkZ ^ $this->level->getSeed());
-		foreach($this->populators as $populator){
+		foreach($this->populators as $populator) {
 			$populator->populate($this->level, $chunkX, $chunkZ, $this->random);
 		}
 
@@ -267,7 +276,8 @@ class Normal extends Generator{
 		$biome->populateChunk($this->level, $chunkX, $chunkZ, $this->random);
 	}
 
-	public function getSpawn(){
+	public function getSpawn()
+	{
 		return new Vector3(127.5, 128, 127.5);
 	}
 

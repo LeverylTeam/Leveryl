@@ -19,12 +19,13 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\item\enchantment;
 
 
-class EnchantmentEntry{
+class EnchantmentEntry
+{
 
 	/** @var Enchantment[] */
 	private $enchantments;
@@ -33,24 +34,28 @@ class EnchantmentEntry{
 
 	/**
 	 * @param Enchantment[] $enchantments
-	 * @param number		$cost
-	 * @param string		$randomName
+	 * @param number $cost
+	 * @param string $randomName
 	 */
-	public function __construct(array $enchantments, $cost, $randomName){
+	public function __construct(array $enchantments, $cost, $randomName)
+	{
 		$this->enchantments = $enchantments;
-		$this->cost = (int) $cost;
+		$this->cost = (int)$cost;
 		$this->randomName = $randomName;
 	}
 
-	public function getEnchantments(){
+	public function getEnchantments()
+	{
 		return $this->enchantments;
 	}
 
-	public function getCost(){
+	public function getCost()
+	{
 		return $this->cost;
 	}
 
-	public function getRandomName(){
+	public function getRandomName()
+	{
 		return $this->randomName;
 	}
 

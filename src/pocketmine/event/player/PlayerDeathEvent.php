@@ -2,11 +2,11 @@
 
 /**
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\player;
 
@@ -28,7 +28,8 @@ use pocketmine\event\TextContainer;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
-class PlayerDeathEvent extends EntityDeathEvent{
+class PlayerDeathEvent extends EntityDeathEvent
+{
 	public static $handlerList = null;
 
 	/** @var TextContainer|string */
@@ -37,11 +38,12 @@ class PlayerDeathEvent extends EntityDeathEvent{
 	private $keepExperience = false;
 
 	/**
-	 * @param Player			   $entity
-	 * @param Item[]			   $drops
+	 * @param Player $entity
+	 * @param Item[] $drops
 	 * @param string|TextContainer $deathMessage
 	 */
-	public function __construct(Player $entity, array $drops, $deathMessage){
+	public function __construct(Player $entity, array $drops, $deathMessage)
+	{
 		parent::__construct($entity, $drops);
 		$this->deathMessage = $deathMessage;
 		$this->keepExperience = $entity->getServer()->getLeverylConfigValue("KeepExperiencePoints", false);
@@ -50,45 +52,53 @@ class PlayerDeathEvent extends EntityDeathEvent{
 	/**
 	 * @return Player
 	 */
-	public function getEntity(){
+	public function getEntity()
+	{
 		return $this->entity;
 	}
 
 	/**
 	 * @return Player
 	 */
-	public function getPlayer(){
+	public function getPlayer()
+	{
 		return $this->entity;
 	}
 
 	/**
 	 * @return TextContainer|string
 	 */
-	public function getDeathMessage(){
+	public function getDeathMessage()
+	{
 		return $this->deathMessage;
 	}
 
 	/**
 	 * @param TextContainer|string $deathMessage
 	 */
-	public function setDeathMessage($deathMessage){
+	public function setDeathMessage($deathMessage)
+	{
 		$this->deathMessage = $deathMessage;
 	}
 
-    public function getKeepInventory(){
-        return $this->keepInventory;
-    }
+	public function getKeepInventory()
+	{
+		return $this->keepInventory;
+	}
 
-    public function setKeepInventory(bool $keepInventory){
-        $this->keepInventory = $keepInventory;
-    }
+	public function setKeepInventory(bool $keepInventory)
+	{
+		$this->keepInventory = $keepInventory;
+	}
 
-    public function getKeepExperience(){
-        return $this->keepExperience;
-    }
+	public function getKeepExperience()
+	{
+		return $this->keepExperience;
+	}
 
-    public function setKeepExperience(bool $keepExperience){
-        $this->keepExperience = $keepExperience;
-    }
+	public function setKeepExperience(bool $keepExperience)
+	{
+		$this->keepExperience = $keepExperience;
+	}
 
 }

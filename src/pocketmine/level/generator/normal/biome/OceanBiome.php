@@ -19,15 +19,17 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level\generator\normal\biome;
 
 use pocketmine\level\generator\populator\TallGrass;
 
-class OceanBiome extends GrassyBiome{
+class OceanBiome extends GrassyBiome
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		parent::__construct();
 
 		$tallGrass = new TallGrass();
@@ -41,7 +43,8 @@ class OceanBiome extends GrassyBiome{
 		$this->rainfall = 0.5;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Ocean";
 	}
 }

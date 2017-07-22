@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\entity;
 
@@ -30,7 +30,8 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Snowball extends Projectile{
+class Snowball extends Projectile
+{
 	const NETWORK_ID = 81;
 
 	public $width = 0.25;
@@ -40,12 +41,14 @@ class Snowball extends Projectile{
 	protected $gravity = 0.03;
 	protected $drag = 0.01;
 
-	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
+	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null)
+	{
 		parent::__construct($level, $nbt, $shootingEntity);
 	}
 
-	public function onUpdate($currentTick){
-		if($this->closed){
+	public function onUpdate($currentTick)
+	{
+		if($this->closed) {
 			return false;
 		}
 
@@ -53,12 +56,12 @@ class Snowball extends Projectile{
 
 		$hasUpdate = parent::onUpdate($currentTick);
 
-		if($this->age > 1200 or $this->isCollided){
-		    if($this->isAlive()){
-                $this->getLevel()->addParticle(new DestroyBlockParticle($this, Block::get(Block::SNOW)));
-                $this->kill();
-                $hasUpdate = true;
-            }
+		if($this->age > 1200 or $this->isCollided) {
+			if($this->isAlive()) {
+				$this->getLevel()->addParticle(new DestroyBlockParticle($this, Block::get(Block::SNOW)));
+				$this->kill();
+				$hasUpdate = true;
+			}
 		}
 
 		$this->timings->stopTiming();
@@ -66,7 +69,8 @@ class Snowball extends Projectile{
 		return $hasUpdate;
 	}
 
-	public function spawnTo(Player $player){
+	public function spawnTo(Player $player)
+	{
 		$pk = new AddEntityPacket();
 		$pk->type = Snowball::NETWORK_ID;
 		$pk->entityRuntimeId = $this->getId();

@@ -19,19 +19,22 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
-class LitRedstoneTorch extends RedstoneTorch{
+class LitRedstoneTorch extends RedstoneTorch
+{
 
 	protected $id = self::REDSTONE_TORCH;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Lit Redstone Torch";
 	}
 }

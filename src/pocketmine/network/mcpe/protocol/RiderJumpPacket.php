@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 
 namespace pocketmine\network\mcpe\protocol;
@@ -29,21 +29,25 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class RiderJumpPacket extends DataPacket{
+class RiderJumpPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::RIDER_JUMP_PACKET;
 
 	public $unknown;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->unknown = $this->getVarInt();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putVarInt($this->unknown);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleRiderJump($this);
 	}
 }

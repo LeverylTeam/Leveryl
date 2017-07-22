@@ -19,13 +19,14 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 
 namespace pocketmine\network\mcpe\protocol\types;
 
 
-interface WindowTypes{
+interface WindowTypes
+{
 
 	const INVENTORY = -1;
 	const CONTAINER = 0;

@@ -22,25 +22,28 @@
 namespace pocketmine\block;
 
 
-
-
-class SlimeBlock extends Solid{
+class SlimeBlock extends Solid
+{
 
 	protected $id = self::SLIME_BLOCK;
 
-	public function __construct($meta = 15){
+	public function __construct($meta = 15)
+	{
 		$this->meta = $meta;
 	}
 
-	public function hasEntityCollision(){
+	public function hasEntityCollision()
+	{
 		return true;
 	}
 
-	public function getHardness() {
+	public function getHardness()
+	{
 		return 0;
 	}
 
-	public function getName() : string{
+	public function getName(): string
+	{
 		return "Slime Block";
 	}
 }

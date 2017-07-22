@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class LoginPacket extends DataPacket{
+class LoginPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::LOGIN_PACKET;
 
 	const EDITION_POCKET = 0;
@@ -52,15 +53,18 @@ class LoginPacket extends DataPacket{
 	public $guiscale;
 	public $controls;
 
-	public function canBeSentBeforeLogin() : bool{
+	public function canBeSentBeforeLogin(): bool
+	{
 		return true;
 	}
 
-	public function decode(){
+	public function decode()
+	{
 		$this->protocol = $this->getInt();
 
-		if($this->protocol !== ProtocolInfo::CURRENT_PROTOCOL){
+		if($this->protocol !== ProtocolInfo::CURRENT_PROTOCOL) {
 			$this->buffer = null;
+
 			return; //Do not attempt to decode for non-accepted protocols
 		}
 
@@ -69,16 +73,16 @@ class LoginPacket extends DataPacket{
 		$this->setBuffer($this->getString(), 0);
 
 		$chainData = json_decode($this->get($this->getLInt()));
-		foreach($chainData->{"chain"} as $chain){
+		foreach($chainData->{"chain"} as $chain) {
 			$webtoken = $this->decodeToken($chain);
-			if(isset($webtoken["extraData"])){
-				if(isset($webtoken["extraData"]["displayName"])){
+			if(isset($webtoken["extraData"])) {
+				if(isset($webtoken["extraData"]["displayName"])) {
 					$this->username = $webtoken["extraData"]["displayName"];
 				}
-				if(isset($webtoken["extraData"]["identity"])){
+				if(isset($webtoken["extraData"]["identity"])) {
 					$this->clientUUID = $webtoken["extraData"]["identity"];
 				}
-				if(isset($webtoken["identityPublicKey"])){
+				if(isset($webtoken["identityPublicKey"])) {
 					$this->identityPublicKey = $webtoken["identityPublicKey"];
 				}
 			}
@@ -90,38 +94,41 @@ class LoginPacket extends DataPacket{
 		$this->serverAddress = $this->clientData["ServerAddress"] ?? null;
 		$this->skinId = $this->clientData["SkinId"] ?? null;
 
-		if(isset($this->clientData["SkinData"])){
+		if(isset($this->clientData["SkinData"])) {
 			$this->skin = base64_decode($this->clientData["SkinData"]);
 		}
-		if(isset($this->clientData["DeviceOS"])){
+		if(isset($this->clientData["DeviceOS"])) {
 			$this->deviceos = $this->clientData["DeviceOS"];
 		}
-		if(isset($this->clientData["DeviceModel"])){
+		if(isset($this->clientData["DeviceModel"])) {
 			$this->devicemodel = $this->clientData["DeviceModel"];
 		}
-		if(isset($this->clientData["UIProfile"])){
+		if(isset($this->clientData["UIProfile"])) {
 			$this->uiprofile = $this->clientData["UIProfile"];
 		}
-		if(isset($this->clientData["GuiScale"])){
+		if(isset($this->clientData["GuiScale"])) {
 			$this->guiscale = $this->clientData["GuiScale"];
 		}
-		if(isset($this->clientData["CurrentInputMode"])){
+		if(isset($this->clientData["CurrentInputMode"])) {
 			$this->controls = $this->clientData["CurrentInputMode"];
 		}
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		//TODO
 	}
 
-	public function decodeToken($token){
+	public function decodeToken($token)
+	{
 		$tokens = explode(".", $token);
-        list($headB64, $payloadB64, $sigB64) = explode(".", $token);
+		list($headB64, $payloadB64, $sigB64) = explode(".", $token);
 
 		return json_decode(base64_decode($payloadB64), true);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleLogin($this);
 	}
 }

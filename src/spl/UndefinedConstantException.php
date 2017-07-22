@@ -15,6 +15,7 @@
  * GNU General Public License for more details.
 */
 
-class UndefinedConstantException extends InvalidStateException{
+class UndefinedConstantException extends InvalidStateException
+{
 
 }

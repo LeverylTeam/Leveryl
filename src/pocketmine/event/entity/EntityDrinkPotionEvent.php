@@ -26,7 +26,8 @@ use pocketmine\entity\Entity;
 use pocketmine\event\Cancellable;
 use pocketmine\item\Potion;
 
-class EntityDrinkPotionEvent extends EntityEvent implements Cancellable {
+class EntityDrinkPotionEvent extends EntityEvent implements Cancellable
+{
 
 	public static $handlerList = null;
 
@@ -36,17 +37,20 @@ class EntityDrinkPotionEvent extends EntityEvent implements Cancellable {
 	/* @var Effect[] */
 	private $effects;
 
-	public function __construct(Entity $entity, Potion $potion) {
+	public function __construct(Entity $entity, Potion $potion)
+	{
 		$this->entity = $entity;
 		$this->potion = $potion;
 		$this->effects = $potion->getEffects();
 	}
 
-	public function getEffects() {
+	public function getEffects()
+	{
 		return $this->effects;
 	}
 
-	public function getPotion() {
+	public function getPotion()
+	{
 		return $this->potion;
 	}
 }

@@ -19,11 +19,12 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /**
  * Network-related classes
  */
+
 namespace pocketmine\network;
 
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
@@ -57,6 +58,7 @@ use pocketmine\network\mcpe\protocol\DataPacket;
 use pocketmine\network\mcpe\protocol\DisconnectPacket;
 use pocketmine\network\mcpe\protocol\DropItemPacket;
 use pocketmine\network\mcpe\protocol\EntityEventPacket;
+use pocketmine\network\mcpe\protocol\EntityFallPacket;
 use pocketmine\network\mcpe\protocol\ExplodePacket;
 use pocketmine\network\mcpe\protocol\FullChunkDataPacket;
 use pocketmine\network\mcpe\protocol\HurtArmorPacket;
@@ -73,7 +75,6 @@ use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
 use pocketmine\network\mcpe\protocol\MoveEntityPacket;
 use pocketmine\network\mcpe\protocol\MovePlayerPacket;
 use pocketmine\network\mcpe\protocol\PlayerActionPacket;
-use pocketmine\network\mcpe\protocol\EntityFallPacket;
 use pocketmine\network\mcpe\protocol\PlayerInputPacket;
 use pocketmine\network\mcpe\protocol\PlayerListPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
@@ -87,8 +88,8 @@ use pocketmine\network\mcpe\protocol\ResourcePackChunkDataPacket;
 use pocketmine\network\mcpe\protocol\ResourcePackChunkRequestPacket;
 use pocketmine\network\mcpe\protocol\ResourcePackClientResponsePacket;
 use pocketmine\network\mcpe\protocol\ResourcePackDataInfoPacket;
-use pocketmine\network\mcpe\protocol\ResourcePackStackPacket;
 use pocketmine\network\mcpe\protocol\ResourcePacksInfoPacket;
+use pocketmine\network\mcpe\protocol\ResourcePackStackPacket;
 use pocketmine\network\mcpe\protocol\RespawnPacket;
 use pocketmine\network\mcpe\protocol\RiderJumpPacket;
 use pocketmine\network\mcpe\protocol\ServerToClientHandshakePacket;
@@ -116,7 +117,8 @@ use pocketmine\network\mcpe\protocol\UpdateTradePacket;
 use pocketmine\network\mcpe\protocol\UseItemPacket;
 use pocketmine\Server;
 
-class Network{
+class Network
+{
 
 	public static $BATCH_THRESHOLD = 512;
 
@@ -137,7 +139,8 @@ class Network{
 
 	private $name;
 
-	public function __construct(Server $server){
+	public function __construct(Server $server)
+	{
 
 		$this->registerPackets();
 
@@ -145,20 +148,24 @@ class Network{
 
 	}
 
-	public function addStatistics($upload, $download){
+	public function addStatistics($upload, $download)
+	{
 		$this->upload += $upload;
 		$this->download += $download;
 	}
 
-	public function getUpload(){
+	public function getUpload()
+	{
 		return $this->upload;
 	}
 
-	public function getDownload(){
+	public function getDownload()
+	{
 		return $this->download;
 	}
 
-	public function resetStatistics(){
+	public function resetStatistics()
+	{
 		$this->upload = 0;
 		$this->download = 0;
 	}
@@ -166,17 +173,19 @@ class Network{
 	/**
 	 * @return SourceInterface[]
 	 */
-	public function getInterfaces(){
+	public function getInterfaces()
+	{
 		return $this->interfaces;
 	}
 
-	public function processInterfaces(){
-		foreach($this->interfaces as $interface){
-			try{
+	public function processInterfaces()
+	{
+		foreach($this->interfaces as $interface) {
+			try {
 				$interface->process();
-			}catch(\Throwable $e){
+			} catch(\Throwable $e) {
 				$logger = $this->server->getLogger();
-				if(\pocketmine\DEBUG > 1){
+				if(\pocketmine\DEBUG > 1) {
 					$logger->logException($e);
 				}
 
@@ -190,9 +199,10 @@ class Network{
 	/**
 	 * @param SourceInterface $interface
 	 */
-	public function registerInterface(SourceInterface $interface){
+	public function registerInterface(SourceInterface $interface)
+	{
 		$this->interfaces[$hash = spl_object_hash($interface)] = $interface;
-		if($interface instanceof AdvancedSourceInterface){
+		if($interface instanceof AdvancedSourceInterface) {
 			$this->advancedInterfaces[$hash] = $interface;
 			$interface->setNetwork($this);
 		}
@@ -202,7 +212,8 @@ class Network{
 	/**
 	 * @param SourceInterface $interface
 	 */
-	public function unregisterInterface(SourceInterface $interface){
+	public function unregisterInterface(SourceInterface $interface)
+	{
 		unset($this->interfaces[$hash = spl_object_hash($interface)],
 			$this->advancedInterfaces[$hash]);
 	}
@@ -212,32 +223,37 @@ class Network{
 	 *
 	 * @param string $name
 	 */
-	public function setName($name){
-		$this->name = (string) $name;
-		foreach($this->interfaces as $interface){
+	public function setName($name)
+	{
+		$this->name = (string)$name;
+		foreach($this->interfaces as $interface) {
 			$interface->setName($this->name);
 		}
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return $this->name;
 	}
 
-	public function updateName(){
-		foreach($this->interfaces as $interface){
+	public function updateName()
+	{
+		foreach($this->interfaces as $interface) {
 			$interface->setName($this->name);
 		}
 	}
 
 	/**
-	 * @param int		$id 0-255
+	 * @param int $id 0-255
 	 * @param DataPacket $class
 	 */
-	public function registerPacket($id, $class){
+	public function registerPacket($id, $class)
+	{
 		$this->packetPool[$id] = new $class;
 	}
 
-	public function getServer(){
+	public function getServer()
+	{
 		return $this->server;
 	}
 
@@ -246,23 +262,26 @@ class Network{
 	 *
 	 * @return DataPacket
 	 */
-	public function getPacket($id){
+	public function getPacket($id)
+	{
 		/** @var DataPacket $class */
 		$class = $this->packetPool[$id];
-		if($class !== null){
+		if($class !== null) {
 			return clone $class;
 		}
+
 		return new UnknownPacket();
 	}
 
 
 	/**
 	 * @param string $address
-	 * @param int	$port
+	 * @param int $port
 	 * @param string $payload
 	 */
-	public function sendPacket($address, $port, $payload){
-		foreach($this->advancedInterfaces as $interface){
+	public function sendPacket($address, $port, $payload)
+	{
+		foreach($this->advancedInterfaces as $interface) {
 			$interface->sendRawPacket($address, $port, $payload);
 		}
 	}
@@ -271,15 +290,17 @@ class Network{
 	 * Blocks an IP address from the main interface. Setting timeout to -1 will block it forever
 	 *
 	 * @param string $address
-	 * @param int	$timeout
+	 * @param int $timeout
 	 */
-	public function blockAddress($address, $timeout = 300){
-		foreach($this->advancedInterfaces as $interface){
+	public function blockAddress($address, $timeout = 300)
+	{
+		foreach($this->advancedInterfaces as $interface) {
 			$interface->blockAddress($address, $timeout);
 		}
 	}
 
-	private function registerPackets(){
+	private function registerPackets()
+	{
 		$this->packetPool = new \SplFixedArray(256);
 
 		$this->registerPacket(ProtocolInfo::ADD_ENTITY_PACKET, AddEntityPacket::class);
@@ -366,7 +387,7 @@ class Network{
 		$this->registerPacket(ProtocolInfo::UPDATE_BLOCK_PACKET, UpdateBlockPacket::class);
 		$this->registerPacket(ProtocolInfo::UPDATE_TRADE_PACKET, UpdateTradePacket::class);
 		$this->registerPacket(ProtocolInfo::USE_ITEM_PACKET, UseItemPacket::class);
-		
+
 		$this->registerPacket(0xfe, BatchPacket::class);
 	}
 }

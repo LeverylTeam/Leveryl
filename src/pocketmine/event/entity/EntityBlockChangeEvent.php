@@ -2,11 +2,11 @@
 
 /**
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\entity;
 
@@ -30,13 +30,15 @@ use pocketmine\event\Cancellable;
 /**
  * Called when an Entity, excluding players, changes a block directly
  */
-class EntityBlockChangeEvent extends EntityEvent implements Cancellable{
+class EntityBlockChangeEvent extends EntityEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	private $from;
 	private $to;
 
-	public function __construct(Entity $entity, Block $from, Block $to){
+	public function __construct(Entity $entity, Block $from, Block $to)
+	{
 		$this->entity = $entity;
 		$this->from = $from;
 		$this->to = $to;
@@ -45,14 +47,16 @@ class EntityBlockChangeEvent extends EntityEvent implements Cancellable{
 	/**
 	 * @return Block
 	 */
-	public function getBlock(){
+	public function getBlock()
+	{
 		return $this->from;
 	}
 
 	/**
 	 * @return Block
 	 */
-	public function getTo(){
+	public function getTo()
+	{
 		return $this->to;
 	}
 

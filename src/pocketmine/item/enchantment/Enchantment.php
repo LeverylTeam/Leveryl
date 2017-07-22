@@ -69,7 +69,8 @@ use pocketmine\item\WoodenShovel;
 use pocketmine\item\WoodenSword;
 use pocketmine\Server;
 
-class Enchantment{
+class Enchantment
+{
 
 	const TYPE_INVALID = -1;
 
@@ -137,7 +138,8 @@ class Enchantment{
 	/** @var Enchantment[] */
 	protected static $enchantments;
 
-	public static function init(){
+	public static function init()
+	{
 		self::$enchantments = new \SplFixedArray(256);
 
 		self::$enchantments[self::TYPE_ARMOR_PROTECTION] = new Enchantment(self::TYPE_ARMOR_PROTECTION, "%enchantment.protect.all", self::RARITY_COMMON, self::ACTIVATION_EQUIP, self::SLOT_ARMOR);
@@ -174,57 +176,66 @@ class Enchantment{
 	 * @param int $id
 	 * @return $this
 	 */
-	public static function getEnchantment(Int $id){
-		if(isset(self::$enchantments[$id])){
-			return clone self::$enchantments[(int) $id];
+	public static function getEnchantment(Int $id)
+	{
+		if(isset(self::$enchantments[$id])) {
+			return clone self::$enchantments[(int)$id];
 		}
+
 		return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
 	}
-	
-	public static function getEffectByName(String $name){
-		if(defined(Enchantment::class . "::TYPE_" . strtoupper($name))){
+
+	public static function getEffectByName(String $name)
+	{
+		if(defined(Enchantment::class . "::TYPE_" . strtoupper($name))) {
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_" . strtoupper($name)));
 		}
+
 		return null;
 	}
 
-	public static function registerEnchantment(Int $id, String $name, Int $rarity, Int $activationType, Int $slot){
-		if(isset(self::$enchantments[$id])){
+	public static function registerEnchantment(Int $id, String $name, Int $rarity, Int $activationType, Int $slot)
+	{
+		if(isset(self::$enchantments[$id])) {
 			Server::getInstance()->getLogger()->debug("Unable to register enchantment with id $id.");
+
 			return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
 		}
 		self::$enchantments[$id] = new Enchantment($id, $name, $rarity, $activationType, $slot);
+
 		return new Enchantment($id, $name, $rarity, $activationType, $slot);
 	}
 
 
-	public static function getEnchantmentByName(String $name){
-		if(defined(Enchantment::class . "::TYPE_" . strtoupper($name))){
+	public static function getEnchantmentByName(String $name)
+	{
+		if(defined(Enchantment::class . "::TYPE_" . strtoupper($name))) {
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_" . strtoupper($name)));
-		}elseif(defined(Enchantment::class . "::TYPE_WEAPON_" . strtoupper($name))){
+		} elseif(defined(Enchantment::class . "::TYPE_WEAPON_" . strtoupper($name))) {
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_WEAPON_" . strtoupper($name)));
-		}elseif(defined(Enchantment::class . "::TYPE_ARMOR_" . strtoupper($name))){
+		} elseif(defined(Enchantment::class . "::TYPE_ARMOR_" . strtoupper($name))) {
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_ARMOR_" . strtoupper($name)));
-		}elseif(defined(Enchantment::class . "::TYPE_MINING_" . strtoupper($name))){
+		} elseif(defined(Enchantment::class . "::TYPE_MINING_" . strtoupper($name))) {
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_MINING_" . strtoupper($name)));
-		}elseif(defined(Enchantment::class . "::TYPE_BOW_" . strtoupper($name))){
+		} elseif(defined(Enchantment::class . "::TYPE_BOW_" . strtoupper($name))) {
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_BOW_" . strtoupper($name)));
-		}elseif(defined(Enchantment::class . "::TYPE_FISHING_" . strtoupper($name))){
+		} elseif(defined(Enchantment::class . "::TYPE_FISHING_" . strtoupper($name))) {
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_FISHING_" . strtoupper($name)));
-		}else{
+		} else {
 			return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
 		}
 	}
 
-	public static function getEnchantAbility(Item $item){
-		switch($item->getId()){
+	public static function getEnchantAbility(Item $item)
+	{
+		switch($item->getId()) {
 			case Item::BOOK:
 			case Item::BOW:
 			case Item::FISHING_ROD:
 				return 4;
 		}
 
-		if($item->isArmor()){
+		if($item->isArmor()) {
 			if($item instanceof ChainBoots or $item instanceof ChainChestplate or $item instanceof ChainHelmet or $item instanceof ChainLeggings) return 12;
 			if($item instanceof IronBoots or $item instanceof IronChestplate or $item instanceof IronHelmet or $item instanceof IronLeggings) return 9;
 			if($item instanceof DiamondBoots or $item instanceof DiamondChestplate or $item instanceof DiamondHelmet or $item instanceof DiamondLeggings) return 10;
@@ -232,7 +243,7 @@ class Enchantment{
 			if($item instanceof GoldBoots or $item instanceof GoldChestplate or $item instanceof GoldHelmet or $item instanceof GoldLeggings) return 25;
 		}
 
-		if($item->isTool()){
+		if($item->isTool()) {
 			if($item instanceof WoodenAxe or $item instanceof WoodenHoe or $item instanceof WoodenPickaxe or $item instanceof WoodenShovel or $item instanceof WoodenSword) return 15;
 			if($item instanceof StoneAxe or $item instanceof StoneHoe or $item instanceof StonePickaxe or $item instanceof StoneShovel or $item instanceof StoneSword) return 5;
 			if($item instanceof DiamondAxe or $item instanceof DiamondHoe or $item instanceof DiamondPickaxe or $item instanceof DiamondShovel or $item instanceof DiamondSword) return 10;
@@ -243,8 +254,9 @@ class Enchantment{
 		return 0;
 	}
 
-	public static function getEnchantWeight(int $enchantmentId){
-		switch($enchantmentId){
+	public static function getEnchantWeight(int $enchantmentId)
+	{
+		switch($enchantmentId) {
 			case self::TYPE_ARMOR_PROTECTION:
 				return 10;
 			case self::TYPE_ARMOR_FIRE_PROTECTION:
@@ -286,11 +298,13 @@ class Enchantment{
 			case self::TYPE_BOW_INFINITY:
 				return 1;
 		}
+
 		return 0;
 	}
 
-	public static function getEnchantMaxLevel(int $enchantmentId){
-		switch($enchantmentId){
+	public static function getEnchantMaxLevel(int $enchantmentId)
+	{
+		switch($enchantmentId) {
 			case self::TYPE_ARMOR_PROTECTION:
 			case self::TYPE_ARMOR_FIRE_PROTECTION:
 			case self::TYPE_ARMOR_FALL_PROTECTION:
@@ -331,6 +345,7 @@ class Enchantment{
 			case self::TYPE_FISHING_LURE:
 				return 3;
 		}
+
 		return 999;
 	}
 
@@ -341,61 +356,74 @@ class Enchantment{
 	private $activationType;
 	private $slot;
 
-	private function __construct(Int $id, String $name, Int $rarity, Int $activationType, Int $slot){
-		$this->id = (int) $id;
-		$this->name = (string) $name;
-		$this->rarity = (int) $rarity;
-		$this->activationType = (int) $activationType;
-		$this->slot = (int) $slot;
+	private function __construct(Int $id, String $name, Int $rarity, Int $activationType, Int $slot)
+	{
+		$this->id = (int)$id;
+		$this->name = (string)$name;
+		$this->rarity = (int)$rarity;
+		$this->activationType = (int)$activationType;
+		$this->slot = (int)$slot;
 	}
 
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 
-	public function getName() : string{
+	public function getName(): string
+	{
 		return $this->name;
 	}
 
-	public function getRarity(){
+	public function getRarity()
+	{
 		return $this->rarity;
 	}
 
-	public function getActivationType(){
+	public function getActivationType()
+	{
 		return $this->activationType;
 	}
 
-	public function getSlot(){
+	public function getSlot()
+	{
 		return $this->slot;
 	}
 
-	public function hasSlot($slot){
+	public function hasSlot($slot)
+	{
 		return ($this->slot & $slot) > 0;
 	}
 
-	public function getLevel(){
+	public function getLevel()
+	{
 		return $this->level;
 	}
 
-	public function setLevel(int $level){
+	public function setLevel(int $level)
+	{
 		$this->level = $level;
 
 		return $this;
 	}
 
-	public function equals(Enchantment $ent){
-		if($ent->getId() == $this->getId() and $ent->getLevel() == $this->getLevel() and $ent->getActivationType() == $this->getActivationType() and $ent->getRarity() == $this->getRarity()){
+	public function equals(Enchantment $ent)
+	{
+		if($ent->getId() == $this->getId() and $ent->getLevel() == $this->getLevel() and $ent->getActivationType() == $this->getActivationType() and $ent->getRarity() == $this->getRarity()) {
 			return true;
 		}
+
 		return false;
 	}
 
-	public static function getRandomName(){
+	public static function getRandomName()
+	{
 		$count = mt_rand(3, 6);
 		$set = [];
-		while(count($set) < $count){
+		while(count($set) < $count) {
 			$set[] = self::$words[mt_rand(0, count(self::$words) - 1)];
 		}
+
 		return implode(" ", $set);
 	}
 }

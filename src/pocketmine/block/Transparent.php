@@ -19,18 +19,21 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
 
-abstract class Transparent extends Block{
+abstract class Transparent extends Block
+{
 
-	public function isTransparent(){
+	public function isTransparent()
+	{
 		return true;
 	}
 
-	public function getLightFilter() : int{
+	public function getLightFilter(): int
+	{
 		return 0;
 	}
 }

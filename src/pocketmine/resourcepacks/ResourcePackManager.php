@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 
 namespace pocketmine\resourcepacks;
@@ -28,7 +28,8 @@ namespace pocketmine\resourcepacks;
 use pocketmine\Server;
 use pocketmine\utils\Config;
 
-class ResourcePackManager{
+class ResourcePackManager
+{
 
 	/** @var Server */
 	private $server;
@@ -52,38 +53,39 @@ class ResourcePackManager{
 	 * @param Server $server
 	 * @param string $path Path to resource-packs directory.
 	 */
-	public function __construct(Server $server, string $path){
+	public function __construct(Server $server, string $path)
+	{
 		$this->server = $server;
 		$this->path = $path;
 
-		if(!file_exists($this->path)){
+		if(!file_exists($this->path)) {
 			$this->server->getLogger()->debug("Resource packs path $path does not exist, creating directory");
 			mkdir($this->path);
-		}elseif(!is_dir($this->path)){
+		} elseif(!is_dir($this->path)) {
 			throw new \InvalidArgumentException("Resource packs path $path exists and is not a directory");
 		}
 
-		if(!file_exists($this->path . "resource_packs.yml")){
+		if(!file_exists($this->path . "resource_packs.yml")) {
 			file_put_contents($this->path . "resource_packs.yml", file_get_contents($this->server->getFilePath() . "src/pocketmine/resources/resource_packs.yml"));
 		}
 
 		$this->resourcePacksConfig = new Config($this->path . "resource_packs.yml", Config::YAML, []);
 
-		$this->serverForceResources = (bool) $this->resourcePacksConfig->get("force_resources", false);
+		$this->serverForceResources = (bool)$this->resourcePacksConfig->get("force_resources", false);
 
 		//$this->server->getLogger()->info("Loading resource packs...");
 
-		foreach($this->resourcePacksConfig->get("resource_stack", []) as $pos => $pack){
-			try{
+		foreach($this->resourcePacksConfig->get("resource_stack", []) as $pos => $pack) {
+			try {
 				$packPath = $this->path . DIRECTORY_SEPARATOR . $pack;
-				if(file_exists($packPath)){
+				if(file_exists($packPath)) {
 					$newPack = null;
 					//Detect the type of resource pack.
-					if(is_dir($packPath)){
+					if(is_dir($packPath)) {
 						$this->server->getLogger()->warning("Skipped resource entry $pack due to directory resource packs currently unsupported");
-					}else{
+					} else {
 						$info = new \SplFileInfo($packPath);
-						switch($info->getExtension()){
+						switch($info->getExtension()) {
 							case "zip":
 							case "mcpack":
 								$newPack = new ZippedResourcePack($packPath);
@@ -94,14 +96,14 @@ class ResourcePackManager{
 						}
 					}
 
-					if($newPack instanceof ResourcePack){
+					if($newPack instanceof ResourcePack) {
 						$this->resourcePacks[] = $newPack;
 						$this->uuidList[$newPack->getPackId()] = $newPack;
 					}
-				}else{
+				} else {
 					$this->server->getLogger()->warning("Skipped resource entry $pack due to file or directory not found");
 				}
-			}catch(\Throwable $e){
+			} catch(\Throwable $e) {
 				$this->server->getLogger()->logException($e);
 			}
 		}
@@ -113,7 +115,8 @@ class ResourcePackManager{
 	 * Returns whether players must accept resource packs in order to join.
 	 * @return bool
 	 */
-	public function resourcePacksRequired() : bool{
+	public function resourcePacksRequired(): bool
+	{
 		return $this->serverForceResources;
 	}
 
@@ -121,7 +124,8 @@ class ResourcePackManager{
 	 * Returns an array of resource packs in use, sorted in order of priority.
 	 * @return ResourcePack[]
 	 */
-	public function getResourceStack() : array{
+	public function getResourceStack(): array
+	{
 		return $this->resourcePacks;
 	}
 
@@ -131,7 +135,8 @@ class ResourcePackManager{
 	 * @param string $id
 	 * @return ResourcePack|null
 	 */
-	public function getPackById(string $id){
+	public function getPackById(string $id)
+	{
 		return $this->uuidList[$id] ?? null;
 	}
 
@@ -139,7 +144,8 @@ class ResourcePackManager{
 	 * Returns an array of pack IDs for packs currently in use.
 	 * @return string[]
 	 */
-	public function getPackIdList() : array{
+	public function getPackIdList(): array
+	{
 		return array_keys($this->uuidList);
 	}
 }

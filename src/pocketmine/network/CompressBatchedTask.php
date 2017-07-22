@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network;
 
@@ -27,19 +27,22 @@ use pocketmine\network\mcpe\protocol\BatchPacket;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 
-class CompressBatchedTask extends AsyncTask{
+class CompressBatchedTask extends AsyncTask
+{
 
 	public $level = 7;
 	public $data;
 	public $targets;
 
-	public function __construct(BatchPacket $batch, array $targets, $level = 7){
+	public function __construct(BatchPacket $batch, array $targets, $level = 7)
+	{
 		$this->data = $batch->payload;
 		$this->targets = serialize($targets);
 		$this->level = $level;
 	}
 
-	public function onRun(){
+	public function onRun()
+	{
 		$batch = new BatchPacket();
 		$batch->payload = $this->data;
 		$this->data = null;
@@ -50,7 +53,8 @@ class CompressBatchedTask extends AsyncTask{
 		$this->setResult($batch->buffer, false);
 	}
 
-	public function onCompletion(Server $server){
+	public function onCompletion(Server $server)
+	{
 		$pk = new BatchPacket($this->getResult());
 		$pk->isEncoded = true;
 		$pk->compressed = true;

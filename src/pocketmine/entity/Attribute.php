@@ -19,11 +19,12 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\entity;
 
-class Attribute{
+class Attribute
+{
 
 	const ABSORPTION = 0;
 	const SATURATION = 1;
@@ -51,7 +52,8 @@ class Attribute{
 	/** @var Attribute[] */
 	protected static $attributes = [];
 
-	public static function init(){
+	public static function init()
+	{
 		self::addAttribute(self::ABSORPTION, "minecraft:absorption", 0.00, 340282346638528859811704183484516925440.00, 0.00);
 		self::addAttribute(self::SATURATION, "minecraft:player.saturation", 0.00, 20.00, 20.00);
 		self::addAttribute(self::EXHAUSTION, "minecraft:player.exhaustion", 0.00, 5.00, 0.0);
@@ -68,21 +70,22 @@ class Attribute{
 	}
 
 	/**
-	 * @param int	$id
+	 * @param int $id
 	 * @param string $name
-	 * @param float  $minValue
-	 * @param float  $maxValue
-	 * @param float  $defaultValue
-	 * @param bool   $shouldSend
+	 * @param float $minValue
+	 * @param float $maxValue
+	 * @param float $defaultValue
+	 * @param bool $shouldSend
 	 *
 	 * @return Attribute
 	 */
-	public static function addAttribute($id, $name, $minValue, $maxValue, $defaultValue, $shouldSend = true){
-		if($minValue > $maxValue or $defaultValue > $maxValue or $defaultValue < $minValue){
+	public static function addAttribute($id, $name, $minValue, $maxValue, $defaultValue, $shouldSend = true)
+	{
+		if($minValue > $maxValue or $defaultValue > $maxValue or $defaultValue < $minValue) {
 			throw new \InvalidArgumentException("Invalid ranges: min value: $minValue, max value: $maxValue, $defaultValue: $defaultValue");
 		}
 
-		return self::$attributes[(int) $id] = new Attribute($id, $name, $minValue, $maxValue, $defaultValue, $shouldSend);
+		return self::$attributes[(int)$id] = new Attribute($id, $name, $minValue, $maxValue, $defaultValue, $shouldSend);
 	}
 
 	/**
@@ -90,7 +93,8 @@ class Attribute{
 	 *
 	 * @return null|Attribute
 	 */
-	public static function getAttribute($id){
+	public static function getAttribute($id)
+	{
 		return isset(self::$attributes[$id]) ? clone self::$attributes[$id] : null;
 	}
 
@@ -99,9 +103,10 @@ class Attribute{
 	 *
 	 * @return null|Attribute
 	 */
-	public static function getAttributeByName($name){
-		foreach(self::$attributes as $a){
-			if($a->getName() === $name){
+	public static function getAttributeByName($name)
+	{
+		foreach(self::$attributes as $a) {
+			if($a->getName() === $name) {
 				return clone $a;
 			}
 		}
@@ -109,108 +114,126 @@ class Attribute{
 		return null;
 	}
 
-	private function __construct($id, $name, $minValue, $maxValue, $defaultValue, $shouldSend = true){
-		$this->id = (int) $id;
-		$this->name = (string) $name;
-		$this->minValue = (float) $minValue;
-		$this->maxValue = (float) $maxValue;
-		$this->defaultValue = (float) $defaultValue;
-		$this->shouldSend = (bool) $shouldSend;
+	private function __construct($id, $name, $minValue, $maxValue, $defaultValue, $shouldSend = true)
+	{
+		$this->id = (int)$id;
+		$this->name = (string)$name;
+		$this->minValue = (float)$minValue;
+		$this->maxValue = (float)$maxValue;
+		$this->defaultValue = (float)$defaultValue;
+		$this->shouldSend = (bool)$shouldSend;
 
 		$this->currentValue = $this->defaultValue;
 	}
 
-	public function getMinValue(){
+	public function getMinValue()
+	{
 		return $this->minValue;
 	}
 
-	public function setMinValue($minValue){
-		if($minValue > $this->getMaxValue()){
+	public function setMinValue($minValue)
+	{
+		if($minValue > $this->getMaxValue()) {
 			throw new \InvalidArgumentException("Value $minValue is bigger than the maxValue!");
 		}
 
-		if($this->minValue != $minValue){
+		if($this->minValue != $minValue) {
 			$this->desynchronized = true;
 			$this->minValue = $minValue;
 		}
+
 		return $this;
 	}
 
-	public function getMaxValue(){
+	public function getMaxValue()
+	{
 		return $this->maxValue;
 	}
 
-	public function setMaxValue($maxValue){
-		if($maxValue < $this->getMinValue()){
+	public function setMaxValue($maxValue)
+	{
+		if($maxValue < $this->getMinValue()) {
 			throw new \InvalidArgumentException("Value $maxValue is bigger than the minValue!");
 		}
 
-		if($this->maxValue != $maxValue){
+		if($this->maxValue != $maxValue) {
 			$this->desynchronized = true;
 			$this->maxValue = $maxValue;
 		}
+
 		return $this;
 	}
 
-	public function getDefaultValue(){
+	public function getDefaultValue()
+	{
 		return $this->defaultValue;
 	}
 
-	public function setDefaultValue($defaultValue){
-		if($defaultValue > $this->getMaxValue() or $defaultValue < $this->getMinValue()){
+	public function setDefaultValue($defaultValue)
+	{
+		if($defaultValue > $this->getMaxValue() or $defaultValue < $this->getMinValue()) {
 			throw new \InvalidArgumentException("Value $defaultValue exceeds the range!");
 		}
 
-		if($this->defaultValue !== $defaultValue){
+		if($this->defaultValue !== $defaultValue) {
 			$this->desynchronized = true;
 			$this->defaultValue = $defaultValue;
 		}
+
 		return $this;
 	}
 
-	public function resetToDefault(){
+	public function resetToDefault()
+	{
 		$this->setValue($this->getDefaultValue());
 	}
 
-	public function getValue(){
+	public function getValue()
+	{
 		return $this->currentValue;
 	}
 
-	public function setValue($value, $fit = false, bool $forceSend = false){
-		if($value > $this->getMaxValue() or $value < $this->getMinValue()){
-			if(!$fit){
+	public function setValue($value, $fit = false, bool $forceSend = false)
+	{
+		if($value > $this->getMaxValue() or $value < $this->getMinValue()) {
+			if(!$fit) {
 				throw new \InvalidArgumentException("Value $value exceeds the range!");
 			}
 			$value = min(max($value, $this->getMinValue()), $this->getMaxValue());
 		}
 
-		if($this->currentValue != $value){
+		if($this->currentValue != $value) {
 			$this->desynchronized = true;
 			$this->currentValue = $value;
-		}elseif($forceSend){
+		} elseif($forceSend) {
 			$this->desynchronized = true;
 		}
 
 		return $this;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return $this->name;
 	}
 
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 
-	public function isSyncable(){
+	public function isSyncable()
+	{
 		return $this->shouldSend;
 	}
 
-	public function isDesynchronized() : bool{
+	public function isDesynchronized(): bool
+	{
 		return $this->shouldSend and $this->desynchronized;
 	}
 
-	public function markSynchronized(bool $synced = true){
+	public function markSynchronized(bool $synced = true)
+	{
 		$this->desynchronized = !$synced;
 	}
 }

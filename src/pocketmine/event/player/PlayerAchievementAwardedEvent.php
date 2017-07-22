@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\player;
 
@@ -29,7 +29,8 @@ use pocketmine\Player;
 /**
  * Called when a player is awarded an achievement
  */
-class PlayerAchievementAwardedEvent extends PlayerEvent implements Cancellable{
+class PlayerAchievementAwardedEvent extends PlayerEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	/** @var string */
@@ -39,12 +40,14 @@ class PlayerAchievementAwardedEvent extends PlayerEvent implements Cancellable{
 	 * @param Player $player
 	 * @param string $achievementId
 	 */
-	public function __construct(Player $player, $achievementId){
+	public function __construct(Player $player, $achievementId)
+	{
 		$this->player = $player;
 		$this->achievement = $achievementId;
 	}
 
-	public function getAchievement(){
+	public function getAchievement()
+	{
 		return $this->achievement;
 	}
 }

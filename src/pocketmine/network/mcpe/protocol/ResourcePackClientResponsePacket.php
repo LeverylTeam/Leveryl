@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class ResourcePackClientResponsePacket extends DataPacket{
+class ResourcePackClientResponsePacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::RESOURCE_PACK_CLIENT_RESPONSE_PACKET;
 
 	const STATUS_REFUSED = 1;
@@ -39,24 +40,27 @@ class ResourcePackClientResponsePacket extends DataPacket{
 	public $status;
 	public $packIds = [];
 
-	public function decode(){
+	public function decode()
+	{
 		$this->status = $this->getByte();
 		$entryCount = $this->getLShort();
-		while($entryCount-- > 0){
+		while($entryCount-- > 0) {
 			$this->packIds[] = $this->getString();
 		}
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putByte($this->status);
 		$this->putLShort(count($this->packIds));
-		foreach($this->packIds as $id){
+		foreach($this->packIds as $id) {
 			$this->putString($id);
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleResourcePackClientResponse($this);
 	}
 

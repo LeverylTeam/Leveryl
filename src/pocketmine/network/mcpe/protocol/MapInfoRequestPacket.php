@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 
 namespace pocketmine\network\mcpe\protocol;
@@ -29,21 +29,25 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class MapInfoRequestPacket extends DataPacket{
+class MapInfoRequestPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::MAP_INFO_REQUEST_PACKET;
 
 	public $mapId;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->mapId = $this->getEntityUniqueId();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putEntityUniqueId($this->mapId);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleMapInfoRequest($this);
 	}
 }

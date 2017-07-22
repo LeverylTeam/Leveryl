@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level\generator\normal\biome;
 
@@ -27,9 +27,11 @@ use pocketmine\block\Sapling;
 use pocketmine\level\generator\populator\TallGrass;
 use pocketmine\level\generator\populator\Tree;
 
-class TaigaBiome extends SnowyBiome{
+class TaigaBiome extends SnowyBiome
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		parent::__construct();
 
 		$trees = new Tree(Sapling::SPRUCE);
@@ -47,7 +49,8 @@ class TaigaBiome extends SnowyBiome{
 		$this->rainfall = 0.8;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Taiga";
 	}
 }

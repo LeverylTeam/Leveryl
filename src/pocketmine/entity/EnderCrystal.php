@@ -26,34 +26,37 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class EnderCrystal extends Vehicle {
-    const NETWORK_ID = 71;
+class EnderCrystal extends Vehicle
+{
+	const NETWORK_ID = 71;
 
-    public $height = 0.7;
-    public $width = 1.6;
+	public $height = 0.7;
+	public $width = 1.6;
 
-    public $gravity = 0.5;
-    public $drag = 0.1;
+	public $gravity = 0.5;
+	public $drag = 0.1;
 
-    public function __construct(Level $level, CompoundTag $nbt) {
-        parent::__construct($level, $nbt);
-    }
+	public function __construct(Level $level, CompoundTag $nbt)
+	{
+		parent::__construct($level, $nbt);
+	}
 
-    public function spawnTo(Player $player) {
-        $pk = new AddEntityPacket();
-        $pk->entityRuntimeId = $this->getId();
-        $pk->type = EnderCrystal::NETWORK_ID;
-        $pk->x = $this->x;
-        $pk->y = $this->y;
-        $pk->z = $this->z;
-        $pk->speedX = 0;
-        $pk->speedY = 0;
-        $pk->speedZ = 0;
-        $pk->yaw = 0;
-        $pk->pitch = 0;
-        $pk->metadata = $this->dataProperties;
-        $player->dataPacket($pk);
+	public function spawnTo(Player $player)
+	{
+		$pk = new AddEntityPacket();
+		$pk->entityRuntimeId = $this->getId();
+		$pk->type = EnderCrystal::NETWORK_ID;
+		$pk->x = $this->x;
+		$pk->y = $this->y;
+		$pk->z = $this->z;
+		$pk->speedX = 0;
+		$pk->speedY = 0;
+		$pk->speedZ = 0;
+		$pk->yaw = 0;
+		$pk->pitch = 0;
+		$pk->metadata = $this->dataProperties;
+		$player->dataPacket($pk);
 
-        parent::spawnTo($player);
-    }
+		parent::spawnTo($player);
+	}
 }

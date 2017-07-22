@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class TextPacket extends DataPacket{
+class TextPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::TEXT_PACKET;
 
 	const TYPE_RAW = 0;
@@ -45,13 +46,14 @@ class TextPacket extends DataPacket{
 	public $message;
 	public $parameters = [];
 
-	public function decode(){
+	public function decode()
+	{
 		$this->type = $this->getByte();
-		switch($this->type){
+		switch($this->type) {
 			case self::TYPE_POPUP:
 			case self::TYPE_CHAT:
 			case self::TYPE_WHISPER:
-			/** @noinspection PhpMissingBreakStatementInspection */
+				/** @noinspection PhpMissingBreakStatementInspection */
 			case self::TYPE_ANNOUNCEMENT:
 				$this->source = $this->getString();
 			case self::TYPE_RAW:
@@ -63,20 +65,21 @@ class TextPacket extends DataPacket{
 			case self::TYPE_TRANSLATION:
 				$this->message = $this->getString();
 				$count = $this->getUnsignedVarInt();
-				for($i = 0; $i < $count; ++$i){
+				for($i = 0; $i < $count; ++$i) {
 					$this->parameters[] = $this->getString();
 				}
 		}
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putByte($this->type);
-		switch($this->type){
+		switch($this->type) {
 			case self::TYPE_POPUP:
 			case self::TYPE_CHAT:
 			case self::TYPE_WHISPER:
-			/** @noinspection PhpMissingBreakStatementInspection */
+				/** @noinspection PhpMissingBreakStatementInspection */
 			case self::TYPE_ANNOUNCEMENT:
 				$this->putString($this->source);
 			case self::TYPE_RAW:
@@ -88,13 +91,14 @@ class TextPacket extends DataPacket{
 			case self::TYPE_TRANSLATION:
 				$this->putString($this->message);
 				$this->putUnsignedVarInt(count($this->parameters));
-				foreach($this->parameters as $p){
+				foreach($this->parameters as $p) {
 					$this->putString($p);
 				}
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleText($this);
 	}
 

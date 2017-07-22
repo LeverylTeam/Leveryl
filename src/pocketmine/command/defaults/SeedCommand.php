@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\command\defaults;
 
@@ -27,9 +27,11 @@ use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 
-class SeedCommand extends VanillaCommand{
+class SeedCommand extends VanillaCommand
+{
 
-	public function __construct($name){
+	public function __construct($name)
+	{
 		parent::__construct(
 			$name,
 			"%pocketmine.command.seed.description",
@@ -38,14 +40,15 @@ class SeedCommand extends VanillaCommand{
 		$this->setPermission("pocketmine.command.seed");
 	}
 
-	public function execute(CommandSender $sender, $currentAlias, array $args){
-		if(!$this->testPermission($sender)){
+	public function execute(CommandSender $sender, $currentAlias, array $args)
+	{
+		if(!$this->testPermission($sender)) {
 			return true;
 		}
 
-		if($sender instanceof Player){
+		if($sender instanceof Player) {
 			$seed = $sender->getLevel()->getSeed();
-		}else{
+		} else {
 			$seed = $sender->getServer()->getDefaultLevel()->getSeed();
 		}
 		$sender->sendMessage(new TranslationContainer("commands.seed.success", [$seed]));

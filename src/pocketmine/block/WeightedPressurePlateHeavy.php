@@ -19,19 +19,22 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
-class WeightedPressurePlateHeavy extends WeightedPressurePlateLight{
+class WeightedPressurePlateHeavy extends WeightedPressurePlateLight
+{
 
 	protected $id = self::WEIGHTED_PRESSURE_PLATE_HEAVY;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Weighted Pressure Plate Heavy";
 	}
 }

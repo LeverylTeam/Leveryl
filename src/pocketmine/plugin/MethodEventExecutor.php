@@ -19,26 +19,30 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\plugin;
 
 use pocketmine\event\Event;
 use pocketmine\event\Listener;
 
-class MethodEventExecutor implements EventExecutor{
+class MethodEventExecutor implements EventExecutor
+{
 
 	private $method;
 
-	public function __construct($method){
+	public function __construct($method)
+	{
 		$this->method = $method;
 	}
 
-	public function execute(Listener $listener, Event $event){
+	public function execute(Listener $listener, Event $event)
+	{
 		$listener->{$this->getMethod()}($event);
 	}
 
-	public function getMethod(){
+	public function getMethod()
+	{
 		return $this->method;
 	}
 }

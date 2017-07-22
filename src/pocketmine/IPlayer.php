@@ -19,13 +19,14 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine;
 
 use pocketmine\permission\ServerOperator;
 
-interface IPlayer extends ServerOperator{
+interface IPlayer extends ServerOperator
+{
 
 	/**
 	 * @return bool

@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\tile;
 
@@ -29,7 +29,8 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 
-class Skull extends Spawnable{
+class Skull extends Spawnable
+{
 	const TYPE_SKELETON = 0;
 	const TYPE_WITHER = 1;
 	const TYPE_ZOMBIE = 2;
@@ -37,33 +38,37 @@ class Skull extends Spawnable{
 	const TYPE_CREEPER = 4;
 	const TYPE_DRAGON = 5;
 
-	public function __construct(Level $level, CompoundTag $nbt){
-		if(!isset($nbt->SkullType)){
+	public function __construct(Level $level, CompoundTag $nbt)
+	{
+		if(!isset($nbt->SkullType)) {
 			$nbt->SkullType = new ByteTag("SkullType", 0);
 		}
-		if(!isset($nbt->Rot)){
+		if(!isset($nbt->Rot)) {
 			$nbt->Rot = new ByteTag("Rot", 0);
 		}
 		parent::__construct($level, $nbt);
 	}
 
-	public function setType(int $type){
+	public function setType(int $type)
+	{
 		$this->namedtag->SkullType = new ByteTag("SkullType", $type);
 		$this->onChanged();
 	}
 
-	public function getType(){
+	public function getType()
+	{
 		return $this->namedtag["SkullType"];
 	}
 
-	public function getSpawnCompound(){
+	public function getSpawnCompound()
+	{
 		return new CompoundTag("", [
 			new StringTag("id", Tile::SKULL),
 			$this->namedtag->SkullType,
 			$this->namedtag->Rot,
-			new IntTag("x", (int) $this->x),
-			new IntTag("y", (int) $this->y),
-			new IntTag("z", (int) $this->z)
+			new IntTag("x", (int)$this->x),
+			new IntTag("y", (int)$this->y),
+			new IntTag("z", (int)$this->z),
 		]);
 	}
 }

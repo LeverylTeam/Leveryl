@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\player;
 
@@ -29,22 +29,26 @@ use pocketmine\Player;
 /**
  * Called when the player logs in, before things have been set up
  */
-class PlayerPreLoginEvent extends PlayerEvent implements Cancellable{
+class PlayerPreLoginEvent extends PlayerEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	/** @var string */
 	protected $kickMessage;
 
-	public function __construct(Player $player, $kickMessage){
+	public function __construct(Player $player, $kickMessage)
+	{
 		$this->player = $player;
 		$this->kickMessage = $kickMessage;
 	}
 
-	public function setKickMessage($kickMessage){
+	public function setKickMessage($kickMessage)
+	{
 		$this->kickMessage = $kickMessage;
 	}
 
-	public function getKickMessage(){
+	public function getKickMessage()
+	{
 		return $this->kickMessage;
 	}
 

@@ -27,38 +27,44 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 
-class EnderChest extends Spawnable implements Nameable {
+class EnderChest extends Spawnable implements Nameable
+{
 
 
-    public function getName(): string {
-        return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Ender Chest";
-    }
+	public function getName(): string
+	{
+		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Ender Chest";
+	}
 
-    public function hasName() : bool{
-        return isset($this->namedtag->CustomName);
-    }
+	public function hasName(): bool
+	{
+		return isset($this->namedtag->CustomName);
+	}
 
-    public function setName(string $str) {
-        if ($str === "") {
-            unset($this->namedtag->CustomName);
-            return;
-        }
+	public function setName(string $str)
+	{
+		if($str === "") {
+			unset($this->namedtag->CustomName);
 
-        $this->namedtag->CustomName = new StringTag("CustomName", $str);
-    }
+			return;
+		}
 
-    public function getSpawnCompound() {
-        $enderchest = new CompoundTag("", [
-            new StringTag("id", Tile::ENDER_CHEST),
-            new IntTag("x", (int)$this->x),
-            new IntTag("y", (int)$this->y),
-            new IntTag("z", (int)$this->z)
-        ]);
+		$this->namedtag->CustomName = new StringTag("CustomName", $str);
+	}
 
-        if ($this->hasName()) {
-            $enderchest->CustomName = $this->namedtag->CustomName;
-        }
+	public function getSpawnCompound()
+	{
+		$enderchest = new CompoundTag("", [
+			new StringTag("id", Tile::ENDER_CHEST),
+			new IntTag("x", (int)$this->x),
+			new IntTag("y", (int)$this->y),
+			new IntTag("z", (int)$this->z),
+		]);
 
-        return $enderchest;
-    }
+		if($this->hasName()) {
+			$enderchest->CustomName = $this->namedtag->CustomName;
+		}
+
+		return $enderchest;
+	}
 }

@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level\format\io;
 
@@ -32,7 +32,8 @@ use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 use pocketmine\tile\Spawnable;
 
-class ChunkRequestTask extends AsyncTask{
+class ChunkRequestTask extends AsyncTask
+{
 
 	protected $levelId;
 
@@ -44,7 +45,8 @@ class ChunkRequestTask extends AsyncTask{
 
 	protected $compressionLevel;
 
-	public function __construct(Level $level, Chunk $chunk){
+	public function __construct(Level $level, Chunk $chunk)
+	{
 		$this->levelId = $level->getId();
 		$this->compressionLevel = $level->getServer()->networkCompressionLevel;
 
@@ -55,8 +57,8 @@ class ChunkRequestTask extends AsyncTask{
 		//TODO: serialize tiles with chunks
 		$tiles = "";
 		$nbt = new NBT(NBT::LITTLE_ENDIAN);
-		foreach($chunk->getTiles() as $tile){
-			if($tile instanceof Spawnable){
+		foreach($chunk->getTiles() as $tile) {
+			if($tile instanceof Spawnable) {
 				$nbt->setData($tile->getSpawnCompound());
 				$tiles .= $nbt->write(true);
 			}
@@ -65,7 +67,8 @@ class ChunkRequestTask extends AsyncTask{
 		$this->tiles = $tiles;
 	}
 
-	public function onRun(){
+	public function onRun()
+	{
 		$chunk = Chunk::fastDeserialize($this->chunk);
 
 		$pk = new FullChunkDataPacket();
@@ -81,20 +84,21 @@ class ChunkRequestTask extends AsyncTask{
 		$this->setResult($batch->buffer, false);
 	}
 
-	public function onCompletion(Server $server){
+	public function onCompletion(Server $server)
+	{
 		$level = $server->getLevel($this->levelId);
-		if($level instanceof Level){
- 			if($this->hasResult()){
- 				$batch = new BatchPacket($this->getResult());
- 				assert(strlen($batch->buffer) > 0);
- 				$batch->compressed = true;
- 				$batch->isEncoded = true;
- 				$level->chunkRequestCallback($this->chunkX, $this->chunkZ, $batch);
- 			}else{
- 				$server->getLogger()->error("Chunk request for level #" . $this->levelId . ", x=" . $this->chunkX . ", z=" . $this->chunkZ . " doesn't have any result data");
- 			}
- 		}else{
- 			$server->getLogger()->debug("Dropped chunk task due to level not loaded");
+		if($level instanceof Level) {
+			if($this->hasResult()) {
+				$batch = new BatchPacket($this->getResult());
+				assert(strlen($batch->buffer) > 0);
+				$batch->compressed = true;
+				$batch->isEncoded = true;
+				$level->chunkRequestCallback($this->chunkX, $this->chunkZ, $batch);
+			} else {
+				$server->getLogger()->error("Chunk request for level #" . $this->levelId . ", x=" . $this->chunkX . ", z=" . $this->chunkZ . " doesn't have any result data");
+			}
+		} else {
+			$server->getLogger()->debug("Dropped chunk task due to level not loaded");
 		}
 	}
 

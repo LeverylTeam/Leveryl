@@ -38,69 +38,74 @@ define("YAML_CRLN_BREAK", 3);
  * Send the YAML representation of a value to a file
  *
  * @param string $filename
- * @param mixed  $data
- * @param int	$encoding
- * @param int	$linebreak
- * @param array  $callbacks
+ * @param mixed $data
+ * @param int $encoding
+ * @param int $linebreak
+ * @param array $callbacks
  *
  * @link http://www.php.net/manual/en/function.yaml-emit-file.php
  * @return bool
  */
-function yaml_emit_file($filename, $data, $encoding = YAML_ANY_ENCODING, $linebreak = YAML_ANY_BREAK, array $callbacks = []){
+function yaml_emit_file($filename, $data, $encoding = YAML_ANY_ENCODING, $linebreak = YAML_ANY_BREAK, array $callbacks = [])
+{
 }
 
 /**
  * Returns the YAML representation of a value
  *
  * @param mixed $data
- * @param int   $encoding
- * @param int   $linebreak
+ * @param int $encoding
+ * @param int $linebreak
  * @param array $callbacks
  *
  * @link http://www.php.net/manual/en/function.yaml-emit.php
  * @return string
  */
-function yaml_emit($data, $encoding = YAML_ANY_ENCODING, $linebreak = YAML_ANY_BREAK, array $callbacks = []){
+function yaml_emit($data, $encoding = YAML_ANY_ENCODING, $linebreak = YAML_ANY_BREAK, array $callbacks = [])
+{
 }
 
 /**
  * Parse a YAML stream from a file
  *
  * @param string $filename
- * @param int	$pos
- * @param int	&$ndocs
- * @param array  $callbacks
+ * @param int $pos
+ * @param int &$ndocs
+ * @param array $callbacks
  *
  * @link http://www.php.net/manual/en/function.yaml-parse-file.php
  * @return mixed
  */
-function yaml_parse_file($filename, $pos = 0, &$ndocs = null, array $callbacks = []){
+function yaml_parse_file($filename, $pos = 0, &$ndocs = null, array $callbacks = [])
+{
 }
 
 /**
  * Parse a YAML stream from a URL
  *
  * @param string $url
- * @param int	$pos
- * @param int	&$ndocs
- * @param array  $callbacks
+ * @param int $pos
+ * @param int &$ndocs
+ * @param array $callbacks
  *
  * @link http://www.php.net/manual/en/function.yaml-parse-url.php
  * @return mixed
  */
-function yaml_parse_url($url, $pos = 0, &$ndocs = null, array $callbacks = []){
+function yaml_parse_url($url, $pos = 0, &$ndocs = null, array $callbacks = [])
+{
 }
 
 /**
  * Parse a YAML stream
  *
  * @param string $input
- * @param int	$pos
- * @param int	&$ndocs
- * @param array  $callbacks
+ * @param int $pos
+ * @param int &$ndocs
+ * @param array $callbacks
  *
  * @link http://www.php.net/manual/en/function.yaml-parse.php
  * @return mixed
  */
-function yaml_parse($input, $pos = 0, &$ndocs = null, array $callbacks = []){
+function yaml_parse($input, $pos = 0, &$ndocs = null, array $callbacks = [])
+{
 }

@@ -21,19 +21,27 @@
 
 namespace pocketmine\block;
 
-class WetSponge extends Solid{
+class WetSponge extends Solid
+{
 
 	protected $id = self::WET_SPONGE;
 
-	public function __construct(){
+	public function __construct()
+	{
 	}
-	public function getResistance(){
+
+	public function getResistance()
+	{
 		return 3;
 	}
-	public function getHardness(){
+
+	public function getHardness()
+	{
 		return 0.6;
 	}
-	public function getName(){
+
+	public function getName()
+	{
 		return "Wet Sponge";
 	}
 }

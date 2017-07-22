@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -29,25 +29,29 @@ namespace pocketmine\network\mcpe\protocol;
 use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
 
-class DropItemPacket extends DataPacket{
+class DropItemPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::DROP_ITEM_PACKET;
 
 	public $type;
 	/** @var Item */
 	public $item;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->type = $this->getByte();
 		$this->item = $this->getSlot();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putByte($this->type);
 		$this->putSlot($this->item);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleDropItem($this);
 	}
 

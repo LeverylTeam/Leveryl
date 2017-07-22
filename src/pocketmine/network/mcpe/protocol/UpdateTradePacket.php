@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 
 namespace pocketmine\network\mcpe\protocol;
@@ -30,7 +30,8 @@ namespace pocketmine\network\mcpe\protocol;
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\network\mcpe\protocol\types\WindowTypes;
 
-class UpdateTradePacket extends DataPacket{
+class UpdateTradePacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::UPDATE_TRADE_PACKET;
 
 	//TODO: find fields
@@ -44,7 +45,8 @@ class UpdateTradePacket extends DataPacket{
 	public $displayName;
 	public $offers;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->windowId = $this->getByte();
 		$this->windowType = $this->getByte();
 		$this->varint1 = $this->getVarInt();
@@ -56,7 +58,8 @@ class UpdateTradePacket extends DataPacket{
 		$this->offers = $this->getRemaining();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putByte($this->windowId);
 		$this->putByte($this->windowType);
@@ -69,7 +72,8 @@ class UpdateTradePacket extends DataPacket{
 		$this->put($this->offers);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleUpdateTrade($this);
 	}
 }

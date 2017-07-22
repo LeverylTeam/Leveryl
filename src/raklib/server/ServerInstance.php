@@ -17,12 +17,13 @@ namespace raklib\server;
 
 use raklib\protocol\EncapsulatedPacket;
 
-interface ServerInstance{
+interface ServerInstance
+{
 
 	/**
-	 * @param string	 $identifier
-	 * @param string	 $address
-	 * @param int		$port
+	 * @param string $identifier
+	 * @param string $address
+	 * @param int $port
 	 * @param string|int $clientID
 	 */
 	public function openSession($identifier, $address, $port, $clientID);
@@ -34,22 +35,22 @@ interface ServerInstance{
 	public function closeSession($identifier, $reason);
 
 	/**
-	 * @param string			 $identifier
+	 * @param string $identifier
 	 * @param EncapsulatedPacket $packet
-	 * @param int				$flags
+	 * @param int $flags
 	 */
 	public function handleEncapsulated($identifier, EncapsulatedPacket $packet, $flags);
 
 	/**
 	 * @param string $address
-	 * @param int	$port
+	 * @param int $port
 	 * @param string $payload
 	 */
 	public function handleRaw($address, $port, $payload);
 
 	/**
 	 * @param string $identifier
-	 * @param int	$identifierACK
+	 * @param int $identifierACK
 	 */
 	public function notifyACK($identifier, $identifierACK);
 

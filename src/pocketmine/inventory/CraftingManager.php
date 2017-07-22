@@ -6,7 +6,7 @@
  * Ported by @LeverylTeam...
  * */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\inventory;
 
@@ -18,7 +18,8 @@ use pocketmine\Server;
 use pocketmine\utils\Config;
 use pocketmine\utils\UUID;
 
-class CraftingManager{
+class CraftingManager
+{
 
 	/** @var Recipe[] */
 	public $recipes = [];
@@ -37,21 +38,22 @@ class CraftingManager{
 	/** @var CraftingDataPacket */
 	private $craftingDataCache;
 
-	public function __construct(){
+	public function __construct()
+	{
 		$this->registerBrewingStand();
 
 		// load recipes from src/pocketmine/resources/recipes.json
 		$recipes = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/recipes.json", Config::JSON, []);
 
 		//MainLogger::getLogger()->info("Loading recipes...");
-		foreach($recipes->getAll() as $recipe){
-			switch($recipe["type"]){
+		foreach($recipes->getAll() as $recipe) {
+			switch($recipe["type"]) {
 				case 0:
 					// TODO: handle multiple result items
 					$first = $recipe["output"][0];
 					$result = new ShapelessRecipe(Item::get($first["id"], $first["damage"], $first["count"], $first["nbt"]));
 
-					foreach($recipe["input"] as $ingredient){
+					foreach($recipe["input"] as $ingredient) {
 						$result->addIngredient(Item::get($ingredient["id"], $ingredient["damage"], $ingredient["count"], $first["nbt"]));
 					}
 					$this->registerRecipe($result);
@@ -62,8 +64,8 @@ class CraftingManager{
 					$result = new ShapedRecipe(Item::get($first["id"], $first["damage"], $first["count"], $first["nbt"]), $recipe["height"], $recipe["width"]);
 
 					$shape = array_chunk($recipe["input"], $recipe["width"]);
-					foreach($shape as $y => $row){
-						foreach($row as $x => $ingredient){
+					foreach($shape as $y => $row) {
+						foreach($row as $x => $ingredient) {
 							$result->addIngredient($x, $y, Item::get($ingredient["id"], ($ingredient["damage"] < 0 ? -1 : $ingredient["damage"]), $ingredient["count"], $ingredient["nbt"]));
 						}
 					}
@@ -86,20 +88,21 @@ class CraftingManager{
 	/**
 	 * Rebuilds the cached CraftingDataPacket.
 	 */
-	public function buildCraftingDataCache(){
+	public function buildCraftingDataCache()
+	{
 		Timings::$craftingDataCacheRebuildTimer->startTiming();
 		$pk = new CraftingDataPacket();
 		$pk->cleanRecipes = true;
 
-		foreach($this->recipes as $recipe){
-			if($recipe instanceof ShapedRecipe){
+		foreach($this->recipes as $recipe) {
+			if($recipe instanceof ShapedRecipe) {
 				$pk->addShapedRecipe($recipe);
-			}elseif($recipe instanceof ShapelessRecipe){
+			} elseif($recipe instanceof ShapelessRecipe) {
 				$pk->addShapelessRecipe($recipe);
 			}
 		}
 
-		foreach($this->furnaceRecipes as $recipe){
+		foreach($this->furnaceRecipes as $recipe) {
 			$pk->addFurnaceRecipe($recipe);
 		}
 
@@ -115,28 +118,30 @@ class CraftingManager{
 	 *
 	 * @return CraftingDataPacket
 	 */
-	public function getCraftingDataPacket() : CraftingDataPacket{
-		if($this->craftingDataCache === null){
+	public function getCraftingDataPacket(): CraftingDataPacket
+	{
+		if($this->craftingDataCache === null) {
 			$this->buildCraftingDataCache();
 		}
 
 		return $this->craftingDataCache;
 	}
 
-	public function sort(Item $i1, Item $i2){
-		if($i1->getId() > $i2->getId()){
+	public function sort(Item $i1, Item $i2)
+	{
+		if($i1->getId() > $i2->getId()) {
 			return 1;
-		}elseif($i1->getId() < $i2->getId()){
+		} elseif($i1->getId() < $i2->getId()) {
 			return -1;
-		}elseif($i1->getDamage() > $i2->getDamage()){
+		} elseif($i1->getDamage() > $i2->getDamage()) {
 			return 1;
-		}elseif($i1->getDamage() < $i2->getDamage()){
+		} elseif($i1->getDamage() < $i2->getDamage()) {
 			return -1;
-		}elseif($i1->getCount() > $i2->getCount()){
+		} elseif($i1->getCount() > $i2->getCount()) {
 			return 1;
-		}elseif($i1->getCount() < $i2->getCount()){
+		} elseif($i1->getCount() < $i2->getCount()) {
 			return -1;
-		}else{
+		} else {
 			return 0;
 		}
 	}
@@ -145,22 +150,26 @@ class CraftingManager{
 	 * @param UUID $id
 	 * @return Recipe
 	 */
-	public function getRecipe(UUID $id){
+	public function getRecipe(UUID $id)
+	{
 		$index = $id->toBinary();
+
 		return $this->recipes[$index] ?? null;
 	}
 
 	/**
 	 * @return Recipe[]
 	 */
-	public function getRecipes(){
+	public function getRecipes()
+	{
 		return $this->recipes;
 	}
 
 	/**
 	 * @return FurnaceRecipe[]
 	 */
-	public function getFurnaceRecipes(){
+	public function getFurnaceRecipes()
+	{
 		return $this->furnaceRecipes;
 	}
 
@@ -169,10 +178,11 @@ class CraftingManager{
 	 *
 	 * @return FurnaceRecipe
 	 */
-	public function matchFurnaceRecipe(Item $input){
-		if(isset($this->furnaceRecipes[$input->getId() . ":" . $input->getDamage()])){
+	public function matchFurnaceRecipe(Item $input)
+	{
+		if(isset($this->furnaceRecipes[$input->getId() . ":" . $input->getDamage()])) {
 			return $this->furnaceRecipes[$input->getId() . ":" . $input->getDamage()];
-		}elseif(isset($this->furnaceRecipes[$input->getId() . ":?"])){
+		} elseif(isset($this->furnaceRecipes[$input->getId() . ":?"])) {
 			return $this->furnaceRecipes[$input->getId() . ":?"];
 		}
 
@@ -185,25 +195,28 @@ class CraftingManager{
 	 *
 	 * @return BrewingRecipe
 	 */
-	public function matchBrewingRecipe(Item $input, Item $potion) {
+	public function matchBrewingRecipe(Item $input, Item $potion)
+	{
 		$subscript = $input->getId() . ":" . ($input->getDamage() === null ? "0" : $input->getDamage()) . ":" . $potion->getId() . ":" . ($potion->getDamage() === null ? "0" : $potion->getDamage());
-		if (isset($this->brewingRecipes[$subscript])) {
+		if(isset($this->brewingRecipes[$subscript])) {
 			return $this->brewingRecipes[$subscript];
 		}
+
 		return null;
 	}
 
 	/**
 	 * @param ShapedRecipe $recipe
 	 */
-	public function registerShapedRecipe(ShapedRecipe $recipe){
+	public function registerShapedRecipe(ShapedRecipe $recipe)
+	{
 		$result = $recipe->getResult();
 		$this->recipes[$recipe->getId()->toBinary()] = $recipe;
 		$ingredients = $recipe->getIngredientMap();
 		$hash = "";
-		foreach($ingredients as $v){
-			foreach($v as $item){
-				if($item !== null){
+		foreach($ingredients as $v) {
+			foreach($v as $item) {
+				if($item !== null) {
 					/** @var Item $item */
 					$hash .= $item->getId() . ":" . ($item->hasAnyDamageValue() ? "?" : $item->getDamage()) . "x" . $item->getCount() . ",";
 				}
@@ -219,13 +232,14 @@ class CraftingManager{
 	/**
 	 * @param ShapelessRecipe $recipe
 	 */
-	public function registerShapelessRecipe(ShapelessRecipe $recipe){
+	public function registerShapelessRecipe(ShapelessRecipe $recipe)
+	{
 		$result = $recipe->getResult();
 		$this->recipes[$recipe->getId()->toBinary()] = $recipe;
 		$hash = "";
 		$ingredients = $recipe->getIngredientList();
 		usort($ingredients, [$this, "sort"]);
-		foreach($ingredients as $item){
+		foreach($ingredients as $item) {
 			$hash .= $item->getId() . ":" . ($item->hasAnyDamageValue() ? "?" : $item->getDamage()) . "x" . $item->getCount() . ",";
 		}
 		$this->recipeLookup[$result->getId() . ":" . $result->getDamage()][$hash] = $recipe;
@@ -235,7 +249,8 @@ class CraftingManager{
 	/**
 	 * @param FurnaceRecipe $recipe
 	 */
-	public function registerFurnaceRecipe(FurnaceRecipe $recipe){
+	public function registerFurnaceRecipe(FurnaceRecipe $recipe)
+	{
 		$input = $recipe->getInput();
 		$this->furnaceRecipes[$input->getId() . ":" . ($input->hasAnyDamageValue() ? "?" : $input->getDamage())] = $recipe;
 		$this->craftingDataCache = null;
@@ -244,7 +259,8 @@ class CraftingManager{
 	/**
 	 * @param BrewingRecipe $recipe
 	 */
-	public function registerBrewingRecipe(BrewingRecipe $recipe) {
+	public function registerBrewingRecipe(BrewingRecipe $recipe)
+	{
 		$input = $recipe->getInput();
 		$potion = $recipe->getPotion();
 		$this->brewingRecipes[$input->getId() . ":" . ($input->getDamage() === null ? "0" : $input->getDamage()) . ":" . $potion->getId() . ":" . ($potion->getDamage() === null ? "0" : $potion->getDamage())] = $recipe;
@@ -254,52 +270,53 @@ class CraftingManager{
 	 * @param ShapelessRecipe $recipe
 	 * @return bool
 	 */
-	public function matchRecipe(ShapelessRecipe $recipe){
-		if(!isset($this->recipeLookup[$idx = $recipe->getResult()->getId() . ":" . $recipe->getResult()->getDamage()])){
+	public function matchRecipe(ShapelessRecipe $recipe)
+	{
+		if(!isset($this->recipeLookup[$idx = $recipe->getResult()->getId() . ":" . $recipe->getResult()->getDamage()])) {
 			return false;
 		}
 
 		$hash = "";
 		$ingredients = $recipe->getIngredientList();
 		usort($ingredients, [$this, "sort"]);
-		foreach($ingredients as $item){
+		foreach($ingredients as $item) {
 			$hash .= $item->getId() . ":" . ($item->hasAnyDamageValue() ? "?" : $item->getDamage()) . "x" . $item->getCount() . ",";
 		}
 
-		if(isset($this->recipeLookup[$idx][$hash])){
+		if(isset($this->recipeLookup[$idx][$hash])) {
 			return true;
 		}
 
 		$hasRecipe = null;
-        foreach($this->recipeLookup[$idx] as $possibleRecipe){
-            if($possibleRecipe instanceof ShapelessRecipe){
-                if($possibleRecipe->getIngredientCount() !== count($ingredients)){
+		foreach($this->recipeLookup[$idx] as $possibleRecipe) {
+			if($possibleRecipe instanceof ShapelessRecipe) {
+				if($possibleRecipe->getIngredientCount() !== count($ingredients)) {
 					continue;
 				}
-                $checkInput = $possibleRecipe->getIngredientList();
-				foreach($ingredients as $item){
+				$checkInput = $possibleRecipe->getIngredientList();
+				foreach($ingredients as $item) {
 					$amount = $item->getCount();
-					foreach($checkInput as $k => $checkItem){
-						if($checkItem->equals($item, !$checkItem->hasAnyDamageValue(), $checkItem->hasCompoundTag())){
+					foreach($checkInput as $k => $checkItem) {
+						if($checkItem->equals($item, !$checkItem->hasAnyDamageValue(), $checkItem->hasCompoundTag())) {
 							$remove = min($checkItem->getCount(), $amount);
 							$checkItem->setCount($checkItem->getCount() - $remove);
-							if($checkItem->getCount() === 0){
+							if($checkItem->getCount() === 0) {
 								unset($checkInput[$k]);
 							}
 							$amount -= $remove;
-							if($amount === 0){
+							if($amount === 0) {
 								break;
 							}
 						}
 					}
 				}
 
-				if(count($checkInput) === 0){
-                    $hasRecipe = $possibleRecipe;
+				if(count($checkInput) === 0) {
+					$hasRecipe = $possibleRecipe;
 					break;
 				}
 			}
-			if($hasRecipe instanceof Recipe){
+			if($hasRecipe instanceof Recipe) {
 				break;
 			}
 		}
@@ -311,19 +328,21 @@ class CraftingManager{
 	/**
 	 * @param Recipe $recipe
 	 */
-	public function registerRecipe(Recipe $recipe){
-		$recipe->setId(UUID::fromData((string) ++self::$RECIPE_COUNT, (string) $recipe->getResult()->getId(), (string) $recipe->getResult()->getDamage(), (string) $recipe->getResult()->getCount(), $recipe->getResult()->getCompoundTag()));
+	public function registerRecipe(Recipe $recipe)
+	{
+		$recipe->setId(UUID::fromData((string)++self::$RECIPE_COUNT, (string)$recipe->getResult()->getId(), (string)$recipe->getResult()->getDamage(), (string)$recipe->getResult()->getCount(), $recipe->getResult()->getCompoundTag()));
 
-		if($recipe instanceof ShapedRecipe){
+		if($recipe instanceof ShapedRecipe) {
 			$this->registerShapedRecipe($recipe);
-		}elseif($recipe instanceof ShapelessRecipe){
+		} elseif($recipe instanceof ShapelessRecipe) {
 			$this->registerShapelessRecipe($recipe);
-		}elseif($recipe instanceof FurnaceRecipe){
+		} elseif($recipe instanceof FurnaceRecipe) {
 			$this->registerFurnaceRecipe($recipe);
 		}
 	}
 
-	protected function registerBrewingStand() {
+	protected function registerBrewingStand()
+	{
 		//Potion
 		//WATER_BOTTLE
 		$this->registerBrewingRecipe(new BrewingRecipe(Item::get(Item::POTION, Potion::AWKWARD, 1), Item::get(Item::NETHER_WART, 0, 1), Item::get(Item::POTION, Potion::WATER_BOTTLE, 1)));
@@ -457,10 +476,10 @@ class CraftingManager{
 		$this->registerBrewingRecipe(new BrewingRecipe(Item::get(Item::SPLASH_POTION, Potion::INVISIBILITY_T, 1), Item::get(Item::FERMENTED_SPIDER_EYE, 0, 1), Item::get(Item::SPLASH_POTION, Potion::NIGHT_VISION_T, 1)));
 		//===================================================================分隔符=======================================================================
 		//普通药水升级成喷溅
-		foreach (Potion::POTIONS as $potion => $effect) {
+		foreach(Potion::POTIONS as $potion => $effect) {
 			$this->registerBrewingRecipe(new BrewingRecipe(Item::get(Item::SPLASH_POTION, $potion, 1), Item::get(Item::GUNPOWDER, 0, 1), Item::get(Item::POTION, $potion, 1)));
 		}
 	}
 
-	
+
 }

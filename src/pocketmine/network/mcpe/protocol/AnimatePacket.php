@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,31 +28,35 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class AnimatePacket extends DataPacket{
+class AnimatePacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::ANIMATE_PACKET;
 
 	public $action;
 	public $entityRuntimeId;
 	public $float; //TODO (Boat rowing time?)
 
-	public function decode(){
+	public function decode()
+	{
 		$this->action = $this->getVarInt();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		if($this->action & 0x80){
+		if($this->action & 0x80) {
 			$this->float = $this->getLFloat();
 		}
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putVarInt($this->action);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
-		if($this->action & 0x80){
+		if($this->action & 0x80) {
 			$this->putLFloat($this->float);
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleAnimate($this);
 	}
 

@@ -19,30 +19,33 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\inventory;
 
-use pocketmine\level\Position;
 use pocketmine\Player;
 use pocketmine\tile\EnchantTable;
 
-class EnchantInventory extends ContainerInventory{
-	public function __construct(EnchantTable $tile){
+class EnchantInventory extends ContainerInventory
+{
+	public function __construct(EnchantTable $tile)
+	{
 		parent::__construct($tile, InventoryType::get(InventoryType::ENCHANT_TABLE));
 	}
 
 	/**
 	 * @return FakeBlockMenu
 	 */
-	public function getHolder(){
+	public function getHolder()
+	{
 		return $this->holder;
 	}
 
-	public function onClose(Player $who){
+	public function onClose(Player $who)
+	{
 		parent::onClose($who);
 
-		for($i = 0; $i < 2; ++$i){
+		for($i = 0; $i < 2; ++$i) {
 			$this->getHolder()->getLevel()->dropItem($this->getHolder()->add(0.5, 0.5, 0.5), $this->getItem($i));
 			$this->clear($i);
 		}

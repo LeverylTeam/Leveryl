@@ -2,11 +2,11 @@
 
 /**
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\entity;
 
@@ -31,7 +31,8 @@ use pocketmine\level\Position;
 /**
  * Called when a entity explodes
  */
-class EntityExplodeEvent extends EntityEvent implements Cancellable{
+class EntityExplodeEvent extends EntityEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	/** @var Position */
@@ -46,12 +47,13 @@ class EntityExplodeEvent extends EntityEvent implements Cancellable{
 	protected $yield;
 
 	/**
-	 * @param Entity   $entity
+	 * @param Entity $entity
 	 * @param Position $position
-	 * @param Block[]  $blocks
-	 * @param float	$yield
+	 * @param Block[] $blocks
+	 * @param float $yield
 	 */
-	public function __construct(Entity $entity, Position $position, array $blocks, $yield){
+	public function __construct(Entity $entity, Position $position, array $blocks, $yield)
+	{
 		$this->entity = $entity;
 		$this->position = $position;
 		$this->blocks = $blocks;
@@ -61,35 +63,40 @@ class EntityExplodeEvent extends EntityEvent implements Cancellable{
 	/**
 	 * @return Position
 	 */
-	public function getPosition(){
+	public function getPosition()
+	{
 		return $this->position;
 	}
 
 	/**
 	 * @return Block[]
 	 */
-	public function getBlockList(){
+	public function getBlockList()
+	{
 		return $this->blocks;
 	}
 
 	/**
 	 * @param Block[] $blocks
 	 */
-	public function setBlockList(array $blocks){
+	public function setBlockList(array $blocks)
+	{
 		$this->blocks = $blocks;
 	}
 
 	/**
 	 * @return float
 	 */
-	public function getYield(){
+	public function getYield()
+	{
 		return $this->yield;
 	}
 
 	/**
 	 * @param float $yield
 	 */
-	public function setYield($yield){
+	public function setYield($yield)
+	{
 		$this->yield = $yield;
 	}
 

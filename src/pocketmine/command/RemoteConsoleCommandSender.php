@@ -19,32 +19,36 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\command;
 
 use pocketmine\event\TextContainer;
 
-class RemoteConsoleCommandSender extends ConsoleCommandSender{
+class RemoteConsoleCommandSender extends ConsoleCommandSender
+{
 
 	/** @var string */
 	private $messages = "";
 
-	public function sendMessage($message){
-		if($message instanceof TextContainer){
+	public function sendMessage($message)
+	{
+		if($message instanceof TextContainer) {
 			$message = $this->getServer()->getLanguage()->translate($message);
-		}else{
+		} else {
 			$message = $this->getServer()->getLanguage()->translateString($message);
 		}
 
 		$this->messages .= trim($message, "\r\n") . "\n";
 	}
 
-	public function getMessage(){
+	public function getMessage()
+	{
 		return $this->messages;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Rcon";
 	}
 

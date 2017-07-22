@@ -19,39 +19,45 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class IronBars extends Thin{
+class IronBars extends Thin
+{
 
 	protected $id = self::IRON_BARS;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Iron Bars";
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 5;
 	}
 
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getDrops(Item $item){
-		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+	public function getDrops(Item $item)
+	{
+		if($item->isPickaxe() >= Tool::TIER_WOODEN) {
 			return [
 				[Item::IRON_BARS, 0, 1],
 			];
-		}else{
+		} else {
 			return [];
 		}
 	}

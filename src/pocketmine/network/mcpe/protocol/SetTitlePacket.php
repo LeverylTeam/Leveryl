@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 
 namespace pocketmine\network\mcpe\protocol;
@@ -29,7 +29,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class SetTitlePacket extends DataPacket{
+class SetTitlePacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::SET_TITLE_PACKET;
 
 	const TYPE_CLEAR_TITLE = 0;
@@ -45,7 +46,8 @@ class SetTitlePacket extends DataPacket{
 	public $stayTime = 0;
 	public $fadeOutTime = 0;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->type = $this->getVarInt();
 		$this->text = $this->getString();
 		$this->fadeInTime = $this->getVarInt();
@@ -53,7 +55,8 @@ class SetTitlePacket extends DataPacket{
 		$this->fadeOutTime = $this->getVarInt();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putVarInt($this->type);
 		$this->putString($this->text);
@@ -62,7 +65,8 @@ class SetTitlePacket extends DataPacket{
 		$this->putVarInt($this->fadeOutTime);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleSetTitle($this);
 	}
 }

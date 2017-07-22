@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,21 +28,25 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class ContainerClosePacket extends DataPacket{
+class ContainerClosePacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::CONTAINER_CLOSE_PACKET;
 
 	public $windowid;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->windowid = $this->getByte();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putByte($this->windowid);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleContainerClose($this);
 	}
 }

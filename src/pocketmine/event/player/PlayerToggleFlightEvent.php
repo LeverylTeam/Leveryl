@@ -19,25 +19,28 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\player;
 
 use pocketmine\event\Cancellable;
 use pocketmine\Player;
 
-class PlayerToggleFlightEvent extends PlayerEvent implements Cancellable{
+class PlayerToggleFlightEvent extends PlayerEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	/** @var bool */
 	protected $isFlying;
 
-	public function __construct(Player $player, $isFlying){
+	public function __construct(Player $player, $isFlying)
+	{
 		$this->player = $player;
-		$this->isFlying = (bool) $isFlying;
+		$this->isFlying = (bool)$isFlying;
 	}
 
-	public function isFlying(){
+	public function isFlying()
+	{
 		return $this->isFlying;
 	}
 

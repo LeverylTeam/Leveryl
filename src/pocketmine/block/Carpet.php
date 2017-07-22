@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -28,34 +28,39 @@ use pocketmine\level\Level;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
 
-class Carpet extends Flowable{
+class Carpet extends Flowable
+{
 
 	protected $id = self::CARPET;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 0.1;
 	}
 
-	public function isSolid(){
+	public function isSolid()
+	{
 		return true;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		static $names = [
-			0 => "White Carpet",
-			1 => "Orange Carpet",
-			2 => "Magenta Carpet",
-			3 => "Light Blue Carpet",
-			4 => "Yellow Carpet",
-			5 => "Lime Carpet",
-			6 => "Pink Carpet",
-			7 => "Gray Carpet",
-			8 => "Light Gray Carpet",
-			9 => "Cyan Carpet",
+			0  => "White Carpet",
+			1  => "Orange Carpet",
+			2  => "Magenta Carpet",
+			3  => "Light Blue Carpet",
+			4  => "Yellow Carpet",
+			5  => "Lime Carpet",
+			6  => "Pink Carpet",
+			7  => "Gray Carpet",
+			8  => "Light Gray Carpet",
+			9  => "Cyan Carpet",
 			10 => "Purple Carpet",
 			11 => "Blue Carpet",
 			12 => "Brown Carpet",
@@ -63,10 +68,12 @@ class Carpet extends Flowable{
 			14 => "Red Carpet",
 			15 => "Black Carpet",
 		];
+
 		return $names[$this->meta & 0x0f];
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox()
+	{
 
 		return new AxisAlignedBB(
 			$this->x,
@@ -78,9 +85,10 @@ class Carpet extends Flowable{
 		);
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
+	{
 		$down = $this->getSide(0);
-		if($down->getId() !== self::AIR){
+		if($down->getId() !== self::AIR) {
 			$this->getLevel()->setBlock($block, $this, true, true);
 
 			return true;
@@ -89,9 +97,10 @@ class Carpet extends Flowable{
 		return false;
 	}
 
-	public function onUpdate($type){
-		if($type === Level::BLOCK_UPDATE_NORMAL){
-			if($this->getSide(0)->getId() === self::AIR){
+	public function onUpdate($type)
+	{
+		if($type === Level::BLOCK_UPDATE_NORMAL) {
+			if($this->getSide(0)->getId() === self::AIR) {
 				$this->getLevel()->useBreakOn($this);
 
 				return Level::BLOCK_UPDATE_NORMAL;

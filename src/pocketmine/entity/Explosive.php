@@ -19,12 +19,13 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\entity;
 
 
-interface Explosive{
+interface Explosive
+{
 
 	public function explode();
 }

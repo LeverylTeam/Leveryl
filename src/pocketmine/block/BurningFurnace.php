@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -34,35 +34,43 @@ use pocketmine\Player;
 use pocketmine\tile\Furnace as TileFurnace;
 use pocketmine\tile\Tile;
 
-class BurningFurnace extends Solid{
+class BurningFurnace extends Solid
+{
 
 	protected $id = self::BURNING_FURNACE;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Burning Furnace";
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated()
+	{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 3.5;
 	}
 
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getLightLevel(){
+	public function getLightLevel()
+	{
 		return 13;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
+	{
 		$faces = [
 			0 => 4,
 			1 => 2,
@@ -76,16 +84,16 @@ class BurningFurnace extends Solid{
 			new StringTag("id", Tile::FURNACE),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
-			new IntTag("z", $this->z)
+			new IntTag("z", $this->z),
 		]);
 		$nbt->Items->setTagType(NBT::TAG_Compound);
 
-		if($item->hasCustomName()){
+		if($item->hasCustomName()) {
 			$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 		}
 
-		if($item->hasCustomBlockData()){
-			foreach($item->getCustomBlockData() as $key => $v){
+		if($item->hasCustomBlockData()) {
+			foreach($item->getCustomBlockData() as $key => $v) {
 				$nbt->{$key} = $v;
 			}
 		}
@@ -95,29 +103,31 @@ class BurningFurnace extends Solid{
 		return true;
 	}
 
-	public function onBreak(Item $item){
+	public function onBreak(Item $item)
+	{
 		$this->getLevel()->setBlock($this, new Air(), true, true);
 
 		return true;
 	}
 
-	public function onActivate(Item $item, Player $player = null){
-		if($player instanceof Player){
+	public function onActivate(Item $item, Player $player = null)
+	{
+		if($player instanceof Player) {
 			$furnace = $this->getLevel()->getTile($this);
-			if(!($furnace instanceof TileFurnace)){
+			if(!($furnace instanceof TileFurnace)) {
 				$nbt = new CompoundTag("", [
 					new ListTag("Items", []),
 					new StringTag("id", Tile::FURNACE),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
-					new IntTag("z", $this->z)
+					new IntTag("z", $this->z),
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
 				$furnace = Tile::createTile("Furnace", $this->getLevel(), $nbt);
 			}
 
-			if(isset($furnace->namedtag->Lock) and $furnace->namedtag->Lock instanceof StringTag){
-				if($furnace->namedtag->Lock->getValue() !== $item->getCustomName()){
+			if(isset($furnace->namedtag->Lock) and $furnace->namedtag->Lock instanceof StringTag) {
+				if($furnace->namedtag->Lock->getValue() !== $item->getCustomName()) {
 					return true;
 				}
 			}
@@ -128,9 +138,10 @@ class BurningFurnace extends Solid{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item)
+	{
 		$drops = [];
-		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+		if($item->isPickaxe() >= Tool::TIER_WOODEN) {
 			$drops[] = [Item::FURNACE, 0, 1];
 		}
 

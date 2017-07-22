@@ -19,11 +19,10 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
-use pocketmine\inventory\EnchantInventory;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\nbt\NBT;
@@ -32,32 +31,35 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\tile\Tile;
 use pocketmine\tile\EnchantTable;
+use pocketmine\tile\Tile;
 
-class EnchantingTable extends Transparent{
+class EnchantingTable extends Transparent
+{
 
 	protected $id = self::ENCHANTING_TABLE;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
+	{
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
 			new StringTag("id", Tile::ENCHANT_TABLE),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
-			new IntTag("z", $this->z)
+			new IntTag("z", $this->z),
 		]);
 		$tile = Tile::createTile(TILE::ENCHANT_TABLE, $this->getLevel(), $nbt);
-		if($item->hasCustomName()){
+		if($item->hasCustomName()) {
 			$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 		}
 
-		if($item->hasCustomBlockData()){
-			foreach($item->getCustomBlockData() as $key => $v){
+		if($item->hasCustomBlockData()) {
+			foreach($item->getCustomBlockData() as $key => $v) {
 				$nbt->{$key} = $v;
 			}
 		}
@@ -67,40 +69,46 @@ class EnchantingTable extends Transparent{
 		return true;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated()
+	{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 5;
 	}
 
-	public function getResistance(){
+	public function getResistance()
+	{
 		return 6000;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Enchanting Table";
 	}
 
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function onActivate(Item $item, Player $player = null){
-		if($player instanceof Player){
+	public function onActivate(Item $item, Player $player = null)
+	{
+		if($player instanceof Player) {
 			//TODO lock
 			$t = $this->getLevel()->getTile($this);
 			$table = null;
-			if($t instanceof EnchantTable){
+			if($t instanceof EnchantTable) {
 				$table = $t;
-			}else{
+			} else {
 				$nbt = new CompoundTag("", [
 					new ListTag("Items", []),
 					new StringTag("id", Tile::ENCHANT_TABLE),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
-					new IntTag("z", $this->z)
+					new IntTag("z", $this->z),
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
 				$table = Tile::createTile(TILE::ENCHANT_TABLE, $this->getLevel(), $nbt);
@@ -111,12 +119,13 @@ class EnchantingTable extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
-		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+	public function getDrops(Item $item)
+	{
+		if($item->isPickaxe() >= Tool::TIER_WOODEN) {
 			return [
 				[$this->id, 0, 1],
 			];
-		}else{
+		} else {
 			return [];
 		}
 	}

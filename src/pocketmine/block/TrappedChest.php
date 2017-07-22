@@ -19,17 +19,19 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
-class TrappedChest extends Chest{
+class TrappedChest extends Chest
+{
 
 	//TODO: Redstone!
 
 	protected $id = self::TRAPPED_CHEST;
 
-	public function getName(){
+	public function getName()
+	{
 		return "Trapped Chest";
 	}
 }

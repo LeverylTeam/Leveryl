@@ -15,7 +15,8 @@
  * GNU General Public License for more details.
 */
 
-interface ClassLoader{
+interface ClassLoader
+{
 
 	/**
 	 * @param ClassLoader $parent
@@ -26,7 +27,7 @@ interface ClassLoader{
 	 * Adds a path to the lookup list
 	 *
 	 * @param string $path
-	 * @param bool   $prepend
+	 * @param bool $prepend
 	 */
 	public function addPath($path, $prepend = false);
 

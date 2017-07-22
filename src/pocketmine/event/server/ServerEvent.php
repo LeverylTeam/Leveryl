@@ -19,15 +19,17 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /**
  * Events related to the server core, like networking, stop, level loading
  */
+
 namespace pocketmine\event\server;
 
 use pocketmine\event\Event;
 
-abstract class ServerEvent extends Event{
+abstract class ServerEvent extends Event
+{
 
 }

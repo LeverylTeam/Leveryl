@@ -19,16 +19,18 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
 
-class FenceGateBirch extends FenceGate{
+class FenceGateBirch extends FenceGate
+{
 
 	protected $id = self::FENCE_GATE_BIRCH;
 
-	public function getName(){
+	public function getName()
+	{
 		return "Birch Fence Gate";
 	}
 }

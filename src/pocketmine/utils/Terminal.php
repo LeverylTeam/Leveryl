@@ -19,11 +19,12 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\utils;
 
-abstract class Terminal{
+abstract class Terminal
+{
 	public static $FORMAT_BOLD = "";
 	public static $FORMAT_OBFUSCATED = "";
 	public static $FORMAT_ITALIC = "";
@@ -51,12 +52,13 @@ abstract class Terminal{
 
 	private static $formattingCodes = null;
 
-	public static function hasFormattingCodes(){
-		if(self::$formattingCodes === null){
+	public static function hasFormattingCodes()
+	{
+		if(self::$formattingCodes === null) {
 			$opts = getopt("", ["enable-ansi", "disable-ansi"]);
-			if(isset($opts["disable-ansi"])){
+			if(isset($opts["disable-ansi"])) {
 				self::$formattingCodes = false;
-			}else{
+			} else {
 				self::$formattingCodes = ((Utils::getOS() !== "win" and getenv("TERM") != "" and (!function_exists("posix_ttyname") or !defined("STDOUT") or posix_ttyname(STDOUT) !== false)) or isset($opts["enable-ansi"]));
 			}
 		}
@@ -64,7 +66,8 @@ abstract class Terminal{
 		return self::$formattingCodes;
 	}
 
-	protected static function getFallbackEscapeCodes(){
+	protected static function getFallbackEscapeCodes()
+	{
 		self::$FORMAT_BOLD = "\x1b[1m";
 		self::$FORMAT_OBFUSCATED = "";
 		self::$FORMAT_ITALIC = "\x1b[3m";
@@ -91,7 +94,8 @@ abstract class Terminal{
 		self::$COLOR_WHITE = "\x1b[38;5;231m";
 	}
 
-	protected static function getEscapeCodes(){
+	protected static function getEscapeCodes()
+	{
 		self::$FORMAT_BOLD = `tput bold`;
 		self::$FORMAT_OBFUSCATED = `tput smacs`;
 		self::$FORMAT_ITALIC = `tput sitm`;
@@ -100,8 +104,8 @@ abstract class Terminal{
 
 		self::$FORMAT_RESET = `tput sgr0`;
 
-		$colors = (int) `tput colors`;
-		if($colors > 8){
+		$colors = (int)`tput colors`;
+		if($colors > 8) {
 			self::$COLOR_BLACK = $colors >= 256 ? `tput setaf 16` : `tput setaf 0`;
 			self::$COLOR_DARK_BLUE = $colors >= 256 ? `tput setaf 19` : `tput setaf 4`;
 			self::$COLOR_DARK_GREEN = $colors >= 256 ? `tput setaf 34` : `tput setaf 2`;
@@ -118,7 +122,7 @@ abstract class Terminal{
 			self::$COLOR_LIGHT_PURPLE = $colors >= 256 ? `tput setaf 207` : `tput setaf 13`;
 			self::$COLOR_YELLOW = $colors >= 256 ? `tput setaf 227` : `tput setaf 11`;
 			self::$COLOR_WHITE = $colors >= 256 ? `tput setaf 231` : `tput setaf 15`;
-		}else{
+		} else {
 			self::$COLOR_BLACK = self::$COLOR_DARK_GRAY = `tput setaf 0`;
 			self::$COLOR_RED = self::$COLOR_DARK_RED = `tput setaf 1`;
 			self::$COLOR_GREEN = self::$COLOR_DARK_GREEN = `tput setaf 2`;
@@ -130,21 +134,24 @@ abstract class Terminal{
 		}
 	}
 
-	public static function init(){
-		if(!self::hasFormattingCodes()){
+	public static function init()
+	{
+		if(!self::hasFormattingCodes()) {
 			return;
 		}
 
-		switch(Utils::getOS()){
+		switch(Utils::getOS()) {
 			case "linux":
 			case "mac":
 			case "bsd":
 				self::getEscapeCodes();
+
 				return;
 
 			case "win":
 			case "android":
 				self::getFallbackEscapeCodes();
+
 				return;
 		}
 

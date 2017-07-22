@@ -19,13 +19,14 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\inventory;
 
 use pocketmine\item\Item;
 
-class BaseTransaction implements Transaction{
+class BaseTransaction implements Transaction
+{
 	/** @var Inventory */
 	protected $inventory;
 	/** @var int */
@@ -39,35 +40,41 @@ class BaseTransaction implements Transaction{
 
 	/**
 	 * @param Inventory $inventory
-	 * @param int	   $slot
-	 * @param Item	  $sourceItem
-	 * @param Item	  $targetItem
+	 * @param int $slot
+	 * @param Item $sourceItem
+	 * @param Item $targetItem
 	 */
-	public function __construct(Inventory $inventory, $slot, Item $sourceItem, Item $targetItem){
+	public function __construct(Inventory $inventory, $slot, Item $sourceItem, Item $targetItem)
+	{
 		$this->inventory = $inventory;
-		$this->slot = (int) $slot;
+		$this->slot = (int)$slot;
 		$this->sourceItem = clone $sourceItem;
 		$this->targetItem = clone $targetItem;
 		$this->creationTime = microtime(true);
 	}
 
-	public function getCreationTime(){
+	public function getCreationTime()
+	{
 		return $this->creationTime;
 	}
 
-	public function getInventory(){
+	public function getInventory()
+	{
 		return $this->inventory;
 	}
 
-	public function getSlot(){
+	public function getSlot()
+	{
 		return $this->slot;
 	}
 
-	public function getSourceItem(){
+	public function getSourceItem()
+	{
 		return clone $this->sourceItem;
 	}
 
-	public function getTargetItem(){
+	public function getTargetItem()
+	{
 		return clone $this->targetItem;
 	}
 }

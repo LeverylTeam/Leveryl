@@ -19,15 +19,17 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
-class DarkOakWoodStairs extends WoodStairs{
+class DarkOakWoodStairs extends WoodStairs
+{
 
 	protected $id = self::DARK_OAK_WOOD_STAIRS;
 
-	public function getName(){
+	public function getName()
+	{
 		return "Dark Oak Wood Stairs";
 	}
 }

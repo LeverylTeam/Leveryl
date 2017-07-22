@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level\generator;
 
@@ -29,7 +29,8 @@ use pocketmine\level\SimpleChunkManager;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 
-class PopulationTask extends AsyncTask{
+class PopulationTask extends AsyncTask
+{
 
 	public $state;
 	public $levelId;
@@ -45,23 +46,26 @@ class PopulationTask extends AsyncTask{
 	public $chunk7;
 	public $chunk8;
 
-	public function __construct(Level $level, Chunk $chunk){
+	public function __construct(Level $level, Chunk $chunk)
+	{
 		$this->state = true;
 		$this->levelId = $level->getId();
 		$this->chunk = $chunk->fastSerialize();
 
-		foreach($level->getAdjacentChunks($chunk->getX(), $chunk->getZ()) as $i => $c){
+		foreach($level->getAdjacentChunks($chunk->getX(), $chunk->getZ()) as $i => $c) {
 			$this->{"chunk$i"} = $c !== null ? $c->fastSerialize() : null;
 		}
 	}
 
-	public function onRun(){
+	public function onRun()
+	{
 		/** @var SimpleChunkManager $manager */
 		$manager = $this->getFromThreadStore("generation.level{$this->levelId}.manager");
 		/** @var Generator $generator */
 		$generator = $this->getFromThreadStore("generation.level{$this->levelId}.generator");
-		if($manager === null or $generator === null){
+		if($manager === null or $generator === null) {
 			$this->state = false;
+
 			return;
 		}
 
@@ -70,35 +74,35 @@ class PopulationTask extends AsyncTask{
 
 		$chunk = Chunk::fastDeserialize($this->chunk);
 
-		for($i = 0; $i < 9; ++$i){
-			if($i === 4){
+		for($i = 0; $i < 9; ++$i) {
+			if($i === 4) {
 				continue;
 			}
 			$xx = -1 + $i % 3;
-			$zz = -1 + (int) ($i / 3);
+			$zz = -1 + (int)($i / 3);
 			$ck = $this->{"chunk$i"};
-			if($ck === null){
+			if($ck === null) {
 				$chunks[$i] = Chunk::getEmptyChunk($chunk->getX() + $xx, $chunk->getZ() + $zz);
-			}else{
+			} else {
 				$chunks[$i] = Chunk::fastDeserialize($ck);
 			}
 		}
 
-		if($chunk === null){
+		if($chunk === null) {
 			//TODO error
 			return;
 		}
 
 		$manager->setChunk($chunk->getX(), $chunk->getZ(), $chunk);
-		if(!$chunk->isGenerated()){
+		if(!$chunk->isGenerated()) {
 			$generator->generateChunk($chunk->getX(), $chunk->getZ());
 			$chunk->setGenerated();
 		}
 
-		foreach($chunks as $c){
-			if($c !== null){
+		foreach($chunks as $c) {
+			if($c !== null) {
 				$manager->setChunk($c->getX(), $c->getZ(), $c);
-				if(!$c->isGenerated()){
+				if(!$c->isGenerated()) {
 					$generator->generateChunk($c->getX(), $c->getZ());
 					$c = $manager->getChunk($c->getX(), $c->getZ());
 					$c->setGenerated();
@@ -117,13 +121,13 @@ class PopulationTask extends AsyncTask{
 
 		$manager->setChunk($chunk->getX(), $chunk->getZ(), null);
 
-		foreach($chunks as $i => $c){
-			if($c !== null){
+		foreach($chunks as $i => $c) {
+			if($c !== null) {
 				$c = $chunks[$i] = $manager->getChunk($c->getX(), $c->getZ());
-				if(!$c->hasChanged()){
+				if(!$c->hasChanged()) {
 					$chunks[$i] = null;
 				}
-			}else{
+			} else {
 				//This way non-changed chunks are not set
 				$chunks[$i] = null;
 			}
@@ -131,8 +135,8 @@ class PopulationTask extends AsyncTask{
 
 		$manager->cleanChunks();
 
-		for($i = 0; $i < 9; ++$i){
-			if($i === 4){
+		for($i = 0; $i < 9; ++$i) {
+			if($i === 4) {
 				continue;
 			}
 
@@ -140,27 +144,29 @@ class PopulationTask extends AsyncTask{
 		}
 	}
 
-	public function onCompletion(Server $server){
+	public function onCompletion(Server $server)
+	{
 		$level = $server->getLevel($this->levelId);
-		if($level !== null){
-			if($this->state === false){
+		if($level !== null) {
+			if($this->state === false) {
 				$level->registerGenerator();
+
 				return;
 			}
 
 			$chunk = Chunk::fastDeserialize($this->chunk);
 
-			if($chunk === null){
+			if($chunk === null) {
 				//TODO error
 				return;
 			}
 
-			for($i = 0; $i < 9; ++$i){
-				if($i === 4){
+			for($i = 0; $i < 9; ++$i) {
+				if($i === 4) {
 					continue;
 				}
 				$c = $this->{"chunk$i"};
-				if($c !== null){
+				if($c !== null) {
 					$c = Chunk::fastDeserialize($c);
 					$level->generateChunkCallback($c->getX(), $c->getZ(), $c);
 				}

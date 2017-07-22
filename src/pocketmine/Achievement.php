@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine;
 
@@ -29,7 +29,8 @@ use pocketmine\utils\TextFormat;
 /**
  * Handles the achievement list and a bit more
  */
-abstract class Achievement{
+abstract class Achievement
+{
 	/**
 	 * @var array[]
 	 */
@@ -38,67 +39,67 @@ abstract class Achievement{
 			"name" => "Taking Inventory",
 			"requires" => [],
 		),*/
-		"mineWood" => [
-			"name" => "Getting Wood",
+		"mineWood"           => [
+			"name"     => "Getting Wood",
 			"requires" => [ //"openInventory",
 			],
 		],
-		"buildWorkBench" => [
-			"name" => "Benchmarking",
+		"buildWorkBench"     => [
+			"name"     => "Benchmarking",
 			"requires" => [
 				"mineWood",
 			],
 		],
-		"buildPickaxe" => [
-			"name" => "Time to Mine!",
+		"buildPickaxe"       => [
+			"name"     => "Time to Mine!",
 			"requires" => [
 				"buildWorkBench",
 			],
 		],
-		"buildFurnace" => [
-			"name" => "Hot Topic",
+		"buildFurnace"       => [
+			"name"     => "Hot Topic",
 			"requires" => [
 				"buildPickaxe",
 			],
 		],
-		"acquireIron" => [
-			"name" => "Acquire hardware",
+		"acquireIron"        => [
+			"name"     => "Acquire hardware",
 			"requires" => [
 				"buildFurnace",
 			],
 		],
-		"buildHoe" => [
-			"name" => "Time to Farm!",
+		"buildHoe"           => [
+			"name"     => "Time to Farm!",
 			"requires" => [
 				"buildWorkBench",
 			],
 		],
-		"makeBread" => [
-			"name" => "Bake Bread",
+		"makeBread"          => [
+			"name"     => "Bake Bread",
 			"requires" => [
 				"buildHoe",
 			],
 		],
-		"bakeCake" => [
-			"name" => "The Lie",
+		"bakeCake"           => [
+			"name"     => "The Lie",
 			"requires" => [
 				"buildHoe",
 			],
 		],
 		"buildBetterPickaxe" => [
-			"name" => "Getting an Upgrade",
+			"name"     => "Getting an Upgrade",
 			"requires" => [
 				"buildPickaxe",
 			],
 		],
-		"buildSword" => [
-			"name" => "Time to Strike!",
+		"buildSword"         => [
+			"name"     => "Time to Strike!",
 			"requires" => [
 				"buildWorkBench",
 			],
 		],
-		"diamonds" => [
-			"name" => "DIAMONDS!",
+		"diamonds"           => [
+			"name"     => "DIAMONDS!",
 			"requires" => [
 				"acquireIron",
 			],
@@ -107,12 +108,13 @@ abstract class Achievement{
 	];
 
 
-	public static function broadcast(Player $player, $achievementId){
-		if(isset(Achievement::$list[$achievementId])){
+	public static function broadcast(Player $player, $achievementId)
+	{
+		if(isset(Achievement::$list[$achievementId])) {
 			$translation = new TranslationContainer("chat.type.achievement", [$player->getDisplayName(), TextFormat::GREEN . Achievement::$list[$achievementId]["name"] . TextFormat::RESET]);
-			if(Server::getInstance()->getConfigBoolean("announce-player-achievements", true) === true){
+			if(Server::getInstance()->getConfigBoolean("announce-player-achievements", true) === true) {
 				Server::getInstance()->broadcastMessage($translation);
-			}else{
+			} else {
 				$player->sendMessage($translation);
 			}
 
@@ -122,10 +124,11 @@ abstract class Achievement{
 		return false;
 	}
 
-	public static function add($achievementId, $achievementName, array $requires = []){
-		if(!isset(Achievement::$list[$achievementId])){
+	public static function add($achievementId, $achievementName, array $requires = [])
+	{
+		if(!isset(Achievement::$list[$achievementId])) {
 			Achievement::$list[$achievementId] = [
-				"name" => $achievementName,
+				"name"     => $achievementName,
 				"requires" => $requires,
 			];
 

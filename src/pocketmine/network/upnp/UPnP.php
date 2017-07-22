@@ -19,59 +19,63 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /**
  * UPnP port forwarding support. Only for Windows
  */
+
 namespace pocketmine\network\upnp;
 
 use pocketmine\utils\Utils;
 
-abstract class UPnP{
-	public static function PortForward($port){
-		if(Utils::$online === false){
+abstract class UPnP
+{
+	public static function PortForward($port)
+	{
+		if(Utils::$online === false) {
 			return false;
 		}
-		if(Utils::getOS() != "win" or !class_exists("COM")){
+		if(Utils::getOS() != "win" or !class_exists("COM")) {
 			return false;
 		}
-		$port = (int) $port;
+		$port = (int)$port;
 		$myLocalIP = gethostbyname(trim(`hostname`));
-		try{
+		try {
 			/** @noinspection PhpUndefinedClassInspection */
 			$com = new \COM("HNetCfg.NATUPnP");
 			/** @noinspection PhpUndefinedFieldInspection */
-			if($com === false or !is_object($com->StaticPortMappingCollection)){
+			if($com === false or !is_object($com->StaticPortMappingCollection)) {
 				return false;
 			}
 			/** @noinspection PhpUndefinedFieldInspection */
 			$com->StaticPortMappingCollection->Add($port, "UDP", $port, $myLocalIP, true, "PocketMine-MP");
-		}catch(\Throwable $e){
+		} catch(\Throwable $e) {
 			return false;
 		}
 
 		return true;
 	}
 
-	public static function RemovePortForward($port){
-		if(Utils::$online === false){
+	public static function RemovePortForward($port)
+	{
+		if(Utils::$online === false) {
 			return false;
 		}
-		if(Utils::getOS() != "win" or !class_exists("COM")){
+		if(Utils::getOS() != "win" or !class_exists("COM")) {
 			return false;
 		}
-		$port = (int) $port;
-		try{
+		$port = (int)$port;
+		try {
 			/** @noinspection PhpUndefinedClassInspection */
 			$com = new \COM("HNetCfg.NATUPnP") or false;
 			/** @noinspection PhpUndefinedFieldInspection */
-			if($com === false or !is_object($com->StaticPortMappingCollection)){
+			if($com === false or !is_object($com->StaticPortMappingCollection)) {
 				return false;
 			}
 			/** @noinspection PhpUndefinedFieldInspection */
 			$com->StaticPortMappingCollection->Remove($port, "UDP");
-		}catch(\Throwable $e){
+		} catch(\Throwable $e) {
 			return false;
 		}
 

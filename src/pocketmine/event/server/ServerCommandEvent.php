@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\event\server;
 
@@ -34,7 +34,8 @@ use pocketmine\event\Cancellable;
  *
  * The message contains a slash at the start
  */
-class ServerCommandEvent extends ServerEvent implements Cancellable{
+class ServerCommandEvent extends ServerEvent implements Cancellable
+{
 	public static $handlerList = null;
 
 	/** @var string */
@@ -45,9 +46,10 @@ class ServerCommandEvent extends ServerEvent implements Cancellable{
 
 	/**
 	 * @param CommandSender $sender
-	 * @param string		$command
+	 * @param string $command
 	 */
-	public function __construct(CommandSender $sender, $command){
+	public function __construct(CommandSender $sender, $command)
+	{
 		$this->sender = $sender;
 		$this->command = $command;
 	}
@@ -55,21 +57,24 @@ class ServerCommandEvent extends ServerEvent implements Cancellable{
 	/**
 	 * @return CommandSender
 	 */
-	public function getSender(){
+	public function getSender()
+	{
 		return $this->sender;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getCommand(){
+	public function getCommand()
+	{
 		return $this->command;
 	}
 
 	/**
 	 * @param string $command
 	 */
-	public function setCommand($command){
+	public function setCommand($command)
+	{
 		$this->command = $command;
 	}
 

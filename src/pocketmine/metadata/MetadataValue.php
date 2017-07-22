@@ -19,24 +19,27 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\metadata;
 
 use pocketmine\plugin\Plugin;
 
-abstract class MetadataValue{
+abstract class MetadataValue
+{
 	/** @var Plugin */
 	private $owningPlugin;
 
-	protected function __construct(Plugin $owningPlugin){
+	protected function __construct(Plugin $owningPlugin)
+	{
 		$this->owningPlugin = $owningPlugin;
 	}
 
 	/**
 	 * @return Plugin
 	 */
-	public function getOwningPlugin(){
+	public function getOwningPlugin()
+	{
 		return $this->owningPlugin;
 	}
 

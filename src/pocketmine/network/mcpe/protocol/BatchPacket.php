@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,29 +27,36 @@ namespace pocketmine\network\mcpe\protocol;
 
 
 use pocketmine\network\mcpe\NetworkSession;
-#ifndef COMPILE
 use pocketmine\utils\Binary;
+
+#ifndef COMPILE
+
 #endif
 
-class BatchPacket extends DataPacket{
+class BatchPacket extends DataPacket
+{
 	const NETWORK_ID = 0xfe;
 
 	public $payload;
 	public $compressed = false;
 
-	public function canBeBatched() : bool{
+	public function canBeBatched(): bool
+	{
 		return false;
 	}
 
-	public function canBeSentBeforeLogin() : bool{
+	public function canBeSentBeforeLogin(): bool
+	{
 		return true;
 	}
 
-	public function decode(){
+	public function decode()
+	{
 		$this->payload = $this->getRemaining();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		assert($this->compressed);
 		$this->put($this->payload);
@@ -58,46 +65,49 @@ class BatchPacket extends DataPacket{
 	/**
 	 * @param DataPacket $packet
 	 */
-	public function addPacket(DataPacket $packet){
-		if(!$packet->canBeBatched()){
+	public function addPacket(DataPacket $packet)
+	{
+		if(!$packet->canBeBatched()) {
 			throw new \InvalidArgumentException(get_class($packet) . " cannot be put inside a BatchPacket");
 		}
-		if(!$packet->isEncoded){
+		if(!$packet->isEncoded) {
 			$packet->encode();
 		}
 
 		$this->payload .= Binary::writeUnsignedVarInt(strlen($packet->buffer)) . $packet->buffer;
 	}
 
-	public function compress(int $level = 7){
+	public function compress(int $level = 7)
+	{
 		assert(!$this->compressed);
 		$this->payload = zlib_encode($this->payload, ZLIB_ENCODING_DEFLATE, $level);
 		$this->compressed = true;
 	}
 
-	public function handle(NetworkSession $session) : bool{
-		if(strlen($this->payload) < 2){
+	public function handle(NetworkSession $session): bool
+	{
+		if(strlen($this->payload) < 2) {
 			return false;
 		}
 
-		try{
+		try {
 			$str = zlib_decode($this->payload, 1024 * 1024 * 64); //Max 64MB
-		}catch(\ErrorException $e){
+		} catch(\ErrorException $e) {
 			return false;
 		}
 
-        if($str === ""){
+		if($str === "") {
 			throw new \InvalidStateException("Decoded BatchPacket payload is empty");
 		}
 
 		$this->setBuffer($str, 0);
 
 		$network = $session->getServer()->getNetwork();
-		while(!$this->feof()){
+		while(!$this->feof()) {
 			$buf = $this->getString();
 			$pk = $network->getPacket(ord($buf{0}));
 
-			if(!$pk->canBeBatched()){
+			if(!$pk->canBeBatched()) {
 				throw new \InvalidArgumentException("Received invalid " . get_class($pk) . " inside BatchPacket");
 			}
 

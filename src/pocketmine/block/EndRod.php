@@ -25,30 +25,37 @@ use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 
-class EndRod extends Flowable{
+class EndRod extends Flowable
+{
 	protected $id = self::END_ROD;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getLightLevel(){
+	public function getLightLevel()
+	{
 		return 14;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "End Rod";
 	}
 
-	public function getResistance(){
+	public function getResistance()
+	{
 		return 0;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 0;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
+	{
 		$faces = [
 			0 => 0,
 			1 => 1,
@@ -59,10 +66,12 @@ class EndRod extends Flowable{
 		];
 		$this->meta = ($target->getId() === self::END_ROD && $faces[$face] == $target->getDamage()) ? Vector3::getOppositeSide($faces[$face]) : $faces[$face];
 		$this->getLevel()->setBlock($block, $this, true, true);
+
 		return true;
 	}
 
-	public function getDrops(Item $item): array{
+	public function getDrops(Item $item): array
+	{
 		return [
 			[$this->id, 0, 1],
 		];

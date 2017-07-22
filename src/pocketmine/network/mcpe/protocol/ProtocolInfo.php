@@ -19,14 +19,15 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 /**
  * Version numbers and packet IDs for the current Minecraft PE protocol
  */
-interface ProtocolInfo{
+interface ProtocolInfo
+{
 
 	/**
 	 * NOTE TO DEVELOPERS

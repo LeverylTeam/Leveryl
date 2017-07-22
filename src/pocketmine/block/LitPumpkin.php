@@ -19,19 +19,22 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
-class LitPumpkin extends Pumpkin{
+class LitPumpkin extends Pumpkin
+{
 
 	protected $id = self::LIT_PUMPKIN;
 
-	public function getLightLevel(){
+	public function getLightLevel()
+	{
 		return 15;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Jack o'Lantern";
 	}
 }

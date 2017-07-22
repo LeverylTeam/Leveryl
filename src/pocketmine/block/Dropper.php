@@ -25,42 +25,49 @@ use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\tile\Dropper as TileDropper;
 use pocketmine\tile\Tile;
 
-class Dropper extends Solid{
+class Dropper extends Solid
+{
 
 	protected $id = self::DROPPER;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated() : bool {
+	public function canBeActivated(): bool
+	{
 		return true;
 	}
 
-	public function getHardness() {
+	public function getHardness()
+	{
 		return 3.5;
 	}
 
-	public function getName() : string{
+	public function getName(): string
+	{
 		return "Dropper";
 	}
 
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
+	{
 		$dispenser = null;
-		if($player instanceof Player){
+		if($player instanceof Player) {
 			$pitch = $player->getPitch();
-			if(abs($pitch) >= 45){
+			if(abs($pitch) >= 45) {
 				if($pitch < 0) $f = 4;
 				else $f = 5;
 			} else $f = $player->getDirection();
@@ -71,7 +78,7 @@ class Dropper extends Solid{
 			2 => 5,
 			1 => 2,
 			4 => 0,
-			5 => 1
+			5 => 1,
 		];
 		$this->meta = $faces[$f];
 
@@ -81,16 +88,16 @@ class Dropper extends Solid{
 			new StringTag("id", Tile::DROPPER),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
-			new IntTag("z", $this->z)
+			new IntTag("z", $this->z),
 		]);
 		$nbt->Items->setTagType(NBT::TAG_Compound);
 
-		if($item->hasCustomName()){
+		if($item->hasCustomName()) {
 			$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 		}
 
-		if($item->hasCustomBlockData()){
-			foreach($item->getCustomBlockData() as $key => $v){
+		if($item->hasCustomBlockData()) {
+			foreach($item->getCustomBlockData() as $key => $v) {
 				$nbt->{$key} = $v;
 			}
 		}
@@ -100,32 +107,34 @@ class Dropper extends Solid{
 		return true;
 	}
 
-	public function activate(){
+	public function activate()
+	{
 		$tile = $this->getLevel()->getTile($this);
-		if($tile instanceof TileDropper){
+		if($tile instanceof TileDropper) {
 			$tile->activate();
 		}
 	}
 
-	public function onActivate(Item $item, Player $player = null){
-		if($player instanceof Player){
+	public function onActivate(Item $item, Player $player = null)
+	{
+		if($player instanceof Player) {
 			$t = $this->getLevel()->getTile($this);
 			$dropper = null;
-			if($t instanceof TileDropper){
+			if($t instanceof TileDropper) {
 				$dropper = $t;
-			}else{
+			} else {
 				$nbt = new CompoundTag("", [
 					new ListTag("Items", []),
 					new StringTag("id", Tile::DROPPER),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
-					new IntTag("z", $this->z)
+					new IntTag("z", $this->z),
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
 				$dropper = Tile::createTile(Tile::DROPPER, $this->getLevel(), $nbt);
 			}
 
-			if($player->isCreative() and $player->getServer()->getLeverylConfigValue("LimitedCreative", true)){
+			if($player->isCreative() and $player->getServer()->getLeverylConfigValue("LimitedCreative", true)) {
 				return true;
 			}
 			$player->addWindow($dropper->getInventory());
@@ -134,7 +143,8 @@ class Dropper extends Solid{
 		return true;
 	}
 
-	public function getDrops(Item $item) : array {
+	public function getDrops(Item $item): array
+	{
 		return [
 			[$this->id, 0, 1],
 		];

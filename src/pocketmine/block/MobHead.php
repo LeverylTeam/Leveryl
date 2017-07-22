@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -35,23 +35,28 @@ use pocketmine\tile\Skull as SkullTile;
 use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 
-class MobHead extends Flowable{
+class MobHead extends Flowable
+{
 
 	protected $id = self::MOB_HEAD_BLOCK;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 1;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Mob Head";
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox()
+	{
 		return new AxisAlignedBB(
 			$this->x + 0.25,
 			$this->y,
@@ -62,12 +67,13 @@ class MobHead extends Flowable{
 		);
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-		if($face !== 0){
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
+	{
+		if($face !== 0) {
 			$this->meta = $face;
-			if($face === 1){
+			if($face === 1) {
 				$rot = floor(($player->yaw * 16 / 360) + 0.5) & 0x0F;
-			}else{
+			} else {
 				$rot = $face;
 			}
 			$this->getLevel()->setBlock($block, $this, true);
@@ -75,21 +81,24 @@ class MobHead extends Flowable{
 				new StringTag("id", Tile::SKULL),
 				new ByteTag("SkullType", $item->getDamage()),
 				new ByteTag("Rot", $rot),
-				new IntTag("x", (int) $this->x),
-				new IntTag("y", (int) $this->y),
-				new IntTag("z", (int) $this->z)
+				new IntTag("x", (int)$this->x),
+				new IntTag("y", (int)$this->y),
+				new IntTag("z", (int)$this->z),
 			]);
-			if($item->hasCustomName()){
+			if($item->hasCustomName()) {
 				$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 			}
 			/** @var Spawnable $tile */
 			Tile::createTile("Skull", $this->getLevel(), $nbt);
+
 			return true;
 		}
+
 		return false;
 	}
 
-	public function onUpdate($type){
+	public function onUpdate($type)
+	{
 		$faces = [
 			1 => 0,
 			2 => 3,
@@ -97,8 +106,8 @@ class MobHead extends Flowable{
 			4 => 5,
 			5 => 4,
 		];
-		if($type === Level::BLOCK_UPDATE_NORMAL){
-			if($this->getSide($faces[$this->meta])->getId() === self::AIR){
+		if($type === Level::BLOCK_UPDATE_NORMAL) {
+			if($this->getSide($faces[$this->meta])->getId() === self::AIR) {
 				$this->getLevel()->useBreakOn($this);
 
 				return Level::BLOCK_UPDATE_NORMAL;
@@ -108,11 +117,12 @@ class MobHead extends Flowable{
 		return parent::onUpdate($type);
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item)
+	{
 		$tile = $this->level->getTile($this);
-		if($tile instanceof SkullTile){
+		if($tile instanceof SkullTile) {
 			return [
-				[Item::MOB_HEAD, $tile->getType(), 1]
+				[Item::MOB_HEAD, $tile->getType(), 1],
 			];
 		}
 

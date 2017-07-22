@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\level\generator\object;
 
@@ -28,16 +28,19 @@ use pocketmine\block\Wood;
 use pocketmine\level\ChunkManager;
 use pocketmine\utils\Random;
 
-class SpruceTree extends Tree{
+class SpruceTree extends Tree
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		$this->trunkBlock = Block::LOG;
 		$this->leafBlock = Block::LEAVES;
 		$this->type = Wood::SPRUCE;
 		$this->treeHeight = 10;
 	}
 
-	public function placeObject(ChunkManager $level, $x, $y, $z, Random $random){
+	public function placeObject(ChunkManager $level, $x, $y, $z, Random $random)
+	{
 		$this->treeHeight = $random->nextBoundedInt(4) + 6;
 
 		$topSize = $this->treeHeight - (1 + $random->nextBoundedInt(2));
@@ -49,31 +52,31 @@ class SpruceTree extends Tree{
 		$maxR = 1;
 		$minR = 0;
 
-		for($yy = 0; $yy <= $topSize; ++$yy){
+		for($yy = 0; $yy <= $topSize; ++$yy) {
 			$yyy = $y + $this->treeHeight - $yy;
 
-			for($xx = $x - $radius; $xx <= $x + $radius; ++$xx){
+			for($xx = $x - $radius; $xx <= $x + $radius; ++$xx) {
 				$xOff = abs($xx - $x);
-				for($zz = $z - $radius; $zz <= $z + $radius; ++$zz){
+				for($zz = $z - $radius; $zz <= $z + $radius; ++$zz) {
 					$zOff = abs($zz - $z);
-					if($xOff === $radius and $zOff === $radius and $radius > 0){
+					if($xOff === $radius and $zOff === $radius and $radius > 0) {
 						continue;
 					}
 
-					if(!Block::$solid[$level->getBlockIdAt($xx, $yyy, $zz)]){
+					if(!Block::$solid[$level->getBlockIdAt($xx, $yyy, $zz)]) {
 						$level->setBlockIdAt($xx, $yyy, $zz, $this->leafBlock);
 						$level->setBlockDataAt($xx, $yyy, $zz, $this->type);
 					}
 				}
 			}
 
-			if($radius >= $maxR){
+			if($radius >= $maxR) {
 				$radius = $minR;
 				$minR = 1;
-				if(++$maxR > $lRadius){
+				if(++$maxR > $lRadius) {
 					$maxR = $lRadius;
 				}
-			}else{
+			} else {
 				++$radius;
 			}
 		}

@@ -25,26 +25,32 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 
-class DragonEgg extends Fallable{
+class DragonEgg extends Fallable
+{
 
 	protected $id = self::DRAGON_EGG;
 
-	public function __construct(){
+	public function __construct()
+	{
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Dragon Egg";
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return -1;
 	}
-	
-	public function getResistance(){
+
+	public function getResistance()
+	{
 		return 18000000;
 	}
 
-	public function isBreakable(Item $item){
+	public function isBreakable(Item $item)
+	{
 		return false;
 	}
 }

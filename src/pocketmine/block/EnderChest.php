@@ -35,31 +35,38 @@ use pocketmine\Player;
 use pocketmine\tile\EnderChest as TileEnderChest;
 use pocketmine\tile\Tile;
 
-class EnderChest extends Transparent{
+class EnderChest extends Transparent
+{
 
 	protected $id = self::ENDER_CHEST;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated() : bool{
+	public function canBeActivated(): bool
+	{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 22.5;
 	}
 
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName() : string{
+	public function getName(): string
+	{
 		return "Ender Chest";
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox()
+	{
 		return new AxisAlignedBB(
 			$this->x + 0.0625,
 			$this->y,
@@ -70,43 +77,46 @@ class EnderChest extends Transparent{
 		);
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-			$faces = [
-				0 => 4,
-				1 => 2,
-				2 => 5,
-				3 => 3,
-			];
-			
-			$this->meta = $faces[$player instanceof Player ? $player->getDirection() : 0];
-			
-			$this->getLevel()->setBlock($block, $this, true, true);
-			$nbt = new CompoundTag("", [
-				new ListTag("Items", []),
-				new StringTag("id", Tile::ENDER_CHEST),
-				new IntTag("x", $this->x),
-				new IntTag("y", $this->y),
-				new IntTag("z", $this->z)
-			]);
-			$nbt->Items->setTagType(NBT::TAG_Compound);
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
+	{
+		$faces = [
+			0 => 4,
+			1 => 2,
+			2 => 5,
+			3 => 3,
+		];
 
-			if($item->hasCustomName()){
-				$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
-			}
+		$this->meta = $faces[$player instanceof Player ? $player->getDirection() : 0];
 
-			return true;
+		$this->getLevel()->setBlock($block, $this, true, true);
+		$nbt = new CompoundTag("", [
+			new ListTag("Items", []),
+			new StringTag("id", Tile::ENDER_CHEST),
+			new IntTag("x", $this->x),
+			new IntTag("y", $this->y),
+			new IntTag("z", $this->z),
+		]);
+		$nbt->Items->setTagType(NBT::TAG_Compound);
+
+		if($item->hasCustomName()) {
+			$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 		}
 
-	public function onBreak(Item $item){
+		return true;
+	}
+
+	public function onBreak(Item $item)
+	{
 		$this->getLevel()->setBlock($this, new Air(), true, true);
 
 		return true;
 	}
 
-	public function onActivate(Item $item, Player $player = null){
-		if($player instanceof Player){
+	public function onActivate(Item $item, Player $player = null)
+	{
+		if($player instanceof Player) {
 			$top = $this->getSide(1);
-			if($top->isTransparent() !== true){
+			if($top->isTransparent() !== true) {
 				return true;
 			}
 
@@ -115,12 +125,12 @@ class EnderChest extends Transparent{
 					new StringTag("id", Tile::ENDER_CHEST),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
-					new IntTag("z", $this->z)
+					new IntTag("z", $this->z),
 				]);
- 				Tile::createTile("EnderChest", $this->getLevel(), $nbt);
+				Tile::createTile("EnderChest", $this->getLevel(), $nbt);
 			}
 
-			if($player->isCreative() and $player->getServer()->getLeverylConfigValue("LimitedCreative", true)){
+			if($player->isCreative() and $player->getServer()->getLeverylConfigValue("LimitedCreative", true)) {
 				return true;
 			}
 
@@ -130,7 +140,8 @@ class EnderChest extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item) : array{
+	public function getDrops(Item $item): array
+	{
 		return [
 			[Item::OBSIDIAN, 0, 8],
 		];

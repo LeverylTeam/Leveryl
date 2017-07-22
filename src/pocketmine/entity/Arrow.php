@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\entity;
 
@@ -29,7 +29,8 @@ use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\Player;
 
-class Arrow extends Projectile{
+class Arrow extends Projectile
+{
 	const NETWORK_ID = 80;
 
 	public $width = 0.5;
@@ -43,30 +44,35 @@ class Arrow extends Projectile{
 
 	protected $sound = false;
 
-	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null, bool $critical = false){
+	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null, bool $critical = false)
+	{
 		parent::__construct($level, $nbt, $shootingEntity);
 		$this->setCritical($critical);
 	}
 
-	public function isCritical() : bool{
+	public function isCritical(): bool
+	{
 		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_CRITICAL);
 	}
 
-	public function setCritical(bool $value = true){
+	public function setCritical(bool $value = true)
+	{
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_CRITICAL, $value);
 	}
 
-	public function getResultDamage() : int{
+	public function getResultDamage(): int
+	{
 		$base = parent::getResultDamage();
-		if($this->isCritical()){
-			return ($base + mt_rand(0, (int) ($base / 2) + 1));
-		}else{
+		if($this->isCritical()) {
+			return ($base + mt_rand(0, (int)($base / 2) + 1));
+		} else {
 			return $base;
 		}
 	}
 
-	public function onUpdate($currentTick){
-		if($this->closed){
+	public function onUpdate($currentTick)
+	{
+		if($this->closed) {
 			return false;
 		}
 
@@ -74,17 +80,17 @@ class Arrow extends Projectile{
 
 		$hasUpdate = parent::onUpdate($currentTick);
 
-		if($this->onGround or $this->hadCollision){
+		if($this->onGround or $this->hadCollision) {
 			$this->setCritical(false);
-            if($this->level instanceof Level){
-                if(!$this->sound){
-                    $this->level->broadcastLevelSoundEvent($this, LevelSoundEventPacket::SOUND_BOW_HIT);
-                    $this->sound = true;
-                }
-            }
+			if($this->level instanceof Level) {
+				if(!$this->sound) {
+					$this->level->broadcastLevelSoundEvent($this, LevelSoundEventPacket::SOUND_BOW_HIT);
+					$this->sound = true;
+				}
+			}
 		}
 
-		if($this->age > 1200){
+		if($this->age > 1200) {
 			$this->close();
 			$hasUpdate = true;
 		}
@@ -94,7 +100,8 @@ class Arrow extends Projectile{
 		return $hasUpdate;
 	}
 
-	public function spawnTo(Player $player){
+	public function spawnTo(Player $player)
+	{
 		$pk = new AddEntityPacket();
 		$pk->type = Arrow::NETWORK_ID;
 		$pk->entityRuntimeId = $this->getId();

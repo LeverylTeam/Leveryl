@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,27 +28,31 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class EntityFallPacket extends DataPacket{
+class EntityFallPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::ENTITY_FALL_PACKET;
 
 	public $entityRuntimeId;
 	public $fallDistance;
 	public $bool1;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->fallDistance = $this->getLFloat();
 		$this->bool1 = $this->getBool();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putLFloat($this->fallDistance);
 		$this->putBool($this->bool1);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleEntityFall($this);
 	}
 }

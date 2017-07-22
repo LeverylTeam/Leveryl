@@ -19,11 +19,12 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
-interface BlockIds{
+interface BlockIds
+{
 
 	const AIR = 0;
 	const STONE = 1;
@@ -226,26 +227,26 @@ interface BlockIds{
 	const ITEM_FRAME_BLOCK = 199;
 
 	// 1.1 Blocks (Added By @LeverylTeam)
-    const SHULKER_BOX = 218;
-    const PURPLE_GLAZED_TERRACOTTA = 219;
-    const WHITE_GLAZED_TERRACOTTA = 220;
-    const ORANGE_GLAZED_TERRACOTTA = 221;
-    const MAGENTA_GLAZED_TERRACOTTA = 222;
-    const LIGHT_BLUE_GLAZED_TERRACOTTA = 223;
-    const YELLOW_GLAZED_TERRACOTTA = 224;
-    const LIME_GLAZED_TERRACOTTA = 225;
-    const PINK_GLAZED_TERRACOTTA = 226;
-    const GRAY_GLAZED_TERRACOTTA = 227;
-    const SILVER_GLAZED_TERRACOTTA = 228;
-    const CYAN_GLAZED_TERRACOTTA = 229;
-    const BLUE_GLAZED_TERRACOTTA = 231;
-    const BROWN_GLAZED_TERRACOTTA = 232;
-    const GREEN_GLAZED_TERRACOTTA = 233;
-    const RED_GLAZED_TERRACOTTA = 234;
-    const BLACK_GLAZED_TERRACOTTA = 235;
-    const CONCRETE = 236;
-    const CONCRETE_POWDER = 236;
-    // 1.1 Blocks (Added By @LeverylTeam)
+	const SHULKER_BOX = 218;
+	const PURPLE_GLAZED_TERRACOTTA = 219;
+	const WHITE_GLAZED_TERRACOTTA = 220;
+	const ORANGE_GLAZED_TERRACOTTA = 221;
+	const MAGENTA_GLAZED_TERRACOTTA = 222;
+	const LIGHT_BLUE_GLAZED_TERRACOTTA = 223;
+	const YELLOW_GLAZED_TERRACOTTA = 224;
+	const LIME_GLAZED_TERRACOTTA = 225;
+	const PINK_GLAZED_TERRACOTTA = 226;
+	const GRAY_GLAZED_TERRACOTTA = 227;
+	const SILVER_GLAZED_TERRACOTTA = 228;
+	const CYAN_GLAZED_TERRACOTTA = 229;
+	const BLUE_GLAZED_TERRACOTTA = 231;
+	const BROWN_GLAZED_TERRACOTTA = 232;
+	const GREEN_GLAZED_TERRACOTTA = 233;
+	const RED_GLAZED_TERRACOTTA = 234;
+	const BLACK_GLAZED_TERRACOTTA = 235;
+	const CONCRETE = 236;
+	const CONCRETE_POWDER = 236;
+	// 1.1 Blocks (Added By @LeverylTeam)
 
 	const PODZOL = 243;
 	const BEETROOT_BLOCK = 244;

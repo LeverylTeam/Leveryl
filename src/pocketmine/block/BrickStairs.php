@@ -19,33 +19,39 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
 use pocketmine\item\Tool;
 
-class BrickStairs extends Stair{
+class BrickStairs extends Stair
+{
 
 	protected $id = self::BRICK_STAIRS;
 
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 2;
 	}
 
-	public function getResistance(){
+	public function getResistance()
+	{
 		return 30;
 	}
 
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(){
+	public function getName()
+	{
 		return "Brick Stairs";
 	}
 

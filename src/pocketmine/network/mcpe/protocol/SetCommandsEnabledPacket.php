@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,21 +28,25 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class SetCommandsEnabledPacket extends DataPacket{
+class SetCommandsEnabledPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::SET_COMMANDS_ENABLED_PACKET;
 
 	public $enabled;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->enabled = $this->getBool();
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putBool($this->enabled);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleSetCommandsEnabled($this);
 	}
 

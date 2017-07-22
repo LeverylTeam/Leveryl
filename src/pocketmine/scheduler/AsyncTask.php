@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\scheduler;
 
@@ -35,7 +35,8 @@ use pocketmine\Server;
  *
  * WARNING: Do not call PocketMine-MP API methods, or save objects (and arrays containing objects) from/on other Threads!!
  */
-abstract class AsyncTask extends Collectable{
+abstract class AsyncTask extends Collectable
+{
 
 	/** @var AsyncWorker $worker */
 	public $worker = null;
@@ -66,21 +67,23 @@ abstract class AsyncTask extends Collectable{
 	 *
 	 * @param mixed $complexData the data to store, pass null to store nothing. Scalar types can be safely stored in class properties directly instead of using this thread-local storage.
 	 */
-	public function __construct($complexData = null){
-		if($complexData === null){
+	public function __construct($complexData = null)
+	{
+		if($complexData === null) {
 			return;
 		}
 
 		Server::getInstance()->getScheduler()->storeLocalComplex($this, $complexData);
 	}
 
-	public function run(){
+	public function run()
+	{
 		$this->result = null;
 
-		if($this->cancelRun !== true){
-			try{
+		if($this->cancelRun !== true) {
+			try {
 				$this->onRun();
-			}catch(\Throwable $e){
+			} catch(\Throwable $e) {
 				$this->crashed = true;
 				$this->worker->handleException($e);
 			}
@@ -89,46 +92,54 @@ abstract class AsyncTask extends Collectable{
 		$this->setGarbage();
 	}
 
-	public function isCrashed(){
+	public function isCrashed()
+	{
 		return $this->crashed;
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getResult(){
+	public function getResult()
+	{
 		return $this->serialized ? unserialize($this->result) : $this->result;
 	}
 
-	public function cancelRun(){
+	public function cancelRun()
+	{
 		$this->cancelRun = true;
 	}
 
-	public function hasCancelledRun(){
+	public function hasCancelledRun()
+	{
 		return $this->cancelRun === true;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function hasResult(){
+	public function hasResult()
+	{
 		return $this->result !== null;
 	}
 
 	/**
 	 * @param mixed $result
-	 * @param bool  $serialize
+	 * @param bool $serialize
 	 */
-	public function setResult($result, $serialize = true){
+	public function setResult($result, $serialize = true)
+	{
 		$this->result = $serialize ? serialize($result) : $result;
 		$this->serialized = $serialize;
 	}
 
-	public function setTaskId($taskId){
+	public function setTaskId($taskId)
+	{
 		$this->taskId = $taskId;
 	}
 
-	public function getTaskId(){
+	public function getTaskId()
+	{
 		return $this->taskId;
 	}
 
@@ -139,8 +150,10 @@ abstract class AsyncTask extends Collectable{
 	 * @param string $identifier
 	 * @return mixed
 	 */
-	public function getFromThreadStore($identifier){
+	public function getFromThreadStore($identifier)
+	{
 		global $store;
+
 		return ($this->isGarbage() or !isset($store[$identifier])) ? null : $store[$identifier];
 	}
 
@@ -149,11 +162,12 @@ abstract class AsyncTask extends Collectable{
 	 * This might get deleted at any moment.
 	 *
 	 * @param string $identifier
-	 * @param mixed  $value
+	 * @param mixed $value
 	 */
-	public function saveToThreadStore($identifier, $value){
+	public function saveToThreadStore($identifier, $value)
+	{
 		global $store;
-		if(!$this->isGarbage()){
+		if(!$this->isGarbage()) {
 			$store[$identifier] = $value;
 		}
 	}
@@ -173,7 +187,8 @@ abstract class AsyncTask extends Collectable{
 	 *
 	 * @return void
 	 */
-	public function onCompletion(Server $server){
+	public function onCompletion(Server $server)
+	{
 
 	}
 
@@ -183,7 +198,8 @@ abstract class AsyncTask extends Collectable{
 	 *
 	 * @param mixed $progress A value that can be safely serialize()'ed.
 	 */
-	public function publishProgress($progress){
+	public function publishProgress($progress)
+	{
 		$this->progressUpdates[] = serialize($progress);
 	}
 
@@ -192,8 +208,9 @@ abstract class AsyncTask extends Collectable{
 	 *
 	 * @param Server $server
 	 */
-	public function checkProgressUpdates(Server $server){
-		while($this->progressUpdates->count() !== 0){
+	public function checkProgressUpdates(Server $server)
+	{
+		while($this->progressUpdates->count() !== 0) {
 			$progress = $this->progressUpdates->shift();
 			$this->onProgressUpdate($server, unserialize($progress));
 		}
@@ -205,10 +222,11 @@ abstract class AsyncTask extends Collectable{
 	 * {@link AsyncTask#onCompletion} is called.
 	 *
 	 * @param Server $server
-	 * @param mixed  $progress The parameter passed to {@link AsyncTask#publishProgress}. It is serialize()'ed
-	 *						 and then unserialize()'ed, as if it has been cloned.
+	 * @param mixed $progress The parameter passed to {@link AsyncTask#publishProgress}. It is serialize()'ed
+	 *                         and then unserialize()'ed, as if it has been cloned.
 	 */
-	public function onProgressUpdate(Server $server, $progress){
+	public function onProgressUpdate(Server $server, $progress)
+	{
 
 	}
 
@@ -226,8 +244,9 @@ abstract class AsyncTask extends Collectable{
 	 *
 	 * @throws \RuntimeException if no data were stored by this AsyncTask instance.
 	 */
-	protected function fetchLocal(Server $server = null){
-		if($server === null){
+	protected function fetchLocal(Server $server = null)
+	{
+		if($server === null) {
 			$server = Server::getInstance();
 			assert($server !== null, "Call this method only from the main thread!");
 		}
@@ -248,8 +267,9 @@ abstract class AsyncTask extends Collectable{
 	 *
 	 * @throws \RuntimeException if no data were stored by this AsyncTask instance
 	 */
-	protected function peekLocal(Server $server = null){
-		if($server === null){
+	protected function peekLocal(Server $server = null)
+	{
+		if($server === null) {
 			$server = Server::getInstance();
 			assert($server !== null, "Call this method only from the main thread!");
 		}
@@ -257,9 +277,10 @@ abstract class AsyncTask extends Collectable{
 		return $server->getScheduler()->peekLocalComplex($this);
 	}
 
-	public function cleanObject(){
-		foreach($this as $p => $v){
-			if(!($v instanceof \Threaded)){
+	public function cleanObject()
+	{
+		foreach($this as $p => $v) {
+			if(!($v instanceof \Threaded)) {
 				$this->{$p} = null;
 			}
 		}

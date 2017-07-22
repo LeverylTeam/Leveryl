@@ -19,15 +19,17 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\block;
 
-class SpruceWoodStairs extends WoodStairs{
+class SpruceWoodStairs extends WoodStairs
+{
 
 	protected $id = self::SPRUCE_WOOD_STAIRS;
 
-	public function getName(){
+	public function getName()
+	{
 		return "Spruce Wood Stairs";
 	}
 }

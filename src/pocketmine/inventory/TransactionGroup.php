@@ -19,11 +19,12 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\inventory;
 
-interface TransactionGroup{
+interface TransactionGroup
+{
 
 	/**
 	 * @return float

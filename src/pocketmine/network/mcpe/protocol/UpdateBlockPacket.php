@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,17 +28,18 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class UpdateBlockPacket extends DataPacket{
+class UpdateBlockPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::UPDATE_BLOCK_PACKET;
 
-	const FLAG_NONE	  = 0b0000;
+	const FLAG_NONE = 0b0000;
 	const FLAG_NEIGHBORS = 0b0001;
-	const FLAG_NETWORK   = 0b0010;
+	const FLAG_NETWORK = 0b0010;
 	const FLAG_NOGRAPHIC = 0b0100;
-	const FLAG_PRIORITY  = 0b1000;
+	const FLAG_PRIORITY = 0b1000;
 
-    const FLAG_ALL = self::FLAG_NEIGHBORS | self::FLAG_NETWORK;
-    const FLAG_ALL_PRIORITY = self::FLAG_ALL | self::FLAG_PRIORITY;
+	const FLAG_ALL = self::FLAG_NEIGHBORS | self::FLAG_NETWORK;
+	const FLAG_ALL_PRIORITY = self::FLAG_ALL | self::FLAG_PRIORITY;
 
 	public $x;
 	public $z;
@@ -47,7 +48,8 @@ class UpdateBlockPacket extends DataPacket{
 	public $blockData;
 	public $flags;
 
-	public function decode(){
+	public function decode()
+	{
 		$this->getBlockPosition($this->x, $this->y, $this->z);
 		$this->blockId = $this->getUnsignedVarInt();
 		$aux = $this->getUnsignedVarInt();
@@ -55,14 +57,16 @@ class UpdateBlockPacket extends DataPacket{
 		$this->flags = $aux >> 4;
 	}
 
-	public function encode(){
+	public function encode()
+	{
 		$this->reset();
 		$this->putBlockPosition($this->x, $this->y, $this->z);
 		$this->putUnsignedVarInt($this->blockId);
 		$this->putUnsignedVarInt(($this->flags << 4) | $this->blockData);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session): bool
+	{
 		return $session->handleUpdateBlock($this);
 	}
 

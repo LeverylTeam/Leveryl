@@ -19,23 +19,27 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\nbt\tag;
 
 use pocketmine\nbt\NBT;
 
-class EndTag extends Tag{
+class EndTag extends Tag
+{
 
-	public function getType(){
+	public function getType()
+	{
 		return NBT::TAG_End;
 	}
 
-	public function read(NBT $nbt, bool $network = false){
+	public function read(NBT $nbt, bool $network = false)
+	{
 
 	}
 
-	public function write(NBT $nbt, bool $network = false){
+	public function write(NBT $nbt, bool $network = false)
+	{
 
 	}
 }

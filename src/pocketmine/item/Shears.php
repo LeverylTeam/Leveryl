@@ -19,13 +19,15 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\item;
 
 
-class Shears extends Tool{
-	public function __construct($meta = 0, $count = 1){
+class Shears extends Tool
+{
+	public function __construct($meta = 0, $count = 1)
+	{
 		parent::__construct(self::SHEARS, $meta, $count, "Shears");
 	}
 }

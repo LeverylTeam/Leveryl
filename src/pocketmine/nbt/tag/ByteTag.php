@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\nbt\tag;
 
@@ -27,34 +27,40 @@ use pocketmine\nbt\NBT;
 
 #include <rules/NBT.h>
 
-class ByteTag extends NamedTag{
+class ByteTag extends NamedTag
+{
 
 	/**
 	 * ByteTag constructor.
 	 *
 	 * @param string $name
-	 * @param int	$value
+	 * @param int $value
 	 */
-	public function __construct(string $name = "", int $value = 0){
+	public function __construct(string $name = "", int $value = 0)
+	{
 		parent::__construct($name, $value);
 	}
 
-	public function getType(){
+	public function getType()
+	{
 		return NBT::TAG_Byte;
 	}
 
-	public function read(NBT $nbt, bool $network = false){
+	public function read(NBT $nbt, bool $network = false)
+	{
 		$this->value = $nbt->getSignedByte();
 	}
 
-	public function write(NBT $nbt, bool $network = false){
+	public function write(NBT $nbt, bool $network = false)
+	{
 		$nbt->putByte($this->value);
 	}
 
 	/**
 	 * @return int
 	 */
-	public function &getValue() : int{
+	public function &getValue(): int
+	{
 		return parent::getValue();
 	}
 
@@ -63,10 +69,11 @@ class ByteTag extends NamedTag{
 	 *
 	 * @throws \TypeError
 	 */
-	public function setValue($value){
-		if(!is_int($value)){
+	public function setValue($value)
+	{
+		if(!is_int($value)) {
 			throw new \TypeError("ByteTag value must be of type int, " . gettype($value) . " given");
-		}elseif($value < -(2 ** 7) or $value > ((2 ** 7) - 1)){
+		} elseif($value < -(2 ** 7) or $value > ((2 ** 7) - 1)) {
 			throw new \InvalidArgumentException("Value $value is too large!");
 		}
 		parent::setValue($value);

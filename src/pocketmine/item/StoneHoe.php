@@ -19,17 +19,20 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\item;
 
 
-class StoneHoe extends Tool{
-	public function __construct($meta = 0, $count = 1){
+class StoneHoe extends Tool
+{
+	public function __construct($meta = 0, $count = 1)
+	{
 		parent::__construct(self::STONE_HOE, $meta, $count, "Stone Hoe");
 	}
 
-	public function isHoe(){
+	public function isHoe()
+	{
 		return Tool::TIER_STONE;
 	}
 }

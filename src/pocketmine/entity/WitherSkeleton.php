@@ -21,43 +21,46 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\network\mcpe\protocol\AddPlayerPacket;
-use pocketmine\Player;
-use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
 use pocketmine\item\Item as ItemItem;
+use pocketmine\network\mcpe\protocol\AddPlayerPacket;
+use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
+use pocketmine\Player;
 
-class WitherSkeleton extends Monster implements ProjectileSource {
-    const NETWORK_ID = 48;
+class WitherSkeleton extends Monster implements ProjectileSource
+{
+	const NETWORK_ID = 48;
 
-    public $dropExp = [5, 5];
+	public $dropExp = [5, 5];
 
-    public function getName(): string {
-        return "Wither Skeleton";
-    }
+	public function getName(): string
+	{
+		return "Wither Skeleton";
+	}
 
-    public function spawnTo(Player $player) {
-        $pk = new AddPlayerPacket();
-        $pk->entityRuntimeId = $this->getId();
-        $pk->type = WitherSkeleton::NETWORK_ID;
-        $pk->x = $this->x;
-        $pk->y = $this->y;
-        $pk->z = $this->z;
-        $pk->speedX = $this->motionX;
-        $pk->speedY = $this->motionY;
-        $pk->speedZ = $this->motionZ;
-        $pk->yaw = $this->yaw;
-        $pk->pitch = $this->pitch;
-        $pk->metadata = $this->dataProperties;
-        $player->dataPacket($pk);
+	public function spawnTo(Player $player)
+	{
+		$pk = new AddPlayerPacket();
+		$pk->entityRuntimeId = $this->getId();
+		$pk->type = WitherSkeleton::NETWORK_ID;
+		$pk->x = $this->x;
+		$pk->y = $this->y;
+		$pk->z = $this->z;
+		$pk->speedX = $this->motionX;
+		$pk->speedY = $this->motionY;
+		$pk->speedZ = $this->motionZ;
+		$pk->yaw = $this->yaw;
+		$pk->pitch = $this->pitch;
+		$pk->metadata = $this->dataProperties;
+		$player->dataPacket($pk);
 
-        parent::spawnTo($player);
+		parent::spawnTo($player);
 
-        $pk = new MobEquipmentPacket();
-        $pk->entityRuntimeId = $this->getId();
-        $pk->item = new ItemItem(ItemItem::STONE_SWORD);
-        $pk->inventorySlot = 0;
-        $pk->hotbarSlot = 0;
+		$pk = new MobEquipmentPacket();
+		$pk->entityRuntimeId = $this->getId();
+		$pk->item = new ItemItem(ItemItem::STONE_SWORD);
+		$pk->inventorySlot = 0;
+		$pk->hotbarSlot = 0;
 
-        $player->dataPacket($pk);
-    }
+		$player->dataPacket($pk);
+	}
 }
