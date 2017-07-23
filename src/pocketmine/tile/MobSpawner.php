@@ -19,6 +19,8 @@
  *
  */
 
+declare(strict_types = 1);
+
 namespace pocketmine\tile;
 
 use pocketmine\entity\Entity;
@@ -26,6 +28,7 @@ use pocketmine\event\entity\EntityGenerateEvent;
 use pocketmine\item\Item;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\Level;
+use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
@@ -64,9 +67,9 @@ class MobSpawner extends Spawnable
 		}
 	}
 
-	public function getEntityId()
+	public function getEntityId() : int
 	{
-		return $this->namedtag["EntityId"];
+		return intval($this->namedtag["EntityId"]);
 	}
 
 	public function setEntityId(int $id)
@@ -116,9 +119,9 @@ class MobSpawner extends Spawnable
 		$this->namedtag->MaxSpawnDelay->setValue($value);
 	}
 
-	public function getDelay()
+	public function getDelay() : int
 	{
-		return $this->namedtag["Delay"];
+		return intval($this->namedtag["Delay"]);
 	}
 
 	public function setDelay(int $value)
@@ -166,7 +169,8 @@ class MobSpawner extends Spawnable
 			if($this->getDelay() <= 0) {
 				$success = 0;
 				for($i = 0; $i < $this->getSpawnCount(); $i++) {
-					$pos = $this->add(mt_rand() / mt_getrandmax() * $this->getSpawnRange(), mt_rand(-1, 1), mt_rand() / mt_getrandmax() * $this->getSpawnRange());
+					$pos = new Position($this->getX(), $this->getY(), $this->getZ(), $this->getLevel());
+					$pos->setComponents($this->getX() + (mt_rand() / mt_getrandmax() * $this->getSpawnRange()), $this->getY() + (mt_rand(-1, 1)), $this->getZ() + (mt_rand() / mt_getrandmax() * $this->getSpawnRange()));
 					$target = $this->getLevel()->getBlock($pos);
 					$ground = $target->getSide(Vector3::SIDE_DOWN);
 					if($target->getId() == Item::AIR && $ground->isTopFacingSurfaceSolid()) {

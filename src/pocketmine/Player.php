@@ -3561,7 +3561,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			$this->server->getLogger()->debug("Unmatched recipe " . $recipe->getId() . " from player " . $this->getName() . ": expected " . $recipe->getResult() . ", got " . $result . ", using: " . implode(", ", $ingredients));
 			$this->inventory->sendContents($this);
 
-			return true;
+			return false;
 		}
 
 		$used = array_fill(0, $this->inventory->getSize(), 0);
@@ -3586,7 +3586,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			$this->server->getLogger()->debug("Unmatched recipe " . $recipe->getId() . " from player " . $this->getName() . ": client does not have enough items, using: " . implode(", ", $ingredients));
 			$this->inventory->sendContents($this);
 
-			return true;
+			return false;
 		}
 
 		$this->server->getPluginManager()->callEvent($ev = new CraftItemEvent($this, $ingredients, $recipe));

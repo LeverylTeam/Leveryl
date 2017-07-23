@@ -90,6 +90,7 @@ abstract class Tile extends Position
 		self::registerTile(Furnace::class);
 		self::registerTile(Hopper::class);
 		self::registerTile(ItemFrame::class);
+		self::registerTile(MobSpawner::class);
 		self::registerTile(Sign::class);
 		self::registerTile(Skull::class);
 	}
