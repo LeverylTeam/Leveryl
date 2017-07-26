@@ -2,7 +2,7 @@
 
 // @Team Tesseract
 // @Author Rateek
-// Fixed and Made better by @CortexPE - LeverylTeam :P
+// Fixed and Made better by @CortexPE - @LeverylTeam :P
 
 namespace pocketmine\command\defaults;
 
@@ -21,6 +21,7 @@ class ClearCommand extends VanillaCommand
 	{
 		parent::__construct($name);
 		$this->setPermission("pocketmine.command.clear");
+		$this->setDescription("commands.clear.description");
 	}
 
 	/**
@@ -35,10 +36,15 @@ class ClearCommand extends VanillaCommand
 			return true;
 		}
 		if($sender instanceof Player) {
+			$pname = $sender->getName();
+			$c = 0;
+			foreach($sender->getInventory()->getContents() as $itm){
+				$c = $c + $itm->getCount();
+			}
 			$sender->getInventory()->clearAll();
-			$sender->sendMessage(TextFormat::GREEN . "Successfully cleared your inventory");
+			$sender->sendMessage("Cleared the inventory of " . $pname . ", removing " . $c . " items");
 		} else {
-			$sender->sendMessage(TextFormat::RED . "Please run this command in-game.");
+			$sender->sendMessage("Please run this command in-game.");
 		}
 
 		return true;

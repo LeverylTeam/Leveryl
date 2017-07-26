@@ -205,6 +205,10 @@ abstract class Liquid extends Transparent
 			$this->checkForHarden();
 			$this->getLevel()->scheduleDelayedBlockUpdate($this, $this->tickRate());
 		} elseif($type === Level::BLOCK_UPDATE_SCHEDULED) {
+			if($this->getY() <= 0){
+				$this->getLevel()->setBlock($this, new Air(), true);
+				return;
+			}
 			if($this->temporalVector === null) {
 				$this->temporalVector = new Vector3(0, 0, 0);
 			}

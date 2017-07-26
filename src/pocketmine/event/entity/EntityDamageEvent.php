@@ -39,11 +39,11 @@ class EntityDamageEvent extends EntityEvent implements Cancellable
 	public static $handlerList = null;
 
 	const MODIFIER_BASE = 0;
-	const MODIFIER_ARMOR = 1;
-	const MODIFIER_STRENGTH = 2;
-	const MODIFIER_WEAKNESS = 3;
-	const MODIFIER_RESISTANCE = 4;
+	const MODIFIER_RESISTANCE = 1;
+	const MODIFIER_ARMOR = 2;
 	const MODIFIER_PROTECTION = 3;
+	const MODIFIER_STRENGTH = 4;
+	const MODIFIER_WEAKNESS = 5;
 	const MODIFIER_ABSORPTION = 5;
 	const MODIFIER_DIFFICULTY = 6;
 	const MODIFIER_ARMOR_ENCHANTMENTS = 7;
