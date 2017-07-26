@@ -1643,13 +1643,13 @@ class Server
 			}
 
 			if(extension_loaded("openssl")){
-				$this->getLogger()->info("§cOpen§8SSL§a Extention Loaded!");
+				$this->getLogger()->info("§cOpen§8SSL§a Extension Loaded!");
 				if($this->leverylconfig->get("XBoxAuth")){
 					$this->getLogger()->info("§aX§7Box§f Live Authentication §aEnabled!");
 				}
 			} else {
 				if($this->leverylconfig->get("XBoxAuth")){
-					$this->getLogger()->warning("§cOpen§8SSL§e Extention Not Found!");
+					$this->getLogger()->warning("§cOpen§8SSL§e Extension Not Found!");
 					$this->getLogger()->warning("§aX§7Box§f Live Authentication §4Disabled!");
 					$this->leverylconfig->set("XBoxAuth", false);
 				}

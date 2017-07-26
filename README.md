@@ -14,6 +14,7 @@ This spoon is based off of PMMP (For Stability)
 - [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
 - [X] **EnderPearls**
 - [X] **SplashPotions**
+- [X] **XBoxLive Authentication** (Needs OpenSSL Extension)
 - [X] **Cauldrons**
 - [X] Fully Functional **BrewingStands**
 - [X] **XP System**
