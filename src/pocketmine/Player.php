@@ -2167,6 +2167,11 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 		$this->guiscale = $packet->guiscale;
 		$this->controls = $packet->controls;
 
+		if ($this->server->getLeverylConfigValue("XBoxAuth", false) && $packet->identityPublicKey === null) {
+			$this->kick("disconnectionScreen.notAuthenticated", false);
+			return true;
+		}
+
 		if(count($this->server->getOnlinePlayers()) >= $this->server->getMaxPlayers() and $this->kick("disconnectionScreen.serverFull", false)) {
 			return true;
 		}
@@ -4254,9 +4259,9 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			$this->interface->close($this, $notify ? $reason : "");
 
 			if($this->loggedIn) {
+				$this->loggedIn = false;
 				$this->server->removeOnlinePlayer($this);
 			}
-			$this->loggedIn = false;
 
 			$this->server->getLogger()->info($this->getServer()->getLanguage()->translateString("pocketmine.player.logOut", [
 				TextFormat::AQUA . $this->getName() . TextFormat::WHITE,

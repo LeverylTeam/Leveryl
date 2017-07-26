@@ -47,6 +47,7 @@ ClearInventoryOnGameModeChange: true
 KeepExperiencePoints: false
 #### Enables / Disables Leveryl Core's AntiCheat Messages on Console
 VerboseConsoleMessages: true
+XBoxAuth: false
 
 # Miscellaneous
 DisableServerDotLog: false

@@ -52,12 +52,13 @@ ClearInventoryOnGameModeChange: true
 KeepExperiencePoints: false
 #### 콘솔에서 Leveryl Core의 AntiCheat 메시지를 활성화 / 비활성화합니다.
 VerboseConsoleMessages: true
-#### 경고 : 명령이 활성화되면 가끔 문제가 발생합니다.
-AllowUserNamesWithSpaces: false
+XBoxAuth: false
 
 # 기타
 DisableServerDotLog: false
 DisablePluginAPIVersionCheck: true
+#### 경고 : 명령이 활성화되면 가끔 문제가 발생합니다.
+AllowUserNamesWithSpaces: false
 
 # 날씨
 Weather: true
