@@ -3,7 +3,7 @@
 </p>
 
 ## Warning: 32-Bit support is Deprecated!!!
-#### Notice: Master is the only supported branch. Other branches are usually still W.I.P. and might be un-stable.
+<!-- #### Notice: Master is the only supported branch. Other branches are usually still W.I.P. and might be un-stable. -->
 
 # Introduction:
 This is an Advanced & Feature Rich Server Software to hopefully Replace Tesseract.  
