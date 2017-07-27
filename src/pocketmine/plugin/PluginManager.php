@@ -32,6 +32,7 @@ use pocketmine\event\HandlerList;
 use pocketmine\event\Listener;
 use pocketmine\event\Timings;
 use pocketmine\event\TimingsHandler;
+use pocketmine\network\mcpe\protocol\ProtocolInfo;
 use pocketmine\permission\Permissible;
 use pocketmine\permission\Permission;
 use pocketmine\Server;
@@ -279,6 +280,14 @@ class PluginManager
 
 								if($compatible === false) {
 									$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.incompatibleAPI"]));
+									continue;
+								}
+							}
+
+							if(count($pluginMcpeProtocols = $description->getCompatibleMcpeProtocols()) > 0){
+								$serverMcpeProtocols = [ProtocolInfo::CURRENT_PROTOCOL];
+								if(count(array_intersect($pluginMcpeProtocols, $serverMcpeProtocols)) === 0){
+									$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.incompatibleProtocol"]));
 									continue;
 								}
 							}

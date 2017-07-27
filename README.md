@@ -26,7 +26,7 @@ This spoon is based off of PMMP (For Stability)
 - [X] Built-in **Plugin Manager**
 - [ ] 1.0.1 Blocks & Items
 - [X] **Toggleable PluginAPI Version Checking**
-- [ ] Fully Functional Nether
+- [X] Nether (Needs improvement)
 - [X] **Toggleable Built-In Devtools & FolderPluginLoader**
 - [X] **Console Only Commands**
 - [X] **Limited Creative**

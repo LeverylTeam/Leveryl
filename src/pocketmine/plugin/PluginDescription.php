@@ -30,6 +30,8 @@ class PluginDescription
 	private $name;
 	private $main;
 	private $api;
+	/** @var int[] */
+	private $compatibleMcpeProtocols = [];
 	private $extensions = [];
 	private $depend = [];
 	private $softDepend = [];
@@ -75,6 +77,10 @@ class PluginDescription
 		if(stripos($this->main, "pocketmine\\") === 0) {
 			throw new PluginException("Invalid PluginDescription main, cannot start within the PocketMine namespace");
 		}
+
+		$this->compatibleMcpeProtocols = array_map(function($v) {
+			return (int)$v;
+		}, $plugin["mcpe-protocol"] ?? $plugin["mcpe-protocols"] ?? []);
 
 		if(isset($plugin["commands"]) and is_array($plugin["commands"])) {
 			$this->commands = $plugin["commands"];
@@ -147,6 +153,14 @@ class PluginDescription
 	public function getCompatibleApis()
 	{
 		return $this->api;
+	}
+
+	/**
+	 * @return int[]
+	 */
+	public function getCompatibleMcpeProtocols() : array
+	{
+		return $this->compatibleMcpeProtocols;
 	}
 
 	/**
