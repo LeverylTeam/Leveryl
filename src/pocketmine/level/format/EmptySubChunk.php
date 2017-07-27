@@ -135,4 +135,12 @@ class EmptySubChunk extends SubChunk
 	{
 		throw new \BadMethodCallException("Should not try to serialize empty subchunks");
 	}
+
+	public function setBlockLightArray(string $data){
+
+	}
+
+	public function setBlockSkyLightArray(string $data){
+
+	}
 }

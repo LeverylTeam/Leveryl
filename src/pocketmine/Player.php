@@ -363,9 +363,13 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 	public function getLeaveMessage()
 	{
-		return new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.left", [
-			$this->getDisplayName(),
-		]);
+		if($this->joined) {
+			return new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.left", [
+				$this->getDisplayName(),
+			]);
+		}
+
+		return "";
 	}
 
 	/**
@@ -1834,7 +1838,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 		$this->sendAttributes();
 
 		if(!$this->isAlive() and $this->spawned) {
-			++$this->deadTicks;
+			$this->deadTicks += $tickDiff;
 			if($this->deadTicks >= 10) {
 				$this->despawnFromAll();
 			}
@@ -1920,7 +1924,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 							}
 						}
 
-						++$this->inAirTicks;
+						$this->inAirTicks += $tickDiff;
 					}
 				}
 			}
@@ -4257,12 +4261,14 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			$this->usedChunks = [];
 			$this->loadQueue = [];
 
-			foreach($this->server->getOnlinePlayers() as $player) {
-				if(!$player->canSee($this)) {
-					$player->showPlayer($this);
+			if($this->loggedIn) {
+				foreach($this->server->getOnlinePlayers() as $player) {
+					if(!$player->canSee($this)) {
+						$player->showPlayer($this);
+					}
 				}
+				$this->hiddenPlayers = [];
 			}
-			$this->hiddenPlayers = [];
 
 			foreach($this->windowIndex as $window) {
 				$this->removeWindow($window);
@@ -4272,8 +4278,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 			parent::close();
 			$this->spawned = false;
-
-			$this->interface->close($this, $notify ? $reason : "");
 
 			if($this->loggedIn) {
 				$this->loggedIn = false;
@@ -4298,6 +4302,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 				$this->inventory = null;
 				$this->currentTransaction = null;
 			}
+
+			$this->interface->close($this, $notify ? $reason : "");
 
 			$this->server->removePlayer($this);
 		}

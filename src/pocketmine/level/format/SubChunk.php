@@ -31,8 +31,7 @@ class SubChunk
 	protected $blockLight;
 	protected $skyLight;
 
-	private static function assignData(&$target, $data, $length, $value = "\x00")
-	{
+	private static function assignData(&$target, string $data, int $length, string $value = "\x00"){
 		if(strlen($data) !== $length) {
 			assert($data === "", "Invalid non-zero length given, expected $length, got " . strlen($data));
 			$target = str_repeat($value, $length);
@@ -260,5 +259,15 @@ class SubChunk
 			substr($data, 6144, 2048), //sky light
 			substr($data, 8192, 2048)  //block light
 		);
+	}
+
+	public function setBlockSkyLightArray(string $data){
+		assert(strlen($data) === 2048, "Wrong length of skylight array, expecting 2048 bytes, got " . strlen($data));
+		$this->skyLight = $data;
+	}
+
+	public function setBlockLightArray(string $data){
+		assert(strlen($data) === 2048, "Wrong length of light array, expecting 2048 bytes, got " . strlen($data));
+		$this->blockLight = $data;
 	}
 }

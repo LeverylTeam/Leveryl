@@ -1248,7 +1248,6 @@ class Server
 		if($this->leverylconfig->exists($key)) {
 			return $this->leverylconfig->get($key);
 		} else {
-			$this->leverylconfig->set($key, $defaultValue);
 			return $defaultValue;
 		}
 	}
