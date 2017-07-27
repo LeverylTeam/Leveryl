@@ -1233,7 +1233,12 @@ abstract class Entity extends Location implements Metadatable
 		return false;
 	}
 
-	public function entityBaseTick($tickDiff = 1)
+	/**
+	 * @param int $tickDiff
+	 *
+	 * @return bool
+	 */
+	public function entityBaseTick(int $tickDiff = 1)
 	{
 
 		Timings::$timerEntityBaseTick->startTiming();

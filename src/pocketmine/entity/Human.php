@@ -427,7 +427,12 @@ class Human extends Creature implements ProjectileSource, InventoryHolder
 		$this->attributeMap->addAttribute(Attribute::getAttribute(Attribute::EXPERIENCE));
 	}
 
-	public function entityBaseTick($tickDiff = 1)
+	/**
+ 	 * @param int $tickDiff
+ 	 *
+ 	 * @return bool
+ 	 */
+	public function entityBaseTick(int $tickDiff = 1)
 	{
 		$hasUpdate = parent::entityBaseTick($tickDiff);
 
