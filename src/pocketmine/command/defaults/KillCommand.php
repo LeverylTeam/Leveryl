@@ -62,6 +62,20 @@ class KillCommand extends VanillaCommand
 
 				return true;
 			}
+			if($args[0] === "@e") {
+				$c = 0;
+				foreach($sender->getServer()->getLevels() as $level) {
+					foreach($level->getEntities() as $ent) {
+						if(!($ent instanceof Player)) {
+							$ent->close();
+							$c++;
+						}
+					}
+				}
+				$sender->sendMessage("Killed " . $c . " Entities!");
+
+				return true;
+			}
 
 			$player = $sender->getServer()->getPlayer($args[0]);
 

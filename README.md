@@ -53,7 +53,7 @@ Which can be downloaded [Here](https://www.microsoft.com/en-us/download/details.
 # Acknowledgements / Credits:
 - Leveryl is a "spoon" of **[Pocketmine-MP](http://github.com/pmmp/PocketMine-MP/)**
 - Most of the original code was written by the original PocketMine Team and the new PMMP Team.
-- Some Implementations are ported from Tesseract, Nukkit and Genisys
+- Some Implementations are ported from Tesseract, GenisysPro and Genisys
 - Ported files' authors are stated inside the file
 
 # License:

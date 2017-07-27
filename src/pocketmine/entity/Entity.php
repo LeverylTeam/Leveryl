@@ -221,15 +221,19 @@ abstract class Entity extends Location implements Metadatable
 		Entity::registerEntity(Bat::class);
 		Entity::registerEntity(Blaze::class);
 		Entity::registerEntity(BlueWitherSkull::class);
+		//Entity::registerEntity(Boat::class); FIXME: Implement
 		Entity::registerEntity(CaveSpider::class);
 		Entity::registerEntity(Chicken::class);
 		Entity::registerEntity(Cow::class);
 		Entity::registerEntity(Creeper::class);
 		//Entity::registerEntity(DroppedItem::class);
 		Entity::registerEntity(Egg::class);
+		Entity::registerEntity(Donkey::class);
 		Entity::registerEntity(ElderGuardian::class);
 		Entity::registerEntity(EnderCrystal::class);
+		Entity::registerEntity(EnderDragon::class);
 		Entity::registerEntity(Enderman::class);
+		Entity::registerEntity(Endermite::class);
 		Entity::registerEntity(EnderPearl::class);
 		Entity::registerEntity(FallingSand::class);
 		Entity::registerEntity(FishingHook::class);
@@ -241,6 +245,7 @@ abstract class Entity extends Location implements Metadatable
 		Entity::registerEntity(Item::class);
 		Entity::registerEntity(LavaSlime::class); //Magma Cube
 		Entity::registerEntity(Lightning::class);
+		Entity::registerEntity(Llama::class);
 		Entity::registerEntity(Mooshroom::class);
 		Entity::registerEntity(Ocelot::class);
 		Entity::registerEntity(Painting::class);
@@ -252,6 +257,7 @@ abstract class Entity extends Location implements Metadatable
 		Entity::registerEntity(Sheep::class);
 		Entity::registerEntity(Silverfish::class);
 		Entity::registerEntity(Skeleton::class);
+		Entity::registerEntity(SkeletonHorse::class);
 		Entity::registerEntity(Slime::class);
 		Entity::registerEntity(Snowball::class);
 		Entity::registerEntity(SnowGolem::class);
@@ -260,13 +266,16 @@ abstract class Entity extends Location implements Metadatable
 		Entity::registerEntity(Stray::class);
 		Entity::registerEntity(ThrownExpBottle::class);
 		Entity::registerEntity(ThrownPotion::class);
+		Entity::registerEntity(Vex::class);
 		Entity::registerEntity(Villager::class);
+		Entity::registerEntity(Vindicator::class);
 		Entity::registerEntity(Witch::class);
 		Entity::registerEntity(Wither::class);
 		Entity::registerEntity(WitherSkeleton::class);
 		Entity::registerEntity(Wolf::class);
 		Entity::registerEntity(XPOrb::class);
 		Entity::registerEntity(Zombie::class);
+		Entity::registerEntity(ZombieHorse::class);
 		Entity::registerEntity(ZombieVillager::class);
 	}
 
