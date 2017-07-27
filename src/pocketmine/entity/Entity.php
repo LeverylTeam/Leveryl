@@ -28,6 +28,7 @@ declare(strict_types = 1);
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
+use pocketmine\block\EndPortal;
 use pocketmine\block\Fire;
 use pocketmine\block\Portal;
 use pocketmine\block\SlimeBlock;
@@ -1590,6 +1591,17 @@ abstract class Entity extends Location implements Metadatable
 			if($block instanceof Fire) {
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	public function isInsideOfEndPortal()
+	{
+		$block = $this->level->getBlock($this->temporalVector->setComponents(Math::floorFloat($this->x), Math::floorFloat($y = $this->y), Math::floorFloat($this->z)));
+
+		if($block instanceof EndPortal) {
+			return true;
 		}
 
 		return false;

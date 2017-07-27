@@ -69,7 +69,7 @@ class EndPortalFrame extends Solid
 			$this->y,
 			$this->z,
 			$this->x + 1,
-			$this->y + 2, //(($this->getDamage() & 0x04) > 0 ? 1 : 0.8125)
+			$this->y + (($this->getDamage() & 0x04) > 0 ? 1 : 0.8125), //(($this->getDamage() & 0x04) > 0 ? 1 : 0.8125)
 			$this->z + 1
 		);
 	}
