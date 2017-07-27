@@ -142,7 +142,7 @@ class LoginPacket extends DataPacket
 	{
 		if($key === null) {
 			$tokens = explode(".", $token);
-			list($headB64, $payloadB64, $sigB64) = explode(".", $token);
+			list($headB64, $payloadB64, $sigB64) = $tokens;
 
 			return array(false, json_decode(base64_decode($payloadB64), true));
 		} else {
@@ -170,6 +170,8 @@ class LoginPacket extends DataPacket
 				$derSig .= str_repeat(chr(0), $l - $k) . substr($sig, 2 * $rawLen - $k, $k);
 				$verified = openssl_verify($headB64 . "." . $payloadB64, $derSig, "-----BEGIN PUBLIC KEY-----\n" . wordwrap($key, 64, "\n", true) . "\n-----END PUBLIC KEY-----\n", OPENSSL_ALGO_SHA384) === 1;
 			} else {
+				$tokens = explode(".", $token);
+				list($headB64, $payloadB64, $sigB64) = $tokens;
 				$verified = false;
 			}
 			return array($verified, json_decode(base64_decode($payloadB64), true));
