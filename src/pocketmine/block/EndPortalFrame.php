@@ -1,21 +1,20 @@
 <?php
 
 /*
- *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ *     __						    _
+ *    / /  _____   _____ _ __ _   _| |
+ *   / /  / _ \ \ / / _ \ '__| | | | |
+ *  / /__|  __/\ V /  __/ |  | |_| | |
+ *  \____/\___| \_/ \___|_|   \__, |_|
+ *						      |___/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author PocketMine Team
- * @link http://www.pocketmine.net/
- *
+ * @author LeverylTeam
+ * @link https://github.com/LeverylTeam
  *
 */
 
@@ -70,21 +69,31 @@ class EndPortalFrame extends Solid
 			$this->y,
 			$this->z,
 			$this->x + 1,
-			$this->y + (($this->getDamage() & 0x04) > 0 ? 1 : 0.8125),
+			$this->y + 2, //(($this->getDamage() & 0x04) > 0 ? 1 : 0.8125)
 			$this->z + 1
 		);
 	}
 
+	// FIXME: This is still un-verified.
+	// FIXME: This night NOT be how the direction -> meta conversion works in vanilla.
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
 	{
-
-		$faces = [
-			0 => 4,
-			1 => 2,
-			2 => 5,
-			3 => 3,
-		];
-
-		$this->meta = $faces[$player instanceof Player ? $player->getDirection() : 0];
+		switch($player->getDirection()){
+			case 0:
+				$this->meta = 0;
+				break;
+			case 1:
+				$this->meta = 1;
+				break;
+			case 2:
+				$this->meta = 3;
+				break;
+			case 3:
+				$this->meta = 2;
+				break;
+			default:
+				$this->meta = 0;
+				break;
+		}
 	}
 }
