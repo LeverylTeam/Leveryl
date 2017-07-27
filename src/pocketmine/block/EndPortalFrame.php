@@ -25,6 +25,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\math\AxisAlignedBB;
+use pocketmine\Player;
 
 class EndPortalFrame extends Solid
 {
@@ -72,5 +73,18 @@ class EndPortalFrame extends Solid
 			$this->y + (($this->getDamage() & 0x04) > 0 ? 1 : 0.8125),
 			$this->z + 1
 		);
+	}
+
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
+	{
+
+		$faces = [
+			0 => 4,
+			1 => 2,
+			2 => 5,
+			3 => 3,
+		];
+
+		$this->meta = $faces[$player instanceof Player ? $player->getDirection() : 0];
 	}
 }
