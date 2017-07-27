@@ -34,6 +34,7 @@ class ChangeDimensionPacket extends DataPacket
 
 	const DIMENSION_OVERWORLD = 0;
 	const DIMENSION_NETHER = 1;
+	const DIMENSION_END = 2;
 
 	public $dimension;
 	public $x;
@@ -53,7 +54,7 @@ class ChangeDimensionPacket extends DataPacket
 		$this->reset();
 		$this->putVarInt($this->dimension);
 		$this->putVector3f($this->x, $this->y, $this->z);
-		$this->putBool($this->unknown);
+		$this->putBool(true);
 	}
 
 	public function handle(NetworkSession $session): bool

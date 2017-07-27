@@ -132,6 +132,7 @@ class Level implements ChunkManager, Metadatable
 	const TIME_FULL = 24000;
 	const DIMENSION_NORMAL = 0;
 	const DIMENSION_NETHER = 1;
+	const DIMENSION_END = 2; //TODO: End Dimension.
 	public static $COMPRESSION_LEVEL = 8;
 	private static $levelIdCounter = 1;
 	private static $chunkLoaderCounter = 1;

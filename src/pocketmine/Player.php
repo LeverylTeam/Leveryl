@@ -865,6 +865,16 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 				$this->unloadChunk($X, $Z, $oldLevel);
 			}
 
+			if($targetLevel->getDimension() != $oldLevel->getDimension()){
+				$pk = new ChangeDimensionPacket();
+				$pk->dimension = $targetLevel->getDimension();
+				$pk->x = $this->x;
+				$pk->y = $this->y;
+				$pk->z = $this->z;
+				$this->dataPacket($pk);
+				$this->shouldSendStatus = true;
+			}
+
 			$targetLevel->getWeather()->sendWeather($this);
 
 			$this->usedChunks = [];
@@ -2986,7 +2996,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 	public function handlePlayerAction(PlayerActionPacket $packet): bool
 	{
-		if($this->spawned === false or (!$this->isAlive() and $packet->action !== PlayerActionPacket::ACTION_RESPAWN and $packet->action !== PlayerActionPacket::ACTION_SPAWN_OVERWORLD and $packet->action !== PlayerActionPacket::ACTION_SPAWN_NETHER)) {
+		if($this->spawned === false or (!$this->isAlive() and $packet->action !== PlayerActionPacket::ACTION_RESPAWN and $packet->action !== PlayerActionPacket::ACTION_SPAWN_SAME_DIMENSION and $packet->action !== PlayerActionPacket::ACTION_SPAWN_OVERWORLD and $packet->action !== PlayerActionPacket::ACTION_SPAWN_NETHER)) {
 			return true;
 		}
 
@@ -3020,7 +3030,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 				}
 				$this->lastBreak = microtime(true);
 				break;
-
+			case PlayerActionPacket::ACTION_SPAWN_NETHER:
+				break;
 			case PlayerActionPacket::ACTION_SPAWN_SAME_DIMENSION:
 			case PlayerActionPacket::ACTION_SPAWN_OVERWORLD:
 				if($this->isAlive() or !$this->isOnline()) {

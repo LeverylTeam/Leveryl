@@ -26,14 +26,14 @@ This spoon is based off of PMMP (For Stability)
 - [X] Built-in **Plugin Manager**
 - [ ] 1.0.1 Blocks & Items
 - [X] **Toggleable PluginAPI Version Checking**
-- [X] Nether (Needs improvement)
+- [X] **Nether**
 - [X] **Toggleable Built-In Devtools & FolderPluginLoader**
 - [X] **Console Only Commands**
 - [X] **Limited Creative**
 - [X] **Weather**  
 - [X] GameRule
-- [X] Spawn Eggs **(Only For some Mobs (for now))**
-- [ ] Working Mob Spawners
+- [X] Spawn Eggs
+- [X] Working Mob Spawners
 - [ ] Toggleable MobAI
 
 ***Other List Entries are on "leveryl.yml"....***
