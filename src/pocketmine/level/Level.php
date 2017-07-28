@@ -1918,7 +1918,7 @@ class Level implements ChunkManager, Metadatable
 			}
 		}
 
-		if($createParticles) {
+		if($createParticles && $this->server->blockbreakparticles) {
 			$this->addParticle(new DestroyBlockParticle($target->add(0.5, 0.5, 0.5), $target));
 		}
 

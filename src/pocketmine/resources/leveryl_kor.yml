@@ -59,6 +59,7 @@ DisableServerDotLog: false
 DisablePluginAPIVersionCheck: true
 #### 경고 : 명령이 활성화되면 가끔 문제가 발생합니다.
 AllowUserNamesWithSpaces: false
+BlockBreakParticles: true
 
 # 날씨
 Weather: true

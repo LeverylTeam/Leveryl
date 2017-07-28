@@ -275,6 +275,8 @@ class Server
 
 	/** @var array */
 	public $alwaysday;
+	/** @var bool */
+	public $blockbreakparticles;
 
 	/**
 	 * @return string
@@ -1611,6 +1613,7 @@ class Server
 			$this->leverylconfig = new Config($this->dataPath . "leveryl.yml", Config::YAML, []);
 
 			$this->alwaysday = $this->leverylconfig->get("AlwaysDay");
+			$this->blockbreakparticles = $this->getLeverylConfigValue("BlockBreakParticles", true);
 
 			if($this->logger instanceof MainLogger) {
 				$this->logger->directSend($startupmsg);
