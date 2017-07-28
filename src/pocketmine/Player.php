@@ -2906,14 +2906,22 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 					$this->server->getPluginManager()->callEvent($ev = new PlayerUseFishingRodEvent($this, ($this->isFishing() ? PlayerUseFishingRodEvent::ACTION_STOP_FISHING : PlayerUseFishingRodEvent::ACTION_START_FISHING)));
 					if (!$ev->isCancelled()) {
 						if (!$this->isFishing()) {
-							$f = 0.6;
+							$f = 1.6;
 							$entity = Entity::createEntity("FishingHook", $this->getLevel(), $nbt, $this);
 							$entity->setMotion($entity->getMotion()->multiply($f));
+							$this->setFishingHook($entity);
+						} else {
+							$pk = new EntityEventPacket();
+							$pk->entityRuntimeId = $this->fishingHook->getId();
+							$pk->event = EntityEventPacket::FISH_HOOK_TEASE;
+							$this->server->broadcastPacket($this->level->getPlayers(), $pk);
+							if($this->fishingHook->aFishBit){
+								$this->fishingHook->reelLine();
+							}
+							$this->fishingHook->close();
+							$this->fishingHook = null;
 						}
 					}
-
-					$this->setFishingHook($entity);
-					$reduce = false;
 					break;
 				case Item::SNOWBALL:
 					$f = 1.5;
@@ -4934,7 +4942,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			$pk->entityRuntimeId = $this->fishingHook->getId();
 			$pk->event = EntityEventPacket::FISH_HOOK_TEASE;
 			$this->server->broadcastPacket($this->level->getPlayers(), $pk);
-			$this->setFishingHook();
+			$this->fishingHook->close();
 			return true;
 		}
 		return false;
@@ -4944,13 +4952,14 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 		return ($this->fishingHook instanceof FishingHook);
 	}
 
-	public function getFishingHook() {
+	public function getFishingHook() : FishingHook {
 		return $this->fishingHook;
 	}
 
 	public function setFishingHook(FishingHook $entity = null) {
-		if ($entity == null and $this->fishingHook instanceof FishingHook) {
+		if ($this->fishingHook instanceof FishingHook) {
 			$this->fishingHook->close();
+			$this->fishingHook = null;
 		}
 		$this->fishingHook = $entity;
 	}

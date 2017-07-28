@@ -1149,6 +1149,10 @@ class Level implements ChunkManager, Metadatable
 	 */
 	public function checkTime()
 	{
+		if($this->server->alwaysday[$this->getFolderName()] === true){
+			$this->time = 0;
+			return;
+		}
 		if($this->stopTime === true) {
 			return;
 		} else {

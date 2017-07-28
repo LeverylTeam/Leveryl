@@ -46,6 +46,8 @@ class FishingHook extends Projectile
 	public $coughtTimer = 0;
 	public $damageRod = false;
 
+	public $aFishBit = false;
+
 	public function initEntity()
 	{
 		parent::initEntity();
@@ -75,6 +77,9 @@ class FishingHook extends Projectile
 	public function onUpdate($currentTick)
 	{
 		if($this->closed) {
+			if($this->shootingEntity instanceof Player){
+				$this->shootingEntity->unlinkHookFromPlayer();
+			}
 			return false;
 		}
 
@@ -100,6 +105,7 @@ class FishingHook extends Projectile
 			$this->coughtTimer = mt_rand(5, 10) * 20; // random delay to catch fish
 			$this->attractTimer = mt_rand(30, 100) * 20; // reset timer
 			$this->attractFish();
+			$this->aFishBit = true;
 			if($this->shootingEntity instanceof Player) $this->shootingEntity->sendTip("A fish bites!");
 		} elseif($this->attractTimer > 0) {
 			$this->attractTimer--;
@@ -126,7 +132,7 @@ class FishingHook extends Projectile
 
 	public function attractFish()
 	{
-		if($this->shootingEntity instanceof Player) {
+		if($this->shootingEntity instanceof Player && $this->aFishBit) {
 			$pk = new EntityEventPacket();
 			$pk->entityRuntimeId = $this->shootingEntity->getId();//$this or $this->shootingEntity
 			$pk->event = EntityEventPacket::FISH_HOOK_BUBBLE;

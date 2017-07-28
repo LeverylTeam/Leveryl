@@ -1371,7 +1371,7 @@ abstract class Entity extends Location implements Metadatable
 		}
 
 		$tickDiff = $currentTick - $this->lastUpdate;
-		
+
 		if(!$this->isAlive()) {
 			$this->deadTicks += $tickDiff;
 			if($this->deadTicks >= 10) {

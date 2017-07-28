@@ -273,6 +273,9 @@ class Server
 
 	public $startfinished;
 
+	/** @var array */
+	public $alwaysday;
+
 	/**
 	 * @return string
 	 */
@@ -1606,6 +1609,8 @@ class Server
 				@file_put_contents($this->dataPath . "leveryl.yml", $content);
 			}
 			$this->leverylconfig = new Config($this->dataPath . "leveryl.yml", Config::YAML, []);
+
+			$this->alwaysday = $this->leverylconfig->get("AlwaysDay");
 
 			if($this->logger instanceof MainLogger) {
 				$this->logger->directSend($startupmsg);
