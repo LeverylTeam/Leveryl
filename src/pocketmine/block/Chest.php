@@ -149,6 +149,9 @@ class Chest extends Transparent
 	public function onActivate(Item $item, Player $player = null)
 	{
 		if($player instanceof Player) {
+			if($player->isCreative() && $player->getServer()->getLeverylConfigValue("LimitedCreative", true)){
+				return true;
+			}
 			$top = $this->getSide(1);
 			if($top->isTransparent() !== true) {
 				return true;

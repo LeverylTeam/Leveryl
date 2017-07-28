@@ -863,8 +863,8 @@ abstract class Entity extends Location implements Metadatable
 		]);
 
 		$this->namedtag->FallDistance = new FloatTag("FallDistance", $this->fallDistance);
-		$this->namedtag->Fire = new ShortTag("Fire", $this->fireTicks);
-		$this->namedtag->Air = new ShortTag("Air", $this->getDataProperty(self::DATA_AIR));
+		$this->namedtag->Fire = new ShortTag("Fire", intval($this->fireTicks));
+		$this->namedtag->Air = new ShortTag("Air", intval($this->getDataProperty(self::DATA_AIR)));
 		$this->namedtag->OnGround = new ByteTag("OnGround", $this->onGround ? 1 : 0);
 		$this->namedtag->Invulnerable = new ByteTag("Invulnerable", $this->invulnerable ? 1 : 0);
 
