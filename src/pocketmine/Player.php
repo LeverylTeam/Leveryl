@@ -30,6 +30,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\entity\Arrow;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
+use pocketmine\entity\FishingHook;
 use pocketmine\entity\Human;
 use pocketmine\entity\Item as DroppedItem;
 use pocketmine\entity\Living;
@@ -70,6 +71,7 @@ use pocketmine\event\player\PlayerToggleFlightEvent;
 use pocketmine\event\player\PlayerToggleSneakEvent;
 use pocketmine\event\player\PlayerToggleSprintEvent;
 use pocketmine\event\player\PlayerTransferEvent;
+use pocketmine\event\player\PlayerUseFishingRodEvent;
 use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\event\server\DataPacketSendEvent;
 use pocketmine\event\TextContainer;
@@ -359,7 +361,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 	/** @var PermissibleBase */
 	private $perm = null;
 
-	private $packetlog;
+	/** @var FishingHook */
+	public $fishingHook = null;
 
 	public function getLeaveMessage()
 	{
@@ -2899,6 +2902,19 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			]);
 
 			switch($item->getId()) {
+				case Item::FISHING_ROD:
+					$this->server->getPluginManager()->callEvent($ev = new PlayerUseFishingRodEvent($this, ($this->isFishing() ? PlayerUseFishingRodEvent::ACTION_STOP_FISHING : PlayerUseFishingRodEvent::ACTION_START_FISHING)));
+					if (!$ev->isCancelled()) {
+						if (!$this->isFishing()) {
+							$f = 0.6;
+							$entity = Entity::createEntity("FishingHook", $this->getLevel(), $nbt, $this);
+							$entity->setMotion($entity->getMotion()->multiply($f));
+						}
+					}
+
+					$this->setFishingHook($entity);
+					$reduce = false;
+					break;
 				case Item::SNOWBALL:
 					$f = 1.5;
 					$snowball = Entity::createEntity("Snowball", $this->getLevel(), $nbt, $this);
@@ -4909,5 +4925,33 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			throw new \InvalidArgumentException("Line height must be at least 1");
 		}
 		$this->lineHeight = $height;
+	}
+
+
+	public function unlinkHookFromPlayer() {
+		if ($this->fishingHook instanceof FishingHook) {
+			$pk = new EntityEventPacket();
+			$pk->entityRuntimeId = $this->fishingHook->getId();
+			$pk->event = EntityEventPacket::FISH_HOOK_TEASE;
+			$this->server->broadcastPacket($this->level->getPlayers(), $pk);
+			$this->setFishingHook();
+			return true;
+		}
+		return false;
+	}
+
+	public function isFishing() {
+		return ($this->fishingHook instanceof FishingHook);
+	}
+
+	public function getFishingHook() {
+		return $this->fishingHook;
+	}
+
+	public function setFishingHook(FishingHook $entity = null) {
+		if ($entity == null and $this->fishingHook instanceof FishingHook) {
+			$this->fishingHook->close();
+		}
+		$this->fishingHook = $entity;
 	}
 }

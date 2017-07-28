@@ -124,12 +124,21 @@ class Flat extends Generator
 		for($Z = 0; $Z < 16; ++$Z) {
 			for($X = 0; $X < 16; ++$X) {
 				$this->chunk->setBiomeId($X, $Z, $biome);
-				for($y = 0; $y < 256 and isset($this->structure[$y]); ++$y) {
-					$this->chunk->setBlock($X, $y, $Z, ...$this->structure[$y]);
-				}
 			}
 		}
 
+		for($sy = 0; $sy < 256; $sy += 16){
+			$subchunk = $this->chunk->getSubChunk($sy >> 4, true);
+			for($y = 0; $y < 16 and isset($this->structure[$y | $sy]); ++$y){
+				list($id, $meta) = $this->structure[$y | $sy];
+
+				for($Z = 0; $Z < 16; ++$Z){
+					for($X = 0; $X < 16; ++$X){
+						$subchunk->setBlock($X, $y, $Z, $id, $meta);
+					}
+				}
+			}
+		}
 
 		preg_match_all('#(([0-9a-z_]{1,})\(?([0-9a-z_ =:]{0,})\)?),?#', $options, $matches);
 		foreach($matches[2] as $i => $option) {

@@ -1595,28 +1595,7 @@ class Server
 			//$this->logger->info($this->getLanguage()->translateString("language.selected", [$this->getLanguage()->getName(), $this->getLanguage()->getLang()]));
 
 			$this->memoryManager = new MemoryManager($this);
-			$version = $this->getVersion();
-			$this->version = $version;
-			$code = $this->getCodename();
-			$mcpe = $this->getVersion();
-			$protocol = ProtocolInfo::CURRENT_PROTOCOL;
-			$api = $this->getApiVersion();
-			$ip = Utils::getIP();
-			$port = $this->getPort();
-			$query = $this->getIp();
-			$ssl = $this->isExtensionInstalled("OpenSSL");
-			$mode = $this->checkAuthentication();
-			$lang = $this->getProperty("settings.language", "eng");
-			$date = date("D, F d, Y, H:i T");
-
-			if(\Phar::running(true) === "") {
-				$package = "src";
-			} else {
-				$package = "phar";
-			}
-
-			$startupmsg = "\n       §8##§7\§b    _                           _ §r\n      §8##§7 /§b   | | _____   _____ _ __ _   _| |§r\n     §8##§7 /§b    | |/ _ \ \ / / _ \ '__| | | | |§r\n    §8##§7 /§b     | |  __/\ V /  __/ |  | |_| | |§r\n   §8##§7 /§b      |_|\___| \_/ \___|_|   \__, |_|§r\n  §8##§7 /§b                              |___/   §r\n §8#########§7\ §bGitHub.com/LeverylTeam/Leveryl  §r\n §7\________/§r";
-
+			$startupmsg = "\n       §8##§7\§b    _                           _ §r\n      §8##§7 /§b   | | _____   _____ _ __ _   _| |§r\n     §8##§7 /§b    | |/ _ \ \ / / _ \ '__| | | | |§r\n    §8##§7 /§b     | |  __/\ V /  __/ |  | |_| | |§r\n   §8##§7 /§b      |_|\___| \_/ \___|_|   \__, |_|§r\n  §8##§7 /§b                              |___/   §r\n §8#########§7\ §bGitHub.com/LeverylTeam/Leveryl  §r\n §7\________/§r\n";
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(!file_exists($this->dataPath . "leveryl.yml")) {
 				if(file_exists($this->filePath . "src/pocketmine/resources/leveryl_$lang.yml")) {
