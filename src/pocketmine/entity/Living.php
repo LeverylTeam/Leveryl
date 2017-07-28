@@ -236,12 +236,7 @@ abstract class Living extends Entity implements Damageable
 		}
 	}
 
-	/**
- 	 * @param int $tickDiff
- 	 *
- 	 * @return bool
- 	 */
-	public function entityBaseTick(int $tickDiff = 1)
+	public function entityBaseTick($tickDiff = 1)
 	{
 		Timings::$timerLivingEntityBaseTick->startTiming();
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_BREATHING, !$this->isInsideOfWater());
