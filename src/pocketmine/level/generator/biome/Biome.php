@@ -25,6 +25,7 @@ namespace pocketmine\level\generator\biome;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
+use pocketmine\level\generator\nether\HellBiome;
 use pocketmine\level\generator\normal\biome\DesertBiome;
 use pocketmine\level\generator\normal\biome\ForestBiome;
 use pocketmine\level\generator\normal\biome\IcePlainsBiome;
@@ -49,17 +50,34 @@ abstract class Biome
 	const TAIGA = 5;
 	const SWAMP = 6;
 	const RIVER = 7;
-
 	const HELL = 8;
-
+	const END = 9;
+	const FROZEN_OCEAN = 10;
+	const FROZEN_RIVER = 11;
 	const ICE_PLAINS = 12;
-
-
+	const ICE_MOUNTAINS = 13;
+	const MUSHROOM_ISLAND = 14;
+	const MUSHROOM_ISLAND_SHORE = 15;
+	const BEACH = 16;
+	const DESERT_HILLS = 17;
+	const FOREST_HILLS = 18;
+	const TAIGA_HILLS = 19;
 	const SMALL_MOUNTAINS = 20;
-
-
 	const BIRCH_FOREST = 27;
+	const BIRCH_FOREST_HILLS = 28;
+	const ROOFED_FOREST = 29;
+	const COLD_TAIGA = 30;
+	const COLD_TAIGA_HILLS = 31;
+	const MEGA_TAIGA = 32;
+	const MEGA_TAIGA_HILLS = 33;
+	const EXTREME_HILLS_PLUS = 34;
+	const SAVANNA = 35;
+	const SAVANNA_PLATEAU = 36;
+	const MESA = 37;
+	const MESA_PLATEAU_F = 38;
+	const MESA_PLATEAU = 39;
 
+	const VOID = 127;
 
 	const MAX_BIOMES = 256;
 
@@ -95,6 +113,7 @@ abstract class Biome
 		self::register(self::TAIGA, new TaigaBiome());
 		self::register(self::SWAMP, new SwampBiome());
 		self::register(self::RIVER, new RiverBiome());
+		self::register(self::HELL, new HellBiome());
 
 		self::register(self::ICE_PLAINS, new IcePlainsBiome());
 

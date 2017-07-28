@@ -90,4 +90,6 @@ interface ChunkManager
 	 * @return int
 	 */
 	public function getSeed();
+
+	public function updateBlockLight(int $x, int $y, int $z);
 }

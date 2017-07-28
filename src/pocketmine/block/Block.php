@@ -167,6 +167,7 @@ class Block extends Position implements BlockIds, Metadatable
 			self::$list[self::NETHERRACK] = Netherrack::class;
 			self::$list[self::SOUL_SAND] = SoulSand::class;
 			self::$list[self::NETHER_WART_BLOCK] = NetherWart::class;
+			self::$list[self::NETHER_QUARTZ_ORE] = NetherQuartzOre::class;
 			self::$list[self::GLOWSTONE_BLOCK] = Glowstone::class;
 
 			self::$list[self::LIT_PUMPKIN] = LitPumpkin::class;

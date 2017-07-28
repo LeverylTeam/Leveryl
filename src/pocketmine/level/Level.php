@@ -291,12 +291,12 @@ class Level implements ChunkManager, Metadatable
 			}
 		}
 
-		$this->weather = new Weather($this, 0);
 		$this->timings = new LevelTimings($this);
 		$this->temporalPosition = new Position(0, 0, 0, $this);
 		$this->temporalVector = new Vector3(0, 0, 0);
 		$this->tickRate = 1;
 
+		$this->weather = new Weather($this, 0);
 		if($this->server->getLeverylConfigValue("NetherEnabled", true) and $this->server->getLeverylConfigValue("NetherWorldName", "nether") == $this->folderName) {
 			$this->setDimension(self::DIMENSION_NETHER);
 		} else {
@@ -305,7 +305,9 @@ class Level implements ChunkManager, Metadatable
 
 		if($this->server->getLeverylConfigValue("Weather", true) and $this->getDimension() == self::DIMENSION_NORMAL) {
 			$this->weather->setCanCalculate(true);
-		} else $this->weather->setCanCalculate(false);
+		} else {
+			$this->weather->setCanCalculate(false);
+		}
 	}
 
 	public function getDimension(): int
@@ -1034,13 +1036,11 @@ class Level implements ChunkManager, Metadatable
 
 		$this->timings->doTick->startTiming();
 
-		if($this->getGameRule("doDaylightCycle")) {
-			$this->checkTime();
+		$this->checkTime();
 
-			if(++$this->sendTimeTicker === 200) {
-				$this->sendTime();
-				$this->sendTimeTicker = 0;
-			}
+		if(++$this->sendTimeTicker === 200) {
+			$this->sendTime();
+			$this->sendTimeTicker = 0;
 		}
 
 		$this->weather->calcWeather($currentTick);
@@ -1094,7 +1094,9 @@ class Level implements ChunkManager, Metadatable
 		$this->timings->tileEntityTick->stopTiming();
 
 		$this->timings->doTickTiles->startTiming();
-		$this->tickChunks();
+		if (($currentTick % 2) === 0){
+			$this->tickChunks();
+		}
 		$this->timings->doTickTiles->stopTiming();
 
 		if(count($this->changedBlocks) > 0) {

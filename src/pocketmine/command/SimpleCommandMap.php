@@ -26,6 +26,7 @@ namespace pocketmine\command;
 use pocketmine\command\defaults\BanCommand;
 use pocketmine\command\defaults\BanIpCommand;
 use pocketmine\command\defaults\BanListCommand;
+use pocketmine\command\defaults\BiomeCommand;
 use pocketmine\command\defaults\ClearCommand;
 use pocketmine\command\defaults\CreateWorldCommand;
 use pocketmine\command\defaults\DefaultGamemodeCommand;
@@ -141,6 +142,7 @@ class SimpleCommandMap implements CommandMap
 		$this->register("pocketmine", new ClearCommand("clear"));
 		$this->register("pocketmine", new XpCommand("xp"));
 		$this->register("pocketmine", new SetBlockCommand("setblock"));
+		$this->register("pocketmine", new BiomeCommand("biome"));
 
 		// World Commands
 		$this->register("pocketmine", new WorldCommand("world"));

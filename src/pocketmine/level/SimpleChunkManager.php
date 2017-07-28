@@ -144,4 +144,9 @@ class SimpleChunkManager implements ChunkManager
 	{
 		return $this->seed;
 	}
+
+	public function updateBlockLight(int $x, int $y, int $z)
+	{
+		// TODO: Implement updateBlockLight() method.
+	}
 }

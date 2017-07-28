@@ -52,7 +52,6 @@ class Nether extends Generator
 	private $emptyHeight = 64;
 	private $emptyAmplitude = 1;
 	private $density = 0.5;
-	private $bedrockDepth = 5;
 
 	/** @var Populator[] */
 	private $generationPopulators = [];

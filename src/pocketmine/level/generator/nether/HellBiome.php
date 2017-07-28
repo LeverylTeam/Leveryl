@@ -1,7 +1,7 @@
 <?php
 
 
-namespace pocketmine\level\generator\nether\biome;
+namespace pocketmine\level\generator\nether;
 
 use pocketmine\level\generator\biome\Biome;
 

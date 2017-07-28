@@ -1768,7 +1768,6 @@ class Server
 			Generator::addGenerator(Flat::class, "flat");
 			Generator::addGenerator(Normal::class, "normal");
 			Generator::addGenerator(Normal::class, "default");
-			Generator::addGenerator(Nether::class, "hell");
 			Generator::addGenerator(Nether::class, "nether");
 
 			foreach((array)$this->getProperty("worlds", []) as $name => $worldSetting) {
