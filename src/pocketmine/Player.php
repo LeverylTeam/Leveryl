@@ -2100,7 +2100,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 		$pk->pitch = $this->pitch;
 		$pk->yaw = $this->yaw;
 		$pk->seed = -1;
-		$pk->dimension = 0; //TODO: implement this properly
+		$pk->dimension = $this->getLevel()->getDimension();
 		$pk->worldGamemode = Player::getClientFriendlyGamemode($this->server->getGamemode());
 		$pk->difficulty = $this->server->getDifficulty();
 		$pk->spawnX = $spawnPosition->getFloorX();

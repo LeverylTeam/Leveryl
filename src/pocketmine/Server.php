@@ -1600,7 +1600,7 @@ class Server
 			//$this->logger->info($this->getLanguage()->translateString("language.selected", [$this->getLanguage()->getName(), $this->getLanguage()->getLang()]));
 
 			$this->memoryManager = new MemoryManager($this);
-			$startupmsg = "\n       §8##§7\§b    _                           _ §r\n      §8##§7 /§b   | | _____   _____ _ __ _   _| |§r\n     §8##§7 /§b    | |/ _ \ \ / / _ \ '__| | | | |§r\n    §8##§7 /§b     | |  __/\ V /  __/ |  | |_| | |§r\n   §8##§7 /§b      |_|\___| \_/ \___|_|   \__, |_|§r\n  §8##§7 /§b                              |___/   §r\n §8#########§7\ §bGitHub.com/LeverylTeam/Leveryl  §r\n §7\________/§r\n";
+			$startupmsg = "\n       §8##§7\§b    _                           _ §r\n      §8##§7 /§b   | | _____   _____ _ __ _   _| |§r\n     §8##§7 /§b    | |/ _ \ \ / / _ \ '__| | | | |§r\n    §8##§7 /§b     | |  __/\ V /  __/ |  | |_| | |§r\n   §8##§7 /§b      |_|\___| \_/ \___|_|   \__, |_|§r\n  §8##§7 /§b                              |___/   §r\n §8#########§7\ §bGitHub.com/LeverylTeam/Leveryl  §r\n §7\________/§r";
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(!file_exists($this->dataPath . "leveryl.yml")) {
 				if(file_exists($this->filePath . "src/pocketmine/resources/leveryl_$lang.yml")) {
