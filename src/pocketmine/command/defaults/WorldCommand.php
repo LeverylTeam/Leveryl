@@ -48,6 +48,7 @@ class WorldCommand extends VanillaCommand
 
 		if($sender instanceof Player) {
 			if(count($args) == 1) {
+				$sender->getServer()->loadLevel($args[0]);
 				if(($level = $sender->getServer()->getLevelByName($args[0]))) {
 					$pos = $level->getSpawnLocation();
 					$sender->teleport(new Position($pos->getX(), $pos->getY(), $pos->getZ(), $level));
@@ -55,11 +56,12 @@ class WorldCommand extends VanillaCommand
 
 					return true;
 				} else {
-					$sender->sendMessage(TextFormat::RED . "World: \"" . $args[0] . "\" Does not exist or is not Loaded");
+					$sender->sendMessage(TextFormat::RED . "World: \"" . $args[0] . "\" Does not exist");
 
 					return false;
 				}
 			} elseif(count($args) > 1 && count($args) < 3) {
+				$sender->getServer()->loadLevel($args[1]);
 				if(($level = $sender->getServer()->getLevelByName($args[1]))) {
 					$player = $sender->getServer()->getPlayer($args[0]);
 					$pos = $level->getSpawnLocation();
@@ -68,7 +70,7 @@ class WorldCommand extends VanillaCommand
 
 					return true;
 				} else {
-					$sender->sendMessage(TextFormat::RED . "World: \"" . $args[1] . "\" Does not exist or is not Loaded");
+					$sender->sendMessage(TextFormat::RED . "World: \"" . $args[1] . "\" Does not exist");
 
 					return false;
 				}
