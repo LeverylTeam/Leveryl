@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,8 +28,7 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class StartGamePacket extends DataPacket
-{
+class StartGamePacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::START_GAME_PACKET;
 
 	public $entityUniqueId;
@@ -55,14 +54,14 @@ class StartGamePacket extends DataPacket
 	public $lightningLevel;
 	public $commandsEnabled;
 	public $isTexturePacksRequired = true;
+	public $gameRules = []; //TODO: implement this
 	public $levelId = ""; //base64 string, usually the same as world folder name in vanilla
 	public $worldName;
 	public $premiumWorldTemplateId = "";
 	public $unknownBool = false;
 	public $currentTick = 0;
 
-	public function decode()
-	{
+	public function decodePayload(){
 		$this->entityUniqueId = $this->getEntityUniqueId();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->playerGamemode = $this->getVarInt();
@@ -82,8 +81,7 @@ class StartGamePacket extends DataPacket
 		$this->lightningLevel = $this->getLFloat();
 		$this->commandsEnabled = $this->getBool();
 		$this->isTexturePacksRequired = $this->getBool();
-		/*$gameRulesCount = */
-		$this->getUnsignedVarInt(); //TODO
+		$this->gameRules = $this->getGameRules();
 		$this->levelId = $this->getString();
 		$this->worldName = $this->getString();
 		$this->premiumWorldTemplateId = $this->getString();
@@ -92,12 +90,10 @@ class StartGamePacket extends DataPacket
 
 	}
 
-	public function encode()
-	{
-		$this->reset();
+	public function encodePayload(){
 		$this->putEntityUniqueId($this->entityUniqueId);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
-		$this->putVarInt($this->playerGamemode); //client gamemode, other field is world gamemode
+		$this->putVarInt($this->playerGamemode);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putLFloat($this->pitch);
 		$this->putLFloat($this->yaw);
@@ -114,7 +110,7 @@ class StartGamePacket extends DataPacket
 		$this->putLFloat($this->lightningLevel);
 		$this->putBool($this->commandsEnabled);
 		$this->putBool($this->isTexturePacksRequired);
-		$this->putUnsignedVarInt(0); //TODO: gamerules
+		$this->putGameRules($this->gameRules);
 		$this->putString($this->levelId);
 		$this->putString($this->worldName);
 		$this->putString($this->premiumWorldTemplateId);
@@ -122,8 +118,7 @@ class StartGamePacket extends DataPacket
 		$this->putLLong($this->currentTick);
 	}
 
-	public function handle(NetworkSession $session): bool
-	{
+	public function handle(NetworkSession $session) : bool{
 		return $session->handleStartGame($this);
 	}
 
