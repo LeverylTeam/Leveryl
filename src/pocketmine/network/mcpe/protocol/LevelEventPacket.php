@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,8 +27,7 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class LevelEventPacket extends DataPacket
-{
+class LevelEventPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::LEVEL_EVENT_PACKET;
 
 	const EVENT_SOUND_CLICK = 1000;
@@ -41,13 +40,10 @@ class LevelEventPacket extends DataPacket
 	const EVENT_SOUND_GHAST = 1007;
 	const EVENT_SOUND_GHAST_SHOOT = 1008;
 	const EVENT_SOUND_BLAZE_SHOOT = 1009;
-
 	const EVENT_SOUND_DOOR_BUMP = 1010;
+
 	const EVENT_SOUND_DOOR_CRASH = 1012;
 
-	const EVENT_SOUND_BAT_FLY = 1015;
-	const EVENT_SOUND_ZOMBIE_INFECT = 1016;
-	const EVENT_SOUND_ZOMBIE_HEAL = 1017;
 	const EVENT_SOUND_ENDERMAN_TELEPORT = 1018;
 
 	const EVENT_SOUND_ANVIL_BREAK = 1020;
@@ -66,7 +62,6 @@ class LevelEventPacket extends DataPacket
 
 	const EVENT_SOUND_CAMERA = 1050;
 	const EVENT_SOUND_ORB = 1051;
-	const EVENT_SOUND_BLOCK_PLACE = 1052;
 
 	const EVENT_PARTICLE_SHOOT = 2000;
 	const EVENT_PARTICLE_DESTROY = 2001;
@@ -111,23 +106,19 @@ class LevelEventPacket extends DataPacket
 	public $z = 0;
 	public $data;
 
-	public function decode()
-	{
+	public function decodePayload(){
 		$this->evid = $this->getVarInt();
 		$this->getVector3f($this->x, $this->y, $this->z);
 		$this->data = $this->getVarInt();
 	}
 
-	public function encode()
-	{
-		$this->reset();
+	public function encodePayload(){
 		$this->putVarInt($this->evid);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putVarInt($this->data);
 	}
 
-	public function handle(NetworkSession $session): bool
-	{
+	public function handle(NetworkSession $session) : bool{
 		return $session->handleLevelEvent($this);
 	}
 
