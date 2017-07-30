@@ -69,7 +69,7 @@ class LoginPacket extends DataPacket
 		return true;
 	}
 
-	public function decode()
+	public function decodePayLoad()
 	{
 		$this->protocol = $this->getInt();
 
@@ -139,7 +139,7 @@ class LoginPacket extends DataPacket
 		}
 	}
 
-	public function encode()
+	public function encodePayLoad()
 	{
 		//TODO
 	}
