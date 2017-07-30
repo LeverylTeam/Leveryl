@@ -52,6 +52,11 @@ class BanCommand extends VanillaCommand
 
 			return false;
 		}
+		
+		if(count($args) === 1){
+			$sender->sendMessage("Please insert reason why them need banned.");
+			return false;
+		}
 
 		$name = array_shift($args);
 		$reason = implode(" ", $args);
