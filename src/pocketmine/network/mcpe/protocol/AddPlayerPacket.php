@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,14 +27,18 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
+use pocketmine\utils\UUID;
 
-class AddPlayerPacket extends DataPacket
-{
+class AddPlayerPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::ADD_PLAYER_PACKET;
 
+	/** @var UUID */
 	public $uuid;
+	/** @var string */
 	public $username;
+	/** @var int|null */
 	public $entityUniqueId = null; //TODO
+	/** @var int */
 	public $entityRuntimeId;
 	public $x;
 	public $y;
@@ -49,8 +53,7 @@ class AddPlayerPacket extends DataPacket
 	public $item;
 	public $metadata = [];
 
-	public function decode()
-	{
+	public function decodePayload(){
 		$this->uuid = $this->getUUID();
 		$this->username = $this->getString();
 		$this->entityUniqueId = $this->getEntityUniqueId();
@@ -64,9 +67,7 @@ class AddPlayerPacket extends DataPacket
 		$this->metadata = $this->getEntityMetadata();
 	}
 
-	public function encode()
-	{
-		$this->reset();
+	public function encodePayload(){
 		$this->putUUID($this->uuid);
 		$this->putString($this->username);
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);
@@ -80,8 +81,7 @@ class AddPlayerPacket extends DataPacket
 		$this->putEntityMetadata($this->metadata);
 	}
 
-	public function handle(NetworkSession $session): bool
-	{
+	public function handle(NetworkSession $session) : bool{
 		return $session->handleAddPlayer($this);
 	}
 
