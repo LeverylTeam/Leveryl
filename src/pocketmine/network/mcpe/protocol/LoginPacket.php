@@ -46,6 +46,12 @@ class LoginPacket extends DataPacket
 
 	public $skinId;
 	public $skin = "";
+	
+	/** @var array (the "chain" index contains one or more JWTs) */
+	public $chainData = [];
+	/** @var string */
+	public $clientDataJwt;
+	/** @var array decoded payload of the clientData JWT */
 
 	public $clientData = [];
 
@@ -78,9 +84,9 @@ class LoginPacket extends DataPacket
 		$time = time();
 		$this->setBuffer($this->getString(), 0);
 
-		$chainData = json_decode($this->get($this->getLInt()));
+		$this->chainData = json_decode($this->get($this->getLInt()), true);
 		$chainKey = self::MOJANG_PUBKEY;
-		foreach($chainData->{"chain"} as $chain) {
+		foreach($this->chainData["chain"] as $chain){
 			list($verified, $webtoken) = $this->decodeToken($chain, $chainKey);
 			if(isset($webtoken["extraData"])) {
 				if(isset($webtoken["extraData"]["displayName"])) {
@@ -97,8 +103,8 @@ class LoginPacket extends DataPacket
 			}
 		}
 
-		$arr = $this->decodeToken($this->get($this->getLInt()), $this->identityPublicKey);
-		$this->clientData = $arr[1];
+		$this->clientDataJwt = $this->get($this->getLInt());
+		$this->clientData = $this->decodeToken($this->clientDataJwt);
 
 		$this->clientId = $this->clientData["ClientRandomId"] ?? null;
 		$this->serverAddress = $this->clientData["ServerAddress"] ?? null;
