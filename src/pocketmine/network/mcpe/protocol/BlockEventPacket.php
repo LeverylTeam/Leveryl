@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,8 +28,7 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class BlockEventPacket extends DataPacket
-{
+class BlockEventPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::BLOCK_EVENT_PACKET;
 
 	public $x;
@@ -38,23 +37,19 @@ class BlockEventPacket extends DataPacket
 	public $case1;
 	public $case2;
 
-	public function decode()
-	{
+	public function decodePayload(){
 		$this->getBlockPosition($this->x, $this->y, $this->z);
 		$this->case1 = $this->getVarInt();
 		$this->case2 = $this->getVarInt();
 	}
 
-	public function encode()
-	{
-		$this->reset();
+	public function encodePayload(){
 		$this->putBlockPosition($this->x, $this->y, $this->z);
 		$this->putVarInt($this->case1);
 		$this->putVarInt($this->case2);
 	}
 
-	public function handle(NetworkSession $session): bool
-	{
+	public function handle(NetworkSession $session) : bool{
 		return $session->handleBlockEvent($this);
 	}
 
