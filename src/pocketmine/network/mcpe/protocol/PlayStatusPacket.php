@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,8 +28,7 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class PlayStatusPacket extends DataPacket
-{
+class PlayStatusPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::PLAY_STATUS_PACKET;
 
 	const LOGIN_SUCCESS = 0;
@@ -42,24 +41,19 @@ class PlayStatusPacket extends DataPacket
 
 	public $status;
 
-	public function decode()
-	{
-
+	public function decodePayload(){
+		$this->status = $this->getInt();
 	}
 
-	public function canBeSentBeforeLogin(): bool
-	{
+	public function canBeSentBeforeLogin() : bool{
 		return true;
 	}
 
-	public function encode()
-	{
-		$this->reset();
+	public function encodePayload(){
 		$this->putInt($this->status);
 	}
 
-	public function handle(NetworkSession $session): bool
-	{
+	public function handle(NetworkSession $session) : bool{
 		return $session->handlePlayStatus($this);
 	}
 
