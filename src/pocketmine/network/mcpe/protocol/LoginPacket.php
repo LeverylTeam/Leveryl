@@ -52,8 +52,8 @@ class LoginPacket extends DataPacket
 	/** @var string */
 	public $clientDataJwt;
 	/** @var array decoded payload of the clientData JWT */
-
 	public $clientData = [];
+	public $decoded = [];
 
 	public $deviceos;
 	public $devicemodel;
@@ -104,9 +104,9 @@ class LoginPacket extends DataPacket
 		}
 
 		$this->clientDataJwt = $this->get($this->getLInt());
-		$decoded = $this->decodeToken($this->clientDataJwt);
+		$this->decoded = $this->decodeToken($this->clientDataJwt);
 		// get the SECOND element of the returned value of decodeToken() [which is... an array]
-		$this->clientData = $decoded[1];
+		$this->clientData = $this->decoded[1];
 
 		$this->clientId = $this->clientData["ClientRandomId"] ?? null;
 		$this->serverAddress = $this->clientData["ServerAddress"] ?? null;
