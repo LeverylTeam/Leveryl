@@ -104,7 +104,9 @@ class LoginPacket extends DataPacket
 		}
 
 		$this->clientDataJwt = $this->get($this->getLInt());
-		$this->clientData = $this->decodeToken($this->clientDataJwt);
+		$decoded = $this->decodeToken($this->clientDataJwt);
+		// get the SECOND element of the returned value of decodeToken() [which is... an array]
+		$this->clientData = $decoded[1];
 
 		$this->clientId = $this->clientData["ClientRandomId"] ?? null;
 		$this->serverAddress = $this->clientData["ServerAddress"] ?? null;
