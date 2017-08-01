@@ -25,7 +25,6 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 #ifndef COMPILE
 use pocketmine\utils\Binary;
@@ -54,9 +53,12 @@ class BatchPacket extends DataPacket
 	public function decodePayload()
 	{
 		$data = $this->getRemaining();
-		try{
+		try
+		{
 			$this->payload = zlib_decode($data, 1024 * 1024 * 64); //Max 64MB
-		}catch(\ErrorException $e){ //zlib decode error
+		}
+		catch(\ErrorException $e)
+		{ //zlib decode error
 			$this->payload = "";
 		}
 	}
@@ -71,15 +73,14 @@ class BatchPacket extends DataPacket
 	 */
 	public function addPacket(DataPacket $packet)
 	{
-		if(!$packet->canBeBatched())
+		if (!$packet->canBeBatched())
 		{
 			throw new \InvalidArgumentException(get_class($packet) . " cannot be put inside a BatchPacket");
 		}
-		if(!$packet->isEncoded)
+		if (!$packet->isEncoded)
 		{
 			$packet->encode();
 		}
-
 		$this->payload .= Binary::writeUnsignedVarInt(strlen($packet->buffer)) . $packet->buffer;
 	}
 
@@ -89,7 +90,7 @@ class BatchPacket extends DataPacket
 	public function getPackets()
 	{
 		$stream = new BinaryStream($this->payload);
-		while(!$stream->feof())
+		while (!$stream->feof())
 		{
 			yield $stream->getString();
 		}
@@ -107,25 +108,20 @@ class BatchPacket extends DataPacket
 
 	public function handle(NetworkSession $session) : bool
 	{
-		if($this->payload === "")
+		if ($this->payload === "")
 		{
 			return false;
 		}
-
-		foreach($this->getPackets() as $buf)
+		foreach ($this->getPackets() as $buf)
 		{
 			$pk = PacketPool::getPacketById(ord($buf{0}));
-
-			if(!$pk->canBeBatched())
+			if (!$pk->canBeBatched())
 			{
 				throw new \InvalidArgumentException("Received invalid " . get_class($pk) . " inside BatchPacket");
 			}
-
 			$pk->setBuffer($buf, 1);
 			$session->handleDataPacket($pk);
 		}
-
 		return true;
 	}
-
 }
