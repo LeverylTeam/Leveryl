@@ -48,7 +48,7 @@ class DisconnectPacket extends DataPacket
 	public function encodePayload()
 	{
 		$this->putBool($this->hideDisconnectionScreen);
-		if(!$this->hideDisconnectionScreen)
+		if (!$this->hideDisconnectionScreen)
 		{
 			$this->putString($this->message);
 		}
@@ -58,5 +58,4 @@ class DisconnectPacket extends DataPacket
 	{
 		return $session->handleDisconnect($this);
 	}
-
 }
