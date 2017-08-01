@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,18 +27,22 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class StructureBlockUpdatePacket extends DataPacket{
+class StructureBlockUpdatePacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::STRUCTURE_BLOCK_UPDATE_PACKET;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		//TODO
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		//TODO
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleStructureBlockUpdate($this);
 	}
 }
