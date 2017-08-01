@@ -19,16 +19,16 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class EntityEventPacket extends DataPacket{
+class EntityEventPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::ENTITY_EVENT_PACKET;
 
 	const HURT_ANIMATION = 2;
@@ -54,19 +54,22 @@ class EntityEventPacket extends DataPacket{
 	public $event;
 	public $data = 0;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->event = $this->getByte();
 		$this->data = $this->getVarInt();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putByte($this->event);
 		$this->putVarInt($this->data);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleEntityEvent($this);
 	}
 
