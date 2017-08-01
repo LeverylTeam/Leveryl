@@ -61,7 +61,7 @@ class AddEntityPacket extends DataPacket
 		$this->yaw = $this->getLFloat();
 
 		$attrCount = $this->getUnsignedVarInt();
-		for($i = 0; $i < $attrCount; ++$i)
+		for ($i = 0; $i < $attrCount; ++$i)
 		{
 			$name = $this->getString();
 			$min = $this->getLFloat();
@@ -69,7 +69,7 @@ class AddEntityPacket extends DataPacket
 			$max = $this->getLFloat();
 			$attr = Attribute::getAttributeByName($name);
 
-			if($attr !== null)
+			if ($attr !== null)
 			{
 				$attr->setMinValue($min);
 				$attr->setMaxValue($max);
@@ -84,7 +84,7 @@ class AddEntityPacket extends DataPacket
 
 		$this->metadata = $this->getEntityMetadata();
 		$linkCount = $this->getUnsignedVarInt();
-		for($i = 0; $i < $linkCount; ++$i)
+		for ($i = 0; $i < $linkCount; ++$i)
 		{
 			$this->links[$i][0] = $this->getEntityUniqueId();
 			$this->links[$i][1] = $this->getEntityUniqueId();
@@ -103,7 +103,7 @@ class AddEntityPacket extends DataPacket
 		$this->putLFloat($this->yaw);
 
 		$this->putUnsignedVarInt(count($this->attributes));
-		foreach($this->attributes as $attribute)
+		foreach ($this->attributes as $attribute)
 		{
 			$this->putString($attribute->getName());
 			$this->putLFloat($attribute->getMinValue());
@@ -113,7 +113,7 @@ class AddEntityPacket extends DataPacket
 
 		$this->putEntityMetadata($this->metadata);
 		$this->putUnsignedVarInt(count($this->links));
-		foreach($this->links as $link)
+		foreach ($this->links as $link)
 		{
 			$this->putEntityUniqueId($link[0]);
 			$this->putEntityUniqueId($link[1]);
