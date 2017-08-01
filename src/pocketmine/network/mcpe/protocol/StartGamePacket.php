@@ -19,16 +19,16 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class StartGamePacket extends DataPacket{
+class StartGamePacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::START_GAME_PACKET;
 
 	public $entityUniqueId;
@@ -61,7 +61,8 @@ class StartGamePacket extends DataPacket{
 	public $unknownBool = false;
 	public $currentTick = 0;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->entityUniqueId = $this->getEntityUniqueId();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->playerGamemode = $this->getVarInt();
@@ -87,10 +88,10 @@ class StartGamePacket extends DataPacket{
 		$this->premiumWorldTemplateId = $this->getString();
 		$this->unknownBool = $this->getBool();
 		$this->currentTick = $this->getLLong();
-
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putEntityUniqueId($this->entityUniqueId);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putVarInt($this->playerGamemode);
@@ -118,8 +119,8 @@ class StartGamePacket extends DataPacket{
 		$this->putLLong($this->currentTick);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleStartGame($this);
 	}
-
 }
