@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,7 +27,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class LevelSoundEventPacket extends DataPacket{
+class LevelSoundEventPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::LEVEL_SOUND_EVENT_PACKET;
 
 	const SOUND_ITEM_USE_ON = 0;
@@ -148,7 +149,8 @@ class LevelSoundEventPacket extends DataPacket{
 	public $unknownBool = false;
 	public $disableRelativeVolume = false;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->sound = $this->getByte();
 		$this->getVector3f($this->x, $this->y, $this->z);
 		$this->extraData = $this->getVarInt();
@@ -157,7 +159,8 @@ class LevelSoundEventPacket extends DataPacket{
 		$this->disableRelativeVolume = $this->getBool();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putByte($this->sound);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putVarInt($this->extraData);
@@ -166,7 +169,8 @@ class LevelSoundEventPacket extends DataPacket{
 		$this->putBool($this->disableRelativeVolume);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleLevelSoundEvent($this);
 	}
 }
