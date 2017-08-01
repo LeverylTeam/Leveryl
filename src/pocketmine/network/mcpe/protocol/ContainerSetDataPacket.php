@@ -25,7 +25,6 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
 class ContainerSetDataPacket extends DataPacket
@@ -54,5 +53,4 @@ class ContainerSetDataPacket extends DataPacket
 	{
 		return $session->handleContainerSetData($this);
 	}
-
 }
