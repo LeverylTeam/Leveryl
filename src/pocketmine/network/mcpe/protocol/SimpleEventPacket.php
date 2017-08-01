@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,20 +27,24 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class SimpleEventPacket extends DataPacket{
+class SimpleEventPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::SIMPLE_EVENT_PACKET;
 
 	public $unknownShort1;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->unknownShort1 = $this->getLShort();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putLShort($this->unknownShort1);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleSimpleEvent($this);
 	}
 }
