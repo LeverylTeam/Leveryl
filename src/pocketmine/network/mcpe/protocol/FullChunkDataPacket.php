@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,26 +28,30 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class FullChunkDataPacket extends DataPacket{
+class FullChunkDataPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::FULL_CHUNK_DATA_PACKET;
 
 	public $chunkX;
 	public $chunkZ;
 	public $data;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->chunkX = $this->getVarInt();
 		$this->chunkZ = $this->getVarInt();
 		$this->data = $this->getString();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putVarInt($this->chunkX);
 		$this->putVarInt($this->chunkZ);
 		$this->putString($this->data);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleFullChunkData($this);
 	}
 
