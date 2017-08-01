@@ -88,5 +88,4 @@ class AddPlayerPacket extends DataPacket
 	{
 		return $session->handleAddPlayer($this);
 	}
-
 }
