@@ -36,6 +36,8 @@ This spoon is based off of PMMP (For Stability)
 - [X] GameRule
 - [X] Spawn Eggs
 - [X] Working Mob Spawners
+- [ ] **RedStone System**
+- [ ] **Minecart Correctly Work**
 - [ ] Toggleable MobAI
 
 ***Other List Entries are on "leveryl.yml"....***
