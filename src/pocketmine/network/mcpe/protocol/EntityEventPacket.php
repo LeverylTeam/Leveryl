@@ -33,7 +33,8 @@ class EntityEventPacket extends DataPacket
 
 	const HURT_ANIMATION = 2;
 	const DEATH_ANIMATION = 3;
-
+	// 4
+	// 5
 	const TAME_FAIL = 6;
 	const TAME_SUCCESS = 7;
 	const SHAKE_WET = 8;
@@ -45,9 +46,8 @@ class EntityEventPacket extends DataPacket
 	const FISH_HOOK_TEASE = 14;
 	const SQUID_INK_CLOUD = 15;
 	const AMBIENT_SOUND = 16;
-
+	// 17
 	const RESPAWN = 18;
-
 	//TODO: add more events
 
 	public $entityRuntimeId;
@@ -72,5 +72,4 @@ class EntityEventPacket extends DataPacket
 	{
 		return $session->handleEntityEvent($this);
 	}
-
 }
