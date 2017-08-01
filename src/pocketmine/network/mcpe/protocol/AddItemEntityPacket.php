@@ -1,4 +1,5 @@
 <?php
+
 /*
  *
  *  ____            _        _   __  __ _                  __  __ ____
@@ -17,12 +18,19 @@
  *
  *
 */
-declare(strict_types=1);
+
+declare(strict_types = 1);
+
 namespace pocketmine\network\mcpe\protocol;
+
 #include <rules/DataPacket.h>
+
 use pocketmine\network\mcpe\NetworkSession;
-class AddItemEntityPacket extends DataPacket{
+
+class AddItemEntityPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::ADD_ITEM_ENTITY_PACKET;
+
 	/** @var int|null */
 	public $entityUniqueId = null; //TODO
 	/** @var int */
@@ -35,7 +43,9 @@ class AddItemEntityPacket extends DataPacket{
 	public $speedY = 0.0;
 	public $speedZ = 0.0;
 	public $metadata = [];
-	public function decodePayload(){
+
+	public function decodePayload()
+	{
 		$this->entityUniqueId = $this->getEntityUniqueId();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->item = $this->getSlot();
@@ -43,7 +53,8 @@ class AddItemEntityPacket extends DataPacket{
 		$this->getVector3f($this->speedX, $this->speedY, $this->speedZ);
 		$this->metadata = $this->getEntityMetadata();
 	}
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putSlot($this->item);
@@ -51,7 +62,8 @@ class AddItemEntityPacket extends DataPacket{
 		$this->putVector3f($this->speedX, $this->speedY, $this->speedZ);
 		$this->putEntityMetadata($this->metadata);
 	}
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleAddItemEntity($this);
 	}
 }
