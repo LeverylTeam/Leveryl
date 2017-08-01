@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -39,7 +39,7 @@ class ContainerSetSlotPacket extends DataPacket
 	public $item;
 	public $selectSlot = 0;
 
-	public function decodePayload()
+	public function decode()
 	{
 		$this->windowid = $this->getByte();
 		$this->slot = $this->getVarInt();
@@ -48,8 +48,9 @@ class ContainerSetSlotPacket extends DataPacket
 		$this->selectSlot = $this->getByte();
 	}
 
-	public function encodePayload()
+	public function encode()
 	{
+		$this->reset();
 		$this->putByte($this->windowid);
 		$this->putVarInt($this->slot);
 		$this->putVarInt($this->hotbarSlot);
@@ -57,8 +58,9 @@ class ContainerSetSlotPacket extends DataPacket
 		$this->putByte($this->selectSlot);
 	}
 
-	public function handle(NetworkSession $session) : bool
+	public function handle(NetworkSession $session): bool
 	{
 		return $session->handleContainerSetSlot($this);
 	}
+
 }

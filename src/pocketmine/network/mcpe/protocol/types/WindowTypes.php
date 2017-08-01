@@ -21,10 +21,13 @@
 
 declare(strict_types = 1);
 
+
 namespace pocketmine\network\mcpe\protocol\types;
+
 
 interface WindowTypes
 {
+
 	const INVENTORY = -1;
 	const CONTAINER = 0;
 	const WORKBENCH = 1;
@@ -43,4 +46,5 @@ interface WindowTypes
 	const STRUCTURE_EDITOR = 14;
 	const TRADING = 15;
 	const COMMAND_BLOCK = 16;
+
 }

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -40,7 +40,7 @@ class CommandStepPacket extends DataPacket
 	public $inputJson;
 	public $outputJson;
 
-	public function decodePayload()
+	public function decode()
 	{
 		$this->command = $this->getString();
 		$this->overload = $this->getString();
@@ -50,11 +50,13 @@ class CommandStepPacket extends DataPacket
 		$this->clientId = $this->getUnsignedVarLong();
 		$this->inputJson = json_decode($this->getString());
 		$this->outputJson = json_decode($this->getString());
+
 		$this->getRemaining(); //TODO: read command origin data
 	}
 
-	public function encodePayload()
+	public function encode()
 	{
+		$this->reset();
 		$this->putString($this->command);
 		$this->putString($this->overload);
 		$this->putUnsignedVarInt($this->uvarint1);
@@ -63,11 +65,13 @@ class CommandStepPacket extends DataPacket
 		$this->putUnsignedVarLong($this->clientId);
 		$this->putString(json_encode($this->inputJson));
 		$this->putString(json_encode($this->outputJson));
+
 		$this->put("\x00\x00\x00"); //TODO: command origin data
 	}
 
-	public function handle(NetworkSession $session) : bool
+	public function handle(NetworkSession $session): bool
 	{
 		return $session->handleCommandStep($this);
 	}
+
 }

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,15 +25,14 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
+
 use pocketmine\network\mcpe\NetworkSession;
 
 class AddItemEntityPacket extends DataPacket
 {
 	const NETWORK_ID = ProtocolInfo::ADD_ITEM_ENTITY_PACKET;
 
-	/** @var int|null */
 	public $entityUniqueId = null; //TODO
-	/** @var int */
 	public $entityRuntimeId;
 	public $item;
 	public $x;
@@ -44,7 +43,7 @@ class AddItemEntityPacket extends DataPacket
 	public $speedZ = 0.0;
 	public $metadata = [];
 
-	public function decodePayload()
+	public function decode()
 	{
 		$this->entityUniqueId = $this->getEntityUniqueId();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
@@ -54,8 +53,9 @@ class AddItemEntityPacket extends DataPacket
 		$this->metadata = $this->getEntityMetadata();
 	}
 
-	public function encodePayload()
+	public function encode()
 	{
+		$this->reset();
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putSlot($this->item);
@@ -64,8 +64,9 @@ class AddItemEntityPacket extends DataPacket
 		$this->putEntityMetadata($this->metadata);
 	}
 
-	public function handle(NetworkSession $session) : bool
+	public function handle(NetworkSession $session): bool
 	{
 		return $session->handleAddItemEntity($this);
 	}
+
 }

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ *  ____			_		_   __  __ _				  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,7 @@ declare(strict_types = 1);
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
+
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -44,12 +45,12 @@ class MovePlayerPacket extends DataPacket
 	public $bodyYaw;
 	public $pitch;
 	public $mode = self::MODE_NORMAL;
-	public $onGround = false; //TODO
+	public $onGround;
 	public $ridingEid = 0;
 	public $int1 = 0;
 	public $int2 = 0;
 
-	public function decodePayload()
+	public function decode()
 	{
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->getVector3f($this->x, $this->y, $this->z);
@@ -59,15 +60,15 @@ class MovePlayerPacket extends DataPacket
 		$this->mode = $this->getByte();
 		$this->onGround = $this->getBool();
 		$this->ridingEid = $this->getEntityRuntimeId();
-		if ($this->mode === MovePlayerPacket::MODE_TELEPORT)
-		{
+		if($this->mode === MovePlayerPacket::MODE_TELEPORT) {
 			$this->int1 = $this->getLInt();
 			$this->int2 = $this->getLInt();
 		}
 	}
 
-	public function encodePayload()
+	public function encode()
 	{
+		$this->reset();
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putLFloat($this->pitch);
@@ -76,15 +77,15 @@ class MovePlayerPacket extends DataPacket
 		$this->putByte($this->mode);
 		$this->putBool($this->onGround);
 		$this->putEntityRuntimeId($this->ridingEid);
-		if ($this->mode === MovePlayerPacket::MODE_TELEPORT)
-		{
+		if($this->mode === MovePlayerPacket::MODE_TELEPORT) {
 			$this->putLInt($this->int1);
 			$this->putLInt($this->int2);
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool
+	public function handle(NetworkSession $session): bool
 	{
 		return $session->handleMovePlayer($this);
 	}
+
 }

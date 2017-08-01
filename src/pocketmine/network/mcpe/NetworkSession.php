@@ -21,7 +21,9 @@
 
 declare(strict_types = 1);
 
+
 namespace pocketmine\network\mcpe;
+
 
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\network\mcpe\protocol\AddHangingEntityPacket;
