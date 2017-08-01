@@ -19,16 +19,16 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class MoveEntityPacket extends DataPacket{
+class MoveEntityPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::MOVE_ENTITY_PACKET;
 
 	public $entityRuntimeId;
@@ -41,7 +41,8 @@ class MoveEntityPacket extends DataPacket{
 	public $onGround = false;
 	public $teleported = false;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->getVector3f($this->x, $this->y, $this->z);
 		$this->pitch = $this->getByteRotation();
@@ -51,7 +52,8 @@ class MoveEntityPacket extends DataPacket{
 		$this->teleported = $this->getBool();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putByteRotation($this->pitch);
@@ -61,8 +63,8 @@ class MoveEntityPacket extends DataPacket{
 		$this->putBool($this->teleported);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleMoveEntity($this);
 	}
-
 }
