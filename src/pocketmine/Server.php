@@ -2011,10 +2011,9 @@ class Server
 			}
 
 			if(!$forceSync and !$immediate and $this->networkCompressionAsync) {
-				$task = new CompressBatchedTask($pk, $targets, $compressionLevel);
+				$task = new CompressBatchedTask($pk, $targets);
 				$this->getScheduler()->scheduleAsyncTask($task);
 			} else {
-				$pk->compress($compressionLevel);
 				$this->broadcastPacketsCallback($pk, $targets, $immediate);
 			}
 		}
