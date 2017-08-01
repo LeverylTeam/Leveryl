@@ -3977,30 +3977,9 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer
 	 */
 	public function handleDataPacket(DataPacket $packet)
 	{
-		if($this->connected === false) {
-			return;
+		if($this->sessionAdapter !== null){
+			$this->sessionAdapter->handleDataPacket($packet);
 		}
-
-		//TODO: Remove this hack once InteractPacket spam issue is fixed
-		if($packet->buffer === "\x21\x04\x00") {
-			return;
-		}
-
-		$timings = Timings::getReceiveDataPacketTimings($packet);
-		$timings->startTiming();
-
-		$packet->decode();
-		if(!$packet->feof()) {
-			$remains = substr($packet->buffer, $packet->offset);
-			$this->server->getLogger()->debug("Still " . strlen($remains) . " bytes unread in " . $packet->getName() . ": 0x" . bin2hex($remains));
-		}
-
-		$this->server->getPluginManager()->callEvent($ev = new DataPacketReceiveEvent($this, $packet));
-		if(!$ev->isCancelled() and !$packet->handle($this)) {
-			$this->server->getLogger()->debug("Unhandled " . $packet->getName() . " received from " . $this->getName() . ": 0x" . bin2hex($packet->buffer));
-		}
-
-		$timings->stopTiming();
 	}
 
 	/**
