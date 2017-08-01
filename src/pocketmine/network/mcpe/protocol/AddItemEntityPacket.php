@@ -53,6 +53,7 @@ class AddItemEntityPacket extends DataPacket
 		$this->getVector3f($this->speedX, $this->speedY, $this->speedZ);
 		$this->metadata = $this->getEntityMetadata();
 	}
+
 	public function encodePayload()
 	{
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);
@@ -62,6 +63,7 @@ class AddItemEntityPacket extends DataPacket
 		$this->putVector3f($this->speedX, $this->speedY, $this->speedZ);
 		$this->putEntityMetadata($this->metadata);
 	}
+
 	public function handle(NetworkSession $session) : bool
 	{
 		return $session->handleAddItemEntity($this);
