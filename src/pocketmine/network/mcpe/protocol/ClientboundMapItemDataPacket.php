@@ -25,7 +25,6 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\utils\Color;
 
@@ -38,11 +37,9 @@ class ClientboundMapItemDataPacket extends DataPacket
 
 	public $mapId;
 	public $type;
-
 	public $eids = [];
 	public $scale;
 	public $decorations = [];
-
 	public $width;
 	public $height;
 	public $xOffset = 0;
@@ -55,46 +52,44 @@ class ClientboundMapItemDataPacket extends DataPacket
 		$this->mapId = $this->getEntityUniqueId();
 		$this->type = $this->getUnsignedVarInt();
 
-		if(($this->type & 0x08) !== 0)
+		if (($this->type & 0x08) !== 0)
 		{
 			$count = $this->getUnsignedVarInt();
-			for($i = 0; $i < $count; ++$i)
+			for ($i = 0; $i < $count; ++$i)
 			{
 				$this->eids[] = $this->getEntityUniqueId();
 			}
 		}
 
-		if(($this->type & (self::BITFLAG_DECORATION_UPDATE | self::BITFLAG_TEXTURE_UPDATE)) !== 0)
+		if (($this->type & (self::BITFLAG_DECORATION_UPDATE | self::BITFLAG_TEXTURE_UPDATE)) !== 0)
 		{ //Decoration bitflag or colour bitflag
 			$this->scale = $this->getByte();
 		}
 
-		if(($this->type & self::BITFLAG_DECORATION_UPDATE) !== 0)
+		if (($this->type & self::BITFLAG_DECORATION_UPDATE) !== 0)
 		{
 			$count = $this->getUnsignedVarInt();
-			for($i = 0; $i < $count; ++$i)
+			for ($i = 0; $i < $count; ++$i)
 			{
 				$weird = $this->getVarInt();
 				$this->decorations[$i]["rot"] = $weird & 0x0f;
 				$this->decorations[$i]["img"] = $weird >> 4;
-
 				$this->decorations[$i]["xOffset"] = $this->getByte();
 				$this->decorations[$i]["yOffset"] = $this->getByte();
 				$this->decorations[$i]["label"] = $this->getString();
-
 				$this->decorations[$i]["color"] = Color::fromARGB($this->getLInt()); //already BE, don't need to reverse it again
 			}
 		}
 
-		if(($this->type & self::BITFLAG_TEXTURE_UPDATE) !== 0)
+		if (($this->type & self::BITFLAG_TEXTURE_UPDATE) !== 0)
 		{
 			$this->width = $this->getVarInt();
 			$this->height = $this->getVarInt();
 			$this->xOffset = $this->getVarInt();
 			$this->yOffset = $this->getVarInt();
-			for($y = 0; $y < $this->height; ++$y)
+			for ($y = 0; $y < $this->height; ++$y)
 			{
-				for($x = 0; $x < $this->width; ++$x)
+				for ($x = 0; $x < $this->width; ++$x)
 				{
 					$this->colors[$y][$x] = Color::fromABGR($this->getUnsignedVarInt());
 				}
@@ -107,39 +102,39 @@ class ClientboundMapItemDataPacket extends DataPacket
 		$this->putEntityUniqueId($this->mapId);
 
 		$type = 0;
-		if(($eidsCount = count($this->eids)) > 0)
+		if (($eidsCount = count($this->eids)) > 0)
 		{
 			$type |= 0x08;
 		}
-		if(($decorationCount = count($this->decorations)) > 0)
+		if (($decorationCount = count($this->decorations)) > 0)
 		{
 			$type |= self::BITFLAG_DECORATION_UPDATE;
 		}
-		if(count($this->colors) > 0)
+		if (count($this->colors) > 0)
 		{
 			$type |= self::BITFLAG_TEXTURE_UPDATE;
 		}
 
 		$this->putUnsignedVarInt($type);
 
-		if(($type & 0x08) !== 0)
+		if (($type & 0x08) !== 0)
 		{ //TODO: find out what these are for
 			$this->putUnsignedVarInt($eidsCount);
-			foreach($this->eids as $eid)
+			foreach ($this->eids as $eid)
 			{
 				$this->putEntityUniqueId($eid);
 			}
 		}
 
-		if(($type & (self::BITFLAG_TEXTURE_UPDATE | self::BITFLAG_DECORATION_UPDATE)) !== 0)
+		if (($type & (self::BITFLAG_TEXTURE_UPDATE | self::BITFLAG_DECORATION_UPDATE)) !== 0)
 		{
 			$this->putByte($this->scale);
 		}
 
-		if(($type & self::BITFLAG_DECORATION_UPDATE) !== 0)
+		if (($type & self::BITFLAG_DECORATION_UPDATE) !== 0)
 		{
 			$this->putUnsignedVarInt($decorationCount);
-			foreach($this->decorations as $decoration)
+			foreach ($this->decorations as $decoration)
 			{
 				$this->putVarInt(($decoration["rot"] & 0x0f) | ($decoration["img"] << 4));
 				$this->putByte($decoration["xOffset"]);
@@ -150,15 +145,15 @@ class ClientboundMapItemDataPacket extends DataPacket
 			}
 		}
 
-		if(($type & self::BITFLAG_TEXTURE_UPDATE) !== 0)
+		if (($type & self::BITFLAG_TEXTURE_UPDATE) !== 0)
 		{
 			$this->putVarInt($this->width);
 			$this->putVarInt($this->height);
 			$this->putVarInt($this->xOffset);
 			$this->putVarInt($this->yOffset);
-			for($y = 0; $y < $this->height; ++$y)
+			for ($y = 0; $y < $this->height; ++$y)
 			{
-				for($x = 0; $x < $this->width; ++$x)
+				for ($x = 0; $x < $this->width; ++$x)
 				{
 					$this->putUnsignedVarInt($this->colors[$y][$x]->toABGR());
 				}
