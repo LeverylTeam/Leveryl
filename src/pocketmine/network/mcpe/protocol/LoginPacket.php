@@ -25,6 +25,7 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
+
 use pocketmine\network\mcpe\NetworkSession;
 
 class LoginPacket extends DataPacket
@@ -51,8 +52,8 @@ class LoginPacket extends DataPacket
 	/** @var string */
 	public $clientDataJwt;
 	/** @var array decoded payload of the clientData JWT */
-
 	public $clientData = [];
+	public $decoded = [];
 
 	public $deviceos;
 	public $devicemodel;
@@ -63,17 +64,16 @@ class LoginPacket extends DataPacket
 	public $defaultInputMode;
 	public $AdRole;
 
-	public function canBeSentBeforeLogin() : bool
+	public function canBeSentBeforeLogin(): bool
 	{
 		return true;
 	}
 
-	public function decodePayLoad()
+	public function decode()
 	{
 		$this->protocol = $this->getInt();
 
-		if ($this->protocol !== ProtocolInfo::CURRENT_PROTOCOL)
-		{
+		if($this->protocol !== ProtocolInfo::ACCEPTED_PROTOCOLS) {
 			$this->buffer = null;
 
 			return; //Do not attempt to decode for non-accepted protocols
@@ -86,112 +86,90 @@ class LoginPacket extends DataPacket
 
 		$this->chainData = json_decode($this->get($this->getLInt()), true);
 		$chainKey = self::MOJANG_PUBKEY;
-		foreach ($this->chainData["chain"] as $chain)
-		{
+		foreach($this->chainData["chain"] as $chain){
 			list($verified, $webtoken) = $this->decodeToken($chain, $chainKey);
-			if (isset($webtoken["extraData"]))
-			{
-				if (isset($webtoken["extraData"]["displayName"]))
-				{
+			if(isset($webtoken["extraData"])) {
+				if(isset($webtoken["extraData"]["displayName"])) {
 					$this->username = $webtoken["extraData"]["displayName"];
 				}
-				if (isset($webtoken["extraData"]["identity"]))
-				{
+				if(isset($webtoken["extraData"]["identity"])) {
 					$this->clientUUID = $webtoken["extraData"]["identity"];
 				}
 			}
-			if ($verified and isset($webtoken["identityPublicKey"]))
-			{
-				if ($webtoken["identityPublicKey"] != self::MOJANG_PUBKEY)
-				{
+			if ($verified and isset($webtoken["identityPublicKey"])) {
+				if ($webtoken["identityPublicKey"] != self::MOJANG_PUBKEY){
 					$this->identityPublicKey = $webtoken["identityPublicKey"];
 				}
 			}
 		}
 
 		$this->clientDataJwt = $this->get($this->getLInt());
-		$this->clientData = $this->decodeToken($this->clientDataJwt);
+		$this->decoded = $this->decodeToken($this->clientDataJwt);
+		// get the SECOND element of the returned value of decodeToken() [which is... an array]
+		$this->clientData = $this->decoded[1];
 
 		$this->clientId = $this->clientData["ClientRandomId"] ?? null;
 		$this->serverAddress = $this->clientData["ServerAddress"] ?? null;
 		$this->skinId = $this->clientData["SkinId"] ?? null;
 
-		if (isset($this->clientData["SkinData"]))
-		{
+		if(isset($this->clientData["SkinData"])) {
 			$this->skin = base64_decode($this->clientData["SkinData"]);
 		}
-		if (isset($this->clientData["DeviceOS"]))
-		{
+		if(isset($this->clientData["DeviceOS"])) {
 			$this->deviceos = $this->clientData["DeviceOS"];
 		}
-		if (isset($this->clientData["DeviceModel"]))
-		{
+		if(isset($this->clientData["DeviceModel"])) {
 			$this->devicemodel = $this->clientData["DeviceModel"];
 		}
-		if (isset($this->clientData["UIProfile"]))
-		{
+		if(isset($this->clientData["UIProfile"])) {
 			$this->uiprofile = $this->clientData["UIProfile"];
 		}
-		if (isset($this->clientData["GuiScale"]))
-		{
+		if(isset($this->clientData["GuiScale"])) {
 			$this->guiscale = $this->clientData["GuiScale"];
 		}
-		if (isset($this->clientData["CurrentInputMode"]))
-		{
+		if(isset($this->clientData["CurrentInputMode"])) {
 			$this->controls = $this->clientData["CurrentInputMode"];
 		}
-		if (isset($this->clientData["TenantId"]))
-		{
+		if (isset($this->clientData["TenantId"])) {
 			$this->TenantID = $this->clientData["TenantId"];
 		}
-		if (isset($this->clientData["DefaultInputMode"]))
-		{
+		if (isset($this->clientData["DefaultInputMode"])) {
 			$this->defaultInputMode = $this->clientData["DefaultInputMode"];
 		}
-		if (isset($this->clientData["AdRole"]))
-		{
+		if (isset($this->clientData["AdRole"])) {
 			$this->AdRole = $this->clientData["AdRole"];
 		}
 	}
 
-	public function encodePayLoad()
+	public function encode()
 	{
 		//TODO
 	}
 
 	public function decodeToken($token, $key = null)
 	{
-		if ($key === null)
-		{
+		if($key === null) {
 			$tokens = explode(".", $token);
 			list($headB64, $payloadB64, $sigB64) = $tokens;
+
 			return array(false, json_decode(base64_decode($payloadB64), true));
-		}
-		else
-		{
-			if (extension_loaded("openssl"))
-			{
+		} else {
+			if (extension_loaded("openssl")) {
 				$tokens = explode(".", $token);
 				list($headB64, $payloadB64, $sigB64) = $tokens;
 				$sig = base64_decode(strtr($sigB64, '-_', '+/'), true);
 				$rawLen = 48; // ES384
-				for ($i = $rawLen; $i > 0 and $sig[$rawLen - $i] == chr(0); $i--)
-				{
+				for ($i = $rawLen; $i > 0 and $sig[$rawLen - $i] == chr(0); $i--) {
 				}
 				$j = $i + (ord($sig[$rawLen - $i]) >= 128 ? 1 : 0);
-				for ($k = $rawLen; $k > 0 and $sig[2 * $rawLen - $k] == chr(0); $k--)
-				{
-					// Nothing
+				for ($k = $rawLen; $k > 0 and $sig[2 * $rawLen - $k] == chr(0); $k--) {
 				}
 				$l = $k + (ord($sig[2 * $rawLen - $k]) >= 128 ? 1 : 0);
 				$len = 2 + $j + 2 + $l;
 				$derSig = chr(48);
-				if ($len > 255)
-				{
+				if ($len > 255) {
 					throw new \RuntimeException("Invalid signature format");
-				}
-				elseif ($len >= 128)
-				{
+				} elseif ($len >= 128) {
 					$derSig .= chr(81);
 				}
 				$derSig .= chr($len) . chr(2) . chr($j);
@@ -199,9 +177,7 @@ class LoginPacket extends DataPacket
 				$derSig .= chr(2) . chr($l);
 				$derSig .= str_repeat(chr(0), $l - $k) . substr($sig, 2 * $rawLen - $k, $k);
 				$verified = openssl_verify($headB64 . "." . $payloadB64, $derSig, "-----BEGIN PUBLIC KEY-----\n" . wordwrap($key, 64, "\n", true) . "\n-----END PUBLIC KEY-----\n", OPENSSL_ALGO_SHA384) === 1;
-			}
-			else
-			{
+			} else {
 				$tokens = explode(".", $token);
 				list($headB64, $payloadB64, $sigB64) = $tokens;
 				$verified = false;
@@ -210,7 +186,7 @@ class LoginPacket extends DataPacket
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool
+	public function handle(NetworkSession $session): bool
 	{
 		return $session->handleLogin($this);
 	}
