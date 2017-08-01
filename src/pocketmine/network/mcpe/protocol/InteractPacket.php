@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class InteractPacket extends DataPacket{
+class InteractPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::INTERACT_PACKET;
 
 	const ACTION_RIGHT_CLICK = 1;
@@ -41,17 +42,20 @@ class InteractPacket extends DataPacket{
 	public $action;
 	public $target;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->action = $this->getByte();
 		$this->target = $this->getEntityRuntimeId();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putByte($this->action);
 		$this->putEntityRuntimeId($this->target);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleInteract($this);
 	}
 
