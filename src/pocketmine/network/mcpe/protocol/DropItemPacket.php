@@ -52,5 +52,4 @@ class DropItemPacket extends DataPacket
 	{
 		return $session->handleDropItem($this);
 	}
-
 }
