@@ -25,13 +25,11 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 
-
 /**
  * Air block
  */
 class Air extends Transparent
 {
-
 	protected $id = self::AIR;
 	protected $meta = 0;
 
@@ -89,5 +87,4 @@ class Air extends Transparent
 	{
 		return 0;
 	}
-
 }
