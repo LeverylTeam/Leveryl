@@ -61,5 +61,4 @@ class ContainerSetSlotPacket extends DataPacket
 	{
 		return $session->handleContainerSetSlot($this);
 	}
-
 }
