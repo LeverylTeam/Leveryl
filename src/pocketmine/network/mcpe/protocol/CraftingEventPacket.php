@@ -56,13 +56,13 @@ class CraftingEventPacket extends DataPacket
 		$this->id = $this->getUUID();
 
 		$size = $this->getUnsignedVarInt();
-		for($i = 0; $i < $size and $i < 128; ++$i)
+		for ($i = 0; $i < $size and $i < 128; ++$i)
 		{
 			$this->input[] = $this->getSlot();
 		}
 
 		$size = $this->getUnsignedVarInt();
-		for($i = 0; $i < $size and $i < 128; ++$i)
+		for ($i = 0; $i < $size and $i < 128; ++$i)
 		{
 			$this->output[] = $this->getSlot();
 		}
@@ -73,15 +73,14 @@ class CraftingEventPacket extends DataPacket
 		$this->putByte($this->windowId);
 		$this->putVarInt($this->type);
 		$this->putUUID($this->id);
-
 		$this->putUnsignedVarInt(count($this->input));
-		foreach($this->input as $item)
+		foreach ($this->input as $item)
 		{
 			$this->putSlot($item);
 		}
 
 		$this->putUnsignedVarInt(count($this->output));
-		foreach($this->output as $item)
+		foreach ($this->output as $item)
 		{
 			$this->putSlot($item);
 		}
@@ -91,5 +90,4 @@ class CraftingEventPacket extends DataPacket
 	{
 		return $session->handleCraftingEvent($this);
 	}
-
 }
