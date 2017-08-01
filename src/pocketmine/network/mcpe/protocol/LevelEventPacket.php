@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,7 +27,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class LevelEventPacket extends DataPacket{
+class LevelEventPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::LEVEL_EVENT_PACKET;
 
 	const EVENT_SOUND_CLICK = 1000;
@@ -106,19 +107,22 @@ class LevelEventPacket extends DataPacket{
 	public $z = 0;
 	public $data;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->evid = $this->getVarInt();
 		$this->getVector3f($this->x, $this->y, $this->z);
 		$this->data = $this->getVarInt();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putVarInt($this->evid);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putVarInt($this->data);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleLevelEvent($this);
 	}
 
