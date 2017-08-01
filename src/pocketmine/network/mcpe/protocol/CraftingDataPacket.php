@@ -57,24 +57,24 @@ class CraftingDataPacket extends DataPacket
 	{
 		$entries = [];
 		$recipeCount = $this->getUnsignedVarInt();
-		for($i = 0; $i < $recipeCount; ++$i)
+		for ($i = 0; $i < $recipeCount; ++$i)
 		{
 			$entry = [];
 			$entry["type"] = $recipeType = $this->getVarInt();
-			switch($recipeType)
+			switch ($recipeType)
 			{
 				case self::ENTRY_SHAPELESS:
 				case self::ENTRY_SHULKER_BOX:
 					$ingredientCount = $this->getUnsignedVarInt();
 					/** @var Item */
 					$entry["input"] = [];
-					for($j = 0; $j < $ingredientCount; ++$j)
+					for ($j = 0; $j < $ingredientCount; ++$j)
 					{
 						$entry["input"][] = $this->getSlot();
 					}
 					$resultCount = $this->getUnsignedVarInt();
 					$entry["output"] = [];
-					for($k = 0; $k < $resultCount; ++$k)
+					for ($k = 0; $k < $resultCount; ++$k)
 					{
 						$entry["output"][] = $this->getSlot();
 					}
@@ -86,13 +86,13 @@ class CraftingDataPacket extends DataPacket
 					$entry["height"] = $this->getVarInt();
 					$count = $entry["width"] * $entry["height"];
 					$entry["input"] = [];
-					for($j = 0; $j < $count; ++$j)
+					for ($j = 0; $j < $count; ++$j)
 					{
 						$entry["input"][] = $this->getSlot();
 					}
 					$resultCount = $this->getUnsignedVarInt();
 					$entry["output"] = [];
-					for($k = 0; $k < $resultCount; ++$k)
+					for ($k = 0; $k < $resultCount; ++$k)
 					{
 						$entry["output"][] = $this->getSlot();
 					}
@@ -101,7 +101,8 @@ class CraftingDataPacket extends DataPacket
 				case self::ENTRY_FURNACE:
 				case self::ENTRY_FURNACE_DATA:
 					$entry["inputId"] = $this->getVarInt();
-					if($recipeType === self::ENTRY_FURNACE_DATA){
+					if (recipeType === self::ENTRY_FURNACE_DATA)
+					{
 						$entry["inputDamage"] = $this->getVarInt();
 					}
 					$entry["output"] = $this->getSlot();
@@ -119,34 +120,32 @@ class CraftingDataPacket extends DataPacket
 
 	private static function writeEntry($entry, BinaryStream $stream)
 	{
-		if($entry instanceof ShapelessRecipe)
+		if ($entry instanceof ShapelessRecipe)
 		{
 			return self::writeShapelessRecipe($entry, $stream);
-		}elseif($entry instanceof ShapedRecipe)
+		}
+		elseif ($entry instanceof ShapedRecipe)
 		{
 			return self::writeShapedRecipe($entry, $stream);
-		}elseif($entry instanceof FurnaceRecipe)
+		}
+		elseif ($entry instanceof FurnaceRecipe)
 		{
 			return self::writeFurnaceRecipe($entry, $stream);
 		}
 		//TODO: add MultiRecipe
-
 		return -1;
 	}
 
 	private static function writeShapelessRecipe(ShapelessRecipe $recipe, BinaryStream $stream)
 	{
 		$stream->putUnsignedVarInt($recipe->getIngredientCount());
-		foreach($recipe->getIngredientList() as $item)
+		foreach ($recipe->getIngredientList() as $item)
 		{
 			$stream->putSlot($item);
 		}
-
 		$stream->putUnsignedVarInt(1);
 		$stream->putSlot($recipe->getResult());
-
 		$stream->putUUID($recipe->getId());
-
 		return CraftingDataPacket::ENTRY_SHAPELESS;
 	}
 
@@ -154,10 +153,9 @@ class CraftingDataPacket extends DataPacket
 	{
 		$stream->putVarInt($recipe->getWidth());
 		$stream->putVarInt($recipe->getHeight());
-
-		for($z = 0; $z < $recipe->getHeight(); ++$z)
+		for ($z = 0; $z < $recipe->getHeight(); ++$z)
 		{
-			for($x = 0; $x < $recipe->getWidth(); ++$x)
+			for ($x = 0; $x < $recipe->getWidth(); ++$x)
 			{
 				$stream->putSlot($recipe->getIngredient($x, $z));
 			}
@@ -165,15 +163,13 @@ class CraftingDataPacket extends DataPacket
 
 		$stream->putUnsignedVarInt(1);
 		$stream->putSlot($recipe->getResult());
-
 		$stream->putUUID($recipe->getId());
-
 		return CraftingDataPacket::ENTRY_SHAPED;
 	}
 
 	private static function writeFurnaceRecipe(FurnaceRecipe $recipe, BinaryStream $stream)
 	{
-		if(!$recipe->getInput()->hasAnyDamageValue())
+		if (!$recipe->getInput()->hasAnyDamageValue())
 		{ //Data recipe
 			$stream->putVarInt($recipe->getInput()->getId());
 			$stream->putVarInt($recipe->getInput()->getDamage());
@@ -185,7 +181,6 @@ class CraftingDataPacket extends DataPacket
 		{
 			$stream->putVarInt($recipe->getInput()->getId());
 			$stream->putSlot($recipe->getResult());
-
 			return CraftingDataPacket::ENTRY_FURNACE;
 		}
 	}
@@ -208,12 +203,11 @@ class CraftingDataPacket extends DataPacket
 	public function encodePayload()
 	{
 		$this->putUnsignedVarInt(count($this->entries));
-
 		$writer = new BinaryStream();
-		foreach($this->entries as $d)
+		foreach ($this->entries as $d)
 		{
 			$entryType = self::writeEntry($d, $writer);
-			if($entryType >= 0)
+			if ($entryType >= 0)
 			{
 				$this->putVarInt($entryType);
 				$this->put($writer->getBuffer());
@@ -225,7 +219,6 @@ class CraftingDataPacket extends DataPacket
 
 			$writer->reset();
 		}
-
 		$this->putBool($this->cleanRecipes);
 	}
 
@@ -233,5 +226,4 @@ class CraftingDataPacket extends DataPacket
 	{
 		return $session->handleCraftingData($this);
 	}
-
 }
