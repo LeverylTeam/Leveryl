@@ -19,17 +19,17 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
 
-class UseItemPacket extends DataPacket{
+class UseItemPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::USE_ITEM_PACKET;
 
 	public $x;
@@ -47,7 +47,8 @@ class UseItemPacket extends DataPacket{
 	/** @var Item */
 	public $item;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->getBlockPosition($this->x, $this->y, $this->z);
 		$this->blockId = $this->getUnsignedVarInt();
 		$this->face = $this->getVarInt();
@@ -57,7 +58,8 @@ class UseItemPacket extends DataPacket{
 		$this->item = $this->getSlot();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putUnsignedVarInt($this->blockId);
 		$this->putUnsignedVarInt($this->face);
 		$this->putVector3f($this->fx, $this->fy, $this->fz);
@@ -66,8 +68,8 @@ class UseItemPacket extends DataPacket{
 		$this->putSlot($this->item);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleUseItem($this);
 	}
-
 }
