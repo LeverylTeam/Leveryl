@@ -50,5 +50,4 @@ class AvailableCommandsPacket extends DataPacket
 	{
 		return $session->handleAvailableCommands($this);
 	}
-
 }
