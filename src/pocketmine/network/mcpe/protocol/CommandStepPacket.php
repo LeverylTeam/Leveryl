@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,7 +27,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class CommandStepPacket extends DataPacket{
+class CommandStepPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::COMMAND_STEP_PACKET;
 
 	public $command;
@@ -39,7 +40,8 @@ class CommandStepPacket extends DataPacket{
 	public $inputJson;
 	public $outputJson;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->command = $this->getString();
 		$this->overload = $this->getString();
 		$this->uvarint1 = $this->getUnsignedVarInt();
@@ -52,7 +54,8 @@ class CommandStepPacket extends DataPacket{
 		$this->getRemaining(); //TODO: read command origin data
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putString($this->command);
 		$this->putString($this->overload);
 		$this->putUnsignedVarInt($this->uvarint1);
@@ -65,7 +68,8 @@ class CommandStepPacket extends DataPacket{
 		$this->put("\x00\x00\x00"); //TODO: command origin data
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleCommandStep($this);
 	}
 
