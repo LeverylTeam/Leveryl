@@ -25,7 +25,6 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
 class ChangeDimensionPacket extends DataPacket
@@ -60,5 +59,4 @@ class ChangeDimensionPacket extends DataPacket
 	{
 		return $session->handleChangeDimension($this);
 	}
-
 }
