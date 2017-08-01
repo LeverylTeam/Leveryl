@@ -19,6 +19,12 @@
  *
 */
 
+/* Implementation Bed Color it's by Leveryl and PMMP, not other software.
+Please don't copy code, it's my implementation AND NOT GIVE PERMISSION TO OTHERS 
+Credits: @NycuRO on 1.08.2017 */
+
+declare(strict_types = 1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -36,11 +42,30 @@ use pocketmine\utils\TextFormat;
 
 class Bed extends Transparent
 {
+	const BITFLAG_OCCUPIED = 0x04;
+	const BITFLAG_HEAD = 0x08;
 
 	/**
 	 * @var int
 	 */
 	protected $id = self::BED_BLOCK;
+	
+	const WHITE_BED = 0;
+	const LIGHT_GRAY_BED = 1;
+	const GRAY_BED = 2;
+	const BLACK_BED = 3;
+	const BROWN_BED = 4;
+	const RED_BED = 5;
+	const ORANGE_BED = 6;
+	const YELLOW_BED = 7;
+	const LIME_BED = 8;
+	const GREEN_BED = 9;
+	const CYAN_BED = 10;
+	const LIGHT_BLUE_BED = 11;
+	const BLUE_BED = 12;
+	const PURPLE_BED = 13;
+	const MAGENTA_BED = 14;
+	const PINK_BED = 15;
 
 	/**
 	 * Bed constructor.
@@ -72,7 +97,25 @@ class Bed extends Transparent
 	 */
 	public function getName(): string
 	{
-		return "Bed Block";
+		static $names = [
+			0 => "White Bed",
+			1 => "Light Grey Bed",
+			2 => "Grey Bed",
+			3 => "Black Bed",
+			4 => "Brown Bed",
+			5 => "Red Bed",
+			6 => "Orange Bed",
+			7 => "Yellow Bed",
+			8 => "Lime Bed",
+			9 => "Green Bed",
+			10 => "Cyan Bed",
+			11 => "Light Blue Bed",
+			12 => "Blue Bed",
+			13 => "Purple Bed",
+			14 => "Magenta Bed",
+			15 => "Pink Bed",
+		];
+		return $names[$this->meta & 0x0f];
 	}
 
 	/**
@@ -97,46 +140,58 @@ class Bed extends Transparent
 	 */
 	public function onActivate(Item $item, Player $player = null)
 	{
-		if($this->getLevel()->getDimension() == Level::DIMENSION_NETHER) {
+		if ($this->getLevel()->getDimension() == Level::DIMENSION_NETHER)
+		{
 			$explosion = new Explosion($this, 6, $this);
 			$explosion->explodeA();
-
 			return true;
 		}
 		$time = $this->getLevel()->getTime() % Level::TIME_FULL;
 		$isNight = ($time >= Level::TIME_NIGHT and $time < Level::TIME_SUNRISE);
-		if($player instanceof Player and !$isNight) {
+		if ($player instanceof Player and !$isNight)
+		{
 			$player->sendMessage(TextFormat::GRAY . "You can only sleep at night"); //TODO; Translate it
-
 			return true;
 		}
 		$blockNorth = $this->getSide(2); //Gets the blocks around them
 		$blockSouth = $this->getSide(3);
 		$blockEast = $this->getSide(5);
 		$blockWest = $this->getSide(4);
-		if(($this->meta & 0x08) === 0x08) { //This is the Top part of bed
+		if (($this->meta & 0x08) === 0x08)
+		{ //This is the Top part of bed
 			$b = $this;
-		} else { //Bottom Part of Bed
-			if($blockNorth->getId() === $this->id and ($blockNorth->meta & 0x08) === 0x08) {
+		}
+		else
+		{ //Bottom Part of Bed
+			if ($blockNorth->getId() === $this->id and ($blockNorth->meta & 0x08) === 0x08)
+			{
 				$b = $blockNorth;
-			} elseif($blockSouth->getId() === $this->id and ($blockSouth->meta & 0x08) === 0x08) {
+			}
+			elseif ($blockSouth->getId() === $this->id and ($blockSouth->meta & 0x08) === 0x08)
+			{
 				$b = $blockSouth;
-			} elseif($blockEast->getId() === $this->id and ($blockEast->meta & 0x08) === 0x08) {
+			}
+			elseif ($blockEast->getId() === $this->id and ($blockEast->meta & 0x08) === 0x08)
+			{
 				$b = $blockEast;
-			} elseif($blockWest->getId() === $this->id and ($blockWest->meta & 0x08) === 0x08) {
+			}
+			elseif ($blockWest->getId() === $this->id and ($blockWest->meta & 0x08) === 0x08)
+			{
 				$b = $blockWest;
-			} else {
-				if($player instanceof Player) {
+			}
+			else
+			{
+				if ($player instanceof Player)
+				{
 					$player->sendMessage(TextFormat::GRAY . "This bed is incomplete"); //TODO; Translate it
 				}
-
 				return true;
 			}
 		}
-		if($player instanceof Player and $player->sleepOn($b) === false) {
+		if ($player instanceof Player and $player->sleepOn($b) === false)
+		{
 			$player->sendMessage(TextFormat::GRAY . "This bed is occupied"); //TODO; Translate it
 		}
-
 		return true;
 	}
 
@@ -154,7 +209,8 @@ class Bed extends Transparent
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
 	{
 		$down = $this->getSide(0);
-		if($down->isTransparent() === false) {
+		if ($down->isTransparent() === false)
+		{
 			$faces = [
 				0 => 3,
 				1 => 4,
@@ -164,7 +220,8 @@ class Bed extends Transparent
 			$d = $player instanceof Player ? $player->getDirection() : 0;
 			$next = $this->getSide($faces[($d + 3) % 4]);
 			$downNext = $this->getSide(0);
-			if($next->canBeReplaced() === true and $downNext->isTransparent() === false) {
+			if ($next->canBeReplaced() === true and $downNext->isTransparent() === false)
+			{
 				$meta = (($d + 3) % 4) & 0x03;
 				$this->getLevel()->setBlock($block, Block::get($this->id, $meta), true, true);
 				$this->getLevel()->setBlock($next, Block::get($this->id, $meta | 0x08), true, true);
@@ -180,11 +237,9 @@ class Bed extends Transparent
 				$nbt2["z"] = $next->z;
 				Tile::createTile(Tile::BED, $this->getLevel(), $nbt);
 				Tile::createTile(Tile::BED, $this->getLevel(), $nbt2);
-
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -204,19 +259,23 @@ class Bed extends Transparent
 			10 => 3,
 			11 => 4,
 		];
-		if(($this->meta & 0x08) === 0x08) { //This is the Top part of bed
+		if (($this->meta & 0x08) === 0x08)
+		{ //This is the Top part of bed
 			$next = $this->getSide($sides[$this->meta]);
-			if($next->getId() === $this->id and ($next->meta | 0x08) === $this->meta) { //Checks if the block ID and meta are right
+			if ($next->getId() === $this->id and ($next->meta | 0x08) === $this->meta)
+			{ //Checks if the block ID and meta are right
 				$this->getLevel()->setBlock($next, new Air(), true, true);
 			}
-		} else { //Bottom Part of Bed
+		}
+		else
+		{ //Bottom Part of Bed
 			$next = $this->getSide($sides[$this->meta]);
-			if($next->getId() === $this->id and $next->meta === ($this->meta | 0x08)) {
+			if ($next->getId() === $this->id and $next->meta === ($this->meta | 0x08))
+			{
 				$this->getLevel()->setBlock($next, new Air(), true, true);
 			}
 		}
 		$this->getLevel()->setBlock($this, new Air(), true, true);
-
 		return true;
 	}
 
@@ -224,17 +283,27 @@ class Bed extends Transparent
 	 * @param Item $item
 	 * @return array
 	 */
-	public function getDrops(Item $item): array
+	public function getDrops(Item $item)
 	{
-		$tile = $this->getLevel()->getTile($this);
-		if($tile instanceof TileBed) {
-			return [
-				[Item::BED, $tile->getColor(), 1],
-			];
-		} else {
-			return [
-				[Item::BED, 14, 1] //Red
-			];
+		if ($this->isHeadPart())
+		{
+			$tile = $this->getLevel()->getTile($this);
+			if ($tile instanceof TileBed)
+			{
+				return [
+					[Item::BED, $tile->getColor(), 1]
+				];
+			}
+			else
+			{
+				return [
+					[Item::BED, 14, 1] //Red
+				];
+			}
+		}
+		else
+		{
+			return [];
 		}
 	}
 
