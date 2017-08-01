@@ -19,16 +19,16 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class PlayStatusPacket extends DataPacket{
+class PlayStatusPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::PLAY_STATUS_PACKET;
 
 	const LOGIN_SUCCESS = 0;
@@ -41,20 +41,23 @@ class PlayStatusPacket extends DataPacket{
 
 	public $status;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->status = $this->getInt();
 	}
 
-	public function canBeSentBeforeLogin() : bool{
+	public function canBeSentBeforeLogin() : bool
+	{
 		return true;
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putInt($this->status);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handlePlayStatus($this);
 	}
-
 }
