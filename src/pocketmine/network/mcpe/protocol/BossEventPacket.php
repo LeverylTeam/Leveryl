@@ -25,7 +25,6 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
 class BossEventPacket extends DataPacket
@@ -69,7 +68,8 @@ class BossEventPacket extends DataPacket
 	{
 		$this->bossEid = $this->getEntityUniqueId();
 		$this->eventType = $this->getUnsignedVarInt();
-		switch($this->eventType){
+		switch ($this->eventType)
+		{
 			case self::TYPE_REGISTER_PLAYER:
 			case self::TYPE_UNREGISTER_PLAYER:
 				$this->playerEid = $this->getEntityUniqueId();
@@ -100,7 +100,8 @@ class BossEventPacket extends DataPacket
 	{
 		$this->putEntityUniqueId($this->bossEid);
 		$this->putUnsignedVarInt($this->eventType);
-		switch($this->eventType){
+		switch ($this->eventType)
+		{
 			case self::TYPE_REGISTER_PLAYER:
 			case self::TYPE_UNREGISTER_PLAYER:
 				$this->putEntityUniqueId($this->playerEid);
@@ -131,5 +132,4 @@ class BossEventPacket extends DataPacket
 	{
 		return $session->handleBossEvent($this);
 	}
-
 }
