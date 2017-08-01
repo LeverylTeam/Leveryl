@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,20 +28,24 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class ChunkRadiusUpdatedPacket extends DataPacket{
+class ChunkRadiusUpdatedPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::CHUNK_RADIUS_UPDATED_PACKET;
 
 	public $radius;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->radius = $this->getVarInt();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putVarInt($this->radius);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleChunkRadiusUpdated($this);
 	}
 
