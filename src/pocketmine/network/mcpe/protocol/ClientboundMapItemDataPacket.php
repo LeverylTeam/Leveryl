@@ -19,8 +19,7 @@
  *
 */
 
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -30,7 +29,8 @@ namespace pocketmine\network\mcpe\protocol;
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\utils\Color;
 
-class ClientboundMapItemDataPacket extends DataPacket{
+class ClientboundMapItemDataPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::CLIENTBOUND_MAP_ITEM_DATA_PACKET;
 
 	const BITFLAG_TEXTURE_UPDATE = 0x02;
@@ -50,24 +50,30 @@ class ClientboundMapItemDataPacket extends DataPacket{
 	/** @var Color[][] */
 	public $colors = [];
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->mapId = $this->getEntityUniqueId();
 		$this->type = $this->getUnsignedVarInt();
 
-		if(($this->type & 0x08) !== 0){
+		if(($this->type & 0x08) !== 0)
+		{
 			$count = $this->getUnsignedVarInt();
-			for($i = 0; $i < $count; ++$i){
+			for($i = 0; $i < $count; ++$i)
+			{
 				$this->eids[] = $this->getEntityUniqueId();
 			}
 		}
 
-		if(($this->type & (self::BITFLAG_DECORATION_UPDATE | self::BITFLAG_TEXTURE_UPDATE)) !== 0){ //Decoration bitflag or colour bitflag
+		if(($this->type & (self::BITFLAG_DECORATION_UPDATE | self::BITFLAG_TEXTURE_UPDATE)) !== 0)
+		{ //Decoration bitflag or colour bitflag
 			$this->scale = $this->getByte();
 		}
 
-		if(($this->type & self::BITFLAG_DECORATION_UPDATE) !== 0){
+		if(($this->type & self::BITFLAG_DECORATION_UPDATE) !== 0)
+		{
 			$count = $this->getUnsignedVarInt();
-			for($i = 0; $i < $count; ++$i){
+			for($i = 0; $i < $count; ++$i)
+			{
 				$weird = $this->getVarInt();
 				$this->decorations[$i]["rot"] = $weird & 0x0f;
 				$this->decorations[$i]["img"] = $weird >> 4;
@@ -80,49 +86,61 @@ class ClientboundMapItemDataPacket extends DataPacket{
 			}
 		}
 
-		if(($this->type & self::BITFLAG_TEXTURE_UPDATE) !== 0){
+		if(($this->type & self::BITFLAG_TEXTURE_UPDATE) !== 0)
+		{
 			$this->width = $this->getVarInt();
 			$this->height = $this->getVarInt();
 			$this->xOffset = $this->getVarInt();
 			$this->yOffset = $this->getVarInt();
-			for($y = 0; $y < $this->height; ++$y){
-				for($x = 0; $x < $this->width; ++$x){
+			for($y = 0; $y < $this->height; ++$y)
+			{
+				for($x = 0; $x < $this->width; ++$x)
+				{
 					$this->colors[$y][$x] = Color::fromABGR($this->getUnsignedVarInt());
 				}
 			}
 		}
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putEntityUniqueId($this->mapId);
 
 		$type = 0;
-		if(($eidsCount = count($this->eids)) > 0){
+		if(($eidsCount = count($this->eids)) > 0)
+		{
 			$type |= 0x08;
 		}
-		if(($decorationCount = count($this->decorations)) > 0){
+		if(($decorationCount = count($this->decorations)) > 0)
+		{
 			$type |= self::BITFLAG_DECORATION_UPDATE;
 		}
-		if(count($this->colors) > 0){
+		if(count($this->colors) > 0)
+		{
 			$type |= self::BITFLAG_TEXTURE_UPDATE;
 		}
 
 		$this->putUnsignedVarInt($type);
 
-		if(($type & 0x08) !== 0){ //TODO: find out what these are for
+		if(($type & 0x08) !== 0)
+		{ //TODO: find out what these are for
 			$this->putUnsignedVarInt($eidsCount);
-			foreach($this->eids as $eid){
+			foreach($this->eids as $eid)
+			{
 				$this->putEntityUniqueId($eid);
 			}
 		}
 
-		if(($type & (self::BITFLAG_TEXTURE_UPDATE | self::BITFLAG_DECORATION_UPDATE)) !== 0){
+		if(($type & (self::BITFLAG_TEXTURE_UPDATE | self::BITFLAG_DECORATION_UPDATE)) !== 0)
+		{
 			$this->putByte($this->scale);
 		}
 
-		if(($type & self::BITFLAG_DECORATION_UPDATE) !== 0){
+		if(($type & self::BITFLAG_DECORATION_UPDATE) !== 0)
+		{
 			$this->putUnsignedVarInt($decorationCount);
-			foreach($this->decorations as $decoration){
+			foreach($this->decorations as $decoration)
+			{
 				$this->putVarInt(($decoration["rot"] & 0x0f) | ($decoration["img"] << 4));
 				$this->putByte($decoration["xOffset"]);
 				$this->putByte($decoration["yOffset"]);
@@ -132,20 +150,24 @@ class ClientboundMapItemDataPacket extends DataPacket{
 			}
 		}
 
-		if(($type & self::BITFLAG_TEXTURE_UPDATE) !== 0){
+		if(($type & self::BITFLAG_TEXTURE_UPDATE) !== 0)
+		{
 			$this->putVarInt($this->width);
 			$this->putVarInt($this->height);
 			$this->putVarInt($this->xOffset);
 			$this->putVarInt($this->yOffset);
-			for($y = 0; $y < $this->height; ++$y){
-				for($x = 0; $x < $this->width; ++$x){
+			for($y = 0; $y < $this->height; ++$y)
+			{
+				for($x = 0; $x < $this->width; ++$x)
+				{
 					$this->putUnsignedVarInt($this->colors[$y][$x]->toABGR());
 				}
 			}
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleClientboundMapItemData($this);
 	}
 }
