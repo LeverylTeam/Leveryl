@@ -25,7 +25,6 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
 class HurtArmorPacket extends DataPacket
@@ -48,5 +47,4 @@ class HurtArmorPacket extends DataPacket
 	{
 		return $session->handleHurtArmor($this);
 	}
-
 }
