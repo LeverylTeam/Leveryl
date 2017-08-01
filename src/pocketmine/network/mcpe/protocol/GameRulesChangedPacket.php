@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,20 +27,24 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class GameRulesChangedPacket extends DataPacket{
+class GameRulesChangedPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::GAME_RULES_CHANGED_PACKET;
 
 	public $gameRules = [];
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->gameRules = $this->getGameRules();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putGameRules($this->gameRules);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleGameRulesChanged($this);
 	}
 
