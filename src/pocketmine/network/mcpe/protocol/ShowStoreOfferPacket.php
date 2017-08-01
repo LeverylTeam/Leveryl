@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,20 +27,24 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class ShowStoreOfferPacket extends DataPacket{
+class ShowStoreOfferPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::SHOW_STORE_OFFER_PACKET;
 
 	public $offerId;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->offerId = $this->getString();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putString($this->offerId);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleShowStoreOffer($this);
 	}
 }
