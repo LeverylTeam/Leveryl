@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,55 +19,56 @@
  *
 */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Network-related classes
  */
-
 namespace pocketmine\network;
 
 use pocketmine\network\mcpe\protocol\PacketPool;
 use pocketmine\Server;
 
-class Network
-{
+class Network{
+
 	public static $BATCH_THRESHOLD = 512;
 
 	/** @var Server */
 	private $server;
+
 	/** @var SourceInterface[] */
 	private $interfaces = [];
+
 	/** @var AdvancedSourceInterface[] */
 	private $advancedInterfaces = [];
+
 	private $upload = 0;
 	private $download = 0;
+
+	/** @var string */
 	private $name;
 
-	public function __construct(Server $server)
-	{
+	public function __construct(Server $server){
 		PacketPool::init();
+
 		$this->server = $server;
+
 	}
 
-	public function addStatistics($upload, $download)
-	{
+	public function addStatistics($upload, $download){
 		$this->upload += $upload;
 		$this->download += $download;
 	}
 
-	public function getUpload()
-	{
+	public function getUpload(){
 		return $this->upload;
 	}
 
-	public function getDownload()
-	{
+	public function getDownload(){
 		return $this->download;
 	}
 
-	public function resetStatistics()
-	{
+	public function resetStatistics(){
 		$this->upload = 0;
 		$this->download = 0;
 	}
@@ -75,26 +76,20 @@ class Network
 	/**
 	 * @return SourceInterface[]
 	 */
-	public function getInterfaces()
-	{
+	public function getInterfaces() : array{
 		return $this->interfaces;
 	}
 
-	public function processInterfaces()
-	{
-		foreach ($this->interfaces as $interface)
-		{
-			try
-			{
+	public function processInterfaces(){
+		foreach($this->interfaces as $interface){
+			try{
 				$interface->process();
-			}
-			catch(\Throwable $e)
-			{
+			}catch(\Throwable $e){
 				$logger = $this->server->getLogger();
-				if (\pocketmine\DEBUG > 1)
-				{
+				if(\pocketmine\DEBUG > 1){
 					$logger->logException($e);
 				}
+
 				$interface->emergencyShutdown();
 				$this->unregisterInterface($interface);
 				$logger->critical($this->server->getLanguage()->translateString("pocketmine.server.networkError", [get_class($interface), $e->getMessage()]));
@@ -105,11 +100,9 @@ class Network
 	/**
 	 * @param SourceInterface $interface
 	 */
-	public function registerInterface(SourceInterface $interface)
-	{
+	public function registerInterface(SourceInterface $interface){
 		$this->interfaces[$hash = spl_object_hash($interface)] = $interface;
-		if ($interface instanceof AdvancedSourceInterface)
-		{
+		if($interface instanceof AdvancedSourceInterface){
 			$this->advancedInterfaces[$hash] = $interface;
 			$interface->setNetwork($this);
 		}
@@ -119,8 +112,7 @@ class Network
 	/**
 	 * @param SourceInterface $interface
 	 */
-	public function unregisterInterface(SourceInterface $interface)
-	{
+	public function unregisterInterface(SourceInterface $interface){
 		unset($this->interfaces[$hash = spl_object_hash($interface)],
 			$this->advancedInterfaces[$hash]);
 	}
@@ -130,42 +122,40 @@ class Network
 	 *
 	 * @param string $name
 	 */
-	public function setName($name)
-	{
-		$this->name = (string)$name;
-		foreach ($this->interfaces as $interface)
-		{
+	public function setName(string $name){
+		$this->name = $name;
+		foreach($this->interfaces as $interface){
 			$interface->setName($this->name);
 		}
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName() : string{
 		return $this->name;
 	}
 
-	public function updateName()
-	{
-		foreach ($this->interfaces as $interface)
-		{
+	public function updateName(){
+		foreach($this->interfaces as $interface){
 			$interface->setName($this->name);
 		}
 	}
 
-	public function getServer()
-	{
+	/**
+	 * @return Server
+	 */
+	public function getServer() : Server{
 		return $this->server;
 	}
 
 	/**
 	 * @param string $address
-	 * @param int $port
+	 * @param int    $port
 	 * @param string $payload
 	 */
-	public function sendPacket($address, $port, $payload)
-	{
-		foreach ($this->advancedInterfaces as $interface)
-		{
+	public function sendPacket(string $address, int $port, string $payload){
+		foreach($this->advancedInterfaces as $interface){
 			$interface->sendRawPacket($address, $port, $payload);
 		}
 	}
@@ -174,12 +164,10 @@ class Network
 	 * Blocks an IP address from the main interface. Setting timeout to -1 will block it forever
 	 *
 	 * @param string $address
-	 * @param int $timeout
+	 * @param int    $timeout
 	 */
-	public function blockAddress($address, $timeout = 300)
-	{
-		foreach ($this->advancedInterfaces as $interface)
-		{
+	public function blockAddress(string $address, int $timeout = 300){
+		foreach($this->advancedInterfaces as $interface){
 			$interface->blockAddress($address, $timeout);
 		}
 	}
