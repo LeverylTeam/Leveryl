@@ -50,7 +50,6 @@ class CommandStepPacket extends DataPacket
 		$this->clientId = $this->getUnsignedVarLong();
 		$this->inputJson = json_decode($this->getString());
 		$this->outputJson = json_decode($this->getString());
-
 		$this->getRemaining(); //TODO: read command origin data
 	}
 
@@ -64,7 +63,6 @@ class CommandStepPacket extends DataPacket
 		$this->putUnsignedVarLong($this->clientId);
 		$this->putString(json_encode($this->inputJson));
 		$this->putString(json_encode($this->outputJson));
-
 		$this->put("\x00\x00\x00"); //TODO: command origin data
 	}
 
@@ -72,5 +70,4 @@ class CommandStepPacket extends DataPacket
 	{
 		return $session->handleCommandStep($this);
 	}
-
 }
