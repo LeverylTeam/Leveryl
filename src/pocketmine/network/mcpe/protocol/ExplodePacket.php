@@ -77,5 +77,4 @@ class ExplodePacket extends DataPacket
 	{
 		return $session->handleExplode($this);
 	}
-
 }
