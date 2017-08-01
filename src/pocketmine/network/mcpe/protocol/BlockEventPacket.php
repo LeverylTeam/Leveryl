@@ -25,7 +25,6 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
 class BlockEventPacket extends DataPacket
@@ -56,5 +55,4 @@ class BlockEventPacket extends DataPacket
 	{
 		return $session->handleBlockEvent($this);
 	}
-
 }
