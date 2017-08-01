@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 use pocketmine\entity\Attribute;
 use pocketmine\network\mcpe\NetworkSession;
 
-class AddEntityPacket extends DataPacket{
+class AddEntityPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::ADD_ENTITY_PACKET;
 
 	/** @var int|null */
@@ -49,7 +50,8 @@ class AddEntityPacket extends DataPacket{
 	public $metadata = [];
 	public $links = [];
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->entityUniqueId = $this->getEntityUniqueId();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->type = $this->getUnsignedVarInt();
@@ -59,33 +61,39 @@ class AddEntityPacket extends DataPacket{
 		$this->yaw = $this->getLFloat();
 
 		$attrCount = $this->getUnsignedVarInt();
-		for($i = 0; $i < $attrCount; ++$i){
+		for($i = 0; $i < $attrCount; ++$i)
+		{
 			$name = $this->getString();
 			$min = $this->getLFloat();
 			$current = $this->getLFloat();
 			$max = $this->getLFloat();
 			$attr = Attribute::getAttributeByName($name);
 
-			if($attr !== null){
+			if($attr !== null)
+			{
 				$attr->setMinValue($min);
 				$attr->setMaxValue($max);
 				$attr->setValue($current);
 				$this->attributes[] = $attr;
-			}else{
+			}
+			else
+			{
 				throw new \UnexpectedValueException("Unknown attribute type \"$name\"");
 			}
 		}
 
 		$this->metadata = $this->getEntityMetadata();
 		$linkCount = $this->getUnsignedVarInt();
-		for($i = 0; $i < $linkCount; ++$i){
+		for($i = 0; $i < $linkCount; ++$i)
+		{
 			$this->links[$i][0] = $this->getEntityUniqueId();
 			$this->links[$i][1] = $this->getEntityUniqueId();
 			$this->links[$i][2] = $this->getByte();
 		}
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putUnsignedVarInt($this->type);
@@ -95,7 +103,8 @@ class AddEntityPacket extends DataPacket{
 		$this->putLFloat($this->yaw);
 
 		$this->putUnsignedVarInt(count($this->attributes));
-		foreach($this->attributes as $attribute){
+		foreach($this->attributes as $attribute)
+		{
 			$this->putString($attribute->getName());
 			$this->putLFloat($attribute->getMinValue());
 			$this->putLFloat($attribute->getValue());
@@ -104,14 +113,16 @@ class AddEntityPacket extends DataPacket{
 
 		$this->putEntityMetadata($this->metadata);
 		$this->putUnsignedVarInt(count($this->links));
-		foreach($this->links as $link){
+		foreach($this->links as $link)
+		{
 			$this->putEntityUniqueId($link[0]);
 			$this->putEntityUniqueId($link[1]);
 			$this->putByte($link[2]);
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleAddEntity($this);
 	}
 
