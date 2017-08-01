@@ -54,7 +54,7 @@ class BanIpCommand extends VanillaCommand
 		}
 		
 		if(count($args) === 1){
-			$sender->sendMessage("Please insert reason why them need banned-ip.");
+			$sender->sendMessage("You must add a Reason for the Ban.");
 			return false;
 		}
 

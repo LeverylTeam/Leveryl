@@ -24,6 +24,7 @@ declare(strict_types = 1);
 namespace pocketmine;
 
 use pocketmine\block\Air;
+use pocketmine\block\Bed;
 use pocketmine\block\Block;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
@@ -1273,17 +1274,15 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			return false;
 		}
 
-		foreach($this->level->getNearbyEntities($this->boundingBox->grow(2, 1, 2), $this) as $p) {
-			if($p instanceof Player) {
-				if($p->sleeping !== null and $pos->distance($p->sleeping) <= 0.1) {
-					return false;
-				}
-			}
-		}
+		$b = $this->level->getBlock($pos);
 
-		$this->server->getPluginManager()->callEvent($ev = new PlayerBedEnterEvent($this, $this->level->getBlock($pos)));
+		$this->server->getPluginManager()->callEvent($ev = new PlayerBedEnterEvent($this, $b));
 		if($ev->isCancelled()) {
 			return false;
+		}
+
+		if($b instanceof Bed){
+			$b->setOccupied();
 		}
 
 		$this->sleeping = clone $pos;
@@ -1334,7 +1333,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 			$pk = new AnimatePacket();
 			$pk->entityRuntimeId = $this->id;
-			$pk->action = 3; //Wake up
+			$pk->action = AnimatePacket::ACTION_STOP_SLEEP; //Wake up
 			$this->dataPacket($pk);
 		}
 	}
@@ -2199,7 +2198,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			return true;
 		}
 
-		if($packet->protocol !== ProtocolInfo::CURRENT_PROTOCOL) {
+		if(!in_array($packet->protocol, ProtocolInfo::ACCEPTED_PROTOCOLS)) {
 			if($packet->protocol < ProtocolInfo::CURRENT_PROTOCOL) {
 				$message = "disconnectionScreen.outdatedClient";
 				$this->sendPlayStatus(PlayStatusPacket::LOGIN_FAILED_CLIENT, true);
@@ -3225,6 +3224,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 				$this->server->getPluginManager()->callEvent($ev = new PlayerRespawnEvent($this, $this->getSpawn()));
 
 				$this->teleport($ev->getRespawnPosition());
+				$this->newPosition = null;
 
 				$this->setSprinting(false);
 				$this->setSneaking(false);
