@@ -39,6 +39,7 @@ This spoon is based off of PMMP (For Stability)
 - [X] Working Mob Spawners
 - [ ] **RedStone System**
 - [ ] **Minecart Correctly Work**
+- [ ] **Colored Beds**
 - [ ] Toggleable MobAI
 
 ***Other List Entries are on "leveryl.yml"....***
