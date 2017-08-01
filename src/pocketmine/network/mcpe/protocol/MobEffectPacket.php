@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,7 +25,6 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
 class MobEffectPacket extends DataPacket
@@ -43,7 +42,7 @@ class MobEffectPacket extends DataPacket
 	public $particles = true;
 	public $duration = 0;
 
-	public function decode()
+	public function decodePayload()
 	{
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->eventId = $this->getByte();
@@ -53,9 +52,8 @@ class MobEffectPacket extends DataPacket
 		$this->duration = $this->getVarInt();
 	}
 
-	public function encode()
+	public function encodePayload()
 	{
-		$this->reset();
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putByte($this->eventId);
 		$this->putVarInt($this->effectId);
@@ -64,9 +62,8 @@ class MobEffectPacket extends DataPacket
 		$this->putVarInt($this->duration);
 	}
 
-	public function handle(NetworkSession $session): bool
+	public function handle(NetworkSession $session) : bool
 	{
 		return $session->handleMobEffect($this);
 	}
-
 }

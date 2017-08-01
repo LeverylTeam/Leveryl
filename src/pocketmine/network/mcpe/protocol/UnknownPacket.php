@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,9 +21,7 @@
 
 declare(strict_types = 1);
 
-
 namespace pocketmine\network\mcpe\protocol;
-
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -35,21 +33,20 @@ class UnknownPacket extends DataPacket
 
 	public function pid()
 	{
-		if(strlen($this->payload ?? "") > 0) {
+		if (strlen($this->payload ?? "") > 0)
+		{
 			return ord($this->payload{0});
 		}
-
 		return self::NETWORK_ID;
 	}
 
-	public function getName(): string
+	public function getName() : string
 	{
 		return "unknown packet";
 	}
 
 	public function decode()
 	{
-		$this->offset -= 1; //Rewind one byte so we can read the PID
 		$this->payload = $this->getRemaining();
 	}
 
@@ -59,7 +56,7 @@ class UnknownPacket extends DataPacket
 		$this->put($this->payload);
 	}
 
-	public function handle(NetworkSession $session): bool
+	public function handle(NetworkSession $session) : bool
 	{
 		return false;
 	}
