@@ -28,7 +28,8 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class AdventureSettingsPacket extends DataPacket{
+class AdventureSettingsPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::ADVENTURE_SETTINGS_PACKET;
 
 	const PERMISSION_NORMAL = 0;
@@ -52,7 +53,8 @@ class AdventureSettingsPacket extends DataPacket{
 	public $flags = 0;
 	public $userPermission;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->flags = $this->getUnsignedVarInt();
 		$this->userPermission = $this->getUnsignedVarInt();
 
@@ -69,7 +71,8 @@ class AdventureSettingsPacket extends DataPacket{
 		$this->muted          = (bool) ($this->flags & (1 << 10));
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->flags |= ((int) $this->worldImmutable);
 		$this->flags |= ((int) $this->noPvp)        << 1;
 		$this->flags |= ((int) $this->noPvm)        << 2;
@@ -86,7 +89,8 @@ class AdventureSettingsPacket extends DataPacket{
 		$this->putUnsignedVarInt($this->userPermission);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleAdventureSettings($this);
 	}
 
