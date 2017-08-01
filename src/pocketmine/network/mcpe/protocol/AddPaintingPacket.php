@@ -63,5 +63,4 @@ class AddPaintingPacket extends DataPacket
 	{
 		return $session->handleAddPainting($this);
 	}
-
 }
