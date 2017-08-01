@@ -32,7 +32,6 @@ use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\utils\BinaryStream;
 use pocketmine\utils\Utils;
 
-
 abstract class DataPacket extends BinaryStream
 {
 
@@ -71,7 +70,7 @@ abstract class DataPacket extends BinaryStream
 	 */
 	public function decodePayload()
 	{
-
+		// Something
 	}
 
 	public function encode()
@@ -86,7 +85,7 @@ abstract class DataPacket extends BinaryStream
 	 */
 	public function encodePayload()
 	{
-
+		// Something
 	}
 
 	/**
@@ -118,13 +117,13 @@ abstract class DataPacket extends BinaryStream
 	public function __debugInfo()
 	{
 		$data = [];
-		foreach($this as $k => $v)
+		foreach ($this as $k => $v)
 		{
-			if($k === "buffer")
+			if ($k === "buffer")
 			{
 				$data[$k] = bin2hex($v);
 			}
-			elseif(is_string($v) or (is_object($v) and method_exists($v, "__toString")))
+			elseif (is_string($v) or (is_object($v) and method_exists($v, "__toString")))
 			{
 				$data[$k] = Utils::printable((string) $v);
 			}
@@ -133,7 +132,6 @@ abstract class DataPacket extends BinaryStream
 				$data[$k] = $v;
 			}
 		}
-
 		return $data;
 	}
 
@@ -148,12 +146,12 @@ abstract class DataPacket extends BinaryStream
 	{
 		$count = $this->getUnsignedVarInt();
 		$data = [];
-		for($i = 0; $i < $count; ++$i)
+		for ($i = 0; $i < $count; ++$i)
 		{
 			$key = $this->getUnsignedVarInt();
 			$type = $this->getUnsignedVarInt();
 			$value = null;
-			switch($type)
+			switch ($type)
 			{
 				case Entity::DATA_TYPE_BYTE:
 					$value = $this->getByte();
@@ -192,7 +190,7 @@ abstract class DataPacket extends BinaryStream
 				default:
 					$value = [];
 			}
-			if($types === true)
+			if ($types === true)
 			{
 				$data[$key] = [$type, $value];
 			}
@@ -201,7 +199,6 @@ abstract class DataPacket extends BinaryStream
 				$data[$key] = $value;
 			}
 		}
-
 		return $data;
 	}
 
@@ -213,11 +210,11 @@ abstract class DataPacket extends BinaryStream
 	public function putEntityMetadata(array $metadata)
 	{
 		$this->putUnsignedVarInt(count($metadata));
-		foreach($metadata as $key => $d)
+		foreach ($metadata as $key => $d)
 		{
 			$this->putUnsignedVarInt($key); //data key
 			$this->putUnsignedVarInt($d[0]); //data type
-			switch($d[0])
+			switch ($d[0])
 			{
 				case Entity::DATA_TYPE_BYTE:
 					$this->putByte($d[1]);
@@ -262,23 +259,20 @@ abstract class DataPacket extends BinaryStream
 	{
 		$list = [];
 		$count = $this->getUnsignedVarInt();
-
-		for($i = 0; $i < $count; ++$i)
+		for ($i = 0; $i < $count; ++$i)
 		{
 			$min = $this->getLFloat();
 			$max = $this->getLFloat();
 			$current = $this->getLFloat();
 			$default = $this->getLFloat();
 			$name = $this->getString();
-
 			$attr = Attribute::getAttributeByName($name);
-			if($attr !== null)
+			if ($attr !== null)
 			{
 				$attr->setMinValue($min);
 				$attr->setMaxValue($max);
 				$attr->setValue($current);
 				$attr->setDefaultValue($default);
-
 				$list[] = $attr;
 			}
 			else
@@ -286,7 +280,6 @@ abstract class DataPacket extends BinaryStream
 				throw new \UnexpectedValueException("Unknown attribute type \"$name\"");
 			}
 		}
-
 		return $list;
 	}
 
@@ -297,7 +290,7 @@ abstract class DataPacket extends BinaryStream
 	public function putAttributeList(Attribute ...$attributes)
 	{
 		$this->putUnsignedVarInt(count($attributes));
-		foreach($attributes as $attribute)
+		foreach ($attributes as $attribute)
 		{
 			$this->putLFloat($attribute->getMinValue());
 			$this->putLFloat($attribute->getMaxValue());
@@ -349,7 +342,7 @@ abstract class DataPacket extends BinaryStream
 	 * @param int &$y
 	 * @param int &$z
 	 */
-	public function getBlockPosition(&$x, &$y, &$z)
+	public function getBlockPosition(&$x, &$y, &$z) // I'm not sure why is there & after $x $y $z, help anyone??
 	{
 		$x = $this->getVarInt();
 		$y = $this->getUnsignedVarInt();
@@ -375,7 +368,7 @@ abstract class DataPacket extends BinaryStream
 	 * @param int &$y
 	 * @param int &$z
 	 */
-	public function getSignedBlockPosition(&$x, &$y, &$z)
+	public function getSignedBlockPosition(&$x, &$y, &$z) // I'm not sure why is there & after $x $y $z, help anyone??
 	{
 		$x = $this->getVarInt();
 		$y = $this->getVarInt();
@@ -401,7 +394,7 @@ abstract class DataPacket extends BinaryStream
 	 * @param float $y
 	 * @param float $z
 	 */
-	public function getVector3f(&$x, &$y, &$z)
+	public function getVector3f(&$x, &$y, &$z) // I'm not sure why is there & after $x $y $z, help anyone??
 	{
 		$x = $this->getRoundedLFloat(4);
 		$y = $this->getRoundedLFloat(4);
@@ -441,12 +434,12 @@ abstract class DataPacket extends BinaryStream
 	{
 		$count = $this->getUnsignedVarInt();
 		$rules = [];
-		for($i = 0; $i < $count; ++$i)
+		for ($i = 0; $i < $count; ++$i)
 		{
 			$name = $this->getString();
 			$type = $this->getUnsignedVarInt();
 			$value = null;
-			switch($type)
+			switch ($type)
 			{
 				case 1:
 					$value = $this->getBool();
@@ -474,11 +467,11 @@ abstract class DataPacket extends BinaryStream
 	public function putGameRules(array $rules)
 	{
 		$this->putUnsignedVarInt(count($rules));
-		foreach($rules as $name => $rule)
+		foreach ($rules as $name => $rule)
 		{
 			$this->putString($name);
 			$this->putUnsignedVarInt($rule[0]);
-			switch($rule[0])
+			switch ($rule[0])
 			{
 				case 1:
 					$this->putBool($rule[1]);
