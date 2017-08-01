@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -29,7 +29,8 @@ use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\utils\UUID;
 
-class AddPlayerPacket extends DataPacket{
+class AddPlayerPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::ADD_PLAYER_PACKET;
 
 	/** @var UUID */
@@ -53,7 +54,8 @@ class AddPlayerPacket extends DataPacket{
 	public $item;
 	public $metadata = [];
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->uuid = $this->getUUID();
 		$this->username = $this->getString();
 		$this->entityUniqueId = $this->getEntityUniqueId();
@@ -67,7 +69,8 @@ class AddPlayerPacket extends DataPacket{
 		$this->metadata = $this->getEntityMetadata();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putUUID($this->uuid);
 		$this->putString($this->username);
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);
@@ -81,7 +84,8 @@ class AddPlayerPacket extends DataPacket{
 		$this->putEntityMetadata($this->metadata);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleAddPlayer($this);
 	}
 
