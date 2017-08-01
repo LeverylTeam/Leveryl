@@ -19,6 +19,7 @@ This spoon is based off of PMMP (For Stability)
 - [X] Fully Functional **BrewingStands**
 - [X] **XP System**
 - [X] **EnderChests**
+- [ ] **Shulker Box**
 - [X] **Full Tesseract & PMMP PluginAPI Compatibility**
 - [X] **CustomPotions**
 - [X] **CustomEnchants**
