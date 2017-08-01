@@ -25,7 +25,6 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
 class LoginPacket extends DataPacket
@@ -73,7 +72,7 @@ class LoginPacket extends DataPacket
 	{
 		$this->protocol = $this->getInt();
 
-		if($this->protocol !== ProtocolInfo::CURRENT_PROTOCOL)
+		if ($this->protocol !== ProtocolInfo::CURRENT_PROTOCOL)
 		{
 			$this->buffer = null;
 
@@ -87,15 +86,16 @@ class LoginPacket extends DataPacket
 
 		$this->chainData = json_decode($this->get($this->getLInt()), true);
 		$chainKey = self::MOJANG_PUBKEY;
-		foreach($this->chainData["chain"] as $chain)
+		foreach ($this->chainData["chain"] as $chain)
 		{
 			list($verified, $webtoken) = $this->decodeToken($chain, $chainKey);
-			if(isset($webtoken["extraData"])) {
-				if(isset($webtoken["extraData"]["displayName"]))
+			if (isset($webtoken["extraData"]))
+			{
+				if (isset($webtoken["extraData"]["displayName"]))
 				{
 					$this->username = $webtoken["extraData"]["displayName"];
 				}
-				if(isset($webtoken["extraData"]["identity"]))
+				if (isset($webtoken["extraData"]["identity"]))
 				{
 					$this->clientUUID = $webtoken["extraData"]["identity"];
 				}
@@ -116,27 +116,27 @@ class LoginPacket extends DataPacket
 		$this->serverAddress = $this->clientData["ServerAddress"] ?? null;
 		$this->skinId = $this->clientData["SkinId"] ?? null;
 
-		if(isset($this->clientData["SkinData"]))
+		if (isset($this->clientData["SkinData"]))
 		{
 			$this->skin = base64_decode($this->clientData["SkinData"]);
 		}
-		if(isset($this->clientData["DeviceOS"]))
+		if (isset($this->clientData["DeviceOS"]))
 		{
 			$this->deviceos = $this->clientData["DeviceOS"];
 		}
-		if(isset($this->clientData["DeviceModel"]))
+		if (isset($this->clientData["DeviceModel"]))
 		{
 			$this->devicemodel = $this->clientData["DeviceModel"];
 		}
-		if(isset($this->clientData["UIProfile"]))
+		if (isset($this->clientData["UIProfile"]))
 		{
 			$this->uiprofile = $this->clientData["UIProfile"];
 		}
-		if(isset($this->clientData["GuiScale"]))
+		if (isset($this->clientData["GuiScale"]))
 		{
 			$this->guiscale = $this->clientData["GuiScale"];
 		}
-		if(isset($this->clientData["CurrentInputMode"]))
+		if (isset($this->clientData["CurrentInputMode"]))
 		{
 			$this->controls = $this->clientData["CurrentInputMode"];
 		}
@@ -165,7 +165,6 @@ class LoginPacket extends DataPacket
 		{
 			$tokens = explode(".", $token);
 			list($headB64, $payloadB64, $sigB64) = $tokens;
-
 			return array(false, json_decode(base64_decode($payloadB64), true));
 		}
 		else
