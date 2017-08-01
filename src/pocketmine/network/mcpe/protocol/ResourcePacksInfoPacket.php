@@ -19,18 +19,18 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\resourcepacks\ResourcePack;
 use pocketmine\resourcepacks\ResourcePackInfoEntry;
 
-class ResourcePacksInfoPacket extends DataPacket{
+class ResourcePacksInfoPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::RESOURCE_PACKS_INFO_PACKET;
 
 	public $mustAccept = false; //if true, forces client to use selected resource packs
@@ -39,7 +39,8 @@ class ResourcePacksInfoPacket extends DataPacket{
 	/** @var ResourcePack[] */
 	public $resourcePackEntries = [];
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		/*$this->mustAccept = $this->getBool();
 		$behaviorPackCount = $this->getLShort();
 		while($behaviorPackCount-- > 0){
@@ -60,18 +61,21 @@ class ResourcePacksInfoPacket extends DataPacket{
 		}*/
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 
 		$this->putBool($this->mustAccept);
 		$this->putLShort(count($this->behaviorPackEntries));
-		foreach($this->behaviorPackEntries as $entry){
+		foreach ($this->behaviorPackEntries as $entry)
+		{
 			$this->putString($entry->getPackId());
 			$this->putString($entry->getPackVersion());
 			$this->putLLong($entry->getPackSize());
 			$this->putString(""); //TODO
 		}
 		$this->putLShort(count($this->resourcePackEntries));
-		foreach($this->resourcePackEntries as $entry){
+		foreach ($this->resourcePackEntries as $entry)
+		{
 			$this->putString($entry->getPackId());
 			$this->putString($entry->getPackVersion());
 			$this->putLLong($entry->getPackSize());
@@ -79,7 +83,8 @@ class ResourcePacksInfoPacket extends DataPacket{
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleResourcePacksInfo($this);
 	}
 }
