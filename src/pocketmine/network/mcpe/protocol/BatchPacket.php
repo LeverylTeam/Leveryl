@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -32,7 +32,8 @@ use pocketmine\utils\Binary;
 #endif
 use pocketmine\utils\BinaryStream;
 
-class BatchPacket extends DataPacket{
+class BatchPacket extends DataPacket
+{
 	const NETWORK_ID = 0xfe;
 
 	/** @var string */
@@ -40,15 +41,18 @@ class BatchPacket extends DataPacket{
 	/** @var int */
 	protected $compressionLevel = 7;
 
-	public function canBeBatched() : bool{
+	public function canBeBatched() : bool
+	{
 		return false;
 	}
 
-	public function canBeSentBeforeLogin() : bool{
+	public function canBeSentBeforeLogin() : bool
+	{
 		return true;
 	}
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$data = $this->getRemaining();
 		try{
 			$this->payload = zlib_decode($data, 1024 * 1024 * 64); //Max 64MB
@@ -57,18 +61,22 @@ class BatchPacket extends DataPacket{
 		}
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->put(zlib_encode($this->payload, ZLIB_ENCODING_DEFLATE, $this->compressionLevel));
 	}
 
 	/**
 	 * @param DataPacket $packet
 	 */
-	public function addPacket(DataPacket $packet){
-		if(!$packet->canBeBatched()){
+	public function addPacket(DataPacket $packet)
+	{
+		if(!$packet->canBeBatched())
+		{
 			throw new \InvalidArgumentException(get_class($packet) . " cannot be put inside a BatchPacket");
 		}
-		if(!$packet->isEncoded){
+		if(!$packet->isEncoded)
+		{
 			$packet->encode();
 		}
 
@@ -78,30 +86,38 @@ class BatchPacket extends DataPacket{
 	/**
 	 * @return \Generator
 	 */
-	public function getPackets(){
+	public function getPackets()
+	{
 		$stream = new BinaryStream($this->payload);
-		while(!$stream->feof()){
+		while(!$stream->feof())
+		{
 			yield $stream->getString();
 		}
 	}
 
-	public function getCompressionLevel() : int{
+	public function getCompressionLevel() : int
+	{
 		return $this->compressionLevel;
 	}
 
-	public function setCompressionLevel(int $level){
+	public function setCompressionLevel(int $level)
+	{
 		$this->compressionLevel = $level;
 	}
 
-	public function handle(NetworkSession $session) : bool{
-		if($this->payload === ""){
+	public function handle(NetworkSession $session) : bool
+	{
+		if($this->payload === "")
+		{
 			return false;
 		}
 
-		foreach($this->getPackets() as $buf){
+		foreach($this->getPackets() as $buf)
+		{
 			$pk = PacketPool::getPacketById(ord($buf{0}));
 
-			if(!$pk->canBeBatched()){
+			if(!$pk->canBeBatched())
+			{
 				throw new \InvalidArgumentException("Received invalid " . get_class($pk) . " inside BatchPacket");
 			}
 
