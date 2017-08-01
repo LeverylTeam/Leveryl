@@ -11,6 +11,7 @@ This is an Advanced & Feature Rich Server Software to hopefully Replace Tesserac
 This spoon is based off of PMMP (For Stability)  
 
 # Features:
+- [ ] TO-DO: ***Re-Write the Inventory***.
 - [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
 - [X] **EnderPearls**
 - [X] **SplashPotions**
