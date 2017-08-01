@@ -283,7 +283,7 @@ class Bed extends Transparent
 	 * @param Item $item
 	 * @return array
 	 */
-	public function getDrops(Item $item)
+	public function getDrops(Item $item) : array
 	{
 		if ($this->isHeadPart())
 		{
