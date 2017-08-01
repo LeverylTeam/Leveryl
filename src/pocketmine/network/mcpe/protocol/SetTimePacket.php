@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,21 +27,24 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class SetTimePacket extends DataPacket{
+class SetTimePacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::SET_TIME_PACKET;
 
 	public $time;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->time = $this->getVarInt();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putVarInt($this->time);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleSetTime($this);
 	}
-
 }
