@@ -40,10 +40,11 @@ This spoon is based off of PMMP (For Stability)
 
 ***Other List Entries are on "leveryl.yml"....***
 
-# Builds & Gitter Chat:
+# Builds, Gitter Chat & Discord Server:
 #### CircleCI Build Status: [![CircleCI](https://circleci.com/gh/LeverylTeam/Leveryl.svg?style=svg)](https://circleci.com/gh/LeverylTeam/Leveryl)
 #### TravisCI Build Status: [![TravisCI](https://travis-ci.org/LeverylTeam/Leveryl.svg?branch=master)](https://travis-ci.org/LeverylTeam/Leveryl)
 #### Gitter Chat: [![Gitter](https://badges.gitter.im/leveryl/leveryl.svg)](https://gitter.im/leveryl/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=pr-badge)
+#### Discord Server (Talk to a Human For Support): [Join Server](https://discord.gg/8dXXsTq)
 
 # Windows & Linux Installation:
 Read [this](https://github.com/LeverylTeam/Leveryl/wiki/Installation) page on our [Wiki](https://github.com/LeverylTeam/Leveryl/wiki/)... ;)
@@ -85,3 +86,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * __[Zlib](http://www.zlib.net/)__: A Massively Spiffy Yet Delicately Unobtrusive Compression Library
 * __[Source RCON Protocol](https://developer.valvesoftware.com/wiki/Source_RCON_Protocol)__
 * __[UT3 Query Protocol](http://wiki.unrealadmin.org/UT3_query_protocol)__
+* __[PHP OpenSSL](https://www.openssl.org/)__ by _[OpenSSL.org](https://www.openssl.org/)_: Cryptography and SSL/TLS Toolkit
