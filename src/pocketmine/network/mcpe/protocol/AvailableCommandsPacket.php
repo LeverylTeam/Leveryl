@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,23 +27,27 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 
-class AvailableCommandsPacket extends DataPacket{
+class AvailableCommandsPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::AVAILABLE_COMMANDS_PACKET;
 
 	public $commands; //JSON-encoded command data
 	public $unknown = "";
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->commands = $this->getString();
 		$this->unknown = $this->getString();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putString($this->commands);
 		$this->putString($this->unknown);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleAvailableCommands($this);
 	}
 
