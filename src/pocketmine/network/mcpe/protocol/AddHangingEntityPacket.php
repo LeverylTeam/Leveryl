@@ -58,5 +58,4 @@ class AddHangingEntityPacket extends DataPacket
 	{
 		return $session->handleAddHangingEntity($this);
 	}
-
 }
