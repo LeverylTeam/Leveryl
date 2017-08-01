@@ -50,5 +50,4 @@ class ItemFrameDropItemPacket extends DataPacket
 	{
 		return $session->handleItemFrameDropItem($this);
 	}
-
 }
