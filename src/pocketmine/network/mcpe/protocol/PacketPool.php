@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -27,9 +27,9 @@ class PacketPool{
 	/** @var \SplFixedArray<DataPacket> */
 	protected static $pool = null;
 
-	public static function init(){
+	public static function init()
+	{
 		static::$pool = new \SplFixedArray(256);
-
 		//Normal packets
 		static::registerPacket(new LoginPacket());
 		static::registerPacket(new PlayStatusPacket());
@@ -124,14 +124,15 @@ class PacketPool{
 		static::registerPacket(new StructureBlockUpdatePacket());
 		static::registerPacket(new ShowStoreOfferPacket());
 		static::registerPacket(new PurchaseReceiptPacket());
-
+		// Some
 		static::registerPacket(new BatchPacket());
 	}
 
 	/**
 	 * @param DataPacket $packet
 	 */
-	public static function registerPacket(DataPacket $packet){
+	public static function registerPacket(DataPacket $packet)
+	{
 		static::$pool[$packet->pid()] = clone $packet;
 	}
 
@@ -139,7 +140,8 @@ class PacketPool{
 	 * @param int $pid
 	 * @return DataPacket
 	 */
-	public static function getPacketById(int $pid) : DataPacket{
+	public static function getPacketById(int $pid) : DataPacket
+	{
 		return isset(static::$pool[$pid]) ? clone static::$pool[$pid] : new UnknownPacket();
 	}
 
@@ -147,11 +149,10 @@ class PacketPool{
 	 * @param string $buffer
 	 * @return DataPacket
 	 */
-	public static function getPacket(string $buffer) : DataPacket{
+	public static function getPacket(string $buffer) : DataPacket
+	{
 		$pk = static::getPacketById(ord($buffer{0}));
 		$pk->setBuffer($buffer);
-
 		return $pk;
 	}
-
 }
