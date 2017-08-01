@@ -19,12 +19,12 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol\types;
 
-interface ContainerIds{
-
+interface ContainerIds
+{
 	const NONE = -1;
 	const INVENTORY = 0;
 	const FIRST = 1;
@@ -34,5 +34,4 @@ interface ContainerIds{
 	const CREATIVE = 121;
 	const HOTBAR = 122;
 	const FIXED_INVENTORY = 123;
-
 }
