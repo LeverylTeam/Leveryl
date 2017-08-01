@@ -19,16 +19,16 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class MobEffectPacket extends DataPacket{
+class MobEffectPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::MOB_EFFECT_PACKET;
 
 	const EVENT_ADD = 1;
@@ -42,7 +42,8 @@ class MobEffectPacket extends DataPacket{
 	public $particles = true;
 	public $duration = 0;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->eventId = $this->getByte();
 		$this->effectId = $this->getVarInt();
@@ -51,7 +52,8 @@ class MobEffectPacket extends DataPacket{
 		$this->duration = $this->getVarInt();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putByte($this->eventId);
 		$this->putVarInt($this->effectId);
@@ -60,8 +62,8 @@ class MobEffectPacket extends DataPacket{
 		$this->putVarInt($this->duration);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleMobEffect($this);
 	}
-
 }
