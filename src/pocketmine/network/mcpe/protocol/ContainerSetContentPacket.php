@@ -49,13 +49,13 @@ class ContainerSetContentPacket extends DataPacket
 		$this->windowid = $this->getUnsignedVarInt();
 		$this->targetEid = $this->getEntityUniqueId();
 		$count = $this->getUnsignedVarInt();
-		for($s = 0; $s < $count and !$this->feof(); ++$s)
+		for ($s = 0; $s < $count and !$this->feof(); ++$s)
 		{
 			$this->slots[$s] = $this->getSlot();
 		}
 
 		$hotbarCount = $this->getUnsignedVarInt(); //MCPE always sends this, even when it's not a player inventory
-		for($s = 0; $s < $hotbarCount and !$this->feof(); ++$s)
+		for ($s = 0; $s < $hotbarCount and !$this->feof(); ++$s)
 		{
 			$this->hotbar[$s] = $this->getVarInt();
 		}
@@ -66,14 +66,14 @@ class ContainerSetContentPacket extends DataPacket
 		$this->putUnsignedVarInt($this->windowid);
 		$this->putEntityUniqueId($this->targetEid);
 		$this->putUnsignedVarInt(count($this->slots));
-		foreach($this->slots as $slot)
+		foreach ($this->slots as $slot)
 		{
 			$this->putSlot($slot);
 		}
-		if($this->windowid === ContainerIds::INVENTORY and count($this->hotbar) > 0)
+		if ($this->windowid === ContainerIds::INVENTORY and count($this->hotbar) > 0)
 		{
 			$this->putUnsignedVarInt(count($this->hotbar));
-			foreach($this->hotbar as $slot)
+			foreach ($this->hotbar as $slot)
 			{
 				$this->putVarInt($slot);
 			}
@@ -88,5 +88,4 @@ class ContainerSetContentPacket extends DataPacket
 	{
 		return $session->handleContainerSetContent($this);
 	}
-
 }
