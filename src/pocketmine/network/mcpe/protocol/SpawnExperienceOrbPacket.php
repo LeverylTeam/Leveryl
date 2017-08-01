@@ -25,10 +25,10 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class SpawnExperienceOrbPacket extends DataPacket{
+class SpawnExperienceOrbPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::SPAWN_EXPERIENCE_ORB_PACKET;
 
 	public $x;
@@ -36,17 +36,20 @@ class SpawnExperienceOrbPacket extends DataPacket{
 	public $z;
 	public $amount;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->getVector3f($this->x, $this->y, $this->z);
 		$this->amount = $this->getVarInt();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putVarInt($this->amount);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleSpawnExperienceOrb($this);
 	}
 }
