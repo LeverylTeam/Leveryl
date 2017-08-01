@@ -19,29 +19,32 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class ReplaceItemInSlotPacket extends DataPacket{
+class ReplaceItemInSlotPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::REPLACE_ITEM_IN_SLOT_PACKET;
 
 	public $item;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->item = $this->getSlot();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putSlot($this->item);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleReplaceItemInSlot($this);
 	}
 }
