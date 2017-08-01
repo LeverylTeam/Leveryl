@@ -213,7 +213,7 @@ use pocketmine\utils\UUID;
 /**
  * Main class that handles networking, recovery, and packet sending to the server part
  */
-class Player extends Human implements CommandSender, ChunkLoader, IPlayer, NetworkSession
+class Player extends Human implements CommandSender, ChunkLoader, IPlayer
 {
 
 	const SURVIVAL = 0;
