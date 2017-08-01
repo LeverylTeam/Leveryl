@@ -260,6 +260,7 @@ class Server
 	/** @var Player[] */
 	private $playerList = [];
 
+	/** @var string[] */
 	private $identifiers = [];
 
 	/** @var Level[] */
@@ -2003,20 +2004,19 @@ class Server
 				$pk->addPacket($p);
 			}
 
-			if(Network::$BATCH_THRESHOLD >= 0 and strlen($pk->payload) >= Network::$BATCH_THRESHOLD) {
-				$compressionLevel = $this->networkCompressionLevel;
-			} else {
-				$compressionLevel = 0; //Do not compress packets under the threshold
-				$forceSync = true;
-			}
-
-			if(!$forceSync and !$immediate and $this->networkCompressionAsync) {
-				$task = new CompressBatchedTask($pk, $targets, $compressionLevel);
-				$this->getScheduler()->scheduleAsyncTask($task);
-			} else {
-				$pk->compress($compressionLevel);
-				$this->broadcastPacketsCallback($pk, $targets, $immediate);
-			}
+			if(Network::$BATCH_THRESHOLD >= 0 and strlen($pk->payload) >= Network::$BATCH_THRESHOLD){
+				$pk->setCompressionLevel($this->networkCompressionLevel);
+  			}else{
+				$pk->setCompressionLevel(0); //Do not compress packets under the threshold
+  				$forceSync = true;
+  			}
+  
+  			if(!$forceSync and !$immediate and $this->networkCompressionAsync){
+				$task = new CompressBatchedTask($pk, $targets);
+  				$this->getScheduler()->scheduleAsyncTask($task);
+  			}else{
+  				$this->broadcastPacketsCallback($pk, $targets, $immediate);
+  			}
 		}
 
 		Timings::$playerNetworkTimer->stopTiming();
