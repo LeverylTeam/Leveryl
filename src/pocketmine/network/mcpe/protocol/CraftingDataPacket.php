@@ -19,12 +19,11 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
-
 
 use pocketmine\inventory\FurnaceRecipe;
 use pocketmine\inventory\ShapedRecipe;
@@ -33,7 +32,8 @@ use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\utils\BinaryStream;
 
-class CraftingDataPacket extends DataPacket{
+class CraftingDataPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::CRAFTING_DATA_PACKET;
 
 	const ENTRY_SHAPELESS = 0;
@@ -47,30 +47,35 @@ class CraftingDataPacket extends DataPacket{
 	public $entries = [];
 	public $cleanRecipes = false;
 
-	public function clean(){
+	public function clean()
+	{
 		$this->entries = [];
 		return parent::clean();
 	}
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$entries = [];
 		$recipeCount = $this->getUnsignedVarInt();
-		for($i = 0; $i < $recipeCount; ++$i){
+		for($i = 0; $i < $recipeCount; ++$i)
+		{
 			$entry = [];
 			$entry["type"] = $recipeType = $this->getVarInt();
-
-			switch($recipeType){
+			switch($recipeType)
+			{
 				case self::ENTRY_SHAPELESS:
 				case self::ENTRY_SHULKER_BOX:
 					$ingredientCount = $this->getUnsignedVarInt();
 					/** @var Item */
 					$entry["input"] = [];
-					for($j = 0; $j < $ingredientCount; ++$j){
+					for($j = 0; $j < $ingredientCount; ++$j)
+					{
 						$entry["input"][] = $this->getSlot();
 					}
 					$resultCount = $this->getUnsignedVarInt();
 					$entry["output"] = [];
-					for($k = 0; $k < $resultCount; ++$k){
+					for($k = 0; $k < $resultCount; ++$k)
+					{
 						$entry["output"][] = $this->getSlot();
 					}
 					$entry["uuid"] = $this->getUUID()->toString();
@@ -81,12 +86,14 @@ class CraftingDataPacket extends DataPacket{
 					$entry["height"] = $this->getVarInt();
 					$count = $entry["width"] * $entry["height"];
 					$entry["input"] = [];
-					for($j = 0; $j < $count; ++$j){
+					for($j = 0; $j < $count; ++$j)
+					{
 						$entry["input"][] = $this->getSlot();
 					}
 					$resultCount = $this->getUnsignedVarInt();
 					$entry["output"] = [];
-					for($k = 0; $k < $resultCount; ++$k){
+					for($k = 0; $k < $resultCount; ++$k)
+					{
 						$entry["output"][] = $this->getSlot();
 					}
 					$entry["uuid"] = $this->getUUID()->toString();
@@ -110,12 +117,16 @@ class CraftingDataPacket extends DataPacket{
 		$this->getBool(); //cleanRecipes
 	}
 
-	private static function writeEntry($entry, BinaryStream $stream){
-		if($entry instanceof ShapelessRecipe){
+	private static function writeEntry($entry, BinaryStream $stream)
+	{
+		if($entry instanceof ShapelessRecipe)
+		{
 			return self::writeShapelessRecipe($entry, $stream);
-		}elseif($entry instanceof ShapedRecipe){
+		}elseif($entry instanceof ShapedRecipe)
+		{
 			return self::writeShapedRecipe($entry, $stream);
-		}elseif($entry instanceof FurnaceRecipe){
+		}elseif($entry instanceof FurnaceRecipe)
+		{
 			return self::writeFurnaceRecipe($entry, $stream);
 		}
 		//TODO: add MultiRecipe
@@ -123,9 +134,11 @@ class CraftingDataPacket extends DataPacket{
 		return -1;
 	}
 
-	private static function writeShapelessRecipe(ShapelessRecipe $recipe, BinaryStream $stream){
+	private static function writeShapelessRecipe(ShapelessRecipe $recipe, BinaryStream $stream)
+	{
 		$stream->putUnsignedVarInt($recipe->getIngredientCount());
-		foreach($recipe->getIngredientList() as $item){
+		foreach($recipe->getIngredientList() as $item)
+		{
 			$stream->putSlot($item);
 		}
 
@@ -137,12 +150,15 @@ class CraftingDataPacket extends DataPacket{
 		return CraftingDataPacket::ENTRY_SHAPELESS;
 	}
 
-	private static function writeShapedRecipe(ShapedRecipe $recipe, BinaryStream $stream){
+	private static function writeShapedRecipe(ShapedRecipe $recipe, BinaryStream $stream)
+	{
 		$stream->putVarInt($recipe->getWidth());
 		$stream->putVarInt($recipe->getHeight());
 
-		for($z = 0; $z < $recipe->getHeight(); ++$z){
-			for($x = 0; $x < $recipe->getWidth(); ++$x){
+		for($z = 0; $z < $recipe->getHeight(); ++$z)
+		{
+			for($x = 0; $x < $recipe->getWidth(); ++$x)
+			{
 				$stream->putSlot($recipe->getIngredient($x, $z));
 			}
 		}
@@ -155,14 +171,18 @@ class CraftingDataPacket extends DataPacket{
 		return CraftingDataPacket::ENTRY_SHAPED;
 	}
 
-	private static function writeFurnaceRecipe(FurnaceRecipe $recipe, BinaryStream $stream){
-		if(!$recipe->getInput()->hasAnyDamageValue()){ //Data recipe
+	private static function writeFurnaceRecipe(FurnaceRecipe $recipe, BinaryStream $stream)
+	{
+		if(!$recipe->getInput()->hasAnyDamageValue())
+		{ //Data recipe
 			$stream->putVarInt($recipe->getInput()->getId());
 			$stream->putVarInt($recipe->getInput()->getDamage());
 			$stream->putSlot($recipe->getResult());
 
 			return CraftingDataPacket::ENTRY_FURNACE_DATA;
-		}else{
+		}
+		else
+		{
 			$stream->putVarInt($recipe->getInput()->getId());
 			$stream->putSlot($recipe->getResult());
 
@@ -170,28 +190,36 @@ class CraftingDataPacket extends DataPacket{
 		}
 	}
 
-	public function addShapelessRecipe(ShapelessRecipe $recipe){
+	public function addShapelessRecipe(ShapelessRecipe $recipe)
+	{
 		$this->entries[] = $recipe;
 	}
 
-	public function addShapedRecipe(ShapedRecipe $recipe){
+	public function addShapedRecipe(ShapedRecipe $recipe)
+	{
 		$this->entries[] = $recipe;
 	}
 
-	public function addFurnaceRecipe(FurnaceRecipe $recipe){
+	public function addFurnaceRecipe(FurnaceRecipe $recipe)
+	{
 		$this->entries[] = $recipe;
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putUnsignedVarInt(count($this->entries));
 
 		$writer = new BinaryStream();
-		foreach($this->entries as $d){
+		foreach($this->entries as $d)
+		{
 			$entryType = self::writeEntry($d, $writer);
-			if($entryType >= 0){
+			if($entryType >= 0)
+			{
 				$this->putVarInt($entryType);
 				$this->put($writer->getBuffer());
-			}else{
+			}
+			else
+			{
 				$this->putVarInt(-1);
 			}
 
@@ -201,7 +229,8 @@ class CraftingDataPacket extends DataPacket{
 		$this->putBool($this->cleanRecipes);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleCraftingData($this);
 	}
 
