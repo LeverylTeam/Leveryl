@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
@@ -29,7 +29,8 @@ use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\utils\UUID;
 
-class CraftingEventPacket extends DataPacket{
+class CraftingEventPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::CRAFTING_EVENT_PACKET;
 
 	public $windowId;
@@ -41,45 +42,53 @@ class CraftingEventPacket extends DataPacket{
 	/** @var Item[] */
 	public $output = [];
 
-	public function clean(){
+	public function clean()
+	{
 		$this->input = [];
 		$this->output = [];
 		return parent::clean();
 	}
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->windowId = $this->getByte();
 		$this->type = $this->getVarInt();
 		$this->id = $this->getUUID();
 
 		$size = $this->getUnsignedVarInt();
-		for($i = 0; $i < $size and $i < 128; ++$i){
+		for($i = 0; $i < $size and $i < 128; ++$i)
+		{
 			$this->input[] = $this->getSlot();
 		}
 
 		$size = $this->getUnsignedVarInt();
-		for($i = 0; $i < $size and $i < 128; ++$i){
+		for($i = 0; $i < $size and $i < 128; ++$i)
+		{
 			$this->output[] = $this->getSlot();
 		}
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putByte($this->windowId);
 		$this->putVarInt($this->type);
 		$this->putUUID($this->id);
 
 		$this->putUnsignedVarInt(count($this->input));
-		foreach($this->input as $item){
+		foreach($this->input as $item)
+		{
 			$this->putSlot($item);
 		}
 
 		$this->putUnsignedVarInt(count($this->output));
-		foreach($this->output as $item){
+		foreach($this->output as $item)
+		{
 			$this->putSlot($item);
 		}
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handleCraftingEvent($this);
 	}
 
