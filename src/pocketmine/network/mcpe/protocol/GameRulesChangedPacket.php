@@ -47,5 +47,4 @@ class GameRulesChangedPacket extends DataPacket
 	{
 		return $session->handleGameRulesChanged($this);
 	}
-
 }
