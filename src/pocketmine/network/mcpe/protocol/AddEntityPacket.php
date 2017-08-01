@@ -59,7 +59,6 @@ class AddEntityPacket extends DataPacket
 		$this->getVector3f($this->speedX, $this->speedY, $this->speedZ);
 		$this->pitch = $this->getLFloat();
 		$this->yaw = $this->getLFloat();
-
 		$attrCount = $this->getUnsignedVarInt();
 		for ($i = 0; $i < $attrCount; ++$i)
 		{
@@ -68,7 +67,6 @@ class AddEntityPacket extends DataPacket
 			$current = $this->getLFloat();
 			$max = $this->getLFloat();
 			$attr = Attribute::getAttributeByName($name);
-
 			if ($attr !== null)
 			{
 				$attr->setMinValue($min);
@@ -81,7 +79,6 @@ class AddEntityPacket extends DataPacket
 				throw new \UnexpectedValueException("Unknown attribute type \"$name\"");
 			}
 		}
-
 		$this->metadata = $this->getEntityMetadata();
 		$linkCount = $this->getUnsignedVarInt();
 		for ($i = 0; $i < $linkCount; ++$i)
@@ -101,7 +98,6 @@ class AddEntityPacket extends DataPacket
 		$this->putVector3f($this->speedX, $this->speedY, $this->speedZ);
 		$this->putLFloat($this->pitch);
 		$this->putLFloat($this->yaw);
-
 		$this->putUnsignedVarInt(count($this->attributes));
 		foreach ($this->attributes as $attribute)
 		{
@@ -110,7 +106,6 @@ class AddEntityPacket extends DataPacket
 			$this->putLFloat($attribute->getValue());
 			$this->putLFloat($attribute->getMaxValue());
 		}
-
 		$this->putEntityMetadata($this->metadata);
 		$this->putUnsignedVarInt(count($this->links));
 		foreach ($this->links as $link)
@@ -125,5 +120,4 @@ class AddEntityPacket extends DataPacket
 	{
 		return $session->handleAddEntity($this);
 	}
-
 }
