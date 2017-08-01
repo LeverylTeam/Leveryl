@@ -19,23 +19,23 @@
  *
 */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class PlayerActionPacket extends DataPacket{
+class PlayerActionPacket extends DataPacket
+{
 	const NETWORK_ID = ProtocolInfo::PLAYER_ACTION_PACKET;
 
 	const ACTION_START_BREAK = 0;
 	const ACTION_ABORT_BREAK = 1;
 	const ACTION_STOP_BREAK = 2;
-
-
+	// 3
+	// 4
 	const ACTION_RELEASE_ITEM = 5;
 	const ACTION_STOP_SLEEPING = 6;
 	const ACTION_RESPAWN = 7; const ACTION_SPAWN_SAME_DIMENSION = 7;
@@ -46,7 +46,6 @@ class PlayerActionPacket extends DataPacket{
 	const ACTION_STOP_SNEAK = 12;
 	const ACTION_DIMENSION_CHANGE = 13; const ACTION_SPAWN_OVERWORLD = 13;
 	const ACTION_SPAWN_NETHER = 14;
-
 	const ACTION_START_GLIDE = 15;
 	const ACTION_STOP_GLIDE = 16;
 	const ACTION_BUILD_DENIED = 17;
@@ -59,22 +58,24 @@ class PlayerActionPacket extends DataPacket{
 	public $z;
 	public $face;
 
-	public function decodePayload(){
+	public function decodePayload()
+	{
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->action = $this->getVarInt();
 		$this->getBlockPosition($this->x, $this->y, $this->z);
 		$this->face = $this->getVarInt();
 	}
 
-	public function encodePayload(){
+	public function encodePayload()
+	{
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putVarInt($this->action);
 		$this->putBlockPosition($this->x, $this->y, $this->z);
 		$this->putVarInt($this->face);
 	}
 
-	public function handle(NetworkSession $session) : bool{
+	public function handle(NetworkSession $session) : bool
+	{
 		return $session->handlePlayerAction($this);
 	}
-
 }
