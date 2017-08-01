@@ -51,7 +51,6 @@ class EventPacket extends DataPacket
 		$this->playerRuntimeId = $this->getEntityRuntimeId();
 		$this->eventData = $this->getVarInt();
 		$this->type = $this->getByte();
-
 		//TODO: nice confusing mess
 	}
 
@@ -60,7 +59,6 @@ class EventPacket extends DataPacket
 		$this->putEntityRuntimeId($this->playerRuntimeId);
 		$this->putVarInt($this->eventData);
 		$this->putByte($this->type);
-
 		//TODO: also nice confusing mess
 	}
 
