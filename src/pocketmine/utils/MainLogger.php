@@ -246,6 +246,12 @@ class MainLogger extends \AttachableThreadedLogger
 			}
 		}
 	}
+	
+	public static function clear()
+	{
+		echo chr(27).chr(91).'H'.chr(27).chr(91).'J';
+		echo TextFormat::toANSI(TextFormat::GREEN . "/");
+	}
 
 	public function directSend($message)
 	{
