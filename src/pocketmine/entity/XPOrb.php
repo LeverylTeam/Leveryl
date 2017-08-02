@@ -79,6 +79,9 @@ class XPOrb extends Entity
 				if(($dist = $p->distance($this)) < $minDistance and $dist < $this->range) {
 					$target = $p;
 					$minDistance = $dist;
+					if(is_null($this->level)){
+						$this->level = $p->getLevel();
+					}
 				}
 			}
 		}

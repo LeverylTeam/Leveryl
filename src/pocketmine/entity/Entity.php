@@ -1139,6 +1139,10 @@ abstract class Entity extends Location implements Metadatable
 
 	protected function checkObstruction($x, $y, $z)
 	{
+		if($this->closed) {
+			return false;
+		}
+
 		if(count($this->level->getCollisionCubes($this, $this->getBoundingBox(), false)) === 0) {
 			return false;
 		}
@@ -1621,6 +1625,10 @@ abstract class Entity extends Location implements Metadatable
 
 	public function fastMove($dx, $dy, $dz)
 	{
+		if($this->closed) {
+			return false;
+		}
+
 		if($dx == 0 and $dz == 0 and $dy == 0) {
 			return true;
 		}
