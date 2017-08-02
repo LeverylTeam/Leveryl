@@ -46,14 +46,11 @@ class LoginPacket extends DataPacket
 
 	public $skinId;
 	public $skin = "";
-	
-	/** @var array (the "chain" index contains one or more JWTs) */
-	public $chainData = [];
-	/** @var string */
+
+	public $chainData;
+	public $clientData;
 	public $clientDataJwt;
-	/** @var array decoded payload of the clientData JWT */
-	public $clientData = [];
-	public $decoded = [];
+	public $decoded;
 
 	public $deviceos;
 	public $devicemodel;
@@ -73,7 +70,7 @@ class LoginPacket extends DataPacket
 	{
 		$this->protocol = $this->getInt();
 
-		if($this->protocol !== ProtocolInfo::ACCEPTED_PROTOCOLS) {
+		if($this->protocol !== ProtocolInfo::CURRENT_PROTOCOL) {
 			$this->buffer = null;
 
 			return; //Do not attempt to decode for non-accepted protocols
@@ -81,12 +78,11 @@ class LoginPacket extends DataPacket
 
 		$this->gameEdition = $this->getByte();
 
-		$time = time();
 		$this->setBuffer($this->getString(), 0);
 
-		$this->chainData = json_decode($this->get($this->getLInt()), true);
+		$this->chainData = json_decode($this->get($this->getLInt()));
 		$chainKey = self::MOJANG_PUBKEY;
-		foreach($this->chainData["chain"] as $chain){
+		foreach($this->chainData->{"chain"} as $chain) {
 			list($verified, $webtoken) = $this->decodeToken($chain, $chainKey);
 			if(isset($webtoken["extraData"])) {
 				if(isset($webtoken["extraData"]["displayName"])) {
@@ -104,8 +100,7 @@ class LoginPacket extends DataPacket
 		}
 
 		$this->clientDataJwt = $this->get($this->getLInt());
-		$this->decoded = $this->decodeToken($this->clientDataJwt);
-		// get the SECOND element of the returned value of decodeToken() [which is... an array]
+		$this->decoded = $this->decodeToken($this->clientDataJwt, $this->identityPublicKey);
 		$this->clientData = $this->decoded[1];
 
 		$this->clientId = $this->clientData["ClientRandomId"] ?? null;
