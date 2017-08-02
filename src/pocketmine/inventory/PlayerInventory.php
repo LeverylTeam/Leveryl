@@ -193,18 +193,63 @@ class PlayerInventory extends BaseInventory
 	 * @param bool $send Whether to send updates back to the inventory holder. This should usually be true for plugin calls.
 	 *                    It should only be false to prevent feedback loops of equipment packets between client and server.
 	 */
-	public function setHeldItemIndex($index, $send = true)
+	public function setHeldItemIndex($index, $send = true, $slotMapping = null)
 	{
-		if($index >= 0 and $index < $this->getHotbarSize()) {
-			$this->itemInHandIndex = $index;
+		if($slotMapping === null) {
+			if($index >= 0 and $index < $this->getHotbarSize()) {
+				$this->itemInHandIndex = $index;
 
-			if($this->getHolder() instanceof Player and $send) {
-				$this->sendHeldItem($this->getHolder());
+				if($this->getHolder() instanceof Player and $send) {
+					$this->sendHeldItem($this->getHolder());
+				}
+
+				$this->sendHeldItem($this->getHolder()->getViewers());
+			} else {
+				throw new \InvalidArgumentException("Hotbar slot index \"$index\" is out of range");
 			}
-
-			$this->sendHeldItem($this->getHolder()->getViewers());
 		} else {
-			throw new \InvalidArgumentException("Hotbar slot index \"$index\" is out of range");
+			$hotbarSlotIndex = $index;
+			$sendToHolder = $send;
+			if ($slotMapping !== null) {
+				//Get the index of the slot in the actual inventory
+				$slotMapping -= $this->getHotbarSize();
+			}
+			if (0 <= $hotbarSlotIndex and $hotbarSlotIndex < $this->getHotbarSize()) {
+				$this->itemInHandIndex = $hotbarSlotIndex;
+				if ($slotMapping !== null) {
+					/* Handle a hotbar slot mapping change. This allows PE to select different inventory slots.
+					 * This is the only time slot mapping should ever be changed. */
+
+					if ($slotMapping < 0 or $slotMapping >= $this->getSize()) {
+						//Mapping was not in range of the inventory, set it to -1
+						//This happens if the client selected a blank slot (sends 255)
+						$slotMapping = -1;
+					}
+
+					$item = $this->getItem($slotMapping);
+					if ($this->getHolder() instanceof Player) {
+						Server::getInstance()->getPluginManager()->callEvent($ev = new PlayerItemHeldEvent($this->getHolder(), $item, $slotMapping, $hotbarSlotIndex));
+						if ($ev->isCancelled()) {
+							$this->sendHeldItem($this->getHolder());
+							$this->sendContents($this->getHolder());
+							return;
+						}
+					}
+
+					if (($key = array_search($slotMapping, $this->hotbar)) !== false and $slotMapping !== -1) {
+						/* Do not do slot swaps if the slot was null
+						 * Chosen slot is already linked to a hotbar slot, swap the two slots around.
+						 * This will already have been done on the client-side so no changes need to be sent. */
+						$this->hotbar[$key] = $this->hotbar[$this->itemInHandIndex];
+					}
+
+					$this->hotbar[$this->itemInHandIndex] = $slotMapping;
+				}
+				$this->sendHeldItem($this->getHolder()->getViewers());
+				if ($sendToHolder) {
+					$this->sendHeldItem($this->getHolder());
+				}
+			}
 		}
 	}
 

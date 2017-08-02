@@ -237,11 +237,6 @@ class PluginManager
 									$this->server->getLogger()->warning("Built-In FolderPluginLoader is already enabled!");
 									continue;
 								}
-							} elseif(stripos(strtolower($name), "packetlogger") !== false) {
-								if($this->server->getLeverylConfigValue("PacketLogger", true)) {
-									$this->server->getLogger()->warning("Built-In PacketLogger is already enabled!");
-									continue;
-								}
 							}
 
 							if(isset($plugins[$name]) or $this->getPlugin($name) instanceof Plugin) {

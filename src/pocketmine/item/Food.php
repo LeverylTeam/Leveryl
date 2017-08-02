@@ -70,8 +70,8 @@ abstract class Food extends Item implements FoodSource
 
 		$ev = new EntityEatItemEvent($human, $this);
 
-		$human->addSaturation($ev->getSaturationRestore());
-		$human->addFood($ev->getFoodRestore());
+		$human->addSaturation(floatval($ev->getSaturationRestore()));
+		$human->addFood(floatval($ev->getFoodRestore()));
 		foreach($ev->getAdditionalEffects() as $effect) {
 			$human->addEffect($effect);
 		}

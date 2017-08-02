@@ -2582,7 +2582,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 	{
 		if($this->spawned === false or !$this->isAlive()) {
 			return true;
-		}
+		}/*
 
 		if($packet->inventorySlot === 255) {
 			$packet->inventorySlot = -1; //Cleared slot
@@ -2606,7 +2606,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 		}
 		$this->inventory->equipItem($packet->hotbarSlot, $packet->inventorySlot);
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
-
+*/
+		$this->inventory->setHeldItemIndex($packet->hotbarSlot, false, $packet->inventorySlot);
 		return true;
 	}
 
