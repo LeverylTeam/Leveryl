@@ -158,7 +158,7 @@ class Enchantment
 		self::$enchantments[self::TYPE_WEAPON_ARTHROPODS] = new Enchantment(self::TYPE_WEAPON_ARTHROPODS, "%enchantment.weapon.arthropods", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_SWORD);
 		self::$enchantments[self::TYPE_WEAPON_KNOCKBACK] = new Enchantment(self::TYPE_WEAPON_KNOCKBACK, "%enchantment.weapon.knockback", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_SWORD);
 		self::$enchantments[self::TYPE_WEAPON_FIRE_ASPECT] = new Enchantment(self::TYPE_WEAPON_FIRE_ASPECT, "%enchantment.weapon.fireaspect", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_SWORD);
-		self::$enchantments[self::TYPE_WEAPON_TYPE_WEAPON_LOOTING] = new Enchantment(self::TYPE_WEAPON_TYPE_WEAPON_LOOTING, "%enchantment.weapon.looting", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_SWORD);
+		self::$enchantments[self::TYPE_WEAPON_LOOTING] = new Enchantment(self::TYPE_WEAPON_LOOTING, "%enchantment.weapon.looting", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_SWORD);
 		self::$enchantments[self::TYPE_MINING_EFFICIENCY] = new Enchantment(self::TYPE_MINING_EFFICIENCY, "%enchantment.mining.efficiency", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_TOOL);
 		self::$enchantments[self::TYPE_MINING_SILK_TOUCH] = new Enchantment(self::TYPE_MINING_SILK_TOUCH, "%enchantment.mining.silktouch", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_TOOL);
 		self::$enchantments[self::TYPE_MINING_DURABILITY] = new Enchantment(self::TYPE_MINING_DURABILITY, "%enchantment.mining.durability", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_TOOL);
@@ -279,7 +279,7 @@ class Enchantment
 				return 5;
 			case self::TYPE_WEAPON_FIRE_ASPECT:
 				return 2;
-			case self::TYPE_WEAPON_TYPE_WEAPON_LOOTING:
+			case self::TYPE_WEAPON_LOOTING:
 				return 2;
 			case self::TYPE_MINING_EFFICIENCY:
 				return 10;
@@ -325,7 +325,7 @@ class Enchantment
 			case self::TYPE_WEAPON_KNOCKBACK:
 			case self::TYPE_WEAPON_FIRE_ASPECT:
 				return 2;
-			case self::TYPE_WEAPON_TYPE_WEAPON_LOOTING:
+			case self::TYPE_WEAPON_LOOTING:
 				return 3;
 			case self::TYPE_MINING_EFFICIENCY:
 				return 5;
