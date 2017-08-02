@@ -36,7 +36,7 @@ interface ProtocolInfo
 	 * If the Client's Protocol Version isn't equal to ProtocolInfo::CURRENT_PROTOCOL
 	 * Fall Back to this array and check if it's one of these.
 	 */
-	const ACCEPTED_PROTOCOLS = [110, 111, 112, 113, 120, 121];
+	const ACCEPTED_PROTOCOLS = [110, 111, 112, 113, 120, 121, 130];
 	/**
 	 * Current MineCraft PE version reported by the server. This is usually the earliest currently supported version.
 	 */
