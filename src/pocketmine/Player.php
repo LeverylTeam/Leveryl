@@ -2014,17 +2014,11 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 		foreach($this->server->getOnlinePlayers() as $p) {
 			if($p !== $this and $p->iusername === $this->iusername) {
-				if($p->kick("logged in from another location") === false) {
-					$this->close($this->getLeaveMessage(), "Logged in from another location");
-
-					return;
-				}
+				$this->close($this->getLeaveMessage(), "Logged in from another location");
+				return;
 			} elseif($p->loggedIn and $this->getUniqueId()->equals($p->getUniqueId())) {
-				if($p->kick("logged in from another location") === false) {
-					$this->close($this->getLeaveMessage(), "Logged in from another location");
-
-					return;
-				}
+				$this->close($this->getLeaveMessage(), "Logged in from another location");
+				return;
 			}
 		}
 
@@ -2124,17 +2118,13 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 		foreach($this->server->getOnlinePlayers() as $p) {
 			if($p !== $this and strtolower($p->getName()) === strtolower($this->getName())) {
-				if($p->kick("logged in from another location") === false) {
-					$this->close($this->getLeaveMessage(), "Logged in from another location");
+				$this->close($this->getLeaveMessage(), "Logged in from another location");
 
-					return;
-				}
+				return;
 			} elseif($p->loggedIn and $this->getUniqueId()->equals($p->getUniqueId())) {
-				if($p->kick("logged in from another location") === false) {
-					$this->close($this->getLeaveMessage(), "Logged in from another location");
+				$this->close($this->getLeaveMessage(), "Logged in from another location");
 
-					return;
-				}
+				return;
 			}
 		}
 
@@ -2236,8 +2226,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 			return true;
 		}
-
-		//TODO: add JWT verification, add encryption
 
 		$this->processLogin();
 
@@ -2582,31 +2570,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 	{
 		if($this->spawned === false or !$this->isAlive()) {
 			return true;
-		}/*
-
-		if($packet->inventorySlot === 255) {
-			$packet->inventorySlot = -1; //Cleared slot
-		} else {
-			if($packet->inventorySlot < 9) {
-				$this->server->getLogger()->debug("Tried to equip a slot that does not exist (index " . $packet->inventorySlot . ")");
-				$this->inventory->sendContents($this);
-
-				return false;
-			}
-			$packet->inventorySlot -= 9; //Get real inventory slot
-
-			$item = $this->inventory->getItem($packet->inventorySlot);
-
-			if($item->getId() != $packet->item->getId() && $item->getId() != Item::AIR) {
-				$this->server->getLogger()->debug("Tried to equip " . $packet->item . " but have " . $item . " in target slot");
-				$this->inventory->sendContents($this);
-
-				return false;
-			}
 		}
-		$this->inventory->equipItem($packet->hotbarSlot, $packet->inventorySlot);
-		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
-*/
+
 		$this->inventory->setHeldItemIndex($packet->hotbarSlot, false, $packet->inventorySlot);
 		return true;
 	}
