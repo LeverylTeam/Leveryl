@@ -6,9 +6,9 @@
 <!-- #### Notice: Master is the only supported branch. Other branches are usually still W.I.P. and might be un-stable. -->
 
 # Introduction:
-This is an Advanced & Feature Rich Server Software to hopefully Replace Tesseract.  
+This is an Advanced & Feature Rich Server Software to hopefully Replace [Tesseract](https://www.github.com/TesseractTeam).  
 (They're dead. And this is **NOT** supposed to be taken out of context.)  
-This spoon is based off of PMMP (For Stability)  
+This spoon is based off of [PMMP](https://www.github.com/pmmp/PocketMine-MP) (For Stability)  
 
 # Features:
 - [ ] TO-DO: ***Re-Write the Inventory***.
@@ -16,7 +16,7 @@ This spoon is based off of PMMP (For Stability)
 - [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
 - [X] **EnderPearls**
 - [X] **SplashPotions**
-- [X] **XBoxLive Authentication** (Needs OpenSSL Extension)
+- [X] **XBoxLive Authentication** (Will not work without [Open-SSL](https://www.github.com/LeverylTeam/PHP7-Binaries) Extension)
 - [X] **Cauldrons**
 - [X] Fully Functional **BrewingStands**
 - [X] **XP System**
@@ -59,7 +59,7 @@ Which can be downloaded [Here](https://www.microsoft.com/en-us/download/details.
 # Acknowledgements / Credits:
 - Leveryl is a "spoon" of **[Pocketmine-MP](http://github.com/pmmp/PocketMine-MP/)**
 - Most of the original code was written by the original PocketMine Team and the new PMMP Team.
-- Some Implementations are ported from Tesseract, GenisysPro and Genisys
+- Some Implementations are ported from [Tesseract](https://www.github.com/TesseractTeam/, [GenisysPro](https://www.github.com/GenisysPro) and [Genisys](https://www.github.com/ITXTech/Genisys)
 - Ported files' authors are stated inside the file
 
 # License:
