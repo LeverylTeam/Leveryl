@@ -2549,7 +2549,15 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 					$this->level->broadcastLevelSoundEvent($this->add(0, 2, 0), LevelSoundEventPacket::SOUND_BURP);
 				}
 				break;
+			case EntityEventPacket::EATING:
+				$slot = $this->inventory->getItemInHand();
+
+				if($slot->canBeConsumed()) {
+					$this->level->broadcastLevelSoundEvent($this->add(0, 2, 0), LevelSoundEventPacket::SOUND_EAT);
+				}
+				break;
 			default:
+				$this->server->getLogger()->debug("UNHANDLED EVENT: " . $packet->event);
 				return false;
 		}
 
