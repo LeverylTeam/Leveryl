@@ -69,6 +69,7 @@ use pocketmine\event\player\PlayerPreLoginEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\event\player\PlayerToggleFlightEvent;
+use pocketmine\event\player\PlayerToggleGlideEvent;
 use pocketmine\event\player\PlayerToggleSneakEvent;
 use pocketmine\event\player\PlayerToggleSprintEvent;
 use pocketmine\event\player\PlayerTransferEvent;
@@ -2203,7 +2204,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 		$this->randomClientId = $packet->clientId;
 
-		$this->uuid = UUID::fromString($packet->clientUUID);
+		// JUST IN CASE the client doesnt send a UUID
+		$this->uuid = UUID::fromString($packet->clientUUID ?? UUID::fromData($this->ip, strval($this->port), $this->username)->toString());
 		$this->rawUUID = $this->uuid->toBinary();
 
 		if(!$this->isValidUserName($packet->username)) {
@@ -3269,8 +3271,23 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 				return true;
 			case PlayerActionPacket::ACTION_START_GLIDE:
+				$ev = new PlayerToggleGlideEvent($this, true);
+				$this->server->getPluginManager()->callEvent($ev);
+				if ($ev->isCancelled()) {
+					$this->sendData($this);
+				} else {
+					$this->setGliding(true);
+				}
+				break;
 			case PlayerActionPacket::ACTION_STOP_GLIDE:
-				break; //TODO
+				$ev = new PlayerToggleGlideEvent($this, false);
+				$this->server->getPluginManager()->callEvent($ev);
+				if ($ev->isCancelled()) {
+					$this->sendData($this);
+				} else {
+					$this->setGliding(false);
+				}
+				break;
 			case PlayerActionPacket::ACTION_CONTINUE_BREAK:
 				$block = $this->level->getBlock($pos);
 				$this->level->broadcastLevelEvent($pos, LevelEventPacket::EVENT_PARTICLE_PUNCH_BLOCK, $block->getId() | ($block->getDamage() << 8) | ($packet->face << 16));
@@ -3348,35 +3365,45 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 	public function handleDropItem(DropItemPacket $packet): bool
 	{
-		if($this->spawned === false or !$this->isAlive()) {
+		if ($this->spawned === false or !$this->isAlive()) {
 			return true;
 		}
 
-		if($this->server->getLeverylConfigValue("LimitedCreative", true) && $this->isCreative()) {
+		if (($this->isCreative() and $this->server->getLeverylConfigValue("LimitedCreative", true)) or $this->isSpectator()) {
+			//Ignore for limited creative
 			return true;
 		}
 
-		if($packet->item->getId() === Item::AIR) {
-			// Windows 10 Edition drops the contents of the crafting grid on container close - including air.
+		if ($packet->item->getId() === Item::AIR or $packet->item->getCount() < 1) {
+			//Ignore dropping air or items with bad counts
 			return true;
 		}
 
-		if($this->gamemode === self::SPECTATOR) {
-			return false;
-		}
-
-		$item = $this->inventory->getItemInHand();
-		$ev = new PlayerDropItemEvent($this, $item);
+		$ev = new PlayerDropItemEvent($this, $packet->item);
 		$this->server->getPluginManager()->callEvent($ev);
-		if($ev->isCancelled()) {
-			$this->inventory->sendContents($this);
-
+		if ($ev->isCancelled()) {
+			$this->getInventory()->removeItem($packet->item);
+			$this->getInventory()->addItem($packet->item);
 			return true;
 		}
 
 		$motion = $this->getDirectionVector()->multiply(0.4);
-		$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
-		$this->level->dropItem($this->add(0, 1.3, 0), $ev->getItem(), $motion, 40);
+
+		$clone = clone $packet->item;
+		$this->level->dropItem($this->add(0, 1.3, 0), $clone, $motion, 40);
+		if($this->getItemInHand()->equals($clone)){
+			$countinhand = $this->getItemInHand()->getCount();
+			$countdropped = $clone->getCount();
+			$inhandclone = clone $this->getItemInHand();
+			if(($countinhand - $countdropped) > 0) {
+				$inhandclone->setCount($countinhand - $countdropped);
+				$this->getInventory()->setItemInHand($inhandclone);
+			} else {
+				$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
+			}
+		} else {
+			$this->getInventory()->removeItem($clone);
+		}
 
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 

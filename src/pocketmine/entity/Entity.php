@@ -577,6 +577,11 @@ abstract class Entity extends Location implements Metadatable
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_IMMOBILE, $value);
 	}
 
+	public function setGliding($value = true) {
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_GLIDING, (bool)$value);
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_IDLING, (bool)$value);
+	}
+
 	/**
 	 * Returns whether the entity is able to climb blocks such as ladders or vines.
 	 * @return bool
