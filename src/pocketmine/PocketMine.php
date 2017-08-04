@@ -65,8 +65,7 @@ namespace {
 		}
 	}
 
-	function dummy()
-	{
+	function dummy(){
 
 	}
 }
