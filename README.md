@@ -10,6 +10,9 @@ This is an Advanced & Feature Rich Server Software to hopefully Replace [Tessera
 (They're dead. And this is **NOT** supposed to be taken out of context.)  
 This spoon is based off of [PMMP](https://www.github.com/pmmp/PocketMine-MP) (For Stability)  
 
+# Where can I get the Latest Leveryl phar?
+You can download the latest phar from our [Jenkins Build Server](http://cortexpe.ml:8080/job/Leveryl/lastSuccessfulBuild/) :smile:
+
 # Features:
 - [ ] TO-DO: ***Re-Write the Inventory***.
 - [x] ***Multi-Protocol***
@@ -48,6 +51,7 @@ This spoon is based off of [PMMP](https://www.github.com/pmmp/PocketMine-MP) (Fo
 #### TravisCI Build Status: [![TravisCI](https://travis-ci.org/LeverylTeam/Leveryl.svg?branch=master)](https://travis-ci.org/LeverylTeam/Leveryl)
 #### Gitter Chat: [![Gitter](https://badges.gitter.im/leveryl/leveryl.svg)](https://gitter.im/leveryl/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=pr-badge)
 #### Discord Server (Talk to a Human For Support): [Join Server](https://discord.gg/8dXXsTq)
+#### Jenkins Build Server: [Jenkins Build Server](http://cortexpe.ml:8080/job/Leveryl/)
 
 # Windows & Linux Installation:
 Read [this](https://github.com/LeverylTeam/Leveryl/wiki/Installation) page on our [Wiki](https://github.com/LeverylTeam/Leveryl/wiki/)... ;)
