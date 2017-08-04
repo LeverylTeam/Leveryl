@@ -3379,6 +3379,10 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			return true;
 		}
 
+		if($this->gamemode === self::SPECTATOR) {
+			return true;
+		}
+
 		$ev = new PlayerDropItemEvent($this, $packet->item);
 		$this->server->getPluginManager()->callEvent($ev);
 		if ($ev->isCancelled()) {
