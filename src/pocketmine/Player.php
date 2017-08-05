@@ -2205,7 +2205,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 		$this->randomClientId = $packet->clientId;
 
 		// JUST IN CASE the client doesnt send a UUID
-		$this->uuid = UUID::fromString($packet->clientUUID ?? UUID::fromData($this->ip, strval($this->port), $this->username)->toString());
+		$this->uuid = UUID::fromString($packet->clientUUID ?? UUID::generateRandom());
 		$this->rawUUID = $this->uuid->toBinary();
 
 		if(!$this->isValidUserName($packet->username)) {
