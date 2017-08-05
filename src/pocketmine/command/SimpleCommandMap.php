@@ -1,22 +1,22 @@
 <?php
 
 /*
- *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ *     __						    _
+ *    / /  _____   _____ _ __ _   _| |
+ *   / /  / _ \ \ / / _ \ '__| | | | |
+ *  / /__|  __/\ V /  __/ |  | |_| | |
+ *  \____/\___| \_/ \___|_|   \__, |_|
+ *						      |___/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author PocketMine Team
- * @link http://www.pocketmine.net/
+ * @author LeverylTeam
+ * @link https://github.com/LeverylTeam
  *
- *
+ * Modified By @CortexPE to FULLY support UserNames with Spaces. ;D
 */
 
 declare(strict_types = 1);
@@ -251,6 +251,25 @@ class SimpleCommandMap implements CommandMap
 	public function dispatch(CommandSender $sender, $commandLine)
 	{
 		$args = explode(" ", $commandLine);
+		// DO NOT STEAL THIS CODE... PLEASE. ~ @LeverylTeam
+		if($this->server->allowignspaces){
+			$index = -1;
+			foreach($args as $e){
+				$index++;
+				if(is_string($e)){
+					if($e[0] == '"' && $e[strlen($e) - 1] == '"'){
+						for($i=1; $i<strlen($e);$i++){
+							if($e[$i] == '_' && ctype_alnum($e[$i - 1]) && ctype_alnum($e[$i + 1])){
+								$e[$i] = ' ';
+							}
+						}
+						$e = str_replace('"','',$e);
+						$args[$index] = $e;
+					}
+				}
+			}
+		}
+		// DO NOT STEAL THIS CODE... PLEASE. ~ @LeverylTeam
 		$sentCommandLabel = "";
 		$target = $this->matchCommand($sentCommandLabel, $args);
 

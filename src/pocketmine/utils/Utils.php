@@ -517,4 +517,42 @@ class Utils
 
 		return $hash;
 	}
+	
+	public static function isValidJson(string $string) : bool {
+		json_decode($string);
+		return (json_last_error() == JSON_ERROR_NONE);
+	}
+	
+	public static function combineQuotation(array $array) : array
+	{
+		if(($array_lenght = count($array)) == 0) {
+			return [];
+		}
+
+		$i = 0;
+		$j = 0;
+		$output = [];
+		$inside_quote = false;
+		$quotation_mark = '"';
+
+		while($i < $array_lenght) {
+			if (false === $inside_quote && $quotation_mark === $array[$i][0]) {
+				$inside_quote = true;
+				$output[$j] = $array[$i];
+			}else if (true === $inside_quote && $quotation_mark === $array[$i][strlen($array[$i]) - 1]) {
+				$inside_quote = false;
+				$output[$j] .= ' ' . $array[$i];
+				$j++;
+			}else if (true === $inside_quote && $quotation_mark !== $array[$i][0] && $quotation_mark !== $array[$i][strlen($array[$i]) - 1]) {
+				$output[$j] .= ' ' . $array[$i];
+			} else {
+				$inside_quote = false;
+				$output[$j] = $array[$i];
+				$j++;
+			}
+			$i++;
+		}
+
+		return $output;
+	}
 }

@@ -277,6 +277,8 @@ class Server
 	public $alwaysday;
 	/** @var bool */
 	public $blockbreakparticles;
+	public $xboxauth;
+	public $allowignspaces;
 
 	/**
 	 * @return string
@@ -1614,6 +1616,8 @@ class Server
 
 			$this->alwaysday = $this->leverylconfig->get("AlwaysDay");
 			$this->blockbreakparticles = $this->getLeverylConfigValue("BlockBreakParticles", true);
+			$this->xboxauth = $this->getLeverylConfigValue("XBoxAuth", false);
+			$this->allowignspaces = $this->getLeverylConfigValue("AllowUserNamesWithSpaces", false);
 
 			if($this->logger instanceof MainLogger) {
 				$this->logger->directSend($startupmsg);
@@ -2288,6 +2292,10 @@ class Server
 			default:
 				// Do nothing.
 				break;
+		}
+		if($this->allowignspaces){
+			$this->logger->warning("PRO TIP: To type User Names on commands with spaces, type it like: \"user_name\"");
+			$this->logger->warning("Example: UserName is Leveryl Team // This Should be typed on commands as: \"Leveryl_Team\" (Including double quotation marks)");
 		}
 
 		($ev = new StartupFinishEvent($this))->call();
