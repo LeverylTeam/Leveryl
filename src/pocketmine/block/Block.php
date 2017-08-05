@@ -340,6 +340,43 @@ class Block extends Position implements BlockIds, Metadatable
 	}
 
 	/**
+	 * Registers a block type into the index. Plugins may use this method to register new block types or override
+	 * existing ones.
+	 *
+	 * NOTE: If you are registering a new block type, you will need to add it to the creative inventory yourself - it
+	 * will not automatically appear there.
+	 *
+	 * @param Block $block
+	 * @param bool  $override Whether to override existing registrations
+	 *
+	 * @throws \RuntimeException if something attempted to override an already-registered block without specifying the
+	 * $override parameter.
+	 */
+	public static function registerBlock(Block $block, bool $override = false)
+	{
+		$id = $block->getId();
+
+		if(isset(self::$list[$id]) and !$override){
+			throw new \RuntimeException("Trying to overwrite an already registered block");
+		}
+
+		self::$list[$id] = clone $block;
+
+		for($meta = 0; $meta < 16; ++$meta){
+			$variant = clone $block;
+			$variant->setDamage($meta);
+			self::$fullList[($id << 4) | $meta] = $variant;
+		}
+
+		self::$solid[$id] = $block->isSolid();
+		self::$transparent[$id] = $block->isTransparent();
+		self::$hardness[$id] = $block->getHardness();
+		self::$light[$id] = $block->getLightLevel();
+		self::$lightFilter[$id] = $block->getLightFilter();
+		self::$diffusesSkyLight[$id] = $block->diffusesSkyLight();
+	}
+	
+	/**
 	 * @param int $id
 	 * @param int $meta
 	 */
