@@ -88,7 +88,7 @@ class Item implements ItemIds, \JsonSerializable
 	/** @var int */
 	protected $id;
 	/** @var int */
-	public $meta;
+	protected $meta;
 	/** @var string */
 	private $tags = "";
 	/** @var CompoundTag|null */
