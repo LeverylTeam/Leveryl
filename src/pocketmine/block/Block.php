@@ -223,7 +223,7 @@ class Block extends Position implements BlockIds, Metadatable
 
 			self::$list[self::QUARTZ_BLOCK] = Quartz::class;
 			self::$list[self::QUARTZ_STAIRS] = QuartzStairs::class;
-			self::$list[self::DOUBLE_WOOD_SLAB] = DoubleWoodSlab::class;
+			self::$list[self::DOUBLE_WOOD_SLAB] = DoubleWoodenSlab::class;
 			self::$list[self::WOOD_SLAB] = WoodSlab::class;
 			self::$list[self::STAINED_CLAY] = StainedClay::class;
 
@@ -372,7 +372,7 @@ class Block extends Position implements BlockIds, Metadatable
 		self::$transparent[$id] = $block->isTransparent();
 		self::$hardness[$id] = $block->getHardness();
 		self::$light[$id] = $block->getLightLevel();
-		self::$lightFilter[$id] = $block->getLightFilter();
+		self::$lightFilter[$id] = $block->getLightFilter() + 1;
 		self::$diffusesSkyLight[$id] = $block->diffusesSkyLight();
 	}
 	

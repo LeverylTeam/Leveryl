@@ -23,6 +23,8 @@
 namespace pocketmine\entity;
 
 use pocketmine\event\entity\CreeperPowerEvent;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\item\Item;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
@@ -90,4 +92,22 @@ class Creeper extends Monster
 
 		parent::spawnTo($player);
 	}
+	public function getDrops(){
+		$drops = [];
+		if($this->lastDamageCause instanceof EntityDamageByEntityEvent){
+			switch(mt_rand(0, 2)){
+				case 0 :
+					$drops[] = Item::get(Item::FLINT, 0, 1);
+					break;
+				case 1 :
+					$drops[] = Item::get(Item::GUNPOWDER, 0, 1);
+					break;
+				case 2 :
+					$drops[] = Item::get(Item::REDSTONE_DUST, 0, 1);
+					break;
+			}
+		}
+		return $drops;
+	}
+
 }

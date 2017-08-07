@@ -66,7 +66,7 @@ class Boat extends Vehicle {
 	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->eid = $this->getId();
+		$pk->entityRuntimeId = $this->getId();
 		$pk->type = Boat::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
@@ -93,7 +93,7 @@ class Boat extends Vehicle {
 
 		if(!$source->isCancelled()){
 			$pk = new EntityEventPacket();
-			$pk->eid = $this->id;
+			$pk->entityRuntimeId = $this->id;
 			$pk->event = EntityEventPacket::HURT_ANIMATION;
 			foreach($this->getLevel()->getPlayers() as $player){
 				$player->dataPacket($pk);

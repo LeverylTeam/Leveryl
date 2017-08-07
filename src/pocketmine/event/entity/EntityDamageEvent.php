@@ -133,14 +133,14 @@ class EntityDamageEvent extends EntityEvent implements Cancellable
 					switch($cause) {
 						case self::CAUSE_ENTITY_EXPLOSION:
 						case self::CAUSE_BLOCK_EXPLOSION:
-							$spe_Prote = Enchantment::TYPE_ARMOR_EXPLOSION_PROTECTION;
+							$spe_Prote = Enchantment::BLAST_PROTECTION;
 							break;
 						case self::CAUSE_FIRE:
 						case self::CAUSE_LAVA:
-							$spe_Prote = Enchantment::TYPE_ARMOR_FIRE_PROTECTION;
+							$spe_Prote = Enchantment::FIRE_PROTECTION;
 							break;
 						case self::CAUSE_PROJECTILE:
-							$spe_Prote = Enchantment::TYPE_ARMOR_PROJECTILE_PROTECTION;
+							$spe_Prote = Enchantment::PROJECTILE_PROTECTION;
 							break;
 						default;
 							break;
@@ -148,10 +148,10 @@ class EntityDamageEvent extends EntityEvent implements Cancellable
 					foreach($this->usedArmors as $index => $cost) {
 						$i = $entity->getInventory()->getArmorItem($index);
 						if($i->isArmor()) {
-							$this->EPF += $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_PROTECTION);
-							$this->fireProtectL = max($this->fireProtectL, $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_FIRE_PROTECTION));
-							if($i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_THORNS) > 0) {
-								$this->thornsLevel[$index] = $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_THORNS);
+							$this->EPF += $i->getEnchantmentLevel(Enchantment::PROTECTION);
+							$this->fireProtectL = max($this->fireProtectL, $i->getEnchantmentLevel(Enchantment::FIRE_PROTECTION));
+							if($i->getEnchantmentLevel(Enchantment::THORNS) > 0) {
+								$this->thornsLevel[$index] = $i->getEnchantmentLevel(Enchantment::THORNS);
 							}
 							if($spe_Prote !== null) {
 								$this->EPF += 2 * $i->getEnchantmentLevel($spe_Prote);
@@ -163,8 +163,8 @@ class EntityDamageEvent extends EntityEvent implements Cancellable
 					//Feather Falling
 					$i = $entity->getInventory()->getBoots();
 					if($i->isArmor()) {
-						$this->EPF += $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_PROTECTION);
-						$this->EPF += 3 * $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_FALL_PROTECTION);
+						$this->EPF += $i->getEnchantmentLevel(Enchantment::PROTECTION);
+						$this->EPF += 3 * $i->getEnchantmentLevel(Enchantment::FEATHER_FALLING);
 					}
 					break;
 				case self::CAUSE_FIRE_TICK:

@@ -1879,7 +1879,7 @@ class Level implements ChunkManager, Metadatable
 			$drops = $ev->getDrops();
 
 			$exp = 0;
-			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) === 0) {
+			if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) === 0) {
 				switch($target->getId()) {
 					case Block::COAL_ORE:
 						$exp = mt_rand(0, 2);

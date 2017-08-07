@@ -62,9 +62,18 @@ class Zombie extends Monster
 
 	public function getDrops()
 	{
-		$drops = [
-			ItemItem::get(ItemItem::FEATHER, 0, 1),
-		];
+		switch(mt_rand(0, 1)) {
+			case 0:
+				$drops = [
+					ItemItem::get(ItemItem::ROTTEN_FLESH, 0, 1),
+				];
+				break;
+			case 1:
+				$drops = [
+					ItemItem::get(ItemItem::FEATHER, 0, 1),
+				];
+				break;
+		}
 		if($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Player) {
 			if(mt_rand(0, 199) < 5) {
 				switch(mt_rand(0, 2)) {

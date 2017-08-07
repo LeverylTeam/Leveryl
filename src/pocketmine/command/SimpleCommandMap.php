@@ -252,7 +252,7 @@ class SimpleCommandMap implements CommandMap
 	{
 		$args = explode(" ", $commandLine);
 		// DO NOT STEAL THIS CODE... PLEASE. ~ @LeverylTeam
-		if($this->server->allowignspaces){
+		if($this->server->allowignspaces && $this->server->xboxauth){
 			$index = -1;
 			foreach($args as $e){
 				$index++;

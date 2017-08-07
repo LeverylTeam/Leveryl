@@ -64,11 +64,14 @@ class Blaze extends Monster
 	{
 		$cause = $this->lastDamageCause;
 		//Only drop when kill by player or dog(No add now.)
-		if($cause instanceof EntityDamageByEntityEvent && $cause->getDamager() instanceof Player) {
-			$lootingL = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_TYPE_WEAPON_LOOTING);
-			$drops = [ItemItem::get(ItemItem::BLAZE_ROD, 0, mt_rand(0, 1 + $lootingL))];
+		if($cause instanceof EntityDamageByEntityEvent) {
+			$pl = $cause->getDamager();
+			if($pl instanceof Player) {
+				$lootingL = $pl->getItemInHand()->getEnchantmentLevel(Enchantment::LOOTING);
+				$drops = [ItemItem::get(ItemItem::BLAZE_ROD, 0, mt_rand(0, 1 + $lootingL))];
 
-			return $drops;
+				return $drops;
+			}
 		}
 
 		return [];

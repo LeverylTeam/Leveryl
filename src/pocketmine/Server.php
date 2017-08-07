@@ -2293,7 +2293,7 @@ class Server
 				// Do nothing.
 				break;
 		}
-		if($this->allowignspaces){
+		if($this->allowignspaces && $this->xboxauth){
 			$this->logger->warning("PRO TIP: To type User Names on commands with spaces, type it like: \"user_name\"");
 			$this->logger->warning("Example: UserName is Leveryl Team // This Should be typed on commands as: \"Leveryl_Team\" (Including double quotation marks)");
 		}

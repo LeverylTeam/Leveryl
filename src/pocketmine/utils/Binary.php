@@ -608,4 +608,16 @@ class Binary
 
 		throw new \InvalidArgumentException("Value too large to be encoded as a VarLong");
 	}
+
+	public static function flipShortEndianness(int $value) : int{
+		return self::readLShort(self::writeShort($value));
+	}
+
+	public static function flipIntEndianness(int $value) : int{
+		return self::readLInt(self::writeInt($value));
+	}
+
+	public static function flipLongEndianness(int $value) : int{
+		return self::readLLong(self::writeLong($value));
+	}
 }

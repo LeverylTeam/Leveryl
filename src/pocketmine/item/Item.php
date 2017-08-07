@@ -535,14 +535,8 @@ class Item implements ItemIds, \JsonSerializable
 		}
 
 		$tag = $this->getNamedTag();
-		if(isset($tag->ench)) {
-			$tag = $tag->ench;
-			if($tag instanceof ListTag) {
-				return true;
-			}
-		}
 
-		return false;
+		return isset($tag->ench) and $tag->ench instanceof ListTag;
 	}
 
 	/**
@@ -697,19 +691,20 @@ class Item implements ItemIds, \JsonSerializable
 		} else {
 			$tag = $this->getNamedTag();
 		}
+		$found = false;
 		if(!isset($tag->ench)) {
 			$tag->ench = new ListTag("ench", []);
 			$tag->ench->setTagType(NBT::TAG_Compound);
-		}
-		$found = false;
-		foreach($tag->ench as $k => $entry) {
-			if($entry["id"] === $ench->getId()) {
-				$tag->ench->{$k} = new CompoundTag("", [
-					new ShortTag("id", $ench->getId()),
-					new ShortTag("lvl", $ench->getLevel()),
-				]);
-				$found = true;
-				break;
+		}else{
+			foreach($tag->ench as $k => $entry) {
+				if($entry["id"] === $ench->getId()) {
+					$tag->ench->{$k} = new CompoundTag("", [
+						new ShortTag("id", $ench->getId()),
+						new ShortTag("lvl", $ench->getLevel()),
+					]);
+					$found = true;
+					break;
+				}
 			}
 		}
 		if(!$found) {
@@ -719,7 +714,7 @@ class Item implements ItemIds, \JsonSerializable
 					$count++;
 				}
 			}
-			$tag->ench->{$count + 1} = new CompoundTag("", [
+			$tag->ench->{$count} = new CompoundTag("", [
 				new ShortTag("id", $ench->getId()),
 				new ShortTag("lvl", $ench->getLevel()),
 			]);
@@ -727,21 +722,44 @@ class Item implements ItemIds, \JsonSerializable
 		$this->setNamedTag($tag);
 	}
 
+	public function removeEnchantment(int $id, int $level = -1){
+		if(!$this->hasEnchantments()){
+			return;
+		}
+
+		$tag = $this->getNamedTag();
+		foreach($tag->ench as $k => $entry){
+			if($entry["id"] === $id){
+				if($level === -1 or $entry["lvl"] === $level){
+					unset($tag->ench[$k]);
+					break;
+				}
+			}
+		}
+		$this->setNamedTag($tag);
+	}
+
+	public function removeEnchantments(){
+		if($this->hasEnchantments()){
+			$tag = $this->getNamedTag();
+			unset($tag->ench);
+			$this->setNamedTag($tag);
+		}
+	}
+
 	/**
 	 * @return Enchantment[]
 	 */
 	public function getEnchantments(): array
 	{
-		if(!$this->hasEnchantments()) {
-			return [];
-		}
-
 		$enchantments = [];
 
-		foreach($this->getNamedTag()->ench as $entry) {
-			$e = Enchantment::getEnchantment($entry["id"]);
-			$e->setLevel($entry["lvl"]);
-			$enchantments[] = $e;
+		if($this->hasEnchantments()) {
+			foreach($this->getNamedTag()->ench as $entry) {
+				$e = Enchantment::getEnchantment($entry["id"]);
+				$e->setLevel($entry["lvl"]);
+				$enchantments[] = $e;
+			}
 		}
 
 		return $enchantments;
