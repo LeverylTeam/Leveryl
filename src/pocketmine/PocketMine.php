@@ -450,10 +450,6 @@ namespace pocketmine {
 			}
 		}
 
-		if(extension_loaded("xdebug")) {
-			$logger->warning(PHP_EOL . PHP_EOL . PHP_EOL . "\tYou are running PocketMine with xdebug enabled. This has a major impact on performance." . PHP_EOL . PHP_EOL);
-		}
-
 		$extensions = [
 			"curl"     => "cURL",
 			"json"     => "JSON",

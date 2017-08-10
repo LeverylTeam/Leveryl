@@ -1639,11 +1639,7 @@ class Server
 					$this->getLogger()->info("§aX§7Box§f Live Authentication §aEnabled!");
 				}
 			} else {
-				if($this->leverylconfig->get("XBoxAuth")){
-					$this->getLogger()->warning("§cOpen§8SSL§e Extension Not Found!");
-					$this->getLogger()->warning("§aX§7Box§f Live Authentication §4Disabled!");
-					$this->leverylconfig->set("XBoxAuth", false);
-				}
+				$this->getLogger()->warning("§cOpen§8SSL§e Not Found! You'll need this extension for XBoxAuth.");
 			}
 
 			ServerScheduler::$WORKERS = $poolSize;
@@ -1694,6 +1690,9 @@ class Server
 
 			define('pocketmine\DEBUG', (int)$this->getProperty("debug.level", 1));
 
+			if(extension_loaded("xdebug")) {
+				$this->logger->warning("You are running Leveryl with xdebug enabled. This has a major impact on performance.");
+			}
 			if(((int)ini_get('zend.assertions')) > 0 and ((bool)$this->getProperty("debug.assertions.warn-if-enabled", true)) !== false) {
 				$this->logger->warning("Debugging assertions are enabled, this may impact on performance. To disable them, set `zend.assertions = -1` in php.ini.");
 			}
