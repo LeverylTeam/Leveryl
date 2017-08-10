@@ -5,12 +5,12 @@ REM Start Script options [WARNING: If you don't know these, Don't attempt to cha
 REM ----------------------------
 
 REM Set to "yes" to automatically start the server up. DEFAULT: "no"
-set DO_LOOP="yes"
+set DO_LOOP="no"
 
 REM Transparency options [WARNING: THIS HAS ONLY BEEN TESTED ON Windows 10] DEFAULT: "off"
 REM Set to "off" to disable...
 REM Available Values: ["off","low","medium","high"]
-set TRANSPARENCY_LEVEL="high"
+set TRANSPARENCY_LEVEL="off"
 
 REM Console Window Size: DEFAULT: CONSOLE_COLUMNS=88 | CONSOLE_ROWS=32
 set CONSOLE_COLUMNS=88
