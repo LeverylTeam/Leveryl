@@ -27,6 +27,7 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
+use pocketmine\utils\UUID;
 
 class AddPlayerPacket extends DataPacket
 {
@@ -67,7 +68,7 @@ class AddPlayerPacket extends DataPacket
 	public function encode()
 	{
 		$this->reset();
-		$this->putUUID($this->uuid);
+		$this->putUUID($this->uuid ?? UUID::fromString(UUID::generateRandom())); // FIXME: HACK!
 		$this->putString($this->username);
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
