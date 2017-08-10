@@ -1,6 +1,0 @@
-name: LeverylCITester
-main: Leveryl\Main
-version: 1.0.0
-api: 3.0.0-ALPHA5
-author: "LeverylTeam"
-description: Plugin used to run CITests on Leveryl
