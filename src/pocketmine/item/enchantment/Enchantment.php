@@ -98,7 +98,7 @@ class Enchantment
 	const FLAME = 21;
 	const INFINITY = 22;
 	const LUCK_OF_THE_SEA = 23;
-	const TYPE_FISHING_LURE = 24;
+	const LURE = 24;
 
 	const RARITY_COMMON = 0;
 	const RARITY_UNCOMMON = 1;
