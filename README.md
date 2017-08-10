@@ -47,7 +47,7 @@ You can download the latest phar from our [Jenkins Build Server](http://cortexpe
 ***Other List Entries are on "leveryl.yml"....***
 
 # Builds, Gitter Chat & Discord Server:
-#### Jenkins Build Server: [![Jenkins](http://cortexpe.ml:8080/job/Leveryl/badge/icon)](http://cortexpe.ml:8080/job/Leveryl/)
+#### Jenkins Build Status: [![Jenkins](http://cortexpe.ml:8080/job/Leveryl/badge/icon)](http://cortexpe.ml:8080/job/Leveryl/)
 #### TravisCI Build Status: [![TravisCI](https://travis-ci.org/LeverylTeam/Leveryl.svg?branch=master)](https://travis-ci.org/LeverylTeam/Leveryl)
 #### Gitter Chat: [![Gitter](https://badges.gitter.im/leveryl/leveryl.svg)](https://gitter.im/leveryl/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=pr-badge)
 #### Discord Server (Talk to a Human For Support): [Join Server](https://discord.gg/8dXXsTq)
