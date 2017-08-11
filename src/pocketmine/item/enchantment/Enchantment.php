@@ -168,7 +168,7 @@ class Enchantment
 		self::$enchantments[self::FLAME] = new Enchantment(self::FLAME, "%enchantment.bow.flame", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_BOW);
 		self::$enchantments[self::INFINITY] = new Enchantment(self::INFINITY, "%enchantment.bow.infinity", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_BOW);
 		self::$enchantments[self::LUCK_OF_THE_SEA] = new Enchantment(self::LUCK_OF_THE_SEA, "%enchantment.fishing.fortune", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_FISHING_ROD);
-		self::$enchantments[self::TYPE_FISHING_LURE] = new Enchantment(self::TYPE_FISHING_LURE, "%enchantment.fishing.lure", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_FISHING_ROD);
+		self::$enchantments[self::LURE] = new Enchantment(self::LURE, "%enchantment.fishing.lure", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_FISHING_ROD);
 
 	}
 
@@ -331,7 +331,7 @@ class Enchantment
 			case self::INFINITY:
 				return 1;
 			case self::LUCK_OF_THE_SEA:
-			case self::TYPE_FISHING_LURE:
+			case self::LURE:
 				return 3;
 		}
 
