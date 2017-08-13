@@ -10,6 +10,9 @@ This is an Advanced & Feature Rich Server Software to hopefully Replace [Tessera
 (They're dead. And this is **NOT** supposed to be taken out of context.)  
 This spoon is based off of [PMMP](https://www.github.com/pmmp/PocketMine-MP) (For Stability)  
 
+NOTE: **The master branch is the only officially supported branch.**
+_All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks._
+
 # Where can I get the Latest Leveryl phar?
 You can download the latest phar from our [Jenkins Build Server](http://cortexpe.ml:8080/job/Leveryl/lastSuccessfulBuild/) :smile:
 
