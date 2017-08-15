@@ -4582,9 +4582,9 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 		$pk = new MovePlayerPacket();
 		$pk->entityRuntimeId = $this->getId();
-		$pk->x = $pos->x;
-		$pk->y = $pos->y + $this->getEyeHeight();
-		$pk->z = $pos->z;
+		$pk->x = (float) $pos->x;
+		$pk->y = (float) $pos->y + $this->getEyeHeight();
+		$pk->z = (float) $pos->z;
 		$pk->bodyYaw = $yaw;
 		$pk->pitch = $pitch;
 		$pk->yaw = $yaw;
