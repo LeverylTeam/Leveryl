@@ -209,8 +209,21 @@ class MainLogger extends \AttachableThreadedLogger
 			}
 		} else {
 			$now = time();
+			
+			$thread = \Thread::getCurrentThread();
+			if($thread === null){
+				$threadName = "Server thread";
+			}elseif($thread instanceof Thread or $thread instanceof Worker){
+				$threadName = $thread->getThreadName() . " thread";
+			}else{
+				$threadName = (new \ReflectionClass($thread))->getShortName() . " thread";
+			}
 
-			$message = TextFormat::toANSI(TextFormat::AQUA . date("H:i:s", $now) . " " . TextFormat::RESET . $color . "[" . $prefix . "] " . $message . TextFormat::RESET);
+			if($threadName == "Server thread"){
+				$message = TextFormat::toANSI(TextFormat::AQUA . date("H:i:s", $now) . " " . TextFormat::RESET . $color . "[" . $prefix . "] " . $message . TextFormat::RESET);
+			} else {
+				$message = TextFormat::toANSI(TextFormat::AQUA . date("H:i:s", $now) . " " . TextFormat::RESET . $color . "[" . TextFormat::YELLOW . $threadName . $color . "/" . $prefix . "] " . $message . TextFormat::RESET);
+			}
 			$cleanMessage = TextFormat::clean($message);
 
 			if(!Terminal::hasFormattingCodes()) {

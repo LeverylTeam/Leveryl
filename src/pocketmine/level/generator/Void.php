@@ -1,34 +1,34 @@
 <?php
 
 /*
- *
- *  _____   _____   __   _   _   _____  __    __  _____
- * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
- * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *     __						    _
+ *    / /  _____   _____ _ __ _   _| |
+ *   / /  / _ \ \ / / _ \ '__| | | | |
+ *  / /__|  __/\ V /  __/ |  | |_| | |
+ *  \____/\___| \_/ \___|_|   \__, |_|
+ *						      |___/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author iTX Technologies
- * @link https://itxtech.org
+ * @author LeverylTeam
+ * @link https://github.com/LeverylTeam
  *
- */
+*/
 
 namespace pocketmine\level\generator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\format\Chunk;
-use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 
-class Void extends Generator{
+use pocketmine\Server;
+
+class Void extends Generator {
 	/** @var ChunkManager */
 	private $level;
 	/** @var Chunk */
@@ -39,27 +39,46 @@ class Void extends Generator{
 	/** @var Chunk */
 	private $emptyChunk = null;
 
-	const SPAWN_X = 256;
-	const SPAWN_Y = 70;
-	const SPAWN_Z = 256;
-
+	/**
+	 * @return array
+	 */
 	public function getSettings(){
 		return [];
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName(){
 		return "Void";
 	}
 
+	/**
+	 * Void constructor.
+	 *
+	 * @param array $settings
+	 */
 	public function __construct(array $settings = []){
 		$this->options = $settings;
 	}
 
+	/**
+	 * @param ChunkManager $level
+	 * @param Random       $random
+	 *
+	 * @return mixed|void
+	 */
 	public function init(ChunkManager $level, Random $random){
 		$this->level = $level;
 		$this->random = $random;
 	}
 
+	/**
+	 * @param $chunkX
+	 * @param $chunkZ
+	 *
+	 * @return mixed|void
+	 */
 	public function generateChunk($chunkX, $chunkZ){
 		if($this->emptyChunk === null){
 			$this->chunk = clone $this->level->getChunk($chunkX, $chunkZ);
@@ -68,15 +87,15 @@ class Void extends Generator{
 			for($Z = 0; $Z < 16; ++$Z){
 				for($X = 0; $X < 16; ++$X){
 					$this->chunk->setBiomeId($X, $Z, 1);
-					for($y = 0; $y < Level::Y_MAX; ++$y){
+					for($y = 0; $y < 128; ++$y){
 						$this->chunk->setBlockId($X, $y, $Z, Block::AIR);
 					}
 				}
 			}
 
 			$spawn = $this->getSpawn();
-			if($spawn->getX() >> 4 === $chunkX and $spawn->getZ() >> 4 === $chunkZ){
-				$this->chunk->setBlockId(self::SPAWN_X, self::SPAWN_Y - 1, self::SPAWN_Z, Block::GRASS);
+			if(($chunkX == ($spawn->x >> 4)) and ($chunkZ == ($spawn->z >> 4))){
+				$this->chunk->setBlockId(0, 64, 0, Block::GRASS);
 			}else{
 				$this->emptyChunk = clone $this->chunk;
 			}
@@ -90,12 +109,21 @@ class Void extends Generator{
 		$this->level->setChunk($chunkX, $chunkZ, $chunk);
 	}
 
+	/**
+	 * @param $chunkX
+	 * @param $chunkZ
+	 *
+	 * @return mixed|void
+	 */
 	public function populateChunk($chunkX, $chunkZ){
 
 	}
 
+	/**
+	 * @return Vector3
+	 */
 	public function getSpawn(){
-		return new Vector3(self::SPAWN_X, self::SPAWN_Y, self::SPAWN_Z);
+		return new Vector3(256, 72, 256);
 	}
 
 }
