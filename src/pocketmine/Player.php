@@ -2170,6 +2170,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			return false;
 		}
 
+		$this->server->getLogger()->debug("Receiving connection from: " . $this->ip . ":" . $this->port);
+
 		$this->username = TextFormat::clean($packet->username);
 		$this->displayName = $this->username;
 		$this->iusername = strtolower($this->username);
@@ -4443,16 +4445,16 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 				}
 				break;
 			case EntityDamageEvent::CAUSE_PROJECTILE:
-				if($cause instanceof EntityDamageByEntityEvent) {
+				if($cause instanceof EntityDamageByEntityEvent){
 					$e = $cause->getDamager();
-					if($e instanceof Player) {
+					if($e instanceof Player){
 						$message = "death.attack.arrow";
 						$params[] = $e->getDisplayName();
-					} elseif($e instanceof Living) {
+					}elseif($e instanceof Living){
 						$message = "death.attack.arrow";
 						$params[] = $e->getNameTag() !== "" ? $e->getNameTag() : $e->getName();
 						break;
-					} else {
+					}else{
 						$params[] = "Unknown";
 					}
 				}
@@ -4464,79 +4466,66 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 				$message = "death.attack.outOfWorld";
 				break;
 			case EntityDamageEvent::CAUSE_FALL:
-				if($cause instanceof EntityDamageEvent) {
-					if($cause->getFinalDamage() > 2) {
+				if($cause instanceof EntityDamageEvent){
+					if($cause->getFinalDamage() > 2){
 						$message = "death.fell.accident.generic";
 						break;
 					}
 				}
 				$message = "death.attack.fall";
 				break;
-
 			case EntityDamageEvent::CAUSE_SUFFOCATION:
 				$message = "death.attack.inWall";
 				break;
-
 			case EntityDamageEvent::CAUSE_LAVA:
 				$message = "death.attack.lava";
 				break;
-
 			case EntityDamageEvent::CAUSE_FIRE:
 				$message = "death.attack.onFire";
 				break;
-
 			case EntityDamageEvent::CAUSE_FIRE_TICK:
 				$message = "death.attack.inFire";
 				break;
-
 			case EntityDamageEvent::CAUSE_DROWNING:
 				$message = "death.attack.drown";
 				break;
-
 			case EntityDamageEvent::CAUSE_CONTACT:
-				if($cause instanceof EntityDamageByBlockEvent) {
-					if($cause->getDamager()->getId() === Block::CACTUS) {
+				if($cause instanceof EntityDamageByBlockEvent){
+					if($cause->getDamager()->getId() === Block::CACTUS){
 						$message = "death.attack.cactus";
 					}
 				}
 				break;
-
 			case EntityDamageEvent::CAUSE_BLOCK_EXPLOSION:
 			case EntityDamageEvent::CAUSE_ENTITY_EXPLOSION:
-				if($cause instanceof EntityDamageByEntityEvent) {
+				if($cause instanceof EntityDamageByEntityEvent){
 					$e = $cause->getDamager();
-					if($e instanceof Player) {
+					if($e instanceof Player){
 						$message = "death.attack.explosion.player";
 						$params[] = $e->getDisplayName();
-					} elseif($e instanceof Living) {
+					}elseif($e instanceof Living){
 						$message = "death.attack.explosion.player";
 						$params[] = $e->getNameTag() !== "" ? $e->getNameTag() : $e->getName();
 						break;
 					}
-				} else {
+				}else{
 					$message = "death.attack.explosion";
 				}
 				break;
-
 			case EntityDamageEvent::CAUSE_MAGIC:
 				$message = "death.attack.magic";
 				break;
-
 			case EntityDamageEvent::CAUSE_CUSTOM:
 				break;
-
 			default:
 				break;
 		}
-
 		$this->server->getPluginManager()->callEvent($ev = new PlayerDeathEvent($this, $this->getDrops(), new TranslationContainer($message, $params)));
-
-		if(!$ev->getPlayer()->getLevel()->getGameRule("keepInventory")) {
-			foreach($ev->getDrops() as $item) {
+		if(!$ev->getKeepInventory()){
+			foreach($ev->getDrops() as $item){
 				$this->level->dropItem($this, $item);
 			}
-
-			if($this->inventory !== null) {
+			if($this->inventory !== null){
 				$this->inventory->clearAll();
 				$this->inventory->setHeldItemIndex(0);
 				$this->inventory->resetHotbar(true);

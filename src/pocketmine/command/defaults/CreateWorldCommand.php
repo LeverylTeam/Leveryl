@@ -47,7 +47,10 @@ class CreateWorldCommand extends VanillaCommand
 			return true;
 		}
 
-		if(count($args) < 1 || count($args) > 3) return false;
+		if(count($args) < 1 || count($args) > 3){
+			$sender->sendMessage("USAGE: /createworld <world name> [seed] [generator]");
+			return false;
+		}
 		$world = array_shift($args);
 
 		if($sender->getServer()->isLevelGenerated($world)) {

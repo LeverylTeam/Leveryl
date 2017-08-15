@@ -64,6 +64,7 @@ use pocketmine\level\generator\Flat;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\hell\Nether;
 use pocketmine\level\generator\normal\Normal;
+use pocketmine\level\generator\Void;
 use pocketmine\level\Level;
 use pocketmine\level\LevelException;
 use pocketmine\metadata\EntityMetadataStore;
@@ -1772,6 +1773,7 @@ class Server
 			Generator::addGenerator(Normal::class, "normal");
 			Generator::addGenerator(Normal::class, "default");
 			Generator::addGenerator(Nether::class, "nether");
+			Generator::addGenerator(Void::class, "void");
 
 			foreach((array)$this->getProperty("worlds", []) as $name => $worldSetting) {
 				if($this->loadLevel($name) === false) {
