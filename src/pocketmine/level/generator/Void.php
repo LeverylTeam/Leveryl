@@ -23,6 +23,7 @@ namespace pocketmine\level\generator;
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 
@@ -87,7 +88,7 @@ class Void extends Generator {
 			for($Z = 0; $Z < 16; ++$Z){
 				for($X = 0; $X < 16; ++$X){
 					$this->chunk->setBiomeId($X, $Z, 1);
-					for($y = 0; $y < 128; ++$y){
+					for($y = 0; $y < Level::Y_MAX; ++$y){
 						$this->chunk->setBlockId($X, $y, $Z, Block::AIR);
 					}
 				}
