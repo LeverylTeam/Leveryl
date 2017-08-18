@@ -715,8 +715,10 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 	{
 		$data = [];
 		foreach($this->server->getCommandMap()->getCommands() as $command) {
-			if(count($cmdData = $command->generateCustomCommandData($this)) > 0) {
-				$data[$command->getName()]["versions"][0] = $cmdData;
+			if($this->hasPermission($command->getPermission()) or $command->getPermission() == null) {
+				if(count($cmdData = $command->generateCustomCommandData($this)) > 0) {
+					$data[$command->getName()]["versions"][0] = $cmdData;
+				}
 			}
 		}
 
