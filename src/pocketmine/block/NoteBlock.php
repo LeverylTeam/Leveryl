@@ -159,4 +159,8 @@ class NoteBlock extends Solid
 	{
 		return "Noteblock";
 	}
+
+	public function getFuelTime() : int{
+		return 300;
+	}
 }

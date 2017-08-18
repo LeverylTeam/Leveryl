@@ -89,22 +89,22 @@ abstract class BaseLevelProvider implements LevelProvider
 		return (string)$this->levelData["LevelName"];
 	}
 
-	public function getTime()
+	public function getTime() : int
 	{
-		return $this->levelData["Time"];
+		return intval($this->levelData["Time"]);
 	}
 
-	public function setTime($value)
+	public function setTime(int $value)
 	{
 		$this->levelData->Time = new LongTag("Time", $value);
 	}
 
-	public function getSeed()
+	public function getSeed() : int
 	{
-		return $this->levelData["RandomSeed"];
+		return intval($this->levelData["RandomSeed"]);
 	}
 
-	public function setSeed($value)
+	public function setSeed(int $value)
 	{
 		$this->levelData->RandomSeed = new LongTag("RandomSeed", $value);
 	}

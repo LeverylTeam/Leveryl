@@ -63,11 +63,9 @@ class Fence extends Transparent
 			self::FENCE_JUNGLE  => "Jungle Fence",
 			self::FENCE_ACACIA  => "Acacia Fence",
 			self::FENCE_DARKOAK => "Dark Oak Fence",
-			"",
-			"",
 		];
 
-		return $names[$this->meta & 0x07];
+		return $names[$this->meta & 0x07] ?? "Unknown";
 	}
 
 	protected function recalculateBoundingBox()
@@ -98,4 +96,7 @@ class Fence extends Transparent
 		return ($block instanceof Fence or $block instanceof FenceGate) ? true : $block->isSolid() and !$block->isTransparent();
 	}
 
+	public function getFuelTime() : int{
+		return 300;
+	}
 }

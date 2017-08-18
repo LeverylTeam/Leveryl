@@ -172,4 +172,8 @@ class Trapdoor extends Transparent
 	{
 		return Tool::TYPE_AXE;
 	}
+
+	public function getFuelTime() : int{
+		return 300;
+	}
 }

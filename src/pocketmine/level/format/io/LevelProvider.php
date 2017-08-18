@@ -180,22 +180,22 @@ interface LevelProvider
 	/**
 	 * @return int|string int, or the string numeric representation of a long in 32-bit systems
 	 */
-	public function getTime();
+	public function getTime() : int;
 
 	/**
 	 * @param int|string $value int, or the string numeric representation of a long in 32-bit systems
 	 */
-	public function setTime($value);
+	public function setTime(int $value);
 
 	/**
 	 * @return int|string int, or the string numeric representation of a long in 32-bit systems
 	 */
-	public function getSeed();
+	public function getSeed() : int;
 
 	/**
 	 * @param int|string $value int, or the string numeric representation of a long in 32-bit systems
 	 */
-	public function setSeed($value);
+	public function setSeed(int $value);
 
 	/**
 	 * @return Vector3

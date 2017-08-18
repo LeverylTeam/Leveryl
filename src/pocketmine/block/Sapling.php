@@ -59,11 +59,9 @@ class Sapling extends Flowable
 			3 => "Jungle Sapling",
 			4 => "Acacia Sapling",
 			5 => "Dark Oak Sapling",
-			6 => "",
-			7 => "",
 		];
 
-		return $names[$this->meta & 0x07];
+		return $names[$this->meta & 0x07] ?? "Unknown";
 	}
 
 
@@ -125,5 +123,9 @@ class Sapling extends Flowable
 		return [
 			[$this->id, $this->meta & 0x07, 1],
 		];
+	}
+
+	public function getFuelTime() : int{
+		return 100;
 	}
 }

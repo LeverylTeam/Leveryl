@@ -59,7 +59,7 @@ class DoubleSlab extends Solid
 			7 => "Nether Brick",
 		];
 
-		return "Double " . $names[$this->meta & 0x07] . " Slab";
+		return "Double " . $names[$this->meta & 0x07] ?? "Unknown" . " Slab";
 	}
 
 	public function getDrops(Item $item)

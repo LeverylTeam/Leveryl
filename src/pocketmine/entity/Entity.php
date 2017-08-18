@@ -385,10 +385,13 @@ abstract class Entity extends Location implements Metadatable
 	/** @var \pocketmine\event\TimingsHandler */
 	protected $timings;
 	protected $isPlayer = false;
+	/** @var bool */
+	protected $constructed = false;
 
 
 	public function __construct(Level $level, CompoundTag $nbt)
 	{
+		$this->constructed = true;
 		$this->timings = Timings::getEntityTimings($this);
 
 		$this->isPlayer = $this instanceof Player;
@@ -650,13 +653,19 @@ abstract class Entity extends Location implements Metadatable
 	 *
 	 * @throws \InvalidArgumentException if the supplied entity is not valid
 	 */
-	public function setOwningEntity(Entity $owner)
+	public function setOwningEntity(Entity $owner = null)
 	{
-		if($owner->closed) {
-			throw new \InvalidArgumentException("Supplied owning entity is garbage and cannot be used");
+		if($owner === null){
+			$this->removeDataProperty(self::DATA_OWNER_EID);
+		}elseif($owner->closed) {
+			throw new \InvalidArgumentException("Supplied owning entity cannot be used");
+		}else{
+			$this->setDataProperty(self::DATA_OWNER_EID, self::DATA_TYPE_LONG, $owner->getId());
 		}
+	}
 
-		$this->setDataProperty(self::DATA_OWNER_EID, self::DATA_TYPE_LONG, $owner->getId());
+	public function removeDataProperty(int $id){
+		unset($this->dataProperties[$id]);
 	}
 
 	/**
@@ -684,6 +693,10 @@ abstract class Entity extends Location implements Metadatable
 		return null;
 	}
 
+	public function isClosed() : bool{
+		return $this->closed;
+	}
+
 	/**
 	 * Sets the entity's target entity.
 	 *
@@ -691,13 +704,15 @@ abstract class Entity extends Location implements Metadatable
 	 *
 	 * @throws \InvalidArgumentException if the target entity is not valid
 	 */
-	public function setTargetEntity(Entity $target)
+	public function setTargetEntity(Entity $target = null)
 	{
-		if($target->closed) {
-			throw new \InvalidArgumentException("Supplied target entity is garbage and cannot be used");
+		if($target === null){
+			$this->removeDataProperty(self::DATA_TARGET_EID);
+		}elseif($target->closed) {
+			throw new \InvalidArgumentException("Supplied target cannot be used");
+		}else{
+			$this->setDataProperty(self::DATA_TARGET_EID, self::DATA_TYPE_LONG, $target->getId());
 		}
-
-		$this->setDataProperty(self::DATA_TARGET_EID, self::DATA_TYPE_LONG, $target->getId());
 	}
 
 	/**

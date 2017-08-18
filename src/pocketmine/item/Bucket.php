@@ -102,4 +102,12 @@ class Bucket extends Item
 
 		return false;
 	}
+
+	public function getFuelTime() : int{
+		if($this->meta === Block::LAVA or $this->meta === Block::FLOWING_LAVA){
+			return 20000;
+		}
+
+		return 0;
+	}
 }

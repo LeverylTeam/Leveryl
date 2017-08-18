@@ -66,7 +66,7 @@ class Slab extends WoodSlab
 			self::NETHER_BRICK => "Nether Brick",
 		];
 
-		return (($this->meta & 0x08) > 0 ? "Upper " : "") . $names[$this->meta & 0x07] . " Slab";
+		return (($this->meta & 0x08) > 0 ? "Upper " : "") . $names[$this->meta & 0x07] ?? "Unknown" . " Slab";
 	}
 
 	public function getDrops(Item $item)
@@ -83,5 +83,9 @@ class Slab extends WoodSlab
 	public function getToolType()
 	{
 		return Tool::TYPE_PICKAXE;
+	}
+
+	public function getFuelTime() : int{
+		return 0;
 	}
 }

@@ -300,9 +300,9 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 	protected $ip;
 	protected $removeFormat = true;
 	protected $port;
-	protected $username;
-	protected $iusername;
-	protected $displayName;
+	protected $username = "";
+	protected $iusername = "";
+	protected $displayName = "";
 	protected $startAction = -1;
 	/** @var Vector3 */
 	protected $sleeping = null;
@@ -526,9 +526,9 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 	/**
 	 * @param bool $remove
 	 */
-	public function setRemoveFormat($remove = true)
+	public function setRemoveFormat(bool $remove = true)
 	{
-		$this->removeFormat = (bool)$remove;
+		$this->removeFormat = $remove;
 	}
 
 	/**
@@ -715,9 +715,15 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 	{
 		$data = [];
 		foreach($this->server->getCommandMap()->getCommands() as $command) {
-			if($this->hasPermission($command->getPermission()) or $command->getPermission() == null) {
+			if($this->server->displayNoPermCommands){
 				if(count($cmdData = $command->generateCustomCommandData($this)) > 0) {
 					$data[$command->getName()]["versions"][0] = $cmdData;
+				}
+			} else {
+				if($this->hasPermission($command->getPermission()) or $command->getPermission() == null) {
+					if(count($cmdData = $command->generateCustomCommandData($this)) > 0) {
+						$data[$command->getName()]["versions"][0] = $cmdData;
+					}
 				}
 			}
 		}
@@ -883,7 +889,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 				$pk->y = $this->y;
 				$pk->z = $this->z;
 				$this->dataPacket($pk);
-				$this->shouldSendStatus = true;
+				$this->sendPlayStatus(PlayStatusPacket::PLAYER_SPAWN);
 			}
 
 			$targetLevel->getWeather()->sendWeather($this);
@@ -3556,10 +3562,10 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 		$recipe = $this->server->getCraftingManager()->getRecipe($packet->id);
 
-		if($recipe === null or (($recipe instanceof BigShapelessRecipe or $recipe instanceof BigShapedRecipe) and $this->craftingType === 0)) {
+		if($recipe === null or (($recipe instanceof BigShapelessRecipe or $recipe instanceof BigShapedRecipe) and $this->craftingType === 0) or count($packet->input) === 0){
 			$this->inventory->sendContents($this);
 
-			return true;
+			return false;
 		}
 
 		$canCraft = true;
@@ -4260,7 +4266,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 	final public function close($message = "", $reason = "generic reason", $notify = true)
 	{
 		if($this->connected and !$this->closed) {
-			if($notify and strlen((string)$reason) > 0) {
+			if($notify and strlen($reason) > 0) {
 				$pk = new DisconnectPacket();
 				$pk->message = $reason;
 				$this->directDataPacket($pk);
@@ -4309,7 +4315,9 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			$this->windows = null;
 			$this->windowIndex = [];
 
-			parent::close();
+			if($this->constructed){
+				parent::close();
+			}
 			$this->spawned = false;
 
 			if($this->loggedIn) {

@@ -37,4 +37,8 @@ class RedstoneLamp extends Solid
 	{
 		return "Redstone Lamp";
 	}
+
+	public function getHardness(){
+		return 0.3;
+	}
 }

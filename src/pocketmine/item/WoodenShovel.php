@@ -35,4 +35,8 @@ class WoodenShovel extends Tool
 	{
 		return Tool::TIER_WOODEN;
 	}
+
+	public function getFuelTime() : int{
+		return 200;
+	}
 }

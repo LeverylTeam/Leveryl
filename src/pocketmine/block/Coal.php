@@ -61,4 +61,8 @@ class Coal extends Solid
 			return [];
 		}
 	}
+
+	public function getFuelTime() : int{
+		return 16000;
+	}
 }

@@ -117,4 +117,8 @@ class FenceGate extends Transparent
 
 		return true;
 	}
+
+	public function getFuelTime() : int{
+		return 300;
+	}
 }

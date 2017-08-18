@@ -274,13 +274,6 @@ class Server
 
 	public $startfinished;
 
-	/** @var array */
-	public $alwaysday;
-	/** @var bool */
-	public $blockbreakparticles;
-	public $xboxauth;
-	public $allowignspaces;
-
 	/**
 	 * @return string
 	 */
@@ -465,7 +458,7 @@ class Server
 	 */
 	public static function getGamemodeString(int $mode): string
 	{
-		switch((int)$mode) {
+		switch($mode) {
 			case Player::SURVIVAL:
 				return "%gameMode.survival";
 			case Player::CREATIVE:
@@ -1318,7 +1311,7 @@ class Server
 			return (int)$v[$variable];
 		}
 
-		return $this->properties->exists($variable) ? (int)$this->properties->get($variable) : (int)$defaultValue;
+		return $this->properties->exists($variable) ? (int)$this->properties->get($variable) : $defaultValue;
 	}
 
 	/**
@@ -1327,7 +1320,7 @@ class Server
 	 */
 	public function setConfigInt(string $variable, int $value)
 	{
-		$this->properties->set($variable, (int)$value);
+		$this->properties->set($variable, $value);
 	}
 
 	/**
@@ -1615,10 +1608,7 @@ class Server
 			}
 			$this->leverylconfig = new Config($this->dataPath . "leveryl.yml", Config::YAML, []);
 
-			$this->alwaysday = $this->leverylconfig->get("AlwaysDay");
-			$this->blockbreakparticles = $this->getLeverylConfigValue("BlockBreakParticles", true);
-			$this->xboxauth = $this->getLeverylConfigValue("XBoxAuth", false);
-			$this->allowignspaces = $this->getLeverylConfigValue("AllowUserNamesWithSpaces", false);
+			$this->loadConfig();
 
 			if($this->logger instanceof MainLogger) {
 				$this->logger->directSend($startupmsg);
@@ -2791,5 +2781,18 @@ class Server
 		} else {
 			return "online mode/secure";
 		}
+	}
+
+	/** @var array */
+	public $alwaysday;
+	/** @var bool */
+	public $blockbreakparticles, $xboxauth, $allowignspaces, $displayNoPermCommands;
+
+	private function loadConfig(){
+		$this->alwaysday = $this->leverylconfig->get("AlwaysDay");
+		$this->blockbreakparticles = $this->getLeverylConfigValue("BlockBreakParticles", true);
+		$this->xboxauth = $this->getLeverylConfigValue("XBoxAuth", false);
+		$this->allowignspaces = $this->getLeverylConfigValue("AllowUserNamesWithSpaces", false);
+		$this->displayNoPermCommands = $this->getLeverylConfigValue("DisplayNoPermCommands", true);
 	}
 }

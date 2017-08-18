@@ -58,7 +58,7 @@ class WoodSlab extends Transparent
 			7 => "",
 		];
 
-		return (($this->meta & 0x08) === 0x08 ? "Upper " : "") . $names[$this->meta & 0x07] . " Wooden Slab";
+		return (($this->meta & 0x08) === 0x08 ? "Upper " : "") . $names[$this->meta & 0x07] ?? "Unknown" . " Wooden Slab";
 	}
 
 	protected function recalculateBoundingBox()
@@ -144,5 +144,9 @@ class WoodSlab extends Transparent
 		return [
 			[$this->id, $this->meta & 0x07, 1],
 		];
+	}
+
+	public function getFuelTime() : int{
+		return 300;
 	}
 }

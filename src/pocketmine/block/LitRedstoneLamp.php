@@ -37,4 +37,8 @@ class LitRedstoneLamp extends RedstoneLamp
 	{
 		return "Lit Redstone Lamp";
 	}
+
+	public function getLightLevel(){
+		return 15;
+	}
 }

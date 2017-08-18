@@ -88,4 +88,8 @@ class Wood extends Solid
 	{
 		return Tool::TYPE_AXE;
 	}
+
+	public function getFuelTime() : int{
+		return 300;
+	}
 }

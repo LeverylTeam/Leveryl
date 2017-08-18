@@ -70,5 +70,5 @@ LightningTime: 200
 
 # AlwaysDay
 AlwaysDay:
-# LevelName: true/false
+# LevelName: true/false OR the Numeric Time in ticks...
  nether: true

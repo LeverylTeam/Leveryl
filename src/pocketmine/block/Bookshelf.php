@@ -57,4 +57,8 @@ class Bookshelf extends Solid
 		];
 	}
 
+	public function getFuelTime() : int{
+		return 300;
+	}
+
 }
