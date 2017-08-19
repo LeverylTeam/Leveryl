@@ -350,6 +350,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 	public $uiprofile;
 	public $guiscale;
 	public $controls;
+	public $LanguageCode;
 
 	private $portalTime = 0;
 	/** @var Vector3 */
@@ -2189,6 +2190,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 		$this->uiprofile = $packet->uiprofile;
 		$this->guiscale = $packet->guiscale;
 		$this->controls = $packet->controls;
+		$this->LanguageCode = $packet->LanguageCode;
 
 		if ($this->server->getLeverylConfigValue("XBoxAuth", false) && $packet->identityPublicKey === null) {
 			$this->kick("disconnectionScreen.notAuthenticated", false);
@@ -4966,5 +4968,9 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 			$this->fishingHook = null;
 		}
 		$this->fishingHook = $entity;
+	}
+	
+	public function getLanguageCode() : string{
+		return $this->LanguageCode ?? "null";
 	}
 }
