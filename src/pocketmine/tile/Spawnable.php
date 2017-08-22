@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\tile;
 
 use pocketmine\level\Level;
@@ -29,12 +27,15 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\BlockEntityDataPacket;
 use pocketmine\Player;
 
-abstract class Spawnable extends Tile
-{
+abstract class Spawnable extends Tile {
 
-	public function spawnTo(Player $player)
-	{
-		if($this->closed) {
+	/**
+	 * @param Player $player
+	 *
+	 * @return bool
+	 */
+	public function spawnTo(Player $player){
+		if($this->closed){
 			return false;
 		}
 
@@ -50,30 +51,33 @@ abstract class Spawnable extends Tile
 		return true;
 	}
 
-	public function __construct(Level $level, CompoundTag $nbt)
-	{
+	/**
+	 * Spawnable constructor.
+	 *
+	 * @param Level $level
+	 * @param CompoundTag $nbt
+	 */
+	public function __construct(Level $level, CompoundTag $nbt){
 		parent::__construct($level, $nbt);
 		$this->spawnToAll();
 	}
 
-	public function spawnToAll()
-	{
-		if($this->closed) {
+	public function spawnToAll(){
+		if($this->closed){
 			return;
 		}
 
-		foreach($this->getLevel()->getChunkPlayers($this->chunk->getX(), $this->chunk->getZ()) as $player) {
-			if($player->spawned === true) {
+		foreach($this->getLevel()->getChunkPlayers($this->chunk->getX(), $this->chunk->getZ()) as $player){
+			if($player->spawned === true){
 				$this->spawnTo($player);
 			}
 		}
 	}
 
-	protected function onChanged()
-	{
+	protected function onChanged(){
 		$this->spawnToAll();
 
-		if($this->chunk !== null) {
+		if($this->chunk !== null){
 			$this->chunk->setChanged();
 			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
 		}
@@ -82,7 +86,7 @@ abstract class Spawnable extends Tile
 	/**
 	 * @return CompoundTag
 	 */
-	abstract public function getSpawnCompound();
+	public abstract function getSpawnCompound();
 
 	/**
 	 * Called when a player updates a block entity's NBT data
@@ -93,8 +97,7 @@ abstract class Spawnable extends Tile
 	 *
 	 * @return bool indication of success, will respawn the tile to the player if false.
 	 */
-	public function updateCompoundTag(CompoundTag $nbt, Player $player): bool
-	{
+	public function updateCompoundTag(CompoundTag $nbt, Player $player): bool{
 		return false;
 	}
 }

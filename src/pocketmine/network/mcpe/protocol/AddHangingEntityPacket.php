@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,20 +15,16 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-use pocketmine\network\mcpe\NetworkSession;
+class AddHangingEntityPacket extends DataPacket {
 
-class AddHangingEntityPacket extends DataPacket
-{
 	const NETWORK_ID = ProtocolInfo::ADD_HANGING_ENTITY_PACKET;
 
 	public $entityUniqueId;
@@ -36,28 +32,31 @@ class AddHangingEntityPacket extends DataPacket
 	public $x;
 	public $y;
 	public $z;
-	public $unknown; //TODO (rotation?)
+	public $unknown;
 
-	public function decode()
-	{
-		$this->entityUniqueId = $this->getEntityUniqueId();
-		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		$this->getBlockPosition($this->x, $this->y, $this->z);
-		$this->unknown = $this->getVarInt();
+	/**
+	 *
+	 */
+	public function decode(){
+
 	}
 
-	public function encode()
-	{
+	/**
+	 *
+	 */
+	public function encode(){
 		$this->reset();
-		$this->putEntityUniqueId($this->entityUniqueId);
-		$this->putEntityRuntimeId($this->entityRuntimeId);
-		$this->putBlockPosition($this->x, $this->y, $this->z);
+		$this->putEntityId($this->entityUniqueId);
+		$this->putEntityId($this->entityRuntimeId);
+		$this->putBlockCoords($this->x, $this->y, $this->z);
 		$this->putVarInt($this->unknown);
 	}
 
-	public function handle(NetworkSession $session): bool
-	{
-		return $session->handleAddHangingEntity($this);
+	/**
+	 * @return AddHangingEntityPacket|string
+	 */
+	public function getName(){
+		return "AddHangingEntityPacket";
 	}
 
 }

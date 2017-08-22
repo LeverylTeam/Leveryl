@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __	__  _____
+ *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,19 +33,33 @@ use pocketmine\Player;
 use pocketmine\tile\BrewingStand as TileBrewingStand;
 use pocketmine\tile\Tile;
 
-class BrewingStand extends Transparent
-{
+class BrewingStand extends Transparent {
 
 	protected $id = self::BREWING_STAND_BLOCK;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * BrewingStand constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
-	{
-		if($block->getSide(Vector3::SIDE_DOWN)->isTransparent() === false) {
+	/**
+	 * @param Item $item
+	 * @param Block $block
+	 * @param Block $target
+	 * @param int $face
+	 * @param float $fx
+	 * @param float $fy
+	 * @param float $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		if($block->getSide(Vector3::SIDE_DOWN)->isTransparent() === false){
 			$this->getLevel()->setBlock($block, $this, true, true);
 			$nbt = new CompoundTag("", [
 				new ListTag("Items", []),
@@ -55,12 +69,12 @@ class BrewingStand extends Transparent
 				new IntTag("z", $this->z),
 			]);
 			$nbt->Items->setTagType(NBT::TAG_Compound);
-			if($item->hasCustomName()) {
+			if($item->hasCustomName()){
 				$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 			}
 
-			if($item->hasCustomBlockData()) {
-				foreach($item->getCustomBlockData() as $key => $v) {
+			if($item->hasCustomBlockData()){
+				foreach($item->getCustomBlockData() as $key => $v){
 					$nbt->{$key} = $v;
 				}
 			}
@@ -73,43 +87,58 @@ class BrewingStand extends Transparent
 		return false;
 	}
 
-	public function canBeActivated(): bool
-	{
+	/**
+	 * @return bool
+	 */
+	public function canBeActivated(): bool{
 		return true;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return float
+	 */
+	public function getHardness(){
 		return 0.5;
 	}
 
-	public function getResistance()
-	{
+	/**
+	 * @return float
+	 */
+	public function getResistance(){
 		return 2.5;
 	}
 
-	public function getLightLevel()
-	{
+	/**
+	 * @return int
+	 */
+	public function getLightLevel(){
 		return 1;
 	}
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Brewing Stand";
 	}
 
-	public function onActivate(Item $item, Player $player = null)
-	{
-		if($player instanceof Player) {
+	/**
+	 * @param Item $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function onActivate(Item $item, Player $player = null){
+		if($player instanceof Player){
 			//TODO lock
-			if($player->isCreative() and $player->getServer()->getLeverylConfigValue("LimitedCreative", true)) {
+			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
 			$t = $this->getLevel()->getTile($this);
 			//$brewingStand = false;
-			if($t instanceof TileBrewingStand) {
+			if($t instanceof TileBrewingStand){
 				$brewingStand = $t;
-			} else {
+			}else{
 				$nbt = new CompoundTag("", [
 					new ListTag("Items", []),
 					new StringTag("id", Tile::BREWING_STAND),
@@ -126,24 +155,14 @@ class BrewingStand extends Transparent
 		return true;
 	}
 
-
-	public function onBreak(Item $item)
-	{
-		$tile = $this->level->getTile($this);
-		if($tile instanceof TileBrewingStand) {
-			foreach($tile->getInventory()->getContents() as $item) {
-				$tile->level->dropItem($tile->getBlock(), $item);
-			}
-		}
-		$this->getLevel()->setBlock($this, new Air(), true, true);
-
-		return parent::onBreak($item);
-	}
-
-	public function getDrops(Item $item): array
-	{
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
 		$drops = [];
-		if($item->isPickaxe() >= Tool::TIER_WOODEN) {
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			$drops[] = [Item::BREWING_STAND, 0, 1];
 		}
 

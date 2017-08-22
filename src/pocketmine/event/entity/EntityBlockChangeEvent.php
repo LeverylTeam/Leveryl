@@ -19,8 +19,6 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\entity;
 
 use pocketmine\block\Block;
@@ -30,15 +28,20 @@ use pocketmine\event\Cancellable;
 /**
  * Called when an Entity, excluding players, changes a block directly
  */
-class EntityBlockChangeEvent extends EntityEvent implements Cancellable
-{
+class EntityBlockChangeEvent extends EntityEvent implements Cancellable {
 	public static $handlerList = null;
 
 	private $from;
 	private $to;
 
-	public function __construct(Entity $entity, Block $from, Block $to)
-	{
+	/**
+	 * EntityBlockChangeEvent constructor.
+	 *
+	 * @param Entity $entity
+	 * @param Block $from
+	 * @param Block $to
+	 */
+	public function __construct(Entity $entity, Block $from, Block $to){
 		$this->entity = $entity;
 		$this->from = $from;
 		$this->to = $to;
@@ -47,16 +50,14 @@ class EntityBlockChangeEvent extends EntityEvent implements Cancellable
 	/**
 	 * @return Block
 	 */
-	public function getBlock()
-	{
+	public function getBlock(){
 		return $this->from;
 	}
 
 	/**
 	 * @return Block
 	 */
-	public function getTo()
-	{
+	public function getTo(){
 		return $this->to;
 	}
 

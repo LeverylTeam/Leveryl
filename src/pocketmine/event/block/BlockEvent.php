@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
  */
 
-declare(strict_types = 1);
-
 /**
  * Block related events
  */
@@ -30,24 +28,21 @@ namespace pocketmine\event\block;
 use pocketmine\block\Block;
 use pocketmine\event\Event;
 
-abstract class BlockEvent extends Event
-{
+abstract class BlockEvent extends Event {
 	/** @var \pocketmine\block\Block */
 	protected $block;
 
 	/**
 	 * @param Block $block
 	 */
-	public function __construct(Block $block)
-	{
+	public function __construct(Block $block){
 		$this->block = $block;
 	}
 
 	/**
 	 * @return Block
 	 */
-	public function getBlock()
-	{
+	public function getBlock(){
 		return $this->block;
 	}
 }

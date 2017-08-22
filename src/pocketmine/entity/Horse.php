@@ -2,44 +2,71 @@
 
 /*
  *
- *    _______                                _
- *   |__   __|                              | |
- *      | | ___  ___ ___  ___ _ __ __ _  ___| |_
- *      | |/ _ \/ __/ __|/ _ \  __/ _` |/ __| __|
- *      | |  __/\__ \__ \  __/ | | (_| | (__| |_
- *      |_|\___||___/___/\___|_|  \__,_|\___|\__|
- *
+ *  _____            _               _____           
+ * / ____|          (_)             |  __ \          
+ *| |  __  ___ _ __  _ ___ _   _ ___| |__) | __ ___  
+ *| | |_ |/ _ \ '_ \| / __| | | / __|  ___/ '__/ _ \ 
+ *| |__| |  __/ | | | \__ \ |_| \__ \ |   | | | (_) |
+ * \_____|\___|_| |_|_|___/\__, |___/_|   |_|  \___/ 
+ *                         __/ |                    
+ *                        |___/                     
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author Tesseract Team
- * @link http://www.github.com/TesseractTeam/Tesseract
- * 
+ * @author GenisysPro
+ * @link https://github.com/GenisysPro/GenisysPro
  *
- */
+ *
+*/
+
+/* TODO: 骑马 */
 
 namespace pocketmine\entity;
 
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
+use pocketmine\network\mcpe\protocol\MobArmorEquipmentPacket;
 use pocketmine\Player;
 
-class Horse extends Living
-{
+class Horse extends Living {
 
 	const NETWORK_ID = 23;
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Horse";
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param $id
+	 */
+	public function setChestPlate($id){
+		/*	
+		416, 417, 418, 419 only
+		*/
+		$pk = new MobArmorEquipmentPacket();
+		$pk->eid = $this->getId();
+		$pk->slots = [
+			ItemItem::get(0, 0),
+			ItemItem::get($id, 0),
+			ItemItem::get(0, 0),
+			ItemItem::get(0, 0),
+		];
+		foreach($this->level->getPlayers() as $player){
+			$player->dataPacket($pk);
+		}
+	}
+
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = self::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;

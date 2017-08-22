@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,50 +19,66 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class NetherBrickFence extends Transparent
-{
+class NetherBrickFence extends Transparent {
 
 	protected $id = self::NETHER_BRICK_FENCE;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * NetherBrickFence constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return int
+	 */
+	public function getHardness(){
 		return 2;
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
+		//Different then the woodfences
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Nether Brick Fence";
 	}
 
-	public function canConnect(Block $block)
-	{
+	/**
+	 * @param Block $block
+	 *
+	 * @return bool
+	 */
+	public function canConnect(Block $block){
 		return ($block instanceof NetherBrickFence) or ($block->isSolid() and !$block->isTransparent());
 	}
 
-	public function getDrops(Item $item)
-	{
-		if($item->isPickaxe() >= Tool::TIER_WOODEN) {
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [
-				[$this->id, $this->meta, 1],
+				[Item::NETHER_BRICK_FENCE, $this->meta, 1],
 			];
-		} else {
+		}else{
 			return [];
 		}
 	}

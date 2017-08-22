@@ -17,8 +17,7 @@
 namespace raklib\protocol;
 
 
-interface PacketReliability
-{
+interface PacketReliability {
 
 	/*
 	 * From https://github.com/OculusVR/RakNet/blob/master/Source/PacketPriority.h

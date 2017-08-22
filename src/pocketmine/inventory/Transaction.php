@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,14 +19,16 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\inventory;
 
 use pocketmine\item\Item;
+use pocketmine\Player;
 
-interface Transaction
-{
+interface Transaction {
+
+	//Transaction type constants
+	const TYPE_NORMAL = 0;
+	const TYPE_DROP_ITEM = 1;
 
 	/**
 	 * @return Inventory
@@ -41,15 +43,17 @@ interface Transaction
 	/**
 	 * @return Item
 	 */
-	public function getSourceItem();
-
-	/**
-	 * @return Item
-	 */
 	public function getTargetItem();
 
 	/**
 	 * @return float
 	 */
 	public function getCreationTime();
+
+	/**
+	 * @param Player $source
+	 *
+	 * @return bool
+	 */
+	public function execute(Player $source): bool;
 }

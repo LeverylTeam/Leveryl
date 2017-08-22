@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,11 +15,9 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -28,25 +26,30 @@ use pocketmine\item\Tool;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
 
-class WoodSlab extends Transparent
-{
+class WoodSlab extends Transparent {
 
 	protected $id = self::WOOD_SLAB;
 
-	protected $doubleId = self::DOUBLE_WOODEN_SLAB;
-
-	public function __construct($meta = 0)
-	{
+	/**
+	 * WoodSlab constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return int
+	 */
+	public function getHardness(){
 		return 2;
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		static $names = [
 			0 => "Oak",
 			1 => "Spruce",
@@ -58,13 +61,15 @@ class WoodSlab extends Transparent
 			7 => "",
 		];
 
-		return (($this->meta & 0x08) === 0x08 ? "Upper " : "") . $names[$this->meta & 0x07] ?? "Unknown" . " Wooden Slab";
+		return (($this->meta & 0x08) === 0x08 ? "Upper " : "") . $names[$this->meta & 0x07] . " Wooden Slab";
 	}
 
-	protected function recalculateBoundingBox()
-	{
+	/**
+	 * @return AxisAlignedBB
+	 */
+	protected function recalculateBoundingBox(){
 
-		if(($this->meta & 0x08) > 0) {
+		if(($this->meta & 0x08) > 0){
 			return new AxisAlignedBB(
 				$this->x,
 				$this->y + 0.5,
@@ -73,7 +78,7 @@ class WoodSlab extends Transparent
 				$this->y + 1,
 				$this->z + 1
 			);
-		} else {
+		}else{
 			return new AxisAlignedBB(
 				$this->x,
 				$this->y,
@@ -85,48 +90,59 @@ class WoodSlab extends Transparent
 		}
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
-	{
+	/**
+	 * @param Item $item
+	 * @param Block $block
+	 * @param Block $target
+	 * @param int $face
+	 * @param float $fx
+	 * @param float $fy
+	 * @param float $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$this->meta &= 0x07;
-		if($face === 0) {
-			if($target->getId() === $this->id and ($target->getDamage() & 0x08) === 0x08 and ($target->getDamage() & 0x07) === $this->meta) {
-				$this->getLevel()->setBlock($target, Block::get($this->doubleId, $this->meta), true);
+		if($face === 0){
+			if($target->getId() === self::WOOD_SLAB and ($target->getDamage() & 0x08) === 0x08 and ($target->getDamage() & 0x07) === ($this->meta & 0x07)){
+				$this->getLevel()->setBlock($target, Block::get(Item::DOUBLE_WOOD_SLAB, $this->meta), true);
 
 				return true;
-			} elseif($block->getId() === $this->id and ($block->getDamage() & 0x07) === ($this->meta & 0x07)) {
-				$this->getLevel()->setBlock($block, Block::get($this->doubleId, $this->meta), true);
+			}elseif($block->getId() === self::WOOD_SLAB and ($block->getDamage() & 0x07) === ($this->meta & 0x07)){
+				$this->getLevel()->setBlock($block, Block::get(Item::DOUBLE_WOOD_SLAB, $this->meta), true);
 
 				return true;
-			} else {
+			}else{
 				$this->meta |= 0x08;
 			}
-		} elseif($face === 1) {
-			if($target->getId() === $this->id and ($target->getDamage() & 0x08) === 0 and ($target->getDamage() & 0x07) === $this->meta) {
-				$this->getLevel()->setBlock($target, Block::get($this->doubleId, $this->meta), true);
+		}elseif($face === 1){
+			if($target->getId() === self::WOOD_SLAB and ($target->getDamage() & 0x08) === 0 and ($target->getDamage() & 0x07) === ($this->meta & 0x07)){
+				$this->getLevel()->setBlock($target, Block::get(Item::DOUBLE_WOOD_SLAB, $this->meta), true);
 
 				return true;
-			} elseif($block->getId() === $this->id and ($block->getDamage() & 0x07) === $this->meta) {
-				$this->getLevel()->setBlock($block, Block::get($this->doubleId, $this->meta), true);
+			}elseif($block->getId() === self::WOOD_SLAB and ($block->getDamage() & 0x07) === ($this->meta & 0x07)){
+				$this->getLevel()->setBlock($block, Block::get(Item::DOUBLE_WOOD_SLAB, $this->meta), true);
 
 				return true;
 			}
-		} else { //TODO: collision
-			if($block->getId() === $this->id) {
-				if(($block->getDamage() & 0x07) === $this->meta) {
-					$this->getLevel()->setBlock($block, Block::get($this->doubleId, $this->meta), true);
+		}else{ //TODO: collision
+			if($block->getId() === self::WOOD_SLAB){
+				if(($block->getDamage() & 0x07) === ($this->meta & 0x07)){
+					$this->getLevel()->setBlock($block, Block::get(Item::DOUBLE_WOOD_SLAB, $this->meta), true);
 
 					return true;
 				}
 
 				return false;
-			} else {
-				if($fy > 0.5) {
+			}else{
+				if($fy > 0.5){
 					$this->meta |= 0x08;
 				}
 			}
 		}
 
-		if($block->getId() === $this->id and ($target->getDamage() & 0x07) !== ($this->meta & 0x07)) {
+		if($block->getId() === self::WOOD_SLAB and ($target->getDamage() & 0x07) !== ($this->meta & 0x07)){
 			return false;
 		}
 		$this->getLevel()->setBlock($block, $this, true, true);
@@ -134,19 +150,21 @@ class WoodSlab extends Transparent
 		return true;
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
 		return Tool::TYPE_AXE;
 	}
 
-	public function getDrops(Item $item)
-	{
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
 		return [
 			[$this->id, $this->meta & 0x07, 1],
 		];
-	}
-
-	public function getFuelTime() : int{
-		return 300;
 	}
 }

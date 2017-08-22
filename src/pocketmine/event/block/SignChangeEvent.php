@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\block;
 
 use pocketmine\block\Block;
@@ -30,8 +28,7 @@ use pocketmine\Player;
 /**
  * Called when a sign is changed by a player.
  */
-class SignChangeEvent extends BlockEvent implements Cancellable
-{
+class SignChangeEvent extends BlockEvent implements Cancellable {
 	public static $handlerList = null;
 
 	/** @var \pocketmine\Player */
@@ -44,8 +41,7 @@ class SignChangeEvent extends BlockEvent implements Cancellable
 	 * @param Player $thePlayer
 	 * @param string[] $theLines
 	 */
-	public function __construct(Block $theBlock, Player $thePlayer, array $theLines)
-	{
+	public function __construct(Block $theBlock, Player $thePlayer, array $theLines){
 		parent::__construct($theBlock);
 		$this->player = $thePlayer;
 		$this->lines = $theLines;
@@ -54,16 +50,14 @@ class SignChangeEvent extends BlockEvent implements Cancellable
 	/**
 	 * @return Player
 	 */
-	public function getPlayer()
-	{
+	public function getPlayer(){
 		return $this->player;
 	}
 
 	/**
 	 * @return string[]
 	 */
-	public function getLines()
-	{
+	public function getLines(){
 		return $this->lines;
 	}
 
@@ -72,33 +66,15 @@ class SignChangeEvent extends BlockEvent implements Cancellable
 	 *
 	 * @return string
 	 */
-	public function getLine($index)
-	{
-		if($index < 0 or $index > 3){
-			throw new \InvalidArgumentException("Index must be in the range 0-3!");
-		}
+	public function getLine($index){
 		return $this->lines[$index];
 	}
-
-	/**
-	* @param string[] $lines
-	*/
-	public function setLines(array $lines){
-		if(count($lines) !== 4){
-			throw new \InvalidArgumentException("Array size must be 4!");
-		}
- 		$this->lines = $lines;
- 	}
 
 	/**
 	 * @param int $index 0-3
 	 * @param string $line
 	 */
-	public function setLine($index, $line)
-	{
-		if($index < 0 or $index > 3){
-			throw new \InvalidArgumentException("Index must be in the range 0-3!");
-		}
+	public function setLine($index, $line){
 		$this->lines[$index] = $line;
 	}
 }

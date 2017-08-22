@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\player;
 
 use pocketmine\event\Cancellable;
@@ -30,8 +28,7 @@ use pocketmine\Server;
 /**
  * Called when a player chats something
  */
-class PlayerChatEvent extends PlayerEvent implements Cancellable
-{
+class PlayerChatEvent extends PlayerEvent implements Cancellable {
 	public static $handlerList = null;
 
 	/** @var string */
@@ -45,27 +42,38 @@ class PlayerChatEvent extends PlayerEvent implements Cancellable
 	 */
 	protected $recipients = [];
 
-	public function __construct(Player $player, $message, $format = "chat.type.text", array $recipients = null)
-	{
+	/**
+	 * PlayerChatEvent constructor.
+	 *
+	 * @param Player $player
+	 * @param            $message
+	 * @param string $format
+	 * @param array|null $recipients
+	 */
+	public function __construct(Player $player, $message, $format = "chat.type.text", array $recipients = null){
 		$this->player = $player;
 		$this->message = $message;
 
 		$this->format = $format;
 
-		if($recipients === null) {
+		if($recipients === null){
 			$this->recipients = Server::getInstance()->getPluginManager()->getPermissionSubscriptions(Server::BROADCAST_CHANNEL_USERS);
-		} else {
+		}else{
 			$this->recipients = $recipients;
 		}
 	}
 
-	public function getMessage()
-	{
+	/**
+	 * @return string
+	 */
+	public function getMessage(){
 		return $this->message;
 	}
 
-	public function setMessage($message)
-	{
+	/**
+	 * @param $message
+	 */
+	public function setMessage($message){
 		$this->message = $message;
 	}
 
@@ -74,28 +82,35 @@ class PlayerChatEvent extends PlayerEvent implements Cancellable
 	 *
 	 * @param Player $player
 	 */
-	public function setPlayer(Player $player)
-	{
+	public function setPlayer(Player $player){
 		$this->player = $player;
 	}
 
-	public function getFormat()
-	{
+	/**
+	 * @return string
+	 */
+	public function getFormat(){
 		return $this->format;
 	}
 
-	public function setFormat($format)
-	{
+	/**
+	 * @param $format
+	 */
+	public function setFormat($format){
 		$this->format = $format;
 	}
 
-	public function getRecipients()
-	{
+	/**
+	 * @return array|Player[]
+	 */
+	public function getRecipients(){
 		return $this->recipients;
 	}
 
-	public function setRecipients(array $recipients)
-	{
+	/**
+	 * @param array $recipients
+	 */
+	public function setRecipients(array $recipients){
 		$this->recipients = $recipients;
 	}
 }

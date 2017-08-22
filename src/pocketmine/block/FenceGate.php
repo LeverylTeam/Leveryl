@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,11 +15,9 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -29,46 +27,59 @@ use pocketmine\level\sound\DoorSound;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
 
-class FenceGate extends Transparent
-{
+class FenceGate extends Transparent implements ElectricalAppliance {
 
 	protected $id = self::FENCE_GATE;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * FenceGate constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Oak Fence Gate";
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return int
+	 */
+	public function getHardness(){
 		return 2;
 	}
 
-	public function canBeActivated()
-	{
+	/**
+	 * @return bool
+	 */
+	public function canBeActivated(): bool{
 		return true;
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
 		return Tool::TYPE_AXE;
 	}
 
 
-	protected function recalculateBoundingBox()
-	{
+	/**
+	 * @return null|AxisAlignedBB
+	 */
+	protected function recalculateBoundingBox(){
 
-		if(($this->getDamage() & 0x04) > 0) {
+		if(($this->getDamage() & 0x04) > 0){
 			return null;
 		}
 
 		$i = ($this->getDamage() & 0x03);
-		if($i === 2 or $i === 0) {
+		if($i === 2 or $i === 0){
 			return new AxisAlignedBB(
 				$this->x,
 				$this->y,
@@ -77,7 +88,7 @@ class FenceGate extends Transparent
 				$this->y + 1.5,
 				$this->z + 0.625
 			);
-		} else {
+		}else{
 			return new AxisAlignedBB(
 				$this->x + 0.375,
 				$this->y,
@@ -89,26 +100,53 @@ class FenceGate extends Transparent
 		}
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
-	{
+	/**
+	 * @param Item $item
+	 * @param Block $block
+	 * @param Block $target
+	 * @param int $face
+	 * @param float $fx
+	 * @param float $fy
+	 * @param float $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$this->meta = ($player instanceof Player ? ($player->getDirection() - 1) & 0x03 : 0);
 		$this->getLevel()->setBlock($block, $this, true, true);
 
 		return true;
 	}
 
-	public function getDrops(Item $item)
-	{
+	/**
+	 * @return bool
+	 */
+	public function isOpened(){
+		return (($this->getDamage() & 0x04) > 0);
+	}
+
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
 		return [
 			[$this->id, 0, 1],
 		];
 	}
 
-	public function onActivate(Item $item, Player $player = null)
-	{
+	/**
+	 * @param Item $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function onActivate(Item $item, Player $player = null){
 		$this->meta = (($this->meta ^ 0x04) & ~0x02);
 
-		if($player !== null) {
+		if($player !== null){
 			$this->meta |= (($player->getDirection() - 1) & 0x02);
 		}
 
@@ -116,9 +154,5 @@ class FenceGate extends Transparent
 		$this->level->addSound(new DoorSound($this));
 
 		return true;
-	}
-
-	public function getFuelTime() : int{
-		return 300;
 	}
 }

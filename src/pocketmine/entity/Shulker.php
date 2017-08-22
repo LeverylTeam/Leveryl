@@ -2,14 +2,14 @@
 
 /*
  *
- *  _____            _               _____
- * / ____|          (_)             |  __ \
- *| |  __  ___ _ __  _ ___ _   _ ___| |__) | __ ___
- *| | |_ |/ _ \ '_ \| / __| | | / __|  ___/ '__/ _ \
+ *  _____            _               _____           
+ * / ____|          (_)             |  __ \          
+ *| |  __  ___ _ __  _ ___ _   _ ___| |__) | __ ___  
+ *| | |_ |/ _ \ '_ \| / __| | | / __|  ___/ '__/ _ \ 
  *| |__| |  __/ | | | \__ \ |_| \__ \ |   | | | (_) |
- * \_____|\___|_| |_|_|___/\__, |___/_|   |_|  \___/
- *                         __/ |
- *                        |___/
+ * \_____|\___|_| |_|_|___/\__, |___/_|   |_|  \___/ 
+ *                         __/ |                    
+ *                        |___/                     
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -41,7 +41,7 @@ class Shulker extends Monster {
 	/**
 	 * @return string
 	 */
-	public function getName() : string{
+	public function getName(): string{
 		return "Shulker";
 	}
 
@@ -56,7 +56,7 @@ class Shulker extends Monster {
 	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Shulker::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
@@ -76,7 +76,7 @@ class Shulker extends Monster {
 	 */
 	public function getDrops(){
 		$drops = [
-			ItemItem::get(ItemItem::SHULKER_SHELL, 0, mt_rand(0, 1))
+			ItemItem::get(ItemItem::SHULKER_SHELL, 0, mt_rand(0, 1)),
 		];
 
 		return $drops;

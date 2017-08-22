@@ -15,8 +15,7 @@
  * GNU General Public License for more details.
 */
 
-interface LogLevel
-{
+interface LogLevel {
 	const EMERGENCY = "emergency";
 	const ALERT = "alert";
 	const CRITICAL = "critical";

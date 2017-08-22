@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,19 +15,16 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\level;
 
 use pocketmine\entity\Entity;
 use pocketmine\math\Vector3;
 
-class MovingObjectPosition
-{
+class MovingObjectPosition {
 
 	/** 0 = block, 1 = entity */
 	public $typeOfHit;
@@ -48,8 +45,10 @@ class MovingObjectPosition
 	/** @var Entity */
 	public $entityHit = null;
 
-	protected function __construct()
-	{
+	/**
+	 * MovingObjectPosition constructor.
+	 */
+	protected function __construct(){
 
 	}
 
@@ -62,8 +61,7 @@ class MovingObjectPosition
 	 *
 	 * @return MovingObjectPosition
 	 */
-	public static function fromBlock($x, $y, $z, $side, Vector3 $hitVector)
-	{
+	public static function fromBlock($x, $y, $z, $side, Vector3 $hitVector){
 		$ob = new MovingObjectPosition;
 		$ob->typeOfHit = 0;
 		$ob->blockX = $x;
@@ -79,8 +77,7 @@ class MovingObjectPosition
 	 *
 	 * @return MovingObjectPosition
 	 */
-	public static function fromEntity(Entity $entity)
-	{
+	public static function fromEntity(Entity $entity){
 		$ob = new MovingObjectPosition;
 		$ob->typeOfHit = 1;
 		$ob->entityHit = $entity;

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\player;
 
 use pocketmine\block\Block;
@@ -28,8 +26,7 @@ use pocketmine\event\Cancellable;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
-abstract class PlayerBucketEvent extends PlayerEvent implements Cancellable
-{
+abstract class PlayerBucketEvent extends PlayerEvent implements Cancellable {
 
 	/** @var Block */
 	private $blockClicked;
@@ -47,8 +44,7 @@ abstract class PlayerBucketEvent extends PlayerEvent implements Cancellable
 	 * @param Item $bucket
 	 * @param Item $itemInHand
 	 */
-	public function __construct(Player $who, Block $blockClicked, $blockFace, Item $bucket, Item $itemInHand)
-	{
+	public function __construct(Player $who, Block $blockClicked, $blockFace, Item $bucket, Item $itemInHand){
 		$this->player = $who;
 		$this->blockClicked = $blockClicked;
 		$this->blockFace = (int)$blockFace;
@@ -61,8 +57,7 @@ abstract class PlayerBucketEvent extends PlayerEvent implements Cancellable
 	 *
 	 * @return Item
 	 */
-	public function getBucket()
-	{
+	public function getBucket(){
 		return $this->bucket;
 	}
 
@@ -71,32 +66,28 @@ abstract class PlayerBucketEvent extends PlayerEvent implements Cancellable
 	 *
 	 * @return Item
 	 */
-	public function getItem()
-	{
+	public function getItem(){
 		return $this->item;
 	}
 
 	/**
 	 * @param Item $item
 	 */
-	public function setItem(Item $item)
-	{
+	public function setItem(Item $item){
 		$this->item = $item;
 	}
 
 	/**
 	 * @return Block
 	 */
-	public function getBlockClicked()
-	{
+	public function getBlockClicked(){
 		return $this->blockClicked;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getBlockFace()
-	{
+	public function getBlockFace(){
 		return $this->blockFace;
 	}
 }

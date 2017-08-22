@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\scheduler;
 
 use pocketmine\network\mcpe\protocol\ProtocolInfo;
@@ -29,8 +27,7 @@ use pocketmine\utils\Utils;
 use pocketmine\utils\UUID;
 use pocketmine\utils\VersionString;
 
-class SendUsageTask extends AsyncTask
-{
+class SendUsageTask extends AsyncTask {
 
 	const TYPE_OPEN = 1;
 	const TYPE_STATUS = 2;
@@ -39,16 +36,22 @@ class SendUsageTask extends AsyncTask
 	public $endpoint;
 	public $data;
 
-	public function __construct(Server $server, $type, $playerList = [])
-	{
+	/**
+	 * SendUsageTask constructor.
+	 *
+	 * @param Server $server
+	 * @param        $type
+	 * @param array $playerList
+	 */
+	public function __construct(Server $server, $type, $playerList = []){
 		$endpoint = "http://" . $server->getProperty("anonymous-statistics.host", "stats.pocketmine.net") . "/";
 
 		$data = [];
-		$data["uniqueServerId"] = $server->getServerUniqueId()->toString();
-		$data["uniqueMachineId"] = Utils::getMachineUniqueId()->toString();
-		$data["uniqueRequestId"] = UUID::fromData($server->getServerUniqueId()->toString(), microtime(false))->toString();
+		$data["uniqueServerId"] = $server->getServerUniqueId();
+		$data["uniqueMachineId"] = Utils::getMachineUniqueId();
+		$data["uniqueRequestId"] = UUID::fromData($server->getServerUniqueId(), microtime(true));
 
-		switch($type) {
+		switch($type){
 			case self::TYPE_OPEN:
 				$data["event"] = "open";
 
@@ -81,7 +84,7 @@ class SendUsageTask extends AsyncTask
 
 				$plugins = [];
 
-				foreach($server->getPluginManager()->getPlugins() as $p) {
+				foreach($server->getPluginManager()->getPlugins() as $p){
 					$d = $p->getDescription();
 
 					$plugins[$d->getName()] = [
@@ -105,13 +108,13 @@ class SendUsageTask extends AsyncTask
 
 
 				//This anonymizes the user ids so they cannot be reversed to the original
-				foreach($playerList as $k => $v) {
+				foreach($playerList as $k => $v){
 					$playerList[$k] = md5($v);
 				}
 
 				$players = [];
-				foreach($server->getOnlinePlayers() as $p) {
-					if($p->isOnline()) {
+				foreach($server->getOnlinePlayers() as $p){
+					if($p->isOnline()){
 						$players[] = md5($p->getUniqueId()->toBinary());
 					}
 				}
@@ -142,14 +145,13 @@ class SendUsageTask extends AsyncTask
 		$this->data = json_encode($data/*, JSON_PRETTY_PRINT*/);
 	}
 
-	public function onRun()
-	{
-		try {
+	public function onRun(){
+		try{
 			Utils::postURL($this->endpoint, $this->data, 5, [
 				"Content-Type: application/json",
 				"Content-Length: " . strlen($this->data),
 			]);
-		} catch(\Throwable $e) {
+		}catch(\Throwable $e){
 
 		}
 	}

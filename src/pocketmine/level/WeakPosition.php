@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,19 +15,16 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\level;
 
 use pocketmine\math\Vector3;
 use pocketmine\Server;
 
-class WeakPosition extends Position
-{
+class WeakPosition extends Position {
 
 	protected $levelId = -1;
 
@@ -37,24 +34,27 @@ class WeakPosition extends Position
 	 * @param int $z
 	 * @param Level $level
 	 */
-	public function __construct($x = 0, $y = 0, $z = 0, Level $level = null)
-	{
+	public function __construct($x = 0, $y = 0, $z = 0, Level $level = null){
 		$this->x = $x;
 		$this->y = $y;
 		$this->z = $z;
 		$this->levelId = ($level !== null ? $level->getId() : -1);
 	}
 
-	public static function fromObject(Vector3 $pos, Level $level = null)
-	{
+	/**
+	 * @param Vector3 $pos
+	 * @param Level|null $level
+	 *
+	 * @return WeakPosition
+	 */
+	public static function fromObject(Vector3 $pos, Level $level = null){
 		return new WeakPosition($pos->x, $pos->y, $pos->z, $level);
 	}
 
 	/**
 	 * @return Level|null
 	 */
-	public function getLevel()
-	{
+	public function getLevel(){
 		return Server::getInstance()->getLevel($this->levelId);
 	}
 
@@ -65,9 +65,8 @@ class WeakPosition extends Position
 	 *
 	 * @throws \InvalidArgumentException if the specified Level has been closed
 	 */
-	public function setLevel(Level $level = null)
-	{
-		if($level !== null and $level->isClosed()) {
+	public function setLevel(Level $level = null){
+		if($level !== null and $level->isClosed()){
 			throw new \InvalidArgumentException("Specified level has been unloaded and cannot be used");
 		}
 
@@ -86,15 +85,16 @@ class WeakPosition extends Position
 	 *
 	 * @throws LevelException
 	 */
-	public function getSide($side, $step = 1)
-	{
+	public function getSide($side, $step = 1){
 		assert($this->isValid());
 
 		return WeakPosition::fromObject(parent::getSide($side, $step), $this->level);
 	}
 
-	public function __toString()
-	{
+	/**
+	 * @return string
+	 */
+	public function __toString(){
 		return "Weak" . parent::__toString();
 	}
 }

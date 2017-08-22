@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,11 +15,9 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -28,53 +26,70 @@ use pocketmine\item\Tool;
 use pocketmine\Player;
 
 //TODO: check orientation
-class Workbench extends Solid
-{
+class Workbench extends Solid {
 
 	protected $id = self::WORKBENCH;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * Workbench constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated()
-	{
+	/**
+	 * @return bool
+	 */
+	public function canBeActivated(): bool{
 		return true;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return float
+	 */
+	public function getHardness(){
 		return 2.5;
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Crafting Table";
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
 		return Tool::TYPE_AXE;
 	}
 
-	public function onActivate(Item $item, Player $player = null)
-	{
-		if($player instanceof Player) {
-			$player->craftingType = 1;
+	/**
+	 * @param Item $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function onActivate(Item $item, Player $player = null){
+		if($player instanceof Player){
+			if($player->getServer()->limitedCreative and $player->isCreative()) return true;
+			$player->craftingType = Player::CRAFTING_BIG;
 		}
 
 		return true;
 	}
 
-	public function getDrops(Item $item)
-	{
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
 		return [
 			[$this->id, 0, 1],
 		];
-	}
-
-	public function getFuelTime() : int{
-		return 300;
 	}
 }

@@ -53,7 +53,7 @@ class Endermite extends Monster {
 	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Endermite::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;

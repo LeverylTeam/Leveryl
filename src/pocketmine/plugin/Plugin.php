@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,8 +18,6 @@
  *
  *
 */
-
-declare(strict_types = 1);
 
 /**
  * Plugin related classes
@@ -34,8 +32,7 @@ use pocketmine\command\CommandExecutor;
  * It is recommended to use PluginBase for the actual plugin
  *
  */
-interface Plugin extends CommandExecutor
-{
+interface Plugin extends CommandExecutor {
 
 	/**
 	 * Called when the plugin is loaded, before calling onEnable()
@@ -47,6 +44,9 @@ interface Plugin extends CommandExecutor
 	 */
 	public function onEnable();
 
+	/**
+	 * @return mixed
+	 */
 	public function isEnabled();
 
 	/**
@@ -55,11 +55,13 @@ interface Plugin extends CommandExecutor
 	 */
 	public function onDisable();
 
+	/**
+	 * @return mixed
+	 */
 	public function isDisabled();
 
 	/**
-	 * Gets the plugin's data folder to save files and configuration.
-	 * This directory name has a trailing slash.
+	 * Gets the plugin's data folder to save files and configuration
 	 */
 	public function getDataFolder();
 
@@ -93,10 +95,19 @@ interface Plugin extends CommandExecutor
 	 */
 	public function getConfig();
 
+	/**
+	 * @return mixed
+	 */
 	public function saveConfig();
 
+	/**
+	 * @return mixed
+	 */
 	public function saveDefaultConfig();
 
+	/**
+	 * @return mixed
+	 */
 	public function reloadConfig();
 
 	/**
@@ -104,6 +115,9 @@ interface Plugin extends CommandExecutor
 	 */
 	public function getServer();
 
+	/**
+	 * @return mixed
+	 */
 	public function getName();
 
 	/**

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,16 +19,30 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\level\generator\normal\biome;
 
-class SwampBiome extends GrassyBiome
-{
+use pocketmine\block\Block;
+use pocketmine\block\Flower as FlowerBlock;
+use pocketmine\level\generator\populator\Flower;
+use pocketmine\level\generator\populator\LilyPad;
 
-	public function __construct()
-	{
+class SwampBiome extends GrassyBiome {
+
+	/**
+	 * SwampBiome constructor.
+	 */
+	public function __construct(){
 		parent::__construct();
+
+		$flower = new Flower();
+		$flower->setBaseAmount(8);
+		$flower->addType([Block::RED_FLOWER, FlowerBlock::TYPE_BLUE_ORCHID]);
+
+		$this->addPopulator($flower);
+
+		$lilypad = new LilyPad();
+		$lilypad->setBaseAmount(4);
+		$this->addPopulator($lilypad);
 
 		$this->setElevation(62, 63);
 
@@ -36,8 +50,10 @@ class SwampBiome extends GrassyBiome
 		$this->rainfall = 0.9;
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Swamp";
 	}
 }

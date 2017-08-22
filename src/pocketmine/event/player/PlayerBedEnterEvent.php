@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,28 +19,32 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\player;
 
 use pocketmine\block\Block;
 use pocketmine\event\Cancellable;
 use pocketmine\Player;
 
-class PlayerBedEnterEvent extends PlayerEvent implements Cancellable
-{
+class PlayerBedEnterEvent extends PlayerEvent implements Cancellable {
 	public static $handlerList = null;
 
 	private $bed;
 
-	public function __construct(Player $player, Block $bed)
-	{
+	/**
+	 * PlayerBedEnterEvent constructor.
+	 *
+	 * @param Player $player
+	 * @param Block $bed
+	 */
+	public function __construct(Player $player, Block $bed){
 		$this->player = $player;
 		$this->bed = $bed;
 	}
 
-	public function getBed()
-	{
+	/**
+	 * @return Block
+	 */
+	public function getBed(){
 		return $this->bed;
 	}
 

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,21 +15,17 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
 
-use pocketmine\network\mcpe\NetworkSession;
+class BlockEntityDataPacket extends DataPacket {
 
-class BlockEntityDataPacket extends DataPacket
-{
 	const NETWORK_ID = ProtocolInfo::BLOCK_ENTITY_DATA_PACKET;
 
 	public $x;
@@ -37,22 +33,28 @@ class BlockEntityDataPacket extends DataPacket
 	public $z;
 	public $namedtag;
 
-	public function decode()
-	{
-		$this->getBlockPosition($this->x, $this->y, $this->z);
-		$this->namedtag = $this->getRemaining();
+	/**
+	 *
+	 */
+	public function decode(){
+		$this->getBlockCoords($this->x, $this->y, $this->z);
+		$this->namedtag = $this->get(true);
 	}
 
-	public function encode()
-	{
+	/**
+	 *
+	 */
+	public function encode(){
 		$this->reset();
-		$this->putBlockPosition($this->x, $this->y, $this->z);
+		$this->putBlockCoords($this->x, $this->y, $this->z);
 		$this->put($this->namedtag);
 	}
 
-	public function handle(NetworkSession $session): bool
-	{
-		return $session->handleBlockEntityData($this);
+	/**
+	 * @return PacketName|string
+	 */
+	public function getName(){
+		return "BlockEntityDataPacket";
 	}
 
 }

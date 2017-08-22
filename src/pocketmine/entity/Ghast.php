@@ -24,29 +24,31 @@ namespace pocketmine\entity;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Ghast extends FlyingAnimal
-{
+class Ghast extends FlyingAnimal {
 	const NETWORK_ID = 41;
 
 	public $width = 6;
 	public $length = 6;
 	public $height = 6;
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Ghast";
 	}
 
-	public function initEntity()
-	{
+	public function initEntity(){
 		$this->setMaxHealth(10);
 		parent::initEntity();
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Ghast::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;

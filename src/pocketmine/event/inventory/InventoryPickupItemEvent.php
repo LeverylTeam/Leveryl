@@ -19,16 +19,13 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\inventory;
 
 use pocketmine\entity\Item;
 use pocketmine\event\Cancellable;
 use pocketmine\inventory\Inventory;
 
-class InventoryPickupItemEvent extends InventoryEvent implements Cancellable
-{
+class InventoryPickupItemEvent extends InventoryEvent implements Cancellable {
 	public static $handlerList = null;
 
 	/** @var Item */
@@ -38,8 +35,7 @@ class InventoryPickupItemEvent extends InventoryEvent implements Cancellable
 	 * @param Inventory $inventory
 	 * @param Item $item
 	 */
-	public function __construct(Inventory $inventory, Item $item)
-	{
+	public function __construct(Inventory $inventory, Item $item){
 		$this->item = $item;
 		parent::__construct($inventory);
 	}
@@ -47,8 +43,7 @@ class InventoryPickupItemEvent extends InventoryEvent implements Cancellable
 	/**
 	 * @return Item
 	 */
-	public function getItem()
-	{
+	public function getItem(){
 		return $this->item;
 	}
 

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,11 +15,9 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\level\generator\noise;
 
@@ -32,8 +30,7 @@ use pocketmine\utils\Random;
  * Stefan Gustavson at
  * http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
  */
-class Simplex extends Perlin
-{
+class Simplex extends Perlin {
 	protected static $SQRT_3;
 	protected static $SQRT_5;
 	protected static $F2;
@@ -66,8 +63,15 @@ class Simplex extends Perlin
 	protected $offsetW;
 
 
-	public function __construct(Random $random, $octaves, $persistence, $expansion = 1)
-	{
+	/**
+	 * Simplex constructor.
+	 *
+	 * @param Random $random
+	 * @param        $octaves
+	 * @param        $persistence
+	 * @param int $expansion
+	 */
+	public function __construct(Random $random, $octaves, $persistence, $expansion = 1){
 		parent::__construct($random, $octaves, $persistence, $expansion);
 		$this->offsetW = $random->nextFloat() * 256;
 		self::$SQRT_3 = sqrt(3);
@@ -84,23 +88,50 @@ class Simplex extends Perlin
 		self::$G44 = self::$G4 * 4.0 - 1.0;
 	}
 
-	protected static function dot2D($g, $x, $y)
-	{
+	/**
+	 * @param $g
+	 * @param $x
+	 * @param $y
+	 *
+	 * @return mixed
+	 */
+	protected static function dot2D($g, $x, $y){
 		return $g[0] * $x + $g[1] * $y;
 	}
 
-	protected static function dot3D($g, $x, $y, $z)
-	{
+	/**
+	 * @param $g
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 *
+	 * @return mixed
+	 */
+	protected static function dot3D($g, $x, $y, $z){
 		return $g[0] * $x + $g[1] * $y + $g[2] * $z;
 	}
 
-	protected static function dot4D($g, $x, $y, $z, $w)
-	{
+	/**
+	 * @param $g
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 * @param $w
+	 *
+	 * @return mixed
+	 */
+	protected static function dot4D($g, $x, $y, $z, $w){
 		return $g[0] * $x + $g[1] * $y + $g[2] * $z + $g[3] * $w;
 	}
 
-	public function getNoise3D($x, $y, $z)
-	{
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 *
+	 * @return float
+	 */
+	public function getNoise3D($x, $y, $z){
 		$x += $this->offsetX;
 		$y += $this->offsetY;
 		$z += $this->offsetZ;
@@ -119,8 +150,8 @@ class Simplex extends Perlin
 		// For the 3D case, the simplex shape is a slightly irregular tetrahedron.
 
 		// Determine which simplex we are in.
-		if($x0 >= $y0) {
-			if($y0 >= $z0) {
+		if($x0 >= $y0){
+			if($y0 >= $z0){
 				$i1 = 1;
 				$j1 = 0;
 				$k1 = 0;
@@ -128,7 +159,7 @@ class Simplex extends Perlin
 				$j2 = 1;
 				$k2 = 0;
 			} // X Y Z order
-			elseif($x0 >= $z0) {
+			elseif($x0 >= $z0){
 				$i1 = 1;
 				$j1 = 0;
 				$k1 = 0;
@@ -136,7 +167,7 @@ class Simplex extends Perlin
 				$j2 = 0;
 				$k2 = 1;
 			} // X Z Y order
-			else {
+			else{
 				$i1 = 0;
 				$j1 = 0;
 				$k1 = 1;
@@ -145,8 +176,8 @@ class Simplex extends Perlin
 				$k2 = 1;
 			}
 			// Z X Y order
-		} else { // x0<y0
-			if($y0 < $z0) {
+		}else{ // x0<y0
+			if($y0 < $z0){
 				$i1 = 0;
 				$j1 = 0;
 				$k1 = 1;
@@ -154,7 +185,7 @@ class Simplex extends Perlin
 				$j2 = 1;
 				$k2 = 1;
 			} // Z Y X order
-			elseif($x0 < $z0) {
+			elseif($x0 < $z0){
 				$i1 = 0;
 				$j1 = 1;
 				$k1 = 0;
@@ -162,7 +193,7 @@ class Simplex extends Perlin
 				$j2 = 1;
 				$k2 = 1;
 			} // Y Z X order
-			else {
+			else{
 				$i1 = 0;
 				$j1 = 1;
 				$k1 = 0;
@@ -196,25 +227,25 @@ class Simplex extends Perlin
 
 		// Calculate the contribution from the four corners
 		$t0 = 0.6 - $x0 * $x0 - $y0 * $y0 - $z0 * $z0;
-		if($t0 > 0) {
+		if($t0 > 0){
 			$gi0 = self::$grad3[$this->perm[$ii + $this->perm[$jj + $this->perm[$kk]]] % 12];
 			$n += $t0 * $t0 * $t0 * $t0 * ($gi0[0] * $x0 + $gi0[1] * $y0 + $gi0[2] * $z0);
 		}
 
 		$t1 = 0.6 - $x1 * $x1 - $y1 * $y1 - $z1 * $z1;
-		if($t1 > 0) {
+		if($t1 > 0){
 			$gi1 = self::$grad3[$this->perm[$ii + $i1 + $this->perm[$jj + $j1 + $this->perm[$kk + $k1]]] % 12];
 			$n += $t1 * $t1 * $t1 * $t1 * ($gi1[0] * $x1 + $gi1[1] * $y1 + $gi1[2] * $z1);
 		}
 
 		$t2 = 0.6 - $x2 * $x2 - $y2 * $y2 - $z2 * $z2;
-		if($t2 > 0) {
+		if($t2 > 0){
 			$gi2 = self::$grad3[$this->perm[$ii + $i2 + $this->perm[$jj + $j2 + $this->perm[$kk + $k2]]] % 12];
 			$n += $t2 * $t2 * $t2 * $t2 * ($gi2[0] * $x2 + $gi2[1] * $y2 + $gi2[2] * $z2);
 		}
 
 		$t3 = 0.6 - $x3 * $x3 - $y3 * $y3 - $z3 * $z3;
-		if($t3 > 0) {
+		if($t3 > 0){
 			$gi3 = self::$grad3[$this->perm[$ii + 1 + $this->perm[$jj + 1 + $this->perm[$kk + 1]]] % 12];
 			$n += $t3 * $t3 * $t3 * $t3 * ($gi3[0] * $x3 + $gi3[1] * $y3 + $gi3[2] * $z3);
 		}
@@ -224,8 +255,13 @@ class Simplex extends Perlin
 		return 32.0 * $n;
 	}
 
-	public function getNoise2D($x, $y)
-	{
+	/**
+	 * @param $x
+	 * @param $y
+	 *
+	 * @return float
+	 */
+	public function getNoise2D($x, $y){
 		$x += $this->offsetX;
 		$y += $this->offsetY;
 
@@ -241,11 +277,11 @@ class Simplex extends Perlin
 		// For the 2D case, the simplex shape is an equilateral triangle.
 
 		// Determine which simplex we are in.
-		if($x0 > $y0) {
+		if($x0 > $y0){
 			$i1 = 1;
 			$j1 = 0;
 		} // lower triangle, XY order: (0,0)->(1,0)->(1,1)
-		else {
+		else{
 			$i1 = 0;
 			$j1 = 1;
 		}
@@ -268,19 +304,19 @@ class Simplex extends Perlin
 
 		// Calculate the contribution from the three corners
 		$t0 = 0.5 - $x0 * $x0 - $y0 * $y0;
-		if($t0 > 0) {
+		if($t0 > 0){
 			$gi0 = self::$grad3[$this->perm[$ii + $this->perm[$jj]] % 12];
 			$n += $t0 * $t0 * $t0 * $t0 * ($gi0[0] * $x0 + $gi0[1] * $y0); // (x,y) of grad3 used for 2D gradient
 		}
 
 		$t1 = 0.5 - $x1 * $x1 - $y1 * $y1;
-		if($t1 > 0) {
+		if($t1 > 0){
 			$gi1 = self::$grad3[$this->perm[$ii + $i1 + $this->perm[$jj + $j1]] % 12];
 			$n += $t1 * $t1 * $t1 * $t1 * ($gi1[0] * $x1 + $gi1[1] * $y1);
 		}
 
 		$t2 = 0.5 - $x2 * $x2 - $y2 * $y2;
-		if($t2 > 0) {
+		if($t2 > 0){
 			$gi2 = self::$grad3[$this->perm[$ii + 1 + $this->perm[$jj + 1]] % 12];
 			$n += $t2 * $t2 * $t2 * $t2 * ($gi2[0] * $x2 + $gi2[1] * $y2);
 		}

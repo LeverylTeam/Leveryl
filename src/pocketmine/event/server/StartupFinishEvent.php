@@ -24,19 +24,16 @@ namespace pocketmine\event\server;
 
 use pocketmine\Server;
 
-class StartupFinishEvent extends ServerEvent
-{
+class StartupFinishEvent extends ServerEvent {
 	public static $handlerList = null;
 
 	private $server;
 
-	public function __construct(Server $server)
-	{
+	public function __construct(Server $server){
 		$this->server = $server;
 	}
 
-	public function getServer(): Server
-	{
+	public function getServer(): Server{
 		return $this->server;
 	}
 }

@@ -26,8 +26,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Egg extends Projectile
-{
+class Egg extends Projectile {
 	const NETWORK_ID = 82;
 
 	public $width = 0.25;
@@ -37,14 +36,24 @@ class Egg extends Projectile
 	protected $gravity = 0.03;
 	protected $drag = 0.01;
 
-	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null)
-	{
+	/**
+	 * Egg constructor.
+	 *
+	 * @param Level $level
+	 * @param CompoundTag $nbt
+	 * @param Entity|null $shootingEntity
+	 */
+	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($level, $nbt, $shootingEntity);
 	}
 
-	public function onUpdate($currentTick)
-	{
-		if($this->closed) {
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
+	public function onUpdate($currentTick){
+		if($this->closed){
 			return false;
 		}
 
@@ -52,7 +61,7 @@ class Egg extends Projectile
 
 		$hasUpdate = parent::onUpdate($currentTick);
 
-		if($this->age > 1200 or $this->isCollided) {
+		if($this->age > 1200 or $this->isCollided){
 			$this->kill();
 			$hasUpdate = true; //Chance to spawn chicken
 		}
@@ -62,11 +71,13 @@ class Egg extends Projectile
 		return $hasUpdate;
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->type = Egg::NETWORK_ID;
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;

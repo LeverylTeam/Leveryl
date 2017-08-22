@@ -32,47 +32,66 @@ use pocketmine\Player;
 use pocketmine\tile\Hopper as TileHopper;
 use pocketmine\tile\Tile;
 
-class Hopper extends Transparent
-{
+class Hopper extends Transparent {
 
 	protected $id = self::HOPPER_BLOCK;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * Hopper constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated(): bool
-	{
+	/**
+	 * @return bool
+	 */
+	public function canBeActivated(): bool{
 		return true;
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Hopper";
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return int
+	 */
+	public function getHardness(){
 		return 3;
 	}
 
-	public function onActivate(Item $item, Player $player = null)
-	{
-		if($player instanceof Player) {
+	/**
+	 * @param Item $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function onActivate(Item $item, Player $player = null){
+		if($player instanceof Player){
 			$t = $this->getLevel()->getTile($this);
-			if($t instanceof TileHopper) {
-				if($t->hasLock() and !$t->checkLock($item->getCustomName())) {
+			if($t instanceof TileHopper){
+				if($t->hasLock() and !$t->checkLock($item->getCustomName())){
 					$player->getServer()->getLogger()->debug($player->getName() . " attempted to open a locked hopper");
 
 					return true;
 				}
-				if($player->getServer()->getLeverylConfigValue("LimitedCreative", true) and $player->isCreative()) return true;
+
+				if($player->isCreative() and $player->getServer()->limitedCreative){
+					return true;
+				}
 				$player->addWindow($t->getInventory());
 			}
 		}
@@ -80,8 +99,26 @@ class Hopper extends Transparent
 		return true;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
-	{
+	/**
+	 *
+	 */
+	public function activate(){
+		//TODO: Hopper content freezing (requires basic redstone system upgrade)
+	}
+
+	/**
+	 * @param Item $item
+	 * @param Block $block
+	 * @param Block $target
+	 * @param int $face
+	 * @param float $fx
+	 * @param float $fy
+	 * @param float $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$faces = [
 			0 => 0,
 			1 => 0,
@@ -102,41 +139,32 @@ class Hopper extends Transparent
 		]);
 		$nbt->Items->setTagType(NBT::TAG_Compound);
 
-		if($item->hasCustomName()) {
+		if($item->hasCustomName()){
 			$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 		}
 
-		if($item->hasCustomBlockData()) {
-			foreach($item->getCustomBlockData() as $key => $v) {
+		if($item->hasCustomBlockData()){
+			foreach($item->getCustomBlockData() as $key => $v){
 				$nbt->{$key} = $v;
 			}
 		}
 
-		$t = Tile::createTile(Tile::HOPPER, $this->getLevel(), $nbt);
+		Tile::createTile(Tile::HOPPER, $this->getLevel(), $nbt);
 
 		return true;
 	}
 
-	public function onBreak(Item $item)
-	{
-		$tile = $this->level->getTile($this);
-		if($tile instanceof TileHopper) {
-			foreach($tile->getInventory()->getContents() as $item) {
-				$tile->level->dropItem($tile->getBlock(), $item);
-			}
-		}
-		$this->getLevel()->setBlock($this, new Air(), true, true);
-
-		return parent::onBreak($item);
-	}
-
-	public function getDrops(Item $item): array
-	{
-		if($item->isPickaxe() >= 1) {
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
+		if($item->isPickaxe() >= 1){
 			return [
 				[Item::HOPPER, 0, 1],
 			];
-		} else {
+		}else{
 			return [];
 		}
 	}

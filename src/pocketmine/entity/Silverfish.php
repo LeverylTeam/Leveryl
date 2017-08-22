@@ -24,21 +24,24 @@ namespace pocketmine\entity;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Silverfish extends Monster
-{
+class Silverfish extends Monster {
 	const NETWORK_ID = 39;
 
 	public $dropExp = [5, 5];
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Silverfish";
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Silverfish::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;

@@ -43,7 +43,7 @@ class Boat extends Vehicle {
 	/**
 	 * Boat constructor.
 	 *
-	 * @param Level       $level
+	 * @param Level $level
 	 * @param CompoundTag $nbt
 	 */
 	public function __construct(Level $level, CompoundTag $nbt){
@@ -57,8 +57,8 @@ class Boat extends Vehicle {
 	/**
 	 * @return int
 	 */
-	public function getWoodID() : int{
-		return (int) $this->namedtag["WoodID"];
+	public function getWoodID(): int{
+		return (int)$this->namedtag["WoodID"];
 	}
 
 	/**
@@ -66,7 +66,7 @@ class Boat extends Vehicle {
 	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Boat::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
@@ -83,7 +83,7 @@ class Boat extends Vehicle {
 	}
 
 	/**
-	 * @param float             $damage
+	 * @param float $damage
 	 * @param EntityDamageEvent $source
 	 *
 	 * @return bool|void
@@ -93,7 +93,7 @@ class Boat extends Vehicle {
 
 		if(!$source->isCancelled()){
 			$pk = new EntityEventPacket();
-			$pk->entityRuntimeId = $this->id;
+			$pk->eid = $this->id;
 			$pk->event = EntityEventPacket::HURT_ANIMATION;
 			foreach($this->getLevel()->getPlayers() as $player){
 				$player->dataPacket($pk);
@@ -153,7 +153,7 @@ class Boat extends Vehicle {
 	 */
 	public function getDrops(){
 		return [
-			ItemItem::get(ItemItem::BOAT, 0, 1)
+			ItemItem::get(ItemItem::BOAT, 0, 1),
 		];
 	}
 
@@ -162,6 +162,7 @@ class Boat extends Vehicle {
 	 */
 	public function getSaveId(){
 		$class = new \ReflectionClass(static::class);
+
 		return $class->getShortName();
 	}
 }

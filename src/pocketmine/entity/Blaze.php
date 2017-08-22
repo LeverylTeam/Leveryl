@@ -27,8 +27,7 @@ use pocketmine\item\Item as ItemItem;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Blaze extends Monster
-{
+class Blaze extends Monster {
 	const NETWORK_ID = 43;
 
 	public $width = 0.3;
@@ -37,15 +36,19 @@ class Blaze extends Monster
 
 	public $dropExp = [10, 10];
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Blaze";
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = self::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
@@ -60,14 +63,15 @@ class Blaze extends Monster
 		parent::spawnTo($player);
 	}
 
-	public function getDrops()
-	{
+	/**
+	 * @return array
+	 */
+	public function getDrops(){
 		$cause = $this->lastDamageCause;
-		//Only drop when kill by player or dog(No add now.)
-		if($cause instanceof EntityDamageByEntityEvent) {
-			$pl = $cause->getDamager();
-			if($pl instanceof Player) {
-				$lootingL = $pl->getItemInHand()->getEnchantmentLevel(Enchantment::LOOTING);
+		if($cause instanceof EntityDamageByEntityEvent){
+			$damager = $cause->getDamager();
+			if($damager instanceof Player){
+				$lootingL = $damager->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
 				$drops = [ItemItem::get(ItemItem::BLAZE_ROD, 0, mt_rand(0, 1 + $lootingL))];
 
 				return $drops;
@@ -75,5 +79,6 @@ class Blaze extends Monster
 		}
 
 		return [];
+
 	}
 }

@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __	__  _____
+ *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,47 +38,49 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 
-class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
-{
+class Dropper extends Spawnable implements InventoryHolder, Container, Nameable {
 
 	/** @var DropperInventory */
 	protected $inventory;
 
 	protected $nextUpdate = 0;
 
-	public function __construct(Level $level, CompoundTag $nbt)
-	{
+	/**
+	 * Dropper constructor.
+	 *
+	 * @param Level $level
+	 * @param CompoundTag $nbt
+	 */
+	public function __construct(Level $level, CompoundTag $nbt){
 		parent::__construct($level, $nbt);
 		$this->inventory = new DropperInventory($this);
-		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)) {
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
 			$this->namedtag->Items = new ListTag("Items", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
-		for($i = 0; $i < $this->getSize(); ++$i) {
+		for($i = 0; $i < $this->getSize(); ++$i){
 			$this->inventory->setItem($i, $this->getItem($i));
 		}
 		$this->scheduleUpdate();
 	}
 
-	public function close()
-	{
-		if($this->closed === false) {
-			foreach($this->getInventory()->getViewers() as $player) {
+	public function close(){
+		if($this->closed === false){
+			foreach($this->getInventory()->getViewers() as $player){
 				$player->removeWindow($this->getInventory());
 			}
 
-			foreach($this->getInventory()->getViewers() as $player) {
+			foreach($this->getInventory()->getViewers() as $player){
 				$player->removeWindow($this->getInventory());
 			}
 			parent::close();
 		}
 	}
 
-	public function saveNBT()
-	{
+	public function saveNBT(){
 		$this->namedtag->Items = new ListTag("Items", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
-		for($index = 0; $index < $this->getSize(); ++$index) {
+		for($index = 0; $index < $this->getSize(); ++$index){
 			$this->setItem($index, $this->inventory->getItem($index));
 		}
 	}
@@ -86,8 +88,7 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 	/**
 	 * @return int
 	 */
-	public function getSize()
-	{
+	public function getSize(){
 		return 9;
 	}
 
@@ -96,10 +97,9 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 	 *
 	 * @return int
 	 */
-	protected function getSlotIndex($index)
-	{
-		foreach($this->namedtag->Items as $i => $slot) {
-			if((int)$slot["Slot"] === (int)$index) {
+	protected function getSlotIndex($index){
+		foreach($this->namedtag->Items as $i => $slot){
+			if((int)$slot["Slot"] === (int)$index){
 				return (int)$i;
 			}
 		}
@@ -114,12 +114,11 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 	 *
 	 * @return Item
 	 */
-	public function getItem($index)
-	{
+	public function getItem($index){
 		$i = $this->getSlotIndex($index);
-		if($i < 0) {
+		if($i < 0){
 			return Item::get(Item::AIR, 0, 0);
-		} else {
+		}else{
 			return Item::nbtDeserialize($this->namedtag->Items[$i]);
 		}
 	}
@@ -132,22 +131,21 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 	 *
 	 * @return bool
 	 */
-	public function setItem($index, Item $item)
-	{
+	public function setItem($index, Item $item){
 		$i = $this->getSlotIndex($index);
 
-		if($item->getId() === Item::AIR or $item->getCount() <= 0) {
-			if($i >= 0) {
+		if($item->getId() === Item::AIR or $item->getCount() <= 0){
+			if($i >= 0){
 				unset($this->namedtag->Items[$i]);
 			}
-		} elseif($i < 0) {
-			for($i = 0; $i <= $this->getSize(); ++$i) {
-				if(!isset($this->namedtag->Items[$i])) {
+		}elseif($i < 0){
+			for($i = 0; $i <= $this->getSize(); ++$i){
+				if(!isset($this->namedtag->Items[$i])){
 					break;
 				}
 			}
 			$this->namedtag->Items[$i] = $item->nbtSerialize($index);
-		} else {
+		}else{
 			$this->namedtag->Items[$i] = $item->nbtSerialize($index);
 		}
 
@@ -157,24 +155,29 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 	/**
 	 * @return DropperInventory
 	 */
-	public function getInventory()
-	{
+	public function getInventory(){
 		return $this->inventory;
 	}
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Dropper";
 	}
 
-	public function hasName(): bool
-	{
+	/**
+	 * @return bool
+	 */
+	public function hasName(){
 		return isset($this->namedtag->CustomName);
 	}
 
-	public function setName(string $str)
-	{
-		if($str === "") {
+	/**
+	 * @param void $str
+	 */
+	public function setName($str){
+		if($str === ""){
 			unset($this->namedtag->CustomName);
 
 			return;
@@ -183,10 +186,12 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 		$this->namedtag->CustomName = new StringTag("CustomName", $str);
 	}
 
-	public function getMotion()
-	{
+	/**
+	 * @return array
+	 */
+	public function getMotion(){
 		$meta = $this->getBlock()->getDamage();
-		switch($meta) {
+		switch($meta){
 			case Vector3::SIDE_DOWN:
 				return [0, -1, 0];
 			case Vector3::SIDE_UP:
@@ -204,12 +209,11 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 		}
 	}
 
-	public function activate()
-	{
+	public function activate(){
 		$itemIndex = [];
-		for($i = 0; $i < $this->getSize(); $i++) {
+		for($i = 0; $i < $this->getSize(); $i++){
 			$item = $this->getInventory()->getItem($i);
-			if($item->getId() != Item::AIR) {
+			if($item->getId() != Item::AIR){
 				$itemIndex[] = [$i, $item];
 			}
 		}
@@ -218,7 +222,7 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 		elseif($max == 0) $itemArr = $itemIndex[0];
 		else $itemArr = $itemIndex[mt_rand(0, $max)];
 
-		if(is_array($itemArr)) {
+		if(is_array($itemArr)){
 			/** @var Item $item */
 			$item = $itemArr[1];
 			$item->setCount($item->getCount() - 1);
@@ -226,7 +230,7 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 			$motion = $this->getMotion();
 			$needItem = Item::get($item->getId(), $item->getDamage());
 			$block = $this->getLevel()->getBlock($this->add($motion[0], $motion[1], $motion[2]));
-			switch($block->getId()) {
+			switch($block->getId()){
 				case Block::CHEST:
 				case Block::TRAPPED_CHEST:
 				case Block::DROPPER:
@@ -235,8 +239,8 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 				case Block::FURNACE:
 					$t = $this->getLevel()->getTile($block);
 					/** @var Chest|Dispenser|Dropper|BrewingStand|Furnace $t */
-					if($t instanceof Tile) {
-						if($t->getInventory()->canAddItem($needItem)) {
+					if($t instanceof Tile){
+						if($t->getInventory()->canAddItem($needItem)){
 							$t->getInventory()->addItem($needItem);
 
 							return;
@@ -269,14 +273,16 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 			$itemEntity->setMotion($itemEntity->getMotion()->multiply($f));
 			$itemEntity->spawnToAll();
 
-			for($i = 1; $i < 10; $i++) {
+			for($i = 1; $i < 10; $i++){
 				$this->getLevel()->addParticle(new SmokeParticle($this->add($motion[0] * $i * 0.3 + 0.5, $motion[1] == 0 ? 0.5 : $motion[1] * $i * 0.3, $motion[2] * $i * 0.3 + 0.5)));
 			}
 		}
 	}
 
-	public function getSpawnCompound()
-	{
+	/**
+	 * @return CompoundTag
+	 */
+	public function getSpawnCompound(){
 		$c = new CompoundTag("", [
 			new StringTag("id", Tile::DROPPER),
 			new IntTag("x", (int)$this->x),
@@ -284,7 +290,7 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable
 			new IntTag("z", (int)$this->z),
 		]);
 
-		if($this->hasName()) {
+		if($this->hasName()){
 			$c->CustomName = $this->namedtag->CustomName;
 		}
 

@@ -19,8 +19,6 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\entity;
 
 use pocketmine\entity\Creature;
@@ -33,8 +31,7 @@ use pocketmine\entity\Vehicle;
 /**
  * Called when a entity is spawned
  */
-class EntitySpawnEvent extends EntityEvent
-{
+class EntitySpawnEvent extends EntityEvent {
 	public static $handlerList = null;
 
 	private $entityType;
@@ -42,8 +39,7 @@ class EntitySpawnEvent extends EntityEvent
 	/**
 	 * @param Entity $entity
 	 */
-	public function __construct(Entity $entity)
-	{
+	public function __construct(Entity $entity){
 		$this->entity = $entity;
 		$this->entityType = $entity::NETWORK_ID;
 	}
@@ -51,56 +47,49 @@ class EntitySpawnEvent extends EntityEvent
 	/**
 	 * @return \pocketmine\level\Position
 	 */
-	public function getPosition()
-	{
+	public function getPosition(){
 		return $this->entity->getPosition();
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getType()
-	{
+	public function getType(){
 		return $this->entityType;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isCreature()
-	{
+	public function isCreature(){
 		return $this->entity instanceof Creature;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isHuman()
-	{
+	public function isHuman(){
 		return $this->entity instanceof Human;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isProjectile()
-	{
+	public function isProjectile(){
 		return $this->entity instanceof Projectile;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isVehicle()
-	{
+	public function isVehicle(){
 		return $this->entity instanceof Vehicle;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isItem()
-	{
+	public function isItem(){
 		return $this->entity instanceof Item;
 	}
 

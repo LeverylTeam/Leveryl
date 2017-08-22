@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,18 +15,16 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\block;
+
 
 use pocketmine\item\Tool;
 
-class Planks extends Solid
-{
+class Planks extends Solid {
 	const OAK = 0;
 	const SPRUCE = 1;
 	const BIRCH = 2;
@@ -36,23 +34,47 @@ class Planks extends Solid
 
 	protected $id = self::WOODEN_PLANKS;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * Planks constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return int
+	 */
+	public function getHardness(){
 		return 2;
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
 		return Tool::TYPE_AXE;
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return int
+	 */
+	public function getBurnChance(): int{
+		return 5;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getBurnAbility(): int{
+		return 20;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		static $names = [
 			self::OAK      => "Oak Wood Planks",
 			self::SPRUCE   => "Spruce Wood Planks",
@@ -60,13 +82,11 @@ class Planks extends Solid
 			self::JUNGLE   => "Jungle Wood Planks",
 			self::ACACIA   => "Acacia Wood Planks",
 			self::DARK_OAK => "Dark Oak Wood Planks",
+			6              => "Unknown Planks",
+			7              => "Unknown Planks",
 		];
 
-		return $names[$this->meta & 0x07] ?? "Unknown";
-	}
-
-	public function getFuelTime() : int{
-		return 300;
+		return $names[$this->meta & 0x07];
 	}
 
 }

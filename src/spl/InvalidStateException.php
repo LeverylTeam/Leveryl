@@ -15,7 +15,6 @@
  * GNU General Public License for more details.
 */
 
-class InvalidStateException extends InvalidArgumentException
-{
+class InvalidStateException extends InvalidArgumentException {
 
 }

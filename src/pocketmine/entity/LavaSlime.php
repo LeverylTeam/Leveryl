@@ -24,23 +24,26 @@ namespace pocketmine\entity;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class LavaSlime extends Living
-{
+class LavaSlime extends Living {
 	const NETWORK_ID = 42;
 
 	const DATA_SLIME_SIZE = 16;
 
 	public $dropExp = [1, 4];
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "LavaSlime";
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = LavaSlime::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -26,10 +26,8 @@ namespace pocketmine\level\format\io;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
-use pocketmine\scheduler\AsyncTask;
 
-interface LevelProvider
-{
+interface LevelProvider {
 
 	/**
 	 * @param Level $level
@@ -71,11 +69,11 @@ interface LevelProvider
 	 *
 	 * @param string $path
 	 * @param string $name
-	 * @param int $seed
+	 * @param int|string $seed
 	 * @param string $generator
 	 * @param array[] $options
 	 */
-	public static function generate(string $path, string $name, int $seed, string $generator, array $options = []);
+	public static function generate(string $path, string $name, $seed, string $generator, array $options = []);
 
 	/**
 	 * Returns the generator name
@@ -168,9 +166,9 @@ interface LevelProvider
 	 * @param int $x
 	 * @param int $z
 	 *
-	 * @return AsyncTask
+	 * @return \pocketmine\scheduler\AsyncTask|null
 	 */
-	public function requestChunkTask(int $x, int $z): AsyncTask;
+	public function requestChunkTask(int $x, int $z);
 
 	/**
 	 * @return string
@@ -180,22 +178,22 @@ interface LevelProvider
 	/**
 	 * @return int|string int, or the string numeric representation of a long in 32-bit systems
 	 */
-	public function getTime() : int;
+	public function getTime();
 
 	/**
 	 * @param int|string $value int, or the string numeric representation of a long in 32-bit systems
 	 */
-	public function setTime(int $value);
+	public function setTime($value);
 
 	/**
-	 * @return int|string int, or the string numeric representation of a long in 32-bit systems
+	 * @return int
 	 */
-	public function getSeed() : int;
+	public function getSeed();
 
 	/**
 	 * @param int|string $value int, or the string numeric representation of a long in 32-bit systems
 	 */
-	public function setSeed(int $value);
+	public function setSeed($value);
 
 	/**
 	 * @return Vector3
@@ -220,9 +218,5 @@ interface LevelProvider
 	public function getLevel();
 
 	public function close();
-
-	public function updateGameRule($t, $s);
-
-	public function getGameRule($rule);
 
 }

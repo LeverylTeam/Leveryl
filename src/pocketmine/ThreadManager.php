@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,35 +19,29 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine;
 
-class ThreadManager extends \Volatile
-{
+class ThreadManager extends \Volatile {
 
 	/** @var ThreadManager */
 	private static $instance = null;
 
-	public static function init()
-	{
+	public static function init(){
 		self::$instance = new ThreadManager();
 	}
 
 	/**
 	 * @return ThreadManager
 	 */
-	public static function getInstance()
-	{
+	public static function getInstance(){
 		return self::$instance;
 	}
 
 	/**
 	 * @param Worker|Thread $thread
 	 */
-	public function add($thread)
-	{
-		if($thread instanceof Thread or $thread instanceof Worker) {
+	public function add($thread){
+		if($thread instanceof Thread or $thread instanceof Worker){
 			$this->{spl_object_hash($thread)} = $thread;
 		}
 	}
@@ -55,9 +49,8 @@ class ThreadManager extends \Volatile
 	/**
 	 * @param Worker|Thread $thread
 	 */
-	public function remove($thread)
-	{
-		if($thread instanceof Thread or $thread instanceof Worker) {
+	public function remove($thread){
+		if($thread instanceof Thread or $thread instanceof Worker){
 			unset($this->{spl_object_hash($thread)});
 		}
 	}
@@ -65,10 +58,9 @@ class ThreadManager extends \Volatile
 	/**
 	 * @return Worker[]|Thread[]
 	 */
-	public function getAll()
-	{
+	public function getAll(){
 		$array = [];
-		foreach($this as $key => $thread) {
+		foreach($this as $key => $thread){
 			$array[$key] = $thread;
 		}
 

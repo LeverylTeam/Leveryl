@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,32 +15,39 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\level\generator\object;
 
 use pocketmine\block\Block;
+use pocketmine\block\Leaves;
 use pocketmine\block\Wood;
 use pocketmine\level\ChunkManager;
 use pocketmine\utils\Random;
 
-class SpruceTree extends Tree
-{
+class SpruceTree extends Tree {
 
-	public function __construct()
-	{
+	/**
+	 * SpruceTree constructor.
+	 */
+	public function __construct(){
 		$this->trunkBlock = Block::LOG;
 		$this->leafBlock = Block::LEAVES;
+		$this->leafType = Leaves::SPRUCE;
 		$this->type = Wood::SPRUCE;
 		$this->treeHeight = 10;
 	}
 
-	public function placeObject(ChunkManager $level, $x, $y, $z, Random $random)
-	{
+	/**
+	 * @param ChunkManager $level
+	 * @param              $x
+	 * @param              $y
+	 * @param              $z
+	 * @param Random $random
+	 */
+	public function placeObject(ChunkManager $level, $x, $y, $z, Random $random){
 		$this->treeHeight = $random->nextBoundedInt(4) + 6;
 
 		$topSize = $this->treeHeight - (1 + $random->nextBoundedInt(2));
@@ -52,31 +59,31 @@ class SpruceTree extends Tree
 		$maxR = 1;
 		$minR = 0;
 
-		for($yy = 0; $yy <= $topSize; ++$yy) {
+		for($yy = 0; $yy <= $topSize; ++$yy){
 			$yyy = $y + $this->treeHeight - $yy;
 
-			for($xx = $x - $radius; $xx <= $x + $radius; ++$xx) {
+			for($xx = $x - $radius; $xx <= $x + $radius; ++$xx){
 				$xOff = abs($xx - $x);
-				for($zz = $z - $radius; $zz <= $z + $radius; ++$zz) {
+				for($zz = $z - $radius; $zz <= $z + $radius; ++$zz){
 					$zOff = abs($zz - $z);
-					if($xOff === $radius and $zOff === $radius and $radius > 0) {
+					if($xOff === $radius and $zOff === $radius and $radius > 0){
 						continue;
 					}
 
-					if(!Block::$solid[$level->getBlockIdAt($xx, $yyy, $zz)]) {
+					if(!Block::$solid[$level->getBlockIdAt($xx, $yyy, $zz)]){
 						$level->setBlockIdAt($xx, $yyy, $zz, $this->leafBlock);
 						$level->setBlockDataAt($xx, $yyy, $zz, $this->type);
 					}
 				}
 			}
 
-			if($radius >= $maxR) {
+			if($radius >= $maxR){
 				$radius = $minR;
 				$minR = 1;
-				if(++$maxR > $lRadius) {
+				if(++$maxR > $lRadius){
 					$maxR = $lRadius;
 				}
-			} else {
+			}else{
 				++$radius;
 			}
 		}

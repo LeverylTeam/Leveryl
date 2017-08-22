@@ -15,7 +15,6 @@
  * GNU General Public License for more details.
 */
 
-abstract class ThreadedLogger extends \Thread implements Logger
-{
+abstract class ThreadedLogger extends \Thread implements Logger {
 
 }

@@ -17,8 +17,7 @@ namespace raklib\server;
 
 use raklib\protocol\EncapsulatedPacket;
 
-interface ServerInstance
-{
+interface ServerInstance {
 
 	/**
 	 * @param string $identifier

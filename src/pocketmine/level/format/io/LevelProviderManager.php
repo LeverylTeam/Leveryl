@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,8 +25,7 @@ namespace pocketmine\level\format\io;
 
 use pocketmine\level\LevelException;
 
-abstract class LevelProviderManager
-{
+abstract class LevelProviderManager {
 	protected static $providers = [];
 
 	/**
@@ -34,9 +33,8 @@ abstract class LevelProviderManager
 	 *
 	 * @throws LevelException
 	 */
-	public static function addProvider(string $class)
-	{
-		if(!is_subclass_of($class, LevelProvider::class)) {
+	public static function addProvider(string $class){
+		if(!is_subclass_of($class, LevelProvider::class)){
 			throw new LevelException("Class is not a subclass of LevelProvider");
 		}
 		/** @var LevelProvider $class */
@@ -50,11 +48,10 @@ abstract class LevelProviderManager
 	 *
 	 * @return string|null
 	 */
-	public static function getProvider(string $path)
-	{
-		foreach(self::$providers as $provider) {
+	public static function getProvider(string $path){
+		foreach(self::$providers as $provider){
 			/** @var $provider LevelProvider */
-			if($provider::isValid($path)) {
+			if($provider::isValid($path)){
 				return $provider;
 			}
 		}
@@ -69,8 +66,7 @@ abstract class LevelProviderManager
 	 *
 	 * @return string|null
 	 */
-	public static function getProviderByName(string $name)
-	{
+	public static function getProviderByName(string $name){
 		return self::$providers[trim(strtolower($name))] ?? null;
 	}
 }

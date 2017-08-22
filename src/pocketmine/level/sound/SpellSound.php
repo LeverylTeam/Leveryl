@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __	__  _____
+ *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,30 +22,39 @@
 namespace pocketmine\level\sound;
 
 use pocketmine\math\Vector3;
-use pocketmine\network\mcpe\protocol\LevelEventPacket;
 
-class SpellSound extends Sound
-{
+class SpellSound extends Sound {
+	//TODO: fix this
 
 	private $id;
 	private $color;
 
-	public function __construct(Vector3 $pos, $r = 0, $g = 0, $b = 0)
-	{
-		parent::__construct($pos->x, $pos->y, $pos->z);
-		$this->id = (int)LevelEventPacket::EVENT_CAULDRON_FILL_POTION;
-		$this->color = ($r << 16 | $g << 8 | $b) & 0xffffff;
+	/**
+	 * SpellSound constructor.
+	 *
+	 * @param Vector3 $pos
+	 * @param int $r
+	 * @param int $g
+	 * @param int $b
+	 */
+	public function __construct(Vector3 $pos, $r = 0, $g = 0, $b = 0){
+		/*parent::__construct($pos->x, $pos->y, $pos->z);
+		$this->id = (int) LevelEventPacket::EVENT_SOUND_SPELL;
+		$this->color = ($r << 16 | $g << 8 | $b) & 0xffffff;*/
 	}
 
-	public function encode()
-	{
-		$pk = new LevelEventPacket;
+	/**
+	 * @return null
+	 */
+	public function encode(){
+		return null;
+		/*$pk = new LevelEventPacket;
 		$pk->evid = $this->id;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;
 		$pk->data = $this->color;
 
-		return $pk;
+		return $pk;*/
 	}
 }

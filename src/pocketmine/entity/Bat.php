@@ -27,8 +27,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Bat extends FlyingAnimal
-{
+class Bat extends FlyingAnimal {
 
 	const NETWORK_ID = 19;
 
@@ -41,20 +40,26 @@ class Bat extends FlyingAnimal
 	public $flySpeed = 0.8;
 	public $switchDirectionTicks = 100;
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Bat";
 	}
 
-	public function initEntity()
-	{
+	public function initEntity(){
 		$this->setMaxHealth(6);
 		parent::initEntity();
 	}
 
-	public function __construct(Level $level, CompoundTag $nbt)
-	{
-		if(!isset($nbt->isResting)) {
+	/**
+	 * Bat constructor.
+	 *
+	 * @param Level $level
+	 * @param CompoundTag $nbt
+	 */
+	public function __construct(Level $level, CompoundTag $nbt){
+		if(!isset($nbt->isResting)){
 			$nbt->isResting = new ByteTag("isResting", 0);
 		}
 		parent::__construct($level, $nbt);
@@ -62,29 +67,39 @@ class Bat extends FlyingAnimal
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_RESTING, $this->isResting());
 	}
 
-	public function isResting(): int
-	{
+	/**
+	 * @return int
+	 */
+	public function isResting(): int{
 		return (int)$this->namedtag["isResting"];
 	}
 
-	public function setResting(bool $resting)
-	{
+	/**
+	 * @param bool $resting
+	 */
+	public function setResting(bool $resting){
 		$this->namedtag->isResting = new ByteTag("isResting", $resting ? 1 : 0);
 	}
 
-	public function onUpdate($currentTick)
-	{
-		if($this->age > 20 * 60 * 10) {
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
+	public function onUpdate($currentTick){
+		if($this->age > 20 * 60 * 10){
 			$this->kill();
 		}
 
 		return parent::onUpdate($currentTick);
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Bat::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,11 +15,9 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -33,40 +31,62 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\tile\Tile;
 
-class SignPost extends Transparent
-{
+class SignPost extends Transparent {
 
 	protected $id = self::SIGN_POST;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * SignPost constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return int
+	 */
+	public function getHardness(){
 		return 1;
 	}
 
-	public function isSolid()
-	{
+	/**
+	 * @return bool
+	 */
+	public function isSolid(){
 		return false;
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Sign Post";
 	}
 
-	public function getBoundingBox()
-	{
+	/**
+	 * @return null
+	 */
+	public function getBoundingBox(){
 		return null;
 	}
 
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
-	{
-		if($face !== 0) {
+	/**
+	 * @param Item $item
+	 * @param Block $block
+	 * @param Block $target
+	 * @param int $face
+	 * @param float $fx
+	 * @param float $fy
+	 * @param float $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		if($face !== 0){
 			$nbt = new CompoundTag("", [
 				"id"    => new StringTag("id", Tile::SIGN),
 				"x"     => new IntTag("x", $block->x),
@@ -78,20 +98,20 @@ class SignPost extends Transparent
 				"Text4" => new StringTag("Text4", ""),
 			]);
 
-			if($player !== null) {
+			if($player !== null){
 				$nbt->Creator = new StringTag("Creator", $player->getRawUniqueId());
 			}
 
-			if($item->hasCustomBlockData()) {
-				foreach($item->getCustomBlockData() as $key => $v) {
+			if($item->hasCustomBlockData()){
+				foreach($item->getCustomBlockData() as $key => $v){
 					$nbt->{$key} = $v;
 				}
 			}
 
-			if($face === 1) {
+			if($face === 1){
 				$this->meta = floor((($player->yaw + 180) * 16 / 360) + 0.5) & 0x0f;
 				$this->getLevel()->setBlock($block, $this, true);
-			} else {
+			}else{
 				$this->meta = $face;
 				$this->getLevel()->setBlock($block, new WallSign($this->meta), true);
 			}
@@ -104,10 +124,14 @@ class SignPost extends Transparent
 		return false;
 	}
 
-	public function onUpdate($type)
-	{
-		if($type === Level::BLOCK_UPDATE_NORMAL) {
-			if($this->getSide(Vector3::SIDE_DOWN)->getId() === self::AIR) {
+	/**
+	 * @param int $type
+	 *
+	 * @return bool|int
+	 */
+	public function onUpdate($type){
+		if($type === Level::BLOCK_UPDATE_NORMAL){
+			if($this->getSide(Vector3::SIDE_DOWN)->getId() === Block::AIR){
 				$this->getLevel()->useBreakOn($this);
 
 				return Level::BLOCK_UPDATE_NORMAL;
@@ -117,15 +141,21 @@ class SignPost extends Transparent
 		return false;
 	}
 
-	public function getDrops(Item $item)
-	{
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
 		return [
 			[Item::SIGN, 0, 1],
 		];
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
 		return Tool::TYPE_AXE;
 	}
 }

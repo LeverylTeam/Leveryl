@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,11 +15,9 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 /**
  * Different noise generators for level generation
@@ -28,8 +26,7 @@ declare(strict_types = 1);
 namespace pocketmine\level\generator\noise;
 
 
-abstract class Noise
-{
+abstract class Noise {
 	protected $perm = [];
 	protected $offsetX = 0;
 	protected $offsetY = 0;
@@ -38,28 +35,63 @@ abstract class Noise
 	protected $persistence;
 	protected $expansion;
 
-	public static function floor($x)
-	{
+	/**
+	 * @param $x
+	 *
+	 * @return int
+	 */
+	public static function floor($x){
 		return $x >= 0 ? (int)$x : (int)($x - 1);
 	}
 
-	public static function fade($x)
-	{
+	/**
+	 * @param $x
+	 *
+	 * @return mixed
+	 */
+	public static function fade($x){
 		return $x * $x * $x * ($x * ($x * 6 - 15) + 10);
 	}
 
-	public static function lerp($x, $y, $z)
-	{
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 *
+	 * @return mixed
+	 */
+	public static function lerp($x, $y, $z){
 		return $y + $x * ($z - $y);
 	}
 
-	public static function linearLerp($x, $x1, $x2, $q0, $q1)
-	{
+	/**
+	 * @param $x
+	 * @param $x1
+	 * @param $x2
+	 * @param $q0
+	 * @param $q1
+	 *
+	 * @return float|int
+	 */
+	public static function linearLerp($x, $x1, $x2, $q0, $q1){
 		return (($x2 - $x) / ($x2 - $x1)) * $q0 + (($x - $x1) / ($x2 - $x1)) * $q1;
 	}
 
-	public static function bilinearLerp($x, $y, $q00, $q01, $q10, $q11, $x1, $x2, $y1, $y2)
-	{
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $q00
+	 * @param $q01
+	 * @param $q10
+	 * @param $q11
+	 * @param $x1
+	 * @param $x2
+	 * @param $y1
+	 * @param $y2
+	 *
+	 * @return float|int
+	 */
+	public static function bilinearLerp($x, $y, $q00, $q01, $q10, $q11, $x1, $x2, $y1, $y2){
 		$dx1 = (($x2 - $x) / ($x2 - $x1));
 		$dx2 = (($x - $x1) / ($x2 - $x1));
 
@@ -70,8 +102,28 @@ abstract class Noise
 			);
 	}
 
-	public static function trilinearLerp($x, $y, $z, $q000, $q001, $q010, $q011, $q100, $q101, $q110, $q111, $x1, $x2, $y1, $y2, $z1, $z2)
-	{
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 * @param $q000
+	 * @param $q001
+	 * @param $q010
+	 * @param $q011
+	 * @param $q100
+	 * @param $q101
+	 * @param $q110
+	 * @param $q111
+	 * @param $x1
+	 * @param $x2
+	 * @param $y1
+	 * @param $y2
+	 * @param $z1
+	 * @param $z2
+	 *
+	 * @return float|int
+	 */
+	public static function trilinearLerp($x, $y, $z, $q000, $q001, $q010, $q011, $q100, $q101, $q110, $q111, $x1, $x2, $y1, $y2, $z1, $z2){
 		$dx1 = (($x2 - $x) / ($x2 - $x1));
 		$dx2 = (($x - $x1) / ($x2 - $x1));
 		$dy1 = (($y2 - $y) / ($y2 - $y1));
@@ -92,8 +144,15 @@ abstract class Noise
 			);
 	}
 
-	public static function grad($hash, $x, $y, $z)
-	{
+	/**
+	 * @param $hash
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 *
+	 * @return mixed
+	 */
+	public static function grad($hash, $x, $y, $z){
 		$hash &= 15;
 		$u = $hash < 8 ? $x : $y;
 		$v = $hash < 4 ? $y : (($hash === 12 or $hash === 14) ? $x : $z);
@@ -101,12 +160,31 @@ abstract class Noise
 		return (($hash & 1) === 0 ? $u : -$u) + (($hash & 2) === 0 ? $v : -$v);
 	}
 
+	/**
+	 * @param $x
+	 * @param $z
+	 *
+	 * @return mixed
+	 */
 	abstract public function getNoise2D($x, $z);
 
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 *
+	 * @return mixed
+	 */
 	abstract public function getNoise3D($x, $y, $z);
 
-	public function noise2D($x, $z, $normalized = false)
-	{
+	/**
+	 * @param      $x
+	 * @param      $z
+	 * @param bool $normalized
+	 *
+	 * @return int
+	 */
+	public function noise2D($x, $z, $normalized = false){
 		$result = 0;
 		$amp = 1;
 		$freq = 1;
@@ -115,22 +193,29 @@ abstract class Noise
 		$x *= $this->expansion;
 		$z *= $this->expansion;
 
-		for($i = 0; $i < $this->octaves; ++$i) {
+		for($i = 0; $i < $this->octaves; ++$i){
 			$result += $this->getNoise2D($x * $freq, $z * $freq) * $amp;
 			$max += $amp;
 			$freq *= 2;
 			$amp *= $this->persistence;
 		}
 
-		if($normalized === true) {
+		if($normalized === true){
 			$result /= $max;
 		}
 
 		return $result;
 	}
 
-	public function noise3D($x, $y, $z, $normalized = false)
-	{
+	/**
+	 * @param      $x
+	 * @param      $y
+	 * @param      $z
+	 * @param bool $normalized
+	 *
+	 * @return int
+	 */
+	public function noise3D($x, $y, $z, $normalized = false){
 		$result = 0;
 		$amp = 1;
 		$freq = 1;
@@ -140,22 +225,26 @@ abstract class Noise
 		$y *= $this->expansion;
 		$z *= $this->expansion;
 
-		for($i = 0; $i < $this->octaves; ++$i) {
+		for($i = 0; $i < $this->octaves; ++$i){
 			$result += $this->getNoise3D($x * $freq, $y * $freq, $z * $freq) * $amp;
 			$max += $amp;
 			$freq *= 2;
 			$amp *= $this->persistence;
 		}
 
-		if($normalized === true) {
+		if($normalized === true){
 			$result /= $max;
 		}
 
 		return $result;
 	}
 
-	public function setOffset($x, $y, $z)
-	{
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 */
+	public function setOffset($x, $y, $z){
 		$this->offsetX = $x;
 		$this->offsetY = $y;
 		$this->offsetZ = $z;

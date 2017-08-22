@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __	__  _____
+ *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,17 +23,38 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 
-class UnpoweredRepeater extends PoweredRepeater
-{
+class UnpoweredRepeater extends PoweredRepeater {
 	protected $id = self::UNPOWERED_REPEATER_BLOCK;
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Unpowered Repeater";
 	}
 
-	public function onBreak(Item $item)
-	{
+	/**
+	 * @return int
+	 */
+	public function getStrength(){
+		return 0;
+	}
+
+	/**
+	 * @param Block|null $from
+	 *
+	 * @return bool
+	 */
+	public function isActivated(Block $from = null){
+		return false;
+	}
+
+	/**
+	 * @param Item $item
+	 *
+	 * @return mixed|void
+	 */
+	public function onBreak(Item $item){
 		$this->getLevel()->setBlock($this, new Air(), true);
 	}
 }

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,291 +15,303 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\utils;
 
 #include <rules/DataPacket.h>
+#ifndef COMPILE
+#endif
 
 use pocketmine\item\Item;
 
-class BinaryStream
-{
+class BinaryStream extends \stdClass {
 
-	/** @var */
 	public $offset;
-	/** @var string */
 	public $buffer;
 
-	public function __construct(string $buffer = "", $offset = 0)
-	{
+	/**
+	 * BinaryStream constructor.
+	 *
+	 * @param string $buffer
+	 * @param int $offset
+	 */
+	public function __construct($buffer = "", $offset = 0){
 		$this->buffer = $buffer;
 		$this->offset = $offset;
 	}
 
-	public function reset()
-	{
+	public function reset(){
 		$this->buffer = "";
 		$this->offset = 0;
 	}
 
-	public function setBuffer(string $buffer = "", $offset = 0)
-	{
+	/**
+	 * @param null $buffer
+	 * @param int $offset
+	 */
+	public function setBuffer($buffer = null, $offset = 0){
 		$this->buffer = $buffer;
-		$this->offset = $offset;
+		$this->offset = (int)$offset;
 	}
 
-	public function getOffset(): int
-	{
+	/**
+	 * @return int
+	 */
+	public function getOffset(){
 		return $this->offset;
 	}
 
-	public function getBuffer(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getBuffer(){
 		return $this->buffer;
 	}
 
 	/**
-	 * @param int|bool $len
+	 * @param $len
 	 *
-	 * @return string
+	 * @return bool|string
 	 */
-	public function get($len): string
-	{
-		if($len === true) {
+	public function get($len){
+		if($len < 0){
+			$this->offset = strlen($this->buffer) - 1;
+
+			return "";
+		}elseif($len === true){
 			$str = substr($this->buffer, $this->offset);
 			$this->offset = strlen($this->buffer);
 
 			return $str;
-		} elseif($len < 0) {
-			$this->offset = strlen($this->buffer) - 1;
-
-			return "";
-		} elseif($len === 0) {
-			return "";
 		}
 
 		return $len === 1 ? $this->buffer{$this->offset++} : substr($this->buffer, ($this->offset += $len) - $len, $len);
 	}
 
-	public function getRemaining(): string
-	{
-		$str = substr($this->buffer, $this->offset);
-		$this->offset = strlen($this->buffer);
-
-		return $str;
-	}
-
-	public function put(string $str)
-	{
+	/**
+	 * @param $str
+	 */
+	public function put($str){
 		$this->buffer .= $str;
 	}
 
-
-	public function getBool(): bool
-	{
-		return $this->get(1) !== "\x00";
+	/**
+	 * @return bool
+	 */
+	public function getBool(): bool{
+		return (bool)$this->getByte();
 	}
 
-	public function putBool(bool $v)
-	{
-		$this->buffer .= ($v ? "\x01" : "\x00");
+	/**
+	 * @param $v
+	 */
+	public function putBool($v){
+		$this->putByte((bool)$v);
 	}
-
-
-	public function getByte(): int
-	{
-		return ord($this->buffer{$this->offset++});
-	}
-
-	public function putByte($v)
-	{
-		$this->buffer .= chr($v);
-	}
-
-
-	public function getShort(): int
-	{
-		return Binary::readShort($this->get(2));
-	}
-
-	public function getSignedShort(): int
-	{
-		return Binary::readSignedShort($this->get(2));
-	}
-
-	public function putShort($v)
-	{
-		$this->buffer .= Binary::writeShort($v);
-	}
-
-	public function getLShort(): int
-	{
-		return Binary::readLShort($this->get(2));
-	}
-
-	public function getSignedLShort(): int
-	{
-		return Binary::readSignedLShort($this->get(2));
-	}
-
-	public function putLShort($v)
-	{
-		$this->buffer .= Binary::writeLShort($v);
-	}
-
-
-	public function getTriad(): int
-	{
-		return Binary::readTriad($this->get(3));
-	}
-
-	public function putTriad($v)
-	{
-		$this->buffer .= Binary::writeTriad($v);
-	}
-
-	public function getLTriad(): int
-	{
-		return Binary::readLTriad($this->get(3));
-	}
-
-	public function putLTriad($v)
-	{
-		$this->buffer .= Binary::writeLTriad($v);
-	}
-
-
-	public function getInt(): int
-	{
-		return Binary::readInt($this->get(4));
-	}
-
-	public function putInt($v)
-	{
-		$this->buffer .= Binary::writeInt($v);
-	}
-
-	public function getLInt(): int
-	{
-		return Binary::readLInt($this->get(4));
-	}
-
-	public function putLInt($v)
-	{
-		$this->buffer .= Binary::writeLInt($v);
-	}
-
-
-	public function getFloat(): float
-	{
-		return Binary::readFloat($this->get(4));
-	}
-
-	public function getRoundedFloat($accuracy): float
-	{
-		return Binary::readRoundedFloat($this->get(4), $accuracy);
-	}
-
-	public function putFloat(float $v)
-	{
-		$this->buffer .= Binary::writeFloat($v);
-	}
-
-	public function getLFloat(): float
-	{
-		return Binary::readLFloat($this->get(4));
-	}
-
-	public function getRoundedLFloat($accuracy): float
-	{
-		return Binary::readRoundedLFloat($this->get(4), $accuracy);
-	}
-
-	public function putLFloat(float $v)
-	{
-		$this->buffer .= Binary::writeLFloat($v);
-	}
-
 
 	/**
 	 * @return int|string
 	 */
-	public function getLong()
-	{
+	public function getLong(){
 		return Binary::readLong($this->get(8));
 	}
 
 	/**
-	 * @param int|string $v
+	 * @param $v
 	 */
-	public function putLong($v)
-	{
+	public function putLong($v){
 		$this->buffer .= Binary::writeLong($v);
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getInt(){
+		return Binary::readInt($this->get(4));
+	}
+
+	/**
+	 * @param $v
+	 */
+	public function putInt($v){
+		$this->buffer .= Binary::writeInt($v);
 	}
 
 	/**
 	 * @return int|string
 	 */
-	public function getLLong()
-	{
+	public function getLLong(){
 		return Binary::readLLong($this->get(8));
 	}
 
 	/**
-	 * @param int|string $v
+	 * @param $v
 	 */
-	public function putLLong($v)
-	{
+	public function putLLong($v){
 		$this->buffer .= Binary::writeLLong($v);
 	}
 
-
-	public function getString(): string
-	{
-		return $this->get($this->getUnsignedVarInt());
+	/**
+	 * @return int
+	 */
+	public function getLInt(){
+		return Binary::readLInt($this->get(4));
 	}
 
-	public function putString(string $v)
-	{
-		$this->putUnsignedVarInt(strlen($v));
-		$this->put($v);
+	/**
+	 * @param $v
+	 */
+	public function putLInt($v){
+		$this->buffer .= Binary::writeLInt($v);
 	}
 
-
-	public function getUUID(): UUID
-	{
-		//This is actually two little-endian longs: UUID Most followed by UUID Least
-		$part1 = $this->getLInt();
-		$part0 = $this->getLInt();
-		$part3 = $this->getLInt();
-		$part2 = $this->getLInt();
-
-		return new UUID($part0, $part1, $part2, $part3);
+	/**
+	 * @return int
+	 */
+	public function getSignedShort(){
+		return Binary::readSignedShort($this->get(2));
 	}
 
-	public function putUUID(UUID $uuid)
-	{
-		$this->putLInt($uuid->getPart(1));
-		$this->putLInt($uuid->getPart(0));
-		$this->putLInt($uuid->getPart(3));
-		$this->putLInt($uuid->getPart(2));
+	/**
+	 * @param $v
+	 */
+	public function putShort($v){
+		$this->buffer .= Binary::writeShort($v);
 	}
 
-	public function getSlot(): Item
-	{
+	/**
+	 * @return int
+	 */
+	public function getShort(){
+		return Binary::readShort($this->get(2));
+	}
+
+	/**
+	 * @param $v
+	 */
+	public function putSignedShort($v){
+		$this->buffer .= Binary::writeShort($v);
+	}
+
+	/**
+	 * @param int $accuracy
+	 *
+	 * @return float
+	 */
+	public function getFloat(int $accuracy = -1){
+		return Binary::readFloat($this->get(4), $accuracy);
+	}
+
+	/**
+	 * @param $v
+	 */
+	public function putFloat($v){
+		$this->buffer .= Binary::writeFloat($v);
+	}
+
+	/**
+	 * @param bool $signed
+	 *
+	 * @return int
+	 */
+	public function getLShort($signed = true){
+		return $signed ? Binary::readSignedLShort($this->get(2)) : Binary::readLShort($this->get(2));
+	}
+
+	/**
+	 * @param $v
+	 */
+	public function putLShort($v){
+		$this->buffer .= Binary::writeLShort($v);
+	}
+
+	/**
+	 * @param int $accuracy
+	 *
+	 * @return float
+	 */
+	public function getLFloat(int $accuracy = -1){
+		return Binary::readLFloat($this->get(4), $accuracy);
+	}
+
+	/**
+	 * @param $v
+	 */
+	public function putLFloat($v){
+		$this->buffer .= Binary::writeLFloat($v);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getTriad(){
+		return Binary::readTriad($this->get(3));
+	}
+
+	/**
+	 * @param $v
+	 */
+	public function putTriad($v){
+		$this->buffer .= Binary::writeTriad($v);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLTriad(){
+		return Binary::readLTriad($this->get(3));
+	}
+
+	/**
+	 * @param $v
+	 */
+	public function putLTriad($v){
+		$this->buffer .= Binary::writeLTriad($v);
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getByte(){
+		return ord($this->buffer{$this->offset++});
+	}
+
+	/**
+	 * @param $v
+	 */
+	public function putByte($v){
+		$this->buffer .= chr($v);
+	}
+
+	/**
+	 * @return UUID
+	 */
+	public function getUUID(){
+		return UUID::fromBinary($this->get(16));
+	}
+
+	/**
+	 * @param UUID $uuid
+	 */
+	public function putUUID(UUID $uuid){
+		$this->put($uuid->toBinary());
+	}
+
+	/**
+	 * @return Item
+	 */
+	public function getSlot(){
 		$id = $this->getVarInt();
-		if($id <= 0) {
+
+		if($id <= 0){
 			return Item::get(0, 0, 0);
 		}
-
 		$auxValue = $this->getVarInt();
 		$data = $auxValue >> 8;
-		if($data === 0x7fff) {
+		if($data === 0x7fff){
 			$data = -1;
 		}
 		$cnt = $auxValue & 0xff;
@@ -307,22 +319,20 @@ class BinaryStream
 		$nbtLen = $this->getLShort();
 		$nbt = "";
 
-		if($nbtLen > 0) {
+		if($nbtLen > 0){
 			$nbt = $this->get($nbtLen);
 		}
 
-		//TODO
 		$canPlaceOn = $this->getVarInt();
-		if($canPlaceOn > 0) {
-			for($i = 0; $i < $canPlaceOn; ++$i) {
+		if($canPlaceOn > 0){
+			for($i = 0; $i < $canPlaceOn; ++$i){
 				$this->getString();
 			}
 		}
 
-		//TODO
 		$canDestroy = $this->getVarInt();
-		if($canDestroy > 0) {
-			for($i = 0; $i < $canDestroy; ++$i) {
+		if($canDestroy > 0){
+			for($i = 0; $i < $canDestroy; ++$i){
 				$this->getString();
 			}
 		}
@@ -331,9 +341,11 @@ class BinaryStream
 	}
 
 
-	public function putSlot(Item $item)
-	{
-		if($item->getId() === 0) {
+	/**
+	 * @param Item $item
+	 */
+	public function putSlot(Item $item){
+		if($item->getId() === 0){
 			$this->putVarInt(0);
 
 			return;
@@ -342,7 +354,6 @@ class BinaryStream
 		$this->putVarInt($item->getId());
 		$auxValue = (($item->getDamage() & 0x7fff) << 8) | $item->getCount();
 		$this->putVarInt($auxValue);
-
 		$nbt = $item->getCompoundTag();
 		$this->putLShort(strlen($nbt));
 		$this->put($nbt);
@@ -352,83 +363,116 @@ class BinaryStream
 	}
 
 	/**
-	 * Reads a 32-bit variable-length unsigned integer from the buffer and returns it.
-	 * @return int
+	 * @return bool|string
 	 */
-	public function getUnsignedVarInt(): int
-	{
-		return Binary::readUnsignedVarInt($this->buffer, $this->offset);
+	public function getString(){
+		return $this->get($this->getUnsignedVarInt());
 	}
 
 	/**
-	 * Writes a 32-bit variable-length unsigned integer to the end of the buffer.
 	 * @param $v
 	 */
-	public function putUnsignedVarInt($v)
-	{
+	public function putString($v){
+		$this->putUnsignedVarInt(strlen($v));
+		$this->put($v);
+	}
+
+	//TODO: varint64
+
+	/**
+	 * Reads an unsigned varint32 from the stream.
+	 */
+	public function getUnsignedVarInt(){
+		return Binary::readUnsignedVarInt($this);
+	}
+
+	/**
+	 * Writes an unsigned varint32 to the stream.
+	 *
+	 * @param $v
+	 */
+	public function putUnsignedVarInt($v){
 		$this->put(Binary::writeUnsignedVarInt($v));
 	}
 
 	/**
-	 * Reads a 32-bit zigzag-encoded variable-length integer from the buffer and returns it.
-	 * @return int
+	 * Reads a signed varint32 from the stream.
 	 */
-	public function getVarInt(): int
-	{
-		return Binary::readVarInt($this->buffer, $this->offset);
+	public function getVarInt(){
+		return Binary::readVarInt($this);
 	}
 
 	/**
-	 * Writes a 32-bit zigzag-encoded variable-length integer to the end of the buffer.
+	 * Writes a signed varint32 to the stream.
+	 *
 	 * @param $v
 	 */
-	public function putVarInt($v)
-	{
+	public function putVarInt($v){
 		$this->put(Binary::writeVarInt($v));
 	}
 
 	/**
-	 * Reads a 64-bit variable-length integer from the buffer and returns it.
-	 * @return int|string int, or the string representation of an int64 on 32-bit platforms
+	 * @return int
 	 */
-	public function getUnsignedVarLong()
-	{
-		return Binary::readUnsignedVarLong($this->buffer, $this->offset);
+	public function getEntityId(){
+		return $this->getVarInt();
 	}
 
 	/**
-	 * Writes a 64-bit variable-length integer to the end of the buffer.
-	 * @param int|string $v int, or the string representation of an int64 on 32-bit platforms
+	 * @param $v
 	 */
-	public function putUnsignedVarLong($v)
-	{
-		$this->buffer .= Binary::writeUnsignedVarLong($v);
+	public function putEntityId($v){
+		$this->putVarInt($v);
 	}
 
 	/**
-	 * Reads a 64-bit zigzag-encoded variable-length integer from the buffer and returns it.
-	 * @return int|string int, or the string representation of an int64 on 32-bit platforms
+	 * @param $x
+	 * @param $y
+	 * @param $z
 	 */
-	public function getVarLong()
-	{
-		return Binary::readVarLong($this->buffer, $this->offset);
+	public function getBlockCoords(&$x, &$y, &$z){
+		$x = $this->getVarInt();
+		$y = $this->getUnsignedVarInt();
+		$z = $this->getVarInt();
 	}
 
 	/**
-	 * Writes a 64-bit zigzag-encoded variable-length integer to the end of the buffer.
-	 * @param int|string $v int, or the string representation of an int64 on 32-bit platforms
+	 * @param $x
+	 * @param $y
+	 * @param $z
 	 */
-	public function putVarLong($v)
-	{
-		$this->buffer .= Binary::writeVarLong($v);
+	public function putBlockCoords($x, $y, $z){
+		$this->putVarInt($x);
+		$this->putUnsignedVarInt($y);
+		$this->putVarInt($z);
 	}
 
 	/**
-	 * Returns whether the offset has reached the end of the buffer.
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 */
+	public function getVector3f(&$x, &$y, &$z){
+		$x = $this->getLFloat(4);
+		$y = $this->getLFloat(4);
+		$z = $this->getLFloat(4);
+	}
+
+	/**
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 */
+	public function putVector3f($x, $y, $z){
+		$this->putLFloat($x);
+		$this->putLFloat($y);
+		$this->putLFloat($z);
+	}
+
+	/**
 	 * @return bool
 	 */
-	public function feof(): bool
-	{
+	public function feof(){
 		return !isset($this->buffer{$this->offset});
 	}
 }

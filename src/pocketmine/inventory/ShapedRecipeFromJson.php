@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -26,8 +26,7 @@ use pocketmine\math\Vector2;
 use pocketmine\Server;
 use pocketmine\utils\UUID;
 
-class ShapedRecipeFromJson extends ShapedRecipe
-{
+class ShapedRecipeFromJson extends ShapedRecipe {
 	/** @var Item */
 	private $output;
 
@@ -48,10 +47,9 @@ class ShapedRecipeFromJson extends ShapedRecipe
 	 *
 	 * @throws \Exception
 	 */
-	public function __construct(Item $result, $height, $width)
-	{
-		for($h = 0; $h < $height; $h++) {
-			if($width === 0 or $width > 3) {
+	public function __construct(Item $result, $height, $width){
+		for($h = 0; $h < $height; $h++){
+			if($width === 0 or $width > 3){
 				throw new \InvalidStateException("Crafting rows should be 1, 2, 3 wide, not $width");
 			}
 			$this->ingredients[] = array_fill(0, $width, null);
@@ -60,37 +58,53 @@ class ShapedRecipeFromJson extends ShapedRecipe
 		$this->output = clone $result;
 	}
 
-	public function getWidth()
-	{
+	/**
+	 * @return int
+	 */
+	public function getWidth(){
 		return count($this->ingredients[0]);
 	}
 
-	public function getHeight()
-	{
+	/**
+	 * @return int
+	 */
+	public function getHeight(){
 		return count($this->ingredients);
 	}
 
-	public function getResult()
-	{
+	/**
+	 * @return Item
+	 */
+	public function getResult(){
 		return $this->output;
 	}
 
-	public function getId()
-	{
+	/**
+	 * @return null
+	 */
+	public function getId(){
 		return $this->id;
 	}
 
-	public function setId(UUID $id)
-	{
-		if($this->id !== null) {
+	/**
+	 * @param UUID $id
+	 */
+	public function setId(UUID $id){
+		if($this->id !== null){
 			throw new \InvalidStateException("Id is already set");
 		}
 
 		$this->id = $id;
 	}
 
-	public function addIngredient($x, $y, Item $item)
-	{
+	/**
+	 * @param      $x
+	 * @param      $y
+	 * @param Item $item
+	 *
+	 * @return $this
+	 */
+	public function addIngredient($x, $y, Item $item){
 		$this->ingredients[$y][$x] = clone $item;
 
 		return $this;
@@ -103,9 +117,8 @@ class ShapedRecipeFromJson extends ShapedRecipe
 	 * @return $this
 	 * @throws \Exception
 	 */
-	public function setIngredient($key, Item $item)
-	{
-		if(!array_key_exists($key, $this->shape)) {
+	public function setIngredient($key, Item $item){
+		if(!array_key_exists($key, $this->shape)){
 			throw new \Exception("Symbol does not appear in the shape: " . $key);
 		}
 
@@ -114,9 +127,12 @@ class ShapedRecipeFromJson extends ShapedRecipe
 		return $this;
 	}
 
-	protected function fixRecipe($key, $item)
-	{
-		foreach($this->shapeItems[$key] as $entry) {
+	/**
+	 * @param $key
+	 * @param $item
+	 */
+	protected function fixRecipe($key, $item){
+		foreach($this->shapeItems[$key] as $entry){
 			$this->ingredients[$entry->y][$entry->x] = clone $item;
 		}
 	}
@@ -124,15 +140,14 @@ class ShapedRecipeFromJson extends ShapedRecipe
 	/**
 	 * @return Item[][]
 	 */
-	public function getIngredientMap()
-	{
+	public function getIngredientMap(){
 		$ingredients = [];
-		foreach($this->ingredients as $y => $row) {
+		foreach($this->ingredients as $y => $row){
 			$ingredients[$y] = [];
-			foreach($row as $x => $ingredient) {
-				if($ingredient !== null) {
+			foreach($row as $x => $ingredient){
+				if($ingredient !== null){
 					$ingredients[$y][$x] = clone $ingredient;
-				} else {
+				}else{
 					$ingredients[$y][$x] = Item::get(Item::AIR);
 				}
 			}
@@ -144,23 +159,21 @@ class ShapedRecipeFromJson extends ShapedRecipe
 	/**
 	 * @param $x
 	 * @param $y
+	 *
 	 * @return null|Item
 	 */
-	public function getIngredient($x, $y)
-	{
+	public function getIngredient($x, $y){
 		return isset($this->ingredients[$y][$x]) ? $this->ingredients[$y][$x] : Item::get(Item::AIR);
 	}
 
 	/**
 	 * @return string[]
 	 */
-	public function getShape()
-	{
+	public function getShape(){
 		return $this->shape;
 	}
 
-	public function registerToCraftingManager()
-	{
+	public function registerToCraftingManager(){
 		Server::getInstance()->getCraftingManager()->registerShapedRecipe($this);
 	}
 }

@@ -53,7 +53,7 @@ class ZombieHorse extends Animal {
 	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = ZombieHorse::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types = 1);
-
 /**
  * Handles the creation of virtual inventories or mapped to an InventoryHolder
  */
@@ -30,8 +28,7 @@ namespace pocketmine\inventory;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
-interface Inventory
-{
+interface Inventory {
 	const MAX_STACK = 64;
 
 	public function getSize();
@@ -72,11 +69,13 @@ interface Inventory
 	 *
 	 * Returns the Items that did not fit.
 	 *
-	 * @param Item[] ...$slots
+	 * @param array $slots
 	 *
 	 * @return Item[]
+	 * @internal param Item ...$item
+	 *
 	 */
-	public function addItem(Item ...$slots);
+	public function addItem(...$slots);
 
 	/**
 	 * Checks if a given Item can be added to the inventory
@@ -91,11 +90,13 @@ interface Inventory
 	 * Removes the given Item from the inventory.
 	 * It will return the Items that couldn't be removed.
 	 *
-	 * @param Item[] ...$slots
+	 * @param array $slots
 	 *
 	 * @return Item[]
+	 * @internal param Item ...$item
+	 *
 	 */
-	public function removeItem(Item ...$slots);
+	public function removeItem(...$slots);
 
 	/**
 	 * @return Item[]
@@ -208,6 +209,11 @@ interface Inventory
 	 */
 	public function open(Player $who);
 
+	/**
+	 * @param Player $who
+	 *
+	 * @return mixed
+	 */
 	public function close(Player $who);
 
 	/**
@@ -218,6 +224,7 @@ interface Inventory
 	/**
 	 * @param int $index
 	 * @param Item $before
+	 * @param bool $send
 	 */
-	public function onSlotChange($index, $before);
+	public function onSlotChange($index, $before, $send);
 }

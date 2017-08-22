@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\plugin;
 
 use pocketmine\event\plugin\PluginDisableEvent;
@@ -30,8 +28,7 @@ use pocketmine\Server;
 /**
  * Handles different types of plugins
  */
-class PharPluginLoader implements PluginLoader
-{
+class PharPluginLoader implements PluginLoader {
 
 	/** @var Server */
 	private $server;
@@ -39,8 +36,7 @@ class PharPluginLoader implements PluginLoader
 	/**
 	 * @param Server $server
 	 */
-	public function __construct(Server $server)
-	{
+	public function __construct(Server $server){
 		$this->server = $server;
 	}
 
@@ -51,26 +47,25 @@ class PharPluginLoader implements PluginLoader
 	 *
 	 * @return Plugin
 	 *
-	 * @throws \Exception
+	 * @throws \Throwable
 	 */
-	public function loadPlugin($file)
-	{
-		if(($description = $this->getPluginDescription($file)) instanceof PluginDescription) {
+	public function loadPlugin($file){
+		if(($description = $this->getPluginDescription($file)) instanceof PluginDescription){
 			$this->server->getLogger()->info($this->server->getLanguage()->translateString("pocketmine.plugin.load", [$description->getFullName()]));
 			$dataFolder = dirname($file) . DIRECTORY_SEPARATOR . $description->getName();
-			if(file_exists($dataFolder) and !is_dir($dataFolder)) {
+			if(file_exists($dataFolder) and !is_dir($dataFolder)){
 				throw new \InvalidStateException("Projected dataFolder '" . $dataFolder . "' for " . $description->getName() . " exists and is not a directory");
 			}
 			$file = "phar://$file";
 			$className = $description->getMain();
 			$this->server->getLoader()->addPath("$file/src");
 
-			if(class_exists($className, true)) {
+			if(class_exists($className, true)){
 				$plugin = new $className();
 				$this->initPlugin($plugin, $description, $dataFolder, $file);
 
 				return $plugin;
-			} else {
+			}else{
 				throw new PluginException("Couldn't load plugin " . $description->getName() . ": main class not found");
 			}
 		}
@@ -85,12 +80,11 @@ class PharPluginLoader implements PluginLoader
 	 *
 	 * @return PluginDescription
 	 */
-	public function getPluginDescription($file)
-	{
+	public function getPluginDescription($file){
 		$phar = new \Phar($file);
-		if(isset($phar["plugin.yml"])) {
+		if(isset($phar["plugin.yml"])){
 			$pluginYml = $phar["plugin.yml"];
-			if($pluginYml instanceof \PharFileInfo) {
+			if($pluginYml instanceof \PharFileInfo){
 				return new PluginDescription($pluginYml->getContent());
 			}
 		}
@@ -103,8 +97,7 @@ class PharPluginLoader implements PluginLoader
 	 *
 	 * @return string
 	 */
-	public function getPluginFilters()
-	{
+	public function getPluginFilters(){
 		return "/\\.phar$/i";
 	}
 
@@ -114,8 +107,7 @@ class PharPluginLoader implements PluginLoader
 	 * @param string $dataFolder
 	 * @param string $file
 	 */
-	private function initPlugin(PluginBase $plugin, PluginDescription $description, $dataFolder, $file)
-	{
+	private function initPlugin(PluginBase $plugin, PluginDescription $description, $dataFolder, $file){
 		$plugin->init($this, $this->server, $description, $dataFolder, $file);
 		$plugin->onLoad();
 	}
@@ -123,9 +115,8 @@ class PharPluginLoader implements PluginLoader
 	/**
 	 * @param Plugin $plugin
 	 */
-	public function enablePlugin(Plugin $plugin)
-	{
-		if($plugin instanceof PluginBase and !$plugin->isEnabled()) {
+	public function enablePlugin(Plugin $plugin){
+		if($plugin instanceof PluginBase and !$plugin->isEnabled()){
 			$this->server->getLogger()->info($this->server->getLanguage()->translateString("pocketmine.plugin.enable", [$plugin->getDescription()->getFullName()]));
 
 			$plugin->setEnabled(true);
@@ -137,9 +128,8 @@ class PharPluginLoader implements PluginLoader
 	/**
 	 * @param Plugin $plugin
 	 */
-	public function disablePlugin(Plugin $plugin)
-	{
-		if($plugin instanceof PluginBase and $plugin->isEnabled()) {
+	public function disablePlugin(Plugin $plugin){
+		if($plugin instanceof PluginBase and $plugin->isEnabled()){
 			$this->server->getLogger()->info($this->server->getLanguage()->translateString("pocketmine.plugin.disable", [$plugin->getDescription()->getFullName()]));
 
 			$this->server->getPluginManager()->callEvent(new PluginDisableEvent($plugin));

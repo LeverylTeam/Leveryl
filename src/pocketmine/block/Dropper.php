@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __	__  _____
+ *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,46 +32,68 @@ use pocketmine\Player;
 use pocketmine\tile\Dropper as TileDropper;
 use pocketmine\tile\Tile;
 
-class Dropper extends Solid
-{
+class Dropper extends Solid implements ElectricalAppliance {
 
 	protected $id = self::DROPPER;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * Dropper constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated(): bool
-	{
+	/**
+	 * @return bool
+	 */
+	public function canBeActivated(): bool{
 		return true;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return float
+	 */
+	public function getHardness(){
 		return 3.5;
 	}
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Dropper";
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
-	{
+	/**
+	 * @param Item $item
+	 * @param Block $block
+	 * @param Block $target
+	 * @param int $face
+	 * @param float $fx
+	 * @param float $fy
+	 * @param float $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$dispenser = null;
-		if($player instanceof Player) {
+		if($player instanceof Player){
 			$pitch = $player->getPitch();
-			if(abs($pitch) >= 45) {
+			if(abs($pitch) >= 45){
 				if($pitch < 0) $f = 4;
 				else $f = 5;
-			} else $f = $player->getDirection();
-		} else $f = 0;
+			}else $f = $player->getDirection();
+		}else $f = 0;
 		$faces = [
 			3 => 3,
 			0 => 4,
@@ -92,12 +114,12 @@ class Dropper extends Solid
 		]);
 		$nbt->Items->setTagType(NBT::TAG_Compound);
 
-		if($item->hasCustomName()) {
+		if($item->hasCustomName()){
 			$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 		}
 
-		if($item->hasCustomBlockData()) {
-			foreach($item->getCustomBlockData() as $key => $v) {
+		if($item->hasCustomBlockData()){
+			foreach($item->getCustomBlockData() as $key => $v){
 				$nbt->{$key} = $v;
 			}
 		}
@@ -107,22 +129,29 @@ class Dropper extends Solid
 		return true;
 	}
 
-	public function activate()
-	{
+	/**
+	 *
+	 */
+	public function activate(){
 		$tile = $this->getLevel()->getTile($this);
-		if($tile instanceof TileDropper) {
+		if($tile instanceof TileDropper){
 			$tile->activate();
 		}
 	}
 
-	public function onActivate(Item $item, Player $player = null)
-	{
-		if($player instanceof Player) {
+	/**
+	 * @param Item $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function onActivate(Item $item, Player $player = null){
+		if($player instanceof Player){
 			$t = $this->getLevel()->getTile($this);
 			$dropper = null;
-			if($t instanceof TileDropper) {
+			if($t instanceof TileDropper){
 				$dropper = $t;
-			} else {
+			}else{
 				$nbt = new CompoundTag("", [
 					new ListTag("Items", []),
 					new StringTag("id", Tile::DROPPER),
@@ -134,7 +163,7 @@ class Dropper extends Solid
 				$dropper = Tile::createTile(Tile::DROPPER, $this->getLevel(), $nbt);
 			}
 
-			if($player->isCreative() and $player->getServer()->getLeverylConfigValue("LimitedCreative", true)) {
+			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
 			$player->addWindow($dropper->getInventory());
@@ -143,8 +172,12 @@ class Dropper extends Solid
 		return true;
 	}
 
-	public function getDrops(Item $item): array
-	{
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
 		return [
 			[$this->id, 0, 1],
 		];

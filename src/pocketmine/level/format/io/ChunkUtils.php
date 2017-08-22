@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,8 +23,7 @@ declare(strict_types = 1);
 
 namespace pocketmine\level\format\io;
 
-class ChunkUtils
-{
+class ChunkUtils {
 
 	/**
 	 * Re-orders a byte array (YZX -> XZY and vice versa)
@@ -33,16 +32,15 @@ class ChunkUtils
 	 *
 	 * @return string length 4096
 	 */
-	public static final function reorderByteArray(string $array): string
-	{
+	public static final function reorderByteArray(string $array): string{
 		$result = str_repeat("\x00", 4096);
-		if($array !== $result) {
+		if($array !== $result){
 			$i = 0;
-			for($x = 0; $x < 16; ++$x) {
+			for($x = 0; $x < 16; ++$x){
 				$zM = $x + 256;
-				for($z = $x; $z < $zM; $z += 16) {
+				for($z = $x; $z < $zM; $z += 16){
 					$yM = $z + 4096;
-					for($y = $z; $y < $yM; $y += 256) {
+					for($y = $z; $y < $yM; $y += 256){
 						$result{$i} = $array{$y};
 						++$i;
 					}
@@ -61,21 +59,20 @@ class ChunkUtils
 	 *
 	 * @return string length 2048
 	 */
-	public static final function reorderNibbleArray(string $array, string $commonValue = "\x00"): string
-	{
+	public static final function reorderNibbleArray(string $array, string $commonValue = "\x00"): string{
 		$result = str_repeat($commonValue, 2048);
 
-		if($array !== $result) {
+		if($array !== $result){
 			$i = 0;
-			for($x = 0; $x < 8; ++$x) {
-				for($z = 0; $z < 16; ++$z) {
+			for($x = 0; $x < 8; ++$x){
+				for($z = 0; $z < 16; ++$z){
 					$zx = (($z << 3) | $x);
-					for($y = 0; $y < 8; ++$y) {
+					for($y = 0; $y < 8; ++$y){
 						$j = (($y << 8) | $zx);
 						$j80 = ($j | 0x80);
-						if($array{$j} === $commonValue and $array{$j80} === $commonValue) {
+						if($array{$j} === $commonValue and $array{$j80} === $commonValue){
 							//values are already filled
-						} else {
+						}else{
 							$i1 = ord($array{$j});
 							$i2 = ord($array{$j80});
 							$result{$i} = chr(($i2 << 4) | ($i1 & 0x0f));
@@ -98,10 +95,9 @@ class ChunkUtils
 	 *
 	 * @return string
 	 */
-	public static function convertBiomeColors(array $array): string
-	{
+	public static function convertBiomeColors(array $array): string{
 		$result = str_repeat("\x00", 256);
-		foreach($array as $i => $color) {
+		foreach($array as $i => $color){
 			$result{$i} = chr(($color >> 24) & 0xff);
 		}
 

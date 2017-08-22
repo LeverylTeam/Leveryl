@@ -32,20 +32,18 @@ use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
 use pocketmine\Player;
 use pocketmine\tile\Tile;
 
-class WindowInventory extends CustomInventory
-{
+class WindowInventory extends CustomInventory {
 
 	protected $customName = "";
 	protected $tile;
 	protected $block;
 	protected $oldID;
 
-	public function __construct(Player $player, $size = 27, $name = "")
-	{
+	public function __construct(Player $player, $size = 27, $name = ""){
 		$this->tile = Tile::CHEST;
 		$this->block = 54;
 		$type = InventoryType::get(InventoryType::CHEST);
-		switch($size) {
+		switch($size){
 			case 5:
 				$this->tile = Tile::HOPPER;
 				$this->block = 154;
@@ -84,8 +82,7 @@ class WindowInventory extends CustomInventory
 		parent::__construct($holder, $type);
 	}
 
-	public function onOpen(Player $who)
-	{
+	public function onOpen(Player $who){
 		$this->holder = $holder = new WindowHolder($who->getFloorX(), $who->getFloorY(), $who->getFloorZ(), $this);
 		$this->oldID[$who->getName()] = $who->getLevel()->getBlockIdAt($holder->x, $holder->y, $holder->z);
 		$pk = new UpdateBlockPacket();
@@ -102,7 +99,7 @@ class WindowInventory extends CustomInventory
 			new IntTag("y", (int)$holder->y),
 			new IntTag("z", (int)$holder->z),
 		]);
-		if($this->name !== "") {
+		if($this->name !== ""){
 			$c->CustomName = new StringTag("CustomName", $this->customName);
 		}
 		$nbt = new NBT(NBT::LITTLE_ENDIAN);
@@ -117,8 +114,7 @@ class WindowInventory extends CustomInventory
 		$this->sendContents($who);
 	}
 
-	public function onClose(Player $who)
-	{
+	public function onClose(Player $who){
 		$holder = $this->holder;
 		$pk = new UpdateBlockPacket();
 		$pk->x = $holder->x;

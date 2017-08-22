@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,24 +19,25 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\level\generator\normal\biome;
 
 use pocketmine\block\Sapling;
 use pocketmine\level\generator\populator\TallGrass;
 use pocketmine\level\generator\populator\Tree;
 
-class ForestBiome extends GrassyBiome
-{
+class ForestBiome extends GrassyBiome {
 
 	const TYPE_NORMAL = 0;
 	const TYPE_BIRCH = 1;
 
 	public $type;
 
-	public function __construct($type = self::TYPE_NORMAL)
-	{
+	/**
+	 * ForestBiome constructor.
+	 *
+	 * @param int $type
+	 */
+	public function __construct($type = self::TYPE_NORMAL){
 		parent::__construct();
 
 		$this->type = $type;
@@ -52,17 +53,19 @@ class ForestBiome extends GrassyBiome
 
 		$this->setElevation(63, 81);
 
-		if($type === self::TYPE_BIRCH) {
+		if($type === self::TYPE_BIRCH){
 			$this->temperature = 0.6;
 			$this->rainfall = 0.5;
-		} else {
+		}else{
 			$this->temperature = 0.7;
 			$this->rainfall = 0.8;
 		}
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return $this->type === self::TYPE_BIRCH ? "Birch Forest" : "Forest";
 	}
 }

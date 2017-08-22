@@ -19,15 +19,12 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\entity;
 
 use pocketmine\entity\Entity;
 use pocketmine\event\Cancellable;
 
-class EntityRegainHealthEvent extends EntityEvent implements Cancellable
-{
+class EntityRegainHealthEvent extends EntityEvent implements Cancellable {
 	public static $handlerList = null;
 
 	const CAUSE_REGEN = 0;
@@ -45,8 +42,7 @@ class EntityRegainHealthEvent extends EntityEvent implements Cancellable
 	 * @param float $amount
 	 * @param int $regainReason
 	 */
-	public function __construct(Entity $entity, $amount, $regainReason)
-	{
+	public function __construct(Entity $entity, $amount, $regainReason){
 		$this->entity = $entity;
 		$this->amount = $amount;
 		$this->reason = (int)$regainReason;
@@ -55,21 +51,21 @@ class EntityRegainHealthEvent extends EntityEvent implements Cancellable
 	/**
 	 * @return float
 	 */
-	public function getAmount()
-	{
+	public function getAmount(){
 		return $this->amount;
 	}
 
 	/**
 	 * @param float $amount
 	 */
-	public function setAmount($amount)
-	{
+	public function setAmount($amount){
 		$this->amount = $amount;
 	}
 
-	public function getRegainReason()
-	{
+	/**
+	 * @return int
+	 */
+	public function getRegainReason(){
 		return $this->reason;
 	}
 

@@ -24,8 +24,7 @@ namespace pocketmine\entity;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Enderman extends Monster
-{
+class Enderman extends Monster {
 	const NETWORK_ID = 38;
 
 	public $width = 0.3;
@@ -34,15 +33,19 @@ class Enderman extends Monster
 
 	public $dropExp = [5, 5];
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Enderman";
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Enderman::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;

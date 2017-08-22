@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,8 +18,6 @@
  *
  *
  */
-
-declare(strict_types = 1);
 
 namespace pocketmine\event\player;
 
@@ -33,8 +31,7 @@ use pocketmine\Player;
 /**
  * Called when a player interacts or touches a block (including air?)
  */
-class PlayerInteractEvent extends PlayerEvent implements Cancellable
-{
+class PlayerInteractEvent extends PlayerEvent implements Cancellable {
 	public static $handlerList = null;
 
 	const LEFT_CLICK_BLOCK = 0;
@@ -58,12 +55,20 @@ class PlayerInteractEvent extends PlayerEvent implements Cancellable
 
 	protected $action;
 
-	public function __construct(Player $player, Item $item, Vector3 $block, $face, $action = PlayerInteractEvent::RIGHT_CLICK_BLOCK)
-	{
-		if($block instanceof Block) {
+	/**
+	 * PlayerInteractEvent constructor.
+	 *
+	 * @param Player $player
+	 * @param Item $item
+	 * @param Vector3 $block
+	 * @param         $face
+	 * @param int $action
+	 */
+	public function __construct(Player $player, Item $item, Vector3 $block, $face, $action = PlayerInteractEvent::RIGHT_CLICK_BLOCK){
+		if($block instanceof Block){
 			$this->blockTouched = $block;
 			$this->touchVector = new Vector3(0, 0, 0);
-		} else {
+		}else{
 			$this->touchVector = $block;
 			$this->blockTouched = Block::get(0, 0, new Position(0, 0, 0, $player->level));
 		}
@@ -76,40 +81,35 @@ class PlayerInteractEvent extends PlayerEvent implements Cancellable
 	/**
 	 * @return int
 	 */
-	public function getAction()
-	{
+	public function getAction(){
 		return $this->action;
 	}
 
 	/**
 	 * @return Item
 	 */
-	public function getItem()
-	{
+	public function getItem(){
 		return $this->item;
 	}
 
 	/**
 	 * @return Block
 	 */
-	public function getBlock()
-	{
+	public function getBlock(){
 		return $this->blockTouched;
 	}
 
 	/**
 	 * @return Vector3
 	 */
-	public function getTouchVector()
-	{
+	public function getTouchVector(){
 		return $this->touchVector;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getFace()
-	{
+	public function getFace(){
 		return $this->blockFace;
 	}
 }

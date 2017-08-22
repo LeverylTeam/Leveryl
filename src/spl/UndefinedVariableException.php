@@ -15,7 +15,6 @@
  * GNU General Public License for more details.
 */
 
-class UndefinedVariableException extends InvalidStateException
-{
+class UndefinedVariableException extends InvalidStateException {
 
 }

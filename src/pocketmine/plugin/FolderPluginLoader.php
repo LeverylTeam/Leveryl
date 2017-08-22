@@ -95,11 +95,6 @@ class FolderPluginLoader implements PluginLoader
 		return null;
 	}
 
-	/**
-	 * Returns the filename patterns that this loader accepts
-	 *
-	 * @return array
-	 */
 	public function getPluginFilters()
 	{
 		return "/[^\\.]/";

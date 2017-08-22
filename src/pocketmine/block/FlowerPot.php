@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,8 +18,6 @@
  *
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -35,31 +33,40 @@ use pocketmine\Player;
 use pocketmine\tile\FlowerPot as TileFlowerPot;
 use pocketmine\tile\Tile;
 
-class FlowerPot extends Flowable
-{
+class FlowerPot extends Flowable {
 
 	const STATE_EMPTY = 0;
 	const STATE_FULL = 1;
 
 	protected $id = self::FLOWER_POT_BLOCK;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * FlowerPot constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Flower Pot Block";
 	}
 
-	public function canBeActivated(): bool
-	{
+	/**
+	 * @return bool
+	 */
+	public function canBeActivated(): bool{
 		return true;
 	}
 
-	protected function recalculateBoundingBox()
-	{
+	/**
+	 * @return AxisAlignedBB
+	 */
+	protected function recalculateBoundingBox(){
 		return new AxisAlignedBB(
 			$this->x + 0.3125,
 			$this->y,
@@ -70,9 +77,20 @@ class FlowerPot extends Flowable
 		);
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
-	{
-		if($this->getSide(Vector3::SIDE_DOWN)->isTransparent()) {
+	/**
+	 * @param Item $item
+	 * @param Block $block
+	 * @param Block $target
+	 * @param int $face
+	 * @param float $fx
+	 * @param float $fy
+	 * @param float $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		if($this->getSide(Vector3::SIDE_DOWN)->isTransparent()){
 			return false;
 		}
 
@@ -87,8 +105,8 @@ class FlowerPot extends Flowable
 			new IntTag("mData", 0),
 		]);
 
-		if($item->hasCustomBlockData()) {
-			foreach($item->getCustomBlockData() as $key => $v) {
+		if($item->hasCustomBlockData()){
+			foreach($item->getCustomBlockData() as $key => $v){
 				$nbt->{$key} = $v;
 			}
 		}
@@ -98,10 +116,14 @@ class FlowerPot extends Flowable
 		return true;
 	}
 
-	public function onUpdate($type)
-	{
-		if($type === Level::BLOCK_UPDATE_NORMAL) {
-			if($this->getSide(0)->isTransparent() === true) {
+	/**
+	 * @param int $type
+	 *
+	 * @return bool|int
+	 */
+	public function onUpdate($type){
+		if($type === Level::BLOCK_UPDATE_NORMAL){
+			if($this->getSide(0)->isTransparent() === true){
 				$this->getLevel()->useBreakOn($this);
 
 				return Level::BLOCK_UPDATE_NORMAL;
@@ -111,13 +133,18 @@ class FlowerPot extends Flowable
 		return false;
 	}
 
-	public function onActivate(Item $item, Player $player = null)
-	{
+	/**
+	 * @param Item $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function onActivate(Item $item, Player $player = null){
 		$pot = $this->getLevel()->getTile($this);
-		if(!($pot instanceof TileFlowerPot)) {
+		if(!($pot instanceof TileFlowerPot)){
 			return false;
 		}
-		if(!$pot->canAddItem($item)) {
+		if(!$pot->canAddItem($item)){
 			return true;
 		}
 
@@ -125,8 +152,8 @@ class FlowerPot extends Flowable
 		$this->getLevel()->setBlock($this, $this, true, false);
 		$pot->setItem($item);
 
-		if($player instanceof Player) {
-			if($player->isSurvival()) {
+		if($player instanceof Player){
+			if($player->isSurvival()){
 				$item->setCount($item->getCount() - 1);
 				$player->getInventory()->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
 			}
@@ -135,12 +162,16 @@ class FlowerPot extends Flowable
 		return true;
 	}
 
-	public function getDrops(Item $item)
-	{
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
 		$items = [[Item::FLOWER_POT, 0, 1]];
 		$tile = $this->getLevel()->getTile($this);
-		if($tile instanceof TileFlowerPot) {
-			if(($item = $tile->getItem())->getId() !== Item::AIR) {
+		if($tile instanceof TileFlowerPot){
+			if(($item = $tile->getItem())->getId() !== Item::AIR){
 				$items[] = [$item->getId(), $item->getDamage(), 1];
 			}
 		}

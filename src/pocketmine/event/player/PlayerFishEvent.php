@@ -31,33 +31,36 @@ use pocketmine\Player;
  */
 class PlayerFishEvent extends PlayerEvent implements Cancellable {
 
-    public static $handlerList = null;
+	public static $handlerList = null;
 
-    /** @var Item */
-    private $item;
+	/** @var Item */
+	private $item;
 
-    /** @var FishingHook */
-    private $hook;
+	/** @var FishingHook */
+	private $hook;
 
-    /**
-     * @param Player $player
-     * @param Item $item
-     * @param        $fishingHook
-     */
-    public function __construct(Player $player, Item $item, $fishingHook = null) {
-        $this->player = $player;
-        $this->item = $item;
-        $this->hook = $fishingHook;
-    }
+	/**
+	 * @param Player $player
+	 * @param Item $item
+	 * @param        $fishingHook
+	 */
+	public function __construct(Player $player, Item $item, $fishingHook = null){
+		$this->player = $player;
+		$this->item = $item;
+		$this->hook = $fishingHook;
+	}
 
-    /**
-     * @return Item
-     */
-    public function getItem() {
-        return clone $this->item;
-    }
+	/**
+	 * @return Item
+	 */
+	public function getItem(){
+		return clone $this->item;
+	}
 
-    public function getHook() {
-        return $this->hook;
-    }
+	/**
+	 * @return null|FishingHook
+	 */
+	public function getHook(){
+		return $this->hook;
+	}
 }

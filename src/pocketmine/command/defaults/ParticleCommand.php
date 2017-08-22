@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,8 +18,6 @@
  *
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\command\defaults;
 
@@ -36,7 +34,6 @@ use pocketmine\level\particle\EnchantmentTableParticle;
 use pocketmine\level\particle\EnchantParticle;
 use pocketmine\level\particle\ExplodeParticle;
 use pocketmine\level\particle\FlameParticle;
-use pocketmine\level\particle\FloatingTextParticle;
 use pocketmine\level\particle\HappyVillagerParticle;
 use pocketmine\level\particle\HeartParticle;
 use pocketmine\level\particle\HugeExplodeParticle;
@@ -61,11 +58,14 @@ use pocketmine\Player;
 use pocketmine\utils\Random;
 use pocketmine\utils\TextFormat;
 
-class ParticleCommand extends VanillaCommand
-{
+class ParticleCommand extends VanillaCommand {
 
-	public function __construct($name)
-	{
+	/**
+	 * ParticleCommand constructor.
+	 *
+	 * @param $name
+	 */
+	public function __construct($name){
 		parent::__construct(
 			$name,
 			"%pocketmine.command.particle.description",
@@ -74,21 +74,27 @@ class ParticleCommand extends VanillaCommand
 		$this->setPermission("pocketmine.command.particle");
 	}
 
-	public function execute(CommandSender $sender, $currentAlias, array $args)
-	{
-		if(!$this->testPermission($sender)) {
+	/**
+	 * @param CommandSender $sender
+	 * @param string $currentAlias
+	 * @param array $args
+	 *
+	 * @return bool
+	 */
+	public function execute(CommandSender $sender, $currentAlias, array $args){
+		if(!$this->testPermission($sender)){
 			return true;
 		}
 
-		if(count($args) < 7) {
+		if(count($args) < 7){
 			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
 
 			return true;
 		}
 
-		if($sender instanceof Player) {
+		if($sender instanceof Player){
 			$level = $sender->getLevel();
-		} else {
+		}else{
 			$level = $sender->getServer()->getDefaultLevel();
 		}
 
@@ -106,7 +112,7 @@ class ParticleCommand extends VanillaCommand
 
 		$particle = $this->getParticle($name, $pos, $xd, $yd, $zd, $data);
 
-		if($particle === null) {
+		if($particle === null){
 			$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.particle.notFound", [$name]));
 
 			return true;
@@ -117,7 +123,7 @@ class ParticleCommand extends VanillaCommand
 
 		$random = new Random((int)(microtime(true) * 1000) + mt_rand());
 
-		for($i = 0; $i < $count; ++$i) {
+		for($i = 0; $i < $count; ++$i){
 			$particle->setComponents(
 				$pos->x + $random->nextSignedFloat() * $xd,
 				$pos->y + $random->nextSignedFloat() * $yd,
@@ -129,20 +135,19 @@ class ParticleCommand extends VanillaCommand
 		return true;
 	}
 
+
 	/**
-	 * @param string $name
-	 *
+	 * @param         $name
 	 * @param Vector3 $pos
-	 * @param float $xd
-	 * @param float $yd
-	 * @param float $zd
-	 * @param int|null $data
+	 * @param         $xd
+	 * @param         $yd
+	 * @param         $zd
+	 * @param         $data
 	 *
 	 * @return Particle
 	 */
-	private function getParticle($name, Vector3 $pos, $xd, $yd, $zd, $data)
-	{
-		switch($name) {
+	private function getParticle($name, Vector3 $pos, $xd, $yd, $zd, $data){
+		switch($name){
 			case "explode":
 				return new ExplodeParticle($pos);
 			case "hugeexplosion":
@@ -184,13 +189,13 @@ class ParticleCommand extends VanillaCommand
 			case "slime":
 				return new ItemBreakParticle($pos, Item::get(Item::SLIMEBALL));
 			case "itembreak":
-				if($data !== null and $data !== 0) {
-					return new ItemBreakParticle($pos, Item::get($data));
+				if($data !== null and $data !== 0){
+					return new ItemBreakParticle($pos, $data);
 				}
 				break;
 			case "terrain":
-				if($data !== null and $data !== 0) {
-					return new TerrainParticle($pos, Block::get($data));
+				if($data !== null and $data !== 0){
+					return new TerrainParticle($pos, $data);
 				}
 				break;
 			case "heart":
@@ -207,27 +212,22 @@ class ParticleCommand extends VanillaCommand
 				return new AngryVillagerParticle($pos);
 			case "forcefield":
 				return new BlockForceFieldParticle($pos, $data ?? 0);
-			case "floatingtext":
-				if($data !== null and $data !== "") {
-					return new FloatingTextParticle($pos, $data);
-				}
-				break;
 
 		}
 
-		if(strpos($name, "iconcrack_") === 0) {
+		if(substr($name, 0, 10) === "iconcrack_"){
 			$d = explode("_", $name);
-			if(count($d) === 3) {
+			if(count($d) === 3){
 				return new ItemBreakParticle($pos, Item::get((int)$d[1], (int)$d[2]));
 			}
-		} elseif(strpos($name, "blockcrack_") === 0) {
+		}elseif(substr($name, 0, 11) === "blockcrack_"){
 			$d = explode("_", $name);
-			if(count($d) === 2) {
+			if(count($d) === 2){
 				return new TerrainParticle($pos, Block::get($d[1] & 0xff, $d[1] >> 12));
 			}
-		} elseif(strpos($name, "blockdust_") === 0) {
+		}elseif(substr($name, 0, 10) === "blockdust_"){
 			$d = explode("_", $name);
-			if(count($d) >= 4) {
+			if(count($d) >= 4){
 				return new DustParticle($pos, $d[1] & 0xff, $d[2] & 0xff, $d[3] & 0xff, isset($d[4]) ? $d[4] & 0xff : 255);
 			}
 		}

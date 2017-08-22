@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\level\particle;
 
 use pocketmine\entity\Entity;
@@ -30,8 +28,7 @@ use pocketmine\network\mcpe\protocol\AddPlayerPacket;
 use pocketmine\network\mcpe\protocol\RemoveEntityPacket;
 use pocketmine\utils\UUID;
 
-class FloatingTextParticle extends Particle
-{
+class FloatingTextParticle extends Particle {
 	//TODO: HACK!
 
 	protected $text;
@@ -44,56 +41,79 @@ class FloatingTextParticle extends Particle
 	 * @param int $text
 	 * @param string $title
 	 */
-	public function __construct(Vector3 $pos, $text, $title = "")
-	{
+	public function __construct(Vector3 $pos, $text, $title = ""){
 		parent::__construct($pos->x, $pos->y, $pos->z);
 		$this->text = $text;
 		$this->title = $title;
 	}
 
-	public function setText($text)
-	{
+	/**
+	 * @return int
+	 */
+	public function getText(){
+		return $this->text;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTitle(){
+		return $this->title;
+	}
+
+	/**
+	 * @param $text
+	 */
+	public function setText($text){
 		$this->text = $text;
 	}
 
-	public function setTitle($title)
-	{
+	/**
+	 * @param $title
+	 */
+	public function setTitle($title){
 		$this->title = $title;
 	}
 
-	public function isInvisible()
-	{
+	/**
+	 * @return bool
+	 */
+	public function isInvisible(){
 		return $this->invisible;
 	}
 
-	public function setInvisible($value = true)
-	{
+	/**
+	 * @param bool $value
+	 */
+	public function setInvisible($value = true){
 		$this->invisible = (bool)$value;
 	}
 
-	public function encode()
-	{
+	/**
+	 * @return array
+	 */
+	public function encode(){
 		$p = [];
 
-		if($this->entityId === null) {
+		if($this->entityId === null){
 			$this->entityId = Entity::$entityCount++;
-		} else {
+		}else{
 			$pk0 = new RemoveEntityPacket();
-			$pk0->entityUniqueId = $this->entityId;
+			$pk0->eid = $this->entityId;
 
 			$p[] = $pk0;
 		}
 
-		if(!$this->invisible) {
+		if(!$this->invisible){
 
 			$pk = new AddPlayerPacket();
 			$pk->uuid = UUID::fromRandom();
 			$pk->username = $this->title;
-			$pk->entityRuntimeId = $this->entityId;
+			$pk->eid = $this->entityId;
 			$pk->x = $this->x;
 			$pk->y = $this->y - 0.50;
 			$pk->z = $this->z;
-			$pk->item = Item::get(0);
+			$pk->item = Item::get(Item::AIR);
 			$flags = (
 				(1 << Entity::DATA_FLAG_CAN_SHOW_NAMETAG) |
 				(1 << Entity::DATA_FLAG_ALWAYS_SHOW_NAMETAG) |

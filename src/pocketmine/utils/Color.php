@@ -1,30 +1,31 @@
 <?php
 
 /*
- *     __						    _
- *    / /  _____   _____ _ __ _   _| |
- *   / /  / _ \ \ / / _ \ '__| | | | |
- *  / /__|  __/\ V /  __/ |  | |_| | |
- *  \____/\___| \_/ \___|_|   \__, |_|
- *						      |___/
+ *
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author LeverylTeam
- * @link https://github.com/LeverylTeam
+ * @author iTX Technologies
+ * @link https://itxtech.org
  *
- * Merged together from BOTH Genisys and PMMP
- *
-*/
+ */
 
+/*
+* Copied from @beito123's FlowerPot plugin
+ */
 
 namespace pocketmine\utils;
 
-class Color
-{
+class Color {
 
 	const COLOR_DYE_BLACK = 0;//dye colors
 	const COLOR_DYE_RED = 1;
@@ -46,14 +47,12 @@ class Color
 	private $red = 0;
 	private $green = 0;
 	private $blue = 0;
-	private $alpha = 0;
 
 	/** @var \SplFixedArray */
 	public static $dyeColors = null;
 
-	public static function init()
-	{
-		if(self::$dyeColors === null) {
+	public static function init(){
+		if(self::$dyeColors === null){
 			self::$dyeColors = new \SplFixedArray(16); //What's the point of making a 256-long array for 16 objects?
 			self::$dyeColors[self::COLOR_DYE_BLACK] = Color::getRGB(30, 27, 27);
 			self::$dyeColors[self::COLOR_DYE_RED] = Color::getRGB(179, 49, 44);
@@ -74,18 +73,28 @@ class Color
 		}
 	}
 
-	public static function getRGB($r, $g, $b)
-	{
+	/**
+	 * @param $r
+	 * @param $g
+	 * @param $b
+	 *
+	 * @return Color
+	 */
+	public static function getRGB($r, $g, $b){
 		return new Color((int)$r, (int)$g, (int)$b);
 	}
 
-	public static function averageColor(Color ...$colors)
-	{
+	/**
+	 * @param Color[] ...$colors
+	 *
+	 * @return Color
+	 */
+	public static function averageColor(Color ...$colors){
 		$tr = 0;//total red
 		$tg = 0;//green
 		$tb = 0;//blue
 		$count = 0;
-		foreach($colors as $c) {
+		foreach($colors as $c){
 			$tr += $c->getRed();
 			$tg += $c->getGreen();
 			$tb += $c->getBlue();
@@ -95,147 +104,64 @@ class Color
 		return Color::getRGB($tr / $count, $tg / $count, $tb / $count);
 	}
 
-	public static function getDyeColor($id)
-	{
-		if(isset(self::$dyeColors[$id])) {
+	/**
+	 * @param $id
+	 *
+	 * @return mixed|Color
+	 */
+	public static function getDyeColor($id){
+		if(isset(self::$dyeColors[$id])){
 			return clone self::$dyeColors[$id];
 		}
 
 		return Color::getRGB(0, 0, 0);
 	}
 
-	public function __construct(int $r, int $g, int $b, int $a = 0xff)
-	{
+	/**
+	 * Color constructor.
+	 *
+	 * @param $r
+	 * @param $g
+	 * @param $b
+	 */
+	public function __construct($r, $g, $b){
 		$this->red = $r;
 		$this->green = $g;
 		$this->blue = $b;
-		$this->alpha = $a;
 	}
 
-	// Alpha (Transparency)
-	public function getAlpha(): int
-	{
-		return (int)$this->alpha;
-	}
-
-	public function setAlpha(int $a)
-	{
-		$this->alpha = $a;
-	}
-
-	// Red
-	public function getRed(): int
-	{
+	/**
+	 * @return int
+	 */
+	public function getRed(){
 		return (int)$this->red;
 	}
 
-	public function setRed(int $r)
-	{
-		$this->red = $r;
-	}
-
-	// Green
-	public function getGreen(): int
-	{
-		return (int)$this->green;
-	}
-
-	public function setGreen(int $g)
-	{
-		$this->green = $g;
-	}
-
-	// Blue
-	public function getBlue(): int
-	{
+	/**
+	 * @return int
+	 */
+	public function getBlue(){
 		return (int)$this->blue;
 	}
 
-	public function setBlue(int $b)
-	{
-		$this->blue = $b;
+	/**
+	 * @return int
+	 */
+	public function getGreen(){
+		return (int)$this->green;
 	}
 
-	// MIRROR FUNCTIONS... JUST FOR PLUGIN COMPATIBILITY
-	public function setA(int $a)
-	{
-		$this->setAlpha($a);
-	}
-
-	public function setR(int $r)
-	{
-		$this->setRed($r);
-	}
-
-	public function setG(int $g)
-	{
-		$this->setGreen($g);
-	}
-
-	public function setB(int $b)
-	{
-		$this->setBlue($b);
-	}
-
-	public function getA(): int
-	{
-		return $this->getAlpha();
-	}
-
-	public function getR(): int
-	{
-		return $this->getRed();
-	}
-
-	public function getG(): int
-	{
-		return $this->getGreen();
-	}
-
-	public function getB(): int
-	{
-		return $this->getBlue();
-	}
-
-	// MIRROR FUNCTIONS... JUST FOR PLUGIN COMPATIBILITY
-
-	public static function fromRGB(int $code)
-	{
-		return new Color(($code >> 16) & 0xff, ($code >> 8) & 0xff, $code & 0xff);
-	}
-
-	public static function fromARGB(int $code)
-	{
-		return new Color(($code >> 16) & 0xff, ($code >> 8) & 0xff, $code & 0xff, ($code >> 24) & 0xff);
-	}
-
-	public function toARGB(): int
-	{
-		return ($this->alpha << 24) | ($this->red << 16) | ($this->green << 8) | $this->blue;
-	}
-
-	public function toBGRA(): int
-	{
-		return ($this->blue << 24) | ($this->green << 16) | ($this->red << 8) | $this->alpha;
-	}
-
-	public function toRGBA(): int
-	{
-		return ($this->red << 24) | ($this->green << 16) | ($this->blue << 8) | $this->alpha;
-	}
-
-	public function toABGR(): int
-	{
-		return ($this->alpha << 24) | ($this->blue << 16) | ($this->green << 8) | $this->red;
-	}
-
-	public function getColorCode()
-	{
+	/**
+	 * @return int
+	 */
+	public function getColorCode(){
 		return ($this->red << 16 | $this->green << 8 | $this->blue) & 0xffffff;
 	}
 
-	public function __toString()
-	{
-		return "Color(red:" . $this->red . ", green:" . $this->green . ", blue:" . $this->blue . ", alpha:" . $this->alpha . ")";
+	/**
+	 * @return string
+	 */
+	public function __toString(){
+		return "Color(red:" . $this->red . ", green:" . $this->green . ", blue:" . $this->blue . ")";
 	}
 }

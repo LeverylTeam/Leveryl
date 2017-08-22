@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,11 +19,8 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\scheduler;
 
-use pocketmine\Collectable;
 use pocketmine\Server;
 
 /**
@@ -35,14 +32,10 @@ use pocketmine\Server;
  *
  * WARNING: Do not call PocketMine-MP API methods, or save objects (and arrays containing objects) from/on other Threads!!
  */
-abstract class AsyncTask extends Collectable
-{
+abstract class AsyncTask extends \Threaded implements \Collectable {
 
 	/** @var AsyncWorker $worker */
 	public $worker = null;
-
-	/** @var \Threaded */
-	public $progressUpdates;
 
 	private $result = null;
 	private $serialized = false;
@@ -52,74 +45,74 @@ abstract class AsyncTask extends Collectable
 
 	private $crashed = false;
 
-	/**
-	 * Constructs a new instance of AsyncTask. Subclasses don't need to call this constructor unless an argument is to be passed. ONLY construct this class from the main thread.
-	 * <br>
-	 * If an argument is passed into this constructor, it will be stored in a thread-local storage (in ServerScheduler), which MUST be retrieved through {@link #fetchLocal} when {@link #onCompletion} is called.
-	 * Otherwise, a NOTICE level message will be raised and the reference will be removed after onCompletion exits.
-	 * <br>
-	 * If null or no argument is passed, do <em>not</em> call {@link #fetchLocal}, or an exception will be thrown.
-	 * <br>
-	 * WARNING: Use this method carefully. It might take a long time before an AsyncTask is completed. PocketMine will keep a strong reference to objects passed in this method.
-	 * This may result in a light memory leak. Usually this does not cause memory failure, but be aware that the object may be no longer usable when the AsyncTask completes.
-	 * (E.g. a {@link \pocketmine\Level} object is no longer usable because it is unloaded while the AsyncTask is executing, or even a plugin might be unloaded)
-	 * Since PocketMine keeps a strong reference, the objects are still valid, but the implementation is responsible for checking whether these objects are still usable.
-	 *
-	 * @param mixed $complexData the data to store, pass null to store nothing. Scalar types can be safely stored in class properties directly instead of using this thread-local storage.
-	 */
-	public function __construct($complexData = null)
-	{
-		if($complexData === null) {
-			return;
-		}
+	private $isGarbage = false;
 
-		Server::getInstance()->getScheduler()->storeLocalComplex($this, $complexData);
+	private $isFinished = false;
+
+	/**
+	 * @return bool
+	 */
+	public function isGarbage(): bool{
+		return $this->isGarbage;
 	}
 
-	public function run()
-	{
-		$this->result = null;
+	public function setGarbage(){
+		$this->isGarbage = true;
+	}
 
-		if($this->cancelRun !== true) {
-			try {
+	/**
+	 * @return bool
+	 */
+	public function isFinished(): bool{
+		return $this->isFinished;
+	}
+
+	public function run(){
+		$this->result = null;
+		$this->isGarbage = false;
+
+		if($this->cancelRun !== true){
+			try{
 				$this->onRun();
-			} catch(\Throwable $e) {
+			}catch(\Throwable $e){
 				$this->crashed = true;
 				$this->worker->handleException($e);
 			}
 		}
 
-		$this->setGarbage();
+		$this->isFinished = true;
+		//$this->setGarbage();
 	}
 
-	public function isCrashed()
-	{
+	/**
+	 * @return bool
+	 */
+	public function isCrashed(){
 		return $this->crashed;
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getResult()
-	{
+	public function getResult(){
 		return $this->serialized ? unserialize($this->result) : $this->result;
 	}
 
-	public function cancelRun()
-	{
+	public function cancelRun(){
 		$this->cancelRun = true;
 	}
 
-	public function hasCancelledRun()
-	{
+	/**
+	 * @return bool
+	 */
+	public function hasCancelledRun(){
 		return $this->cancelRun === true;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function hasResult()
-	{
+	public function hasResult(){
 		return $this->result !== null;
 	}
 
@@ -127,19 +120,22 @@ abstract class AsyncTask extends Collectable
 	 * @param mixed $result
 	 * @param bool $serialize
 	 */
-	public function setResult($result, $serialize = true)
-	{
+	public function setResult($result, $serialize = true){
 		$this->result = $serialize ? serialize($result) : $result;
 		$this->serialized = $serialize;
 	}
 
-	public function setTaskId($taskId)
-	{
+	/**
+	 * @param $taskId
+	 */
+	public function setTaskId($taskId){
 		$this->taskId = $taskId;
 	}
 
-	public function getTaskId()
-	{
+	/**
+	 * @return int
+	 */
+	public function getTaskId(){
 		return $this->taskId;
 	}
 
@@ -148,13 +144,13 @@ abstract class AsyncTask extends Collectable
 	 * You have to initialize this in some way from the task on run
 	 *
 	 * @param string $identifier
+	 *
 	 * @return mixed
 	 */
-	public function getFromThreadStore($identifier)
-	{
+	public function getFromThreadStore($identifier){
 		global $store;
 
-		return ($this->isGarbage() or !isset($store[$identifier])) ? null : $store[$identifier];
+		return $this->isGarbage() ? null : $store[$identifier];
 	}
 
 	/**
@@ -164,10 +160,9 @@ abstract class AsyncTask extends Collectable
 	 * @param string $identifier
 	 * @param mixed $value
 	 */
-	public function saveToThreadStore($identifier, $value)
-	{
+	public function saveToThreadStore($identifier, $value){
 		global $store;
-		if(!$this->isGarbage()) {
+		if(!$this->isGarbage()){
 			$store[$identifier] = $value;
 		}
 	}
@@ -177,7 +172,7 @@ abstract class AsyncTask extends Collectable
 	 *
 	 * @return void
 	 */
-	abstract public function onRun();
+	public abstract function onRun();
 
 	/**
 	 * Actions to execute when completed (on main thread)
@@ -187,105 +182,16 @@ abstract class AsyncTask extends Collectable
 	 *
 	 * @return void
 	 */
-	public function onCompletion(Server $server)
-	{
+	public function onCompletion(Server $server){
 
 	}
 
-	/**
-	 * Call this method from {@link AsyncTask#onRun} (AsyncTask execution thread) to schedule a call to
-	 * {@link AsyncTask#onProgressUpdate} from the main thread with the given progress parameter.
-	 *
-	 * @param mixed $progress A value that can be safely serialize()'ed.
-	 */
-	public function publishProgress($progress)
-	{
-		$this->progressUpdates[] = serialize($progress);
-	}
-
-	/**
-	 * @internal Only call from AsyncPool.php on the main thread
-	 *
-	 * @param Server $server
-	 */
-	public function checkProgressUpdates(Server $server)
-	{
-		while($this->progressUpdates->count() !== 0) {
-			$progress = $this->progressUpdates->shift();
-			$this->onProgressUpdate($server, unserialize($progress));
-		}
-	}
-
-	/**
-	 * Called from the main thread after {@link AsyncTask#publishProgress} is called.
-	 * All {@link AsyncTask#publishProgress} calls should result in {@link AsyncTask#onProgressUpdate} calls before
-	 * {@link AsyncTask#onCompletion} is called.
-	 *
-	 * @param Server $server
-	 * @param mixed $progress The parameter passed to {@link AsyncTask#publishProgress}. It is serialize()'ed
-	 *                         and then unserialize()'ed, as if it has been cloned.
-	 */
-	public function onProgressUpdate(Server $server, $progress)
-	{
-
-	}
-
-	/**
-	 * Call this method from {@link AsyncTask#onCompletion} to fetch the data stored in the constructor, if any, and
-	 * clears it from the storage.
-	 *
-	 * Do not call this method from {@link AsyncTask#onProgressUpdate}, because this method deletes the data and cannot
-	 * be used in the next {@link AsyncTask#onProgressUpdate} call or from {@link AsyncTask#onCompletion}. Use
-	 * {@link AsyncTask#peekLocal} instead.
-	 *
-	 * @param Server $server default null
-	 *
-	 * @return mixed
-	 *
-	 * @throws \RuntimeException if no data were stored by this AsyncTask instance.
-	 */
-	protected function fetchLocal(Server $server = null)
-	{
-		if($server === null) {
-			$server = Server::getInstance();
-			assert($server !== null, "Call this method only from the main thread!");
-		}
-
-		return $server->getScheduler()->fetchLocalComplex($this);
-	}
-
-	/**
-	 * Call this method from {@link AsyncTask#onProgressUpdate} to fetch the data stored in the constructor.
-	 *
-	 * Use {@link AsyncTask#peekLocal} instead from {@link AsyncTask#onCompletion}, because this method does not delete
-	 * the data, and not clearing the data will result in a warning for memory leak after {@link AsyncTask#onCompletion}
-	 * finished executing.
-	 *
-	 * @param Server|null $server default null
-	 *
-	 * @return mixed
-	 *
-	 * @throws \RuntimeException if no data were stored by this AsyncTask instance
-	 */
-	protected function peekLocal(Server $server = null)
-	{
-		if($server === null) {
-			$server = Server::getInstance();
-			assert($server !== null, "Call this method only from the main thread!");
-		}
-
-		return $server->getScheduler()->peekLocalComplex($this);
-	}
-
-	public function cleanObject()
-	{
-		foreach($this as $p => $v) {
-			if(!($v instanceof \Threaded)) {
+	public function cleanObject(){
+		foreach($this as $p => $v){
+			if(!($v instanceof \Threaded) and !in_array($p, ["isFinished", "isGarbage", "cancelRun"])){
 				$this->{$p} = null;
 			}
 		}
-
-		$this->setGarbage();
 	}
-}
 
+}

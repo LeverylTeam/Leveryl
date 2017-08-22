@@ -23,8 +23,8 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\Player;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
+use pocketmine\Player;
 
 class EnderDragon extends Monster {
 
@@ -40,7 +40,7 @@ class EnderDragon extends Monster {
 	/**
 	 * @return string
 	 */
-	public function getName() : string{
+	public function getName(): string{
 		return "Ender Dragon";
 	}
 
@@ -49,7 +49,7 @@ class EnderDragon extends Monster {
 	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = self::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;

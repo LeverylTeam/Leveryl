@@ -27,8 +27,7 @@ use pocketmine\item\Item as ItemItem;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Pig extends Animal
-{
+class Pig extends Animal {
 	const NETWORK_ID = 12;
 
 	public $width = 0.3;
@@ -37,15 +36,19 @@ class Pig extends Animal
 
 	public $dropExp = [1, 3];
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Pig";
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Pig::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
@@ -61,15 +64,21 @@ class Pig extends Animal
 		parent::spawnTo($player);
 	}
 
-	public function getDrops()
-	{
-		$lootingL = 0;
+	/**
+	 * @return array
+	 */
+	public function getDrops(){
 		$cause = $this->lastDamageCause;
-		if($cause instanceof EntityDamageByEntityEvent and $cause->getDamager() instanceof Player) {
-			$lootingL = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::LOOTING);
-		}
-		$drops = [ItemItem::get(ItemItem::RAW_PORKCHOP, 0, mt_rand(1, 3 + $lootingL))];
+		if($cause instanceof EntityDamageByEntityEvent){
+			$damager = $cause->getDamager();
+			if($damager instanceof Player){
+				$lootingL = $damager->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
+				$drops = [ItemItem::get(ItemItem::RAW_PORKCHOP, 0, mt_rand(1, 3 + $lootingL))];
 
-		return $drops;
+				return $drops;
+			}
+		}
+
+		return [];
 	}
 }

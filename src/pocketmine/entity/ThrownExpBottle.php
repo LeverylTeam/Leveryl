@@ -27,8 +27,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class ThrownExpBottle extends Projectile
-{
+class ThrownExpBottle extends Projectile {
 	const NETWORK_ID = 68;
 
 	public $width = 0.25;
@@ -40,27 +39,38 @@ class ThrownExpBottle extends Projectile
 
 	private $hasSplashed = false;
 
-	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null)
-	{
+	/**
+	 * ThrownExpBottle constructor.
+	 *
+	 * @param Level $level
+	 * @param CompoundTag $nbt
+	 * @param Entity|null $shootingEntity
+	 */
+	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($level, $nbt, $shootingEntity);
 	}
 
-	public function splash()
-	{
-		if(!$this->hasSplashed) {
+	public function splash(){
+		if(!$this->hasSplashed){
 			$this->hasSplashed = true;
 			$this->getLevel()->addParticle(new SpellParticle($this, 46, 82, 153));
-			$this->getLevel()->spawnXPOrb($this->add(0, -0.2, 0), mt_rand(1, 4));
-			$this->getLevel()->spawnXPOrb($this->add(-0.1, -0.2, 0), mt_rand(1, 4));
-			$this->getLevel()->spawnXPOrb($this->add(0, -0.2, -0.1), mt_rand(1, 4));
+			if($this->getLevel()->getServer()->expEnabled){
+				$this->getLevel()->spawnXPOrb($this->add(0, -0.2, 0), mt_rand(1, 4));
+				$this->getLevel()->spawnXPOrb($this->add(-0.1, -0.2, 0), mt_rand(1, 4));
+				$this->getLevel()->spawnXPOrb($this->add(0, -0.2, -0.1), mt_rand(1, 4));
+			}
 
 			$this->kill();
 		}
 	}
 
-	public function onUpdate($currentTick)
-	{
-		if($this->closed) {
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
+	public function onUpdate($currentTick){
+		if($this->closed){
 			return false;
 		}
 
@@ -70,7 +80,7 @@ class ThrownExpBottle extends Projectile
 
 		$this->age++;
 
-		if($this->age > 1200 or $this->isCollided) {
+		if($this->age > 1200 or $this->isCollided){
 			$this->splash();
 			$hasUpdate = true;
 		}
@@ -80,11 +90,13 @@ class ThrownExpBottle extends Projectile
 		return $hasUpdate;
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->type = ThrownExpBottle::NETWORK_ID;
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;

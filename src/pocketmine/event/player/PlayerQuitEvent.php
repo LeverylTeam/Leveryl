@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,46 +19,59 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\player;
 
-use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 
 /**
  * Called when a player leaves the server
  */
-class PlayerQuitEvent extends PlayerEvent
-{
+class PlayerQuitEvent extends PlayerEvent {
 	public static $handlerList = null;
 
-	/** @var TranslationContainer|string */
+	/** @var string */
 	protected $quitMessage;
+	protected $autoSave = true;
 
 	/**
+	 * PlayerQuitEvent constructor.
+	 *
 	 * @param Player $player
-	 * @param TranslationContainer|string $quitMessage
+	 * @param        $quitMessage
+	 * @param bool $autoSave
 	 */
-	public function __construct(Player $player, $quitMessage)
-	{
+	public function __construct(Player $player, $quitMessage, $autoSave = true){
 		$this->player = $player;
 		$this->quitMessage = $quitMessage;
+		$this->autoSave = $autoSave;
 	}
 
 	/**
-	 * @param TranslationContainer|string $quitMessage
+	 * @param $quitMessage
 	 */
-	public function setQuitMessage($quitMessage)
-	{
+	public function setQuitMessage($quitMessage){
 		$this->quitMessage = $quitMessage;
 	}
 
 	/**
-	 * @return TranslationContainer|string
+	 * @return string
 	 */
-	public function getQuitMessage()
-	{
+	public function getQuitMessage(){
 		return $this->quitMessage;
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function getAutoSave(){
+		return $this->autoSave;
+	}
+
+	/**
+	 * @param bool $value
+	 */
+	public function setAutoSave($value = true){
+		$this->autoSave = (bool)$value;
+	}
+
 }

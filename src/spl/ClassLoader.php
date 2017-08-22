@@ -15,8 +15,7 @@
  * GNU General Public License for more details.
 */
 
-interface ClassLoader
-{
+interface ClassLoader {
 
 	/**
 	 * @param ClassLoader $parent

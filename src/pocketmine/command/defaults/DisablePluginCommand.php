@@ -25,11 +25,9 @@ namespace pocketmine\command\defaults;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class DisablePluginCommand extends VanillaCommand
-{
+class DisablePluginCommand extends VanillaCommand {
 
-	public function __construct($name)
-	{
+	public function __construct($name){
 		parent::__construct(
 			$name,
 			"Disables a plugin",
@@ -39,23 +37,22 @@ class DisablePluginCommand extends VanillaCommand
 		$this->setPermission("pocketmine.command.disableplugin");
 	}
 
-	public function execute(CommandSender $sender, $currentAlias, array $args)
-	{
-		if(!$this->testPermission($sender)) {
+	public function execute(CommandSender $sender, $currentAlias, array $args){
+		if(!$this->testPermission($sender)){
 			return true;
 		}
-		if(count($args) <= 0) {
+		if(count($args) <= 0){
 			$sender->sendMessage("Usage: /disableplugin <PluginName>");
 
 			return false;
 		}
 		$p = $sender->getServer()->getPluginManager()->getPlugin($args[0]);
-		if($p == null) {
+		if($p == null){
 			$sender->sendMessage(TextFormat::RED . "Could not find the specific plugin.");
 
 			return false;
 		}
-		if($p->isDisabled()) {
+		if($p->isDisabled()){
 			$sender->sendMessage(TextFormat::RED . "Plugin is already disabled.");
 
 			return false;

@@ -27,37 +27,50 @@ use pocketmine\level\sound\NoteblockSound;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 
-class NoteBlock extends Solid
-{
+class Noteblock extends Solid implements ElectricalAppliance {
 	protected $id = self::NOTEBLOCK;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * Noteblock constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return float
+	 */
+	public function getHardness(){
 		return 0.8;
 	}
 
-	public function getResistance()
-	{
+	/**
+	 * @return int
+	 */
+	public function getResistance(){
 		return 4;
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
 		return Tool::TYPE_AXE;
 	}
 
-	public function canBeActivated(): bool
-	{
+	/**
+	 * @return bool
+	 */
+	public function canBeActivated(): bool{
 		return true;
 	}
 
-	public function getStrength()
-	{
+	/**
+	 * @return int
+	 */
+	public function getStrength(){
 		if($this->meta < 24) $this->meta++;
 		else $this->meta = 0;
 		$this->getLevel()->setBlock($this, $this);
@@ -65,10 +78,12 @@ class NoteBlock extends Solid
 		return $this->meta * 1;
 	}
 
-	public function getInstrument()
-	{
+	/**
+	 * @return int
+	 */
+	public function getInstrument(){
 		$below = $this->getSide(Vector3::SIDE_DOWN);
-		switch($below->getId()) {
+		switch($below->getId()){
 			case Block::WOOD:
 			case Block::WOOD2:
 			case Block::WOODEN_PLANK:
@@ -143,24 +158,27 @@ class NoteBlock extends Solid
 		return NoteblockSound::INSTRUMENT_PIANO;
 	}
 
-	public function onActivate(Item $item, Player $player = null)
-	{
+	/**
+	 * @param Item $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function onActivate(Item $item, Player $player = null){
 		$up = $this->getSide(Vector3::SIDE_UP);
-		if($up->getId() == 0) {
+		if($up->getId() == 0){
 			$this->getLevel()->addSound(new NoteblockSound($this, $this->getInstrument(), $this->getStrength()));
 
 			return true;
-		} else {
+		}else{
 			return false;
 		}
 	}
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Noteblock";
-	}
-
-	public function getFuelTime() : int{
-		return 300;
 	}
 }

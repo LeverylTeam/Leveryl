@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,24 +19,30 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\item;
 
-class CookedFish extends Fish
-{
-	public function __construct($meta = 0, $count = 1)
-	{
+class CookedFish extends Fish {
+	/**
+	 * CookedFish constructor.
+	 *
+	 * @param int $meta
+	 * @param int $count
+	 */
+	public function __construct($meta = 0, $count = 1){
 		Food::__construct(self::COOKED_FISH, $meta, $count, $meta === self::FISH_SALMON ? "Cooked Salmon" : "Cooked Fish");
 	}
 
-	public function getFoodRestore(): int
-	{
+	/**
+	 * @return int
+	 */
+	public function getFoodRestore(): int{
 		return $this->meta === self::FISH_SALMON ? 6 : 5;
 	}
 
-	public function getSaturationRestore(): float
-	{
+	/**
+	 * @return float
+	 */
+	public function getSaturationRestore(): float{
 		return $this->meta === self::FISH_SALMON ? 9.6 : 6;
 	}
 }

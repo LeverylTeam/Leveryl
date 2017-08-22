@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,19 +15,24 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\item;
 
-class Redstone extends Item
-{
-	public function __construct($meta = 0, $count = 1)
-	{
-		parent::__construct(self::REDSTONE, $meta, $count, "Redstone");
+use pocketmine\block\Block;
+
+class Redstone extends Item {
+	/**
+	 * Redstone constructor.
+	 *
+	 * @param int $meta
+	 * @param int $count
+	 */
+	public function __construct($meta = 0, $count = 1){
+		$this->block = Block::get(Item::REDSTONE_WIRE);
+		parent::__construct(self::REDSTONE, 0, $count, "Redstone");
 	}
 
 }

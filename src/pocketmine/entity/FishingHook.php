@@ -30,8 +30,7 @@ use pocketmine\network\mcpe\protocol\EntityEventPacket;
 use pocketmine\Player;
 
 
-class FishingHook extends Projectile
-{
+class FishingHook extends Projectile {
 	const NETWORK_ID = 77;
 
 	public $width = 0.25;
@@ -46,40 +45,46 @@ class FishingHook extends Projectile
 	public $coughtTimer = 0;
 	public $damageRod = false;
 
-	public $aFishBit = false;
-
-	public function initEntity()
-	{
+	public function initEntity(){
 		parent::initEntity();
 
-		if(isset($this->namedtag->Data)) {
+		if(isset($this->namedtag->Data)){
 			$this->data = $this->namedtag["Data"];
 		}
-
-		// $this->setDataProperty(FallingSand::DATA_BLOCK_INFO, self::DATA_TYPE_INT, $this->getData());
 	}
 
-	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null)
-	{
+	/**
+	 * FishingHook constructor.
+	 *
+	 * @param Level $level
+	 * @param CompoundTag $nbt
+	 * @param Entity|null $shootingEntity
+	 */
+	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($level, $nbt, $shootingEntity);
 	}
 
-	public function setData($id)
-	{
+	/**
+	 * @param $id
+	 */
+	public function setData($id){
 		$this->data = $id;
 	}
 
-	public function getData()
-	{
+	/**
+	 * @return int
+	 */
+	public function getData(){
 		return $this->data;
 	}
 
-	public function onUpdate($currentTick)
-	{
-		if($this->closed) {
-			if($this->shootingEntity instanceof Player){
-				$this->shootingEntity->unlinkHookFromPlayer();
-			}
+	/**
+	 * @param $currentTick
+	 *
+	 * @return bool
+	 */
+	public function onUpdate($currentTick){
+		if($this->closed){
 			return false;
 		}
 
@@ -87,13 +92,13 @@ class FishingHook extends Projectile
 
 		$hasUpdate = parent::onUpdate($currentTick);
 
-		if($this->isCollidedVertically && $this->isInsideOfWater()) {
+		if($this->isCollidedVertically && $this->isInsideOfWater()){
 			$this->motionX = 0;
 			$this->motionY += 0.01;
 			$this->motionZ = 0;
 			$this->motionChanged = true;
 			$hasUpdate = true;
-		} elseif($this->isCollided && $this->keepMovement === true) {
+		}elseif($this->isCollided && $this->keepMovement === true){
 			$this->motionX = 0;
 			$this->motionY = 0;
 			$this->motionZ = 0;
@@ -101,16 +106,15 @@ class FishingHook extends Projectile
 			$this->keepMovement = false;
 			$hasUpdate = true;
 		}
-		if($this->attractTimer === 0 && mt_rand(0, 100) <= 30) { // chance, that a fish bites
+		if($this->attractTimer === 0 && mt_rand(0, 100) <= 30){ // chance, that a fish bites
 			$this->coughtTimer = mt_rand(5, 10) * 20; // random delay to catch fish
 			$this->attractTimer = mt_rand(30, 100) * 20; // reset timer
 			$this->attractFish();
-			$this->aFishBit = true;
 			if($this->shootingEntity instanceof Player) $this->shootingEntity->sendTip("A fish bites!");
-		} elseif($this->attractTimer > 0) {
+		}elseif($this->attractTimer > 0){
 			$this->attractTimer--;
 		}
-		if($this->coughtTimer > 0) {
+		if($this->coughtTimer > 0){
 			$this->coughtTimer--;
 			$this->fishBites();
 		}
@@ -120,47 +124,47 @@ class FishingHook extends Projectile
 		return $hasUpdate;
 	}
 
-	public function fishBites()
-	{
-		if($this->shootingEntity instanceof Player) {
+	public function fishBites(){
+		if($this->shootingEntity instanceof Player){
 			$pk = new EntityEventPacket();
-			$pk->entityRuntimeId = $this->shootingEntity->getId();//$this or $this->shootingEntity
+			$pk->eid = $this->shootingEntity->getId();//$this or $this->shootingEntity
 			$pk->event = EntityEventPacket::FISH_HOOK_HOOK;
 			$this->server->broadcastPacket($this->shootingEntity->hasSpawned, $pk);
 		}
 	}
 
-	public function attractFish()
-	{
-		if($this->shootingEntity instanceof Player && $this->aFishBit) {
+	public function attractFish(){
+		if($this->shootingEntity instanceof Player){
 			$pk = new EntityEventPacket();
-			$pk->entityRuntimeId = $this->shootingEntity->getId();//$this or $this->shootingEntity
+			$pk->eid = $this->shootingEntity->getId();//$this or $this->shootingEntity
 			$pk->event = EntityEventPacket::FISH_HOOK_BUBBLE;
 			$this->server->broadcastPacket($this->shootingEntity->hasSpawned, $pk);
 		}
 	}
 
-	public function reelLine()
-	{
+	/**
+	 * @return bool
+	 */
+	public function reelLine(){
 		$this->damageRod = false;
 
-		if($this->shootingEntity instanceof Player && $this->coughtTimer > 0) {
+		if($this->shootingEntity instanceof Player && $this->coughtTimer > 0){
 			$fishes = [ItemItem::RAW_FISH, ItemItem::RAW_SALMON, ItemItem::CLOWN_FISH, ItemItem::PUFFER_FISH];
 			$fish = array_rand($fishes, 1);
 			$item = ItemItem::get($fishes[$fish]);
 			$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new PlayerFishEvent($this->shootingEntity, $item, $this));
-			if(!$ev->isCancelled()) {
+			if(!$ev->isCancelled()){
 				$this->shootingEntity->getInventory()->addItem($item);
 				$this->shootingEntity->addXp(mt_rand(1, 6));
 				$this->damageRod = true;
 			}
 		}
 
-		if($this->shootingEntity instanceof Player) {
+		if($this->shootingEntity instanceof Player){
 			$this->shootingEntity->unlinkHookFromPlayer();
 		}
 
-		if(!$this->closed) {
+		if(!$this->closed){
 			$this->kill();
 			$this->close();
 		}
@@ -168,10 +172,12 @@ class FishingHook extends Projectile
 		return $this->damageRod;
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = FishingHook::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,13 +19,10 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\permission;
 
 
-class PermissionAttachmentInfo
-{
+class PermissionAttachmentInfo {
 	/** @var Permissible */
 	private $permissible;
 
@@ -46,9 +43,8 @@ class PermissionAttachmentInfo
 	 *
 	 * @throws \InvalidStateException
 	 */
-	public function __construct(Permissible $permissible, $permission, $attachment, $value)
-	{
-		if($permission === null) {
+	public function __construct(Permissible $permissible, $permission, $attachment, $value){
+		if($permission === null){
 			throw new \InvalidStateException("Permission may not be null");
 		}
 
@@ -61,32 +57,28 @@ class PermissionAttachmentInfo
 	/**
 	 * @return Permissible
 	 */
-	public function getPermissible()
-	{
+	public function getPermissible(){
 		return $this->permissible;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getPermission()
-	{
+	public function getPermission(){
 		return $this->permission;
 	}
 
 	/**
 	 * @return PermissionAttachment
 	 */
-	public function getAttachment()
-	{
+	public function getAttachment(){
 		return $this->attachment;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function getValue()
-	{
+	public function getValue(){
 		return $this->value;
 	}
 }

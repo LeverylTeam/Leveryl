@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -33,109 +33,132 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\LongTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\scheduler\AsyncTask;
 
-abstract class BaseLevelProvider implements LevelProvider
-{
+abstract class BaseLevelProvider implements LevelProvider {
 	/** @var Level */
 	protected $level;
 	/** @var string */
 	protected $path;
 	/** @var CompoundTag */
 	protected $levelData;
+	/** @var bool */
+	protected $asyncChunkRequest = false;
 
-	public function __construct(Level $level, string $path)
-	{
+	/**
+	 * BaseLevelProvider constructor.
+	 *
+	 * @param Level $level
+	 * @param string $path
+	 */
+	public function __construct(Level $level, string $path){
 		$this->level = $level;
 		$this->path = $path;
-		if(!file_exists($this->path)) {
+		if(!file_exists($this->path)){
 			mkdir($this->path, 0777, true);
 		}
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 		$nbt->readCompressed(file_get_contents($this->getPath() . "level.dat"));
 		$levelData = $nbt->getData();
-		if($levelData->Data instanceof CompoundTag) {
+		if($levelData->Data instanceof CompoundTag){
 			$this->levelData = $levelData->Data;
-		} else {
+		}else{
 			throw new LevelException("Invalid level.dat");
 		}
 
-		if(!isset($this->levelData->generatorName)) {
-			$this->levelData->generatorName = new StringTag("generatorName", (string)Generator::getGenerator("DEFAULT"));
+		if(!isset($this->levelData->generatorName)){
+			$this->levelData->generatorName = new StringTag("generatorName", Generator::getGenerator("DEFAULT"));
 		}
 
-		if(!isset($this->levelData->generatorOptions)) {
+		if(!isset($this->levelData->generatorOptions)){
 			$this->levelData->generatorOptions = new StringTag("generatorOptions", "");
 		}
+		$this->asyncChunkRequest = (bool)$this->level->getServer()->getProperty("chunk-sending.async-chunk-request", false);
 	}
 
-	public function getPath(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getPath(): string{
 		return $this->path;
 	}
 
-	public function getServer()
-	{
+	/**
+	 * @return \pocketmine\Server
+	 */
+	public function getServer(){
 		return $this->level->getServer();
 	}
 
-	public function getLevel()
-	{
+	/**
+	 * @return Level
+	 */
+	public function getLevel(){
 		return $this->level;
 	}
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return (string)$this->levelData["LevelName"];
 	}
 
-	public function getTime() : int
-	{
-		return intval($this->levelData["Time"]);
+	/**
+	 * @return mixed|null
+	 */
+	public function getTime(){
+		return $this->levelData["Time"];
 	}
 
-	public function setTime(int $value)
-	{
+	/**
+	 * @param int|string $value
+	 */
+	public function setTime($value){
 		$this->levelData->Time = new LongTag("Time", $value);
 	}
 
-	public function getSeed() : int
-	{
-		return intval($this->levelData["RandomSeed"]);
+	/**
+	 * @return mixed|null
+	 */
+	public function getSeed(){
+		return $this->levelData["RandomSeed"];
 	}
 
-	public function setSeed(int $value)
-	{
-		$this->levelData->RandomSeed = new LongTag("RandomSeed", $value);
+	/**
+	 * @param int|string $value
+	 */
+	public function setSeed($value){
+		$this->levelData->RandomSeed = new LongTag("RandomSeed", (int)$value);
 	}
 
-	public function getSpawn(): Vector3
-	{
+	/**
+	 * @return Vector3
+	 */
+	public function getSpawn(): Vector3{
 		return new Vector3((float)$this->levelData["SpawnX"], (float)$this->levelData["SpawnY"], (float)$this->levelData["SpawnZ"]);
 	}
 
-	public function setSpawn(Vector3 $pos)
-	{
+	/**
+	 * @param Vector3 $pos
+	 */
+	public function setSpawn(Vector3 $pos){
 		$this->levelData->SpawnX = new IntTag("SpawnX", (int)$pos->x);
 		$this->levelData->SpawnY = new IntTag("SpawnY", (int)$pos->y);
 		$this->levelData->SpawnZ = new IntTag("SpawnZ", (int)$pos->z);
 	}
 
-	public function doGarbageCollection()
-	{
+	public function doGarbageCollection(){
 
 	}
 
 	/**
 	 * @return CompoundTag
 	 */
-	public function getLevelData(): CompoundTag
-	{
+	public function getLevelData(): CompoundTag{
 		return $this->levelData;
 	}
 
-	public function saveLevelData()
-	{
+	public function saveLevelData(){
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 		$nbt->setData(new CompoundTag("", [
 			"Data" => $this->levelData,
@@ -144,81 +167,25 @@ abstract class BaseLevelProvider implements LevelProvider
 		file_put_contents($this->getPath() . "level.dat", $buffer);
 	}
 
-	public function requestChunkTask(int $x, int $z): AsyncTask
-	{
+	/**
+	 * @param int $x
+	 * @param int $z
+	 *
+	 * @return null|ChunkRequestTask
+	 */
+	public function requestChunkTask(int $x, int $z){
 		$chunk = $this->getChunk($x, $z, false);
-		if(!($chunk instanceof Chunk)) {
+		if(!($chunk instanceof Chunk)){
 			throw new ChunkException("Invalid Chunk sent");
 		}
 
-		return new ChunkRequestTask($this->level, $chunk);
-	}
-
-	public function updateGameRule($t, $s)
-	{
-		switch($t) {
-			case "keepInventory";
-				$this->levelData->GameRules->keepInventory = new StringTag("$t", "$s");
-				break;
-			case "showDeathMessages";
-				$this->levelData->GameRules->showDeathMessages = new StringTag("$t", "$s");
-				break;
-			case "doTileDrops";
-				$this->levelData->GameRules->doTileDrops = new StringTag("$t", "$s");
-				break;
-			case "doFireTick";
-				$this->levelData->GameRules->doFireTick = new StringTag("$t", "$s");;
-				break;
-			case "doDaylightCycle";
-				$this->levelData->GameRules->doDaylightCycle = new StringTag("$t", "$s");
-				break;
-		}
-	}
-
-	public function getGameRule($rule): bool
-	{
-		if(isset($this->levelData->GameRules)) {
-			if(count($this->levelData->GameRules) == 5) {
-				switch($rule) {
-					case "keepInventory":
-						if(isset($this->levelData->GameRules[$rule])) {
-							return (boolean)$this->levelData->GameRules[$rule];
-						}
-						break;
-					case "showDeathMessage":
-						if(isset($this->levelData->GameRules[$rule])) {
-							return (boolean)$this->levelData->GameRules[$rule];
-						}
-						break;
-					case "doTileDrops":
-						if(isset($this->levelData->GameRules[$rule])) {
-							return (boolean)$this->levelData->GameRules[$rule];
-						}
-						break;
-					case "doFireTick":
-						if(isset($this->levelData->GameRules[$rule])) {
-							return (boolean)$this->levelData->GameRules[$rule];
-						}
-						break;
-					case "doDaylightCycle":
-						if(isset($this->levelData->GameRules[$rule])) {
-							return (boolean)$this->levelData->GameRules[$rule];
-						}
-						break;
-				}
-			} else {
-				// Overwrite the NBT data cuz it's probably invalid.
-				$this->levelData->GameRules = []; // Remove Everything from the GameRules CompoundTag.
-				$this->levelData->GameRules = [
-					"keepInventory"     => new StringTag("KeepInventory", "true"),
-					"showDeathMessages" => new StringTag("showDeathMessages", "true"),
-					"doTileDrops"       => new StringTag("doTileDrops", "true"),
-					"doFireTick"        => new StringTag("doFireTick", "true"),
-					"doDaylightCycle"   => new StringTag("doDaylightCycle", "true"),
-				]; // Re-set the GameRules CompoundTag
-			}
+		if($this->asyncChunkRequest){
+			return new ChunkRequestTask($this->level, $chunk);
 		}
 
-		return false;
+		//non-async, call the callback directly with serialized data
+		$this->getLevel()->chunkRequestCallback($x, $z, $chunk->networkSerialize());
+
+		return null;
 	}
 }

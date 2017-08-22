@@ -19,15 +19,12 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\server;
 
 use pocketmine\Server;
 use pocketmine\utils\Binary;
 
-class QueryRegenerateEvent extends ServerEvent
-{
+class QueryRegenerateEvent extends ServerEvent {
 	public static $handlerList = null;
 
 	const GAME_ID = "MINECRAFTPE";
@@ -53,25 +50,37 @@ class QueryRegenerateEvent extends ServerEvent
 	private $extraData = [];
 
 
-	public function __construct(Server $server, $timeout = 5)
-	{
+	/**
+	 * QueryRegenerateEvent constructor.
+	 *
+	 * @param Server $server
+	 * @param int $timeout
+	 */
+	public function __construct(Server $server, $timeout = 5){
 		$this->timeout = $timeout;
 		$this->serverName = $server->getMotd();
 		$this->listPlugins = $server->getProperty("settings.query-plugins", true);
 		$this->plugins = $server->getPluginManager()->getPlugins();
 		$this->players = [];
-		foreach($server->getOnlinePlayers() as $player) {
-			if($player->isOnline()) {
+		foreach($server->getOnlinePlayers() as $player){
+			if($player->isOnline()){
 				$this->players[] = $player;
 			}
 		}
+
+		if($server->isDServerEnabled() and $server->dserverConfig["queryMaxPlayers"]) $pc = $server->dserverConfig["queryMaxPlayers"];
+		elseif($server->isDServerEnabled() and $server->dserverConfig["queryAllPlayers"]) $pc = $server->getDServerMaxPlayers();
+		else $pc = $server->getMaxPlayers();
+
+		if($server->isDServerEnabled() and $server->dserverConfig["queryPlayers"]) $poc = $server->getDServerOnlinePlayers();
+		else $poc = count($this->players);
 
 		$this->gametype = ($server->getGamemode() & 0x01) === 0 ? "SMP" : "CMP";
 		$this->version = $server->getVersion();
 		$this->server_engine = $server->getName() . " " . $server->getPocketMineVersion();
 		$this->map = $server->getDefaultLevel() === null ? "unknown" : $server->getDefaultLevel()->getName();
-		$this->numPlayers = count($this->players);
-		$this->maxPlayers = $server->getMaxPlayers();
+		$this->numPlayers = $poc;
+		$this->maxPlayers = $pc;
 		$this->whitelist = $server->hasWhitelist() ? "on" : "off";
 		$this->port = $server->getPort();
 		$this->ip = $server->getIp();
@@ -83,95 +92,112 @@ class QueryRegenerateEvent extends ServerEvent
 	 *
 	 * @return int
 	 */
-	public function getTimeout()
-	{
+	public function getTimeout(){
 		return $this->timeout;
 	}
 
-	public function setTimeout($timeout)
-	{
+	/**
+	 * @param $timeout
+	 */
+	public function setTimeout($timeout){
 		$this->timeout = $timeout;
 	}
 
-	public function getServerName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getServerName(){
 		return $this->serverName;
 	}
 
-	public function setServerName($serverName)
-	{
+	/**
+	 * @param $serverName
+	 */
+	public function setServerName($serverName){
 		$this->serverName = $serverName;
 	}
 
-	public function canListPlugins()
-	{
+	/**
+	 * @return mixed
+	 */
+	public function canListPlugins(){
 		return $this->listPlugins;
 	}
 
-	public function setListPlugins($value)
-	{
+	/**
+	 * @param $value
+	 */
+	public function setListPlugins($value){
 		$this->listPlugins = (bool)$value;
 	}
 
 	/**
 	 * @return \pocketmine\plugin\Plugin[]
 	 */
-	public function getPlugins()
-	{
+	public function getPlugins(){
 		return $this->plugins;
 	}
 
 	/**
 	 * @param \pocketmine\plugin\Plugin[] $plugins
 	 */
-	public function setPlugins(array $plugins)
-	{
+	public function setPlugins(array $plugins){
 		$this->plugins = $plugins;
 	}
 
 	/**
 	 * @return \pocketmine\Player[]
 	 */
-	public function getPlayerList()
-	{
+	public function getPlayerList(){
 		return $this->players;
 	}
 
 	/**
 	 * @param \pocketmine\Player[] $players
 	 */
-	public function setPlayerList(array $players)
-	{
+	public function setPlayerList(array $players){
 		$this->players = $players;
 	}
 
-	public function getPlayerCount()
-	{
+	/**
+	 * @return int
+	 */
+	public function getPlayerCount(){
 		return $this->numPlayers;
 	}
 
-	public function setPlayerCount($count)
-	{
+	/**
+	 * @param $count
+	 */
+	public function setPlayerCount($count){
 		$this->numPlayers = (int)$count;
 	}
 
-	public function getMaxPlayerCount()
-	{
+	/**
+	 * @return int
+	 */
+	public function getMaxPlayerCount(){
 		return $this->maxPlayers;
 	}
 
-	public function setMaxPlayerCount($count)
-	{
+	/**
+	 * @param $count
+	 */
+	public function setMaxPlayerCount($count){
 		$this->maxPlayers = (int)$count;
 	}
 
-	public function getWorld()
-	{
+	/**
+	 * @return string
+	 */
+	public function getWorld(){
 		return $this->map;
 	}
 
-	public function setWorld($world)
-	{
+	/**
+	 * @param $world
+	 */
+	public function setWorld($world){
 		$this->map = (string)$world;
 	}
 
@@ -180,24 +206,27 @@ class QueryRegenerateEvent extends ServerEvent
 	 *
 	 * @return array
 	 */
-	public function getExtraData()
-	{
+	public function getExtraData(){
 		return $this->extraData;
 	}
 
-	public function setExtraData(array $extraData)
-	{
+	/**
+	 * @param array $extraData
+	 */
+	public function setExtraData(array $extraData){
 		$this->extraData = $extraData;
 	}
 
-	public function getLongQuery()
-	{
+	/**
+	 * @return string
+	 */
+	public function getLongQuery(){
 		$query = "";
 
 		$plist = $this->server_engine;
-		if(count($this->plugins) > 0 and $this->listPlugins) {
+		if(count($this->plugins) > 0 and $this->listPlugins){
 			$plist .= ":";
-			foreach($this->plugins as $p) {
+			foreach($this->plugins as $p){
 				$d = $p->getDescription();
 				$plist .= " " . str_replace([";", ":", " "], ["", "", "_"], $d->getName()) . " " . str_replace([";", ":", " "], ["", "", "_"], $d->getVersion()) . ";";
 			}
@@ -220,16 +249,16 @@ class QueryRegenerateEvent extends ServerEvent
 			"hostport"      => $this->port,
 		];
 
-		foreach($KVdata as $key => $value) {
+		foreach($KVdata as $key => $value){
 			$query .= $key . "\x00" . $value . "\x00";
 		}
 
-		foreach($this->extraData as $key => $value) {
+		foreach($this->extraData as $key => $value){
 			$query .= $key . "\x00" . $value . "\x00";
 		}
 
 		$query .= "\x00\x01player_\x00\x00";
-		foreach($this->players as $player) {
+		foreach($this->players as $player){
 			$query .= $player->getName() . "\x00";
 		}
 		$query .= "\x00";
@@ -237,8 +266,10 @@ class QueryRegenerateEvent extends ServerEvent
 		return $query;
 	}
 
-	public function getShortQuery()
-	{
+	/**
+	 * @return string
+	 */
+	public function getShortQuery(){
 		return $this->serverName . "\x00" . $this->gametype . "\x00" . $this->map . "\x00" . $this->numPlayers . "\x00" . $this->maxPlayers . "\x00" . Binary::writeLShort($this->port) . $this->ip . "\x00";
 	}
 

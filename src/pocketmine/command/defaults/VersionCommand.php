@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
@@ -29,11 +27,14 @@ use pocketmine\network\mcpe\protocol\ProtocolInfo;
 use pocketmine\plugin\Plugin;
 use pocketmine\utils\TextFormat;
 
-class VersionCommand extends VanillaCommand
-{
+class VersionCommand extends VanillaCommand {
 
-	public function __construct($name)
-	{
+	/**
+	 * VersionCommand constructor.
+	 *
+	 * @param string $name
+	 */
+	public function __construct($name){
 		parent::__construct(
 			$name,
 			"%pocketmine.command.version.description",
@@ -43,59 +44,73 @@ class VersionCommand extends VanillaCommand
 		$this->setPermission("pocketmine.command.version");
 	}
 
-	public function execute(CommandSender $sender, $currentAlias, array $args)
-	{
-		if(!$this->testPermission($sender)) {
-			return true;
+	/**
+	 * @param CommandSender $sender
+	 * @param string $currentAlias
+	 * @param array $args
+	 *
+	 * @return bool
+	 */
+	public function execute(CommandSender $sender, $currentAlias, array $args){
+		if(!$this->testPermission($sender)){
+			return \true;
 		}
 
-		if(count($args) === 0) {
-			$sender->sendMessage("§f----- §aServer information§f -----§r\n§aThis server is running " . $sender->getServer()->getName() . "-v" . $sender->getServer()->getPocketMineVersion() . "§r\n§aCodename: §f" . $sender->getServer()->getCodename() . "§r\n§aPHP Version: §f" . phpversion() . "§r\n§aAPI: §f" . $sender->getServer()->getApiVersion() . "§r\n§aTarget Client: §f" . $sender->getServer()->getVersion() . "§r\n§aProtocol Version:§f " . ProtocolInfo::CURRENT_PROTOCOL . "§r\n§aGitHub Repository§f: https://github.com/LeverylTeam/Leveryl§r");
-		} else {
-			$pluginName = implode(" ", $args);
+		if(\count($args) === 0){
+			if(count(ProtocolInfo::MINECRAFT_VERSION) > 1){
+				$tc = "§r\n§aTarget Clients: §f" . $sender->getServer()->getVersion();
+			}else{
+				$tc = "§r\n§aTarget Client: §f" . $sender->getServer()->getVersion();
+			}
+			$sender->sendMessage("§f----- §aServer information§f -----§r\n§aThis server is running " . $sender->getServer()->getName() . "-v" . $sender->getServer()->getPocketMineVersion() . "§r\n§aCodename: §f" . $sender->getServer()->getCodename() . "§r\n§aPHP Version: §f" . phpversion() . "§r\n§aAPI: §f" . $sender->getServer()->getApiVersion() . $tc . "§r\n§aProtocol Version:§f " . ProtocolInfo::CURRENT_PROTOCOL . "§r\n§aGit Commit:§f " . $sender->getServer()->getShortGitCommit() . "§r\n§aGitHub Repository§f: https://github.com/LeverylTeam/Leveryl§r");
+		}else{
+			$pluginName = \implode(" ", $args);
 			$exactPlugin = $sender->getServer()->getPluginManager()->getPlugin($pluginName);
 
-			if($exactPlugin instanceof Plugin) {
+			if($exactPlugin instanceof Plugin){
 				$this->describeToSender($exactPlugin, $sender);
 
-				return true;
+				return \true;
 			}
 
-			$found = false;
-			$pluginName = strtolower($pluginName);
-			foreach($sender->getServer()->getPluginManager()->getPlugins() as $plugin) {
-				if(stripos($plugin->getName(), $pluginName) !== false) {
+			$found = \false;
+			$pluginName = \strtolower($pluginName);
+			foreach($sender->getServer()->getPluginManager()->getPlugins() as $plugin){
+				if(\stripos($plugin->getName(), $pluginName) !== \false){
 					$this->describeToSender($plugin, $sender);
-					$found = true;
+					$found = \true;
 				}
 			}
 
-			if(!$found) {
+			if(!$found){
 				$sender->sendMessage(new TranslationContainer("pocketmine.command.version.noSuchPlugin"));
 			}
 		}
 
-		return true;
+		return \true;
 	}
 
-	private function describeToSender(Plugin $plugin, CommandSender $sender)
-	{
+	/**
+	 * @param Plugin $plugin
+	 * @param CommandSender $sender
+	 */
+	private function describeToSender(Plugin $plugin, CommandSender $sender){
 		$desc = $plugin->getDescription();
 		$sender->sendMessage(TextFormat::DARK_GREEN . $desc->getName() . TextFormat::WHITE . " version " . TextFormat::DARK_GREEN . $desc->getVersion());
 
-		if($desc->getDescription() != null) {
+		if($desc->getDescription() != \null){
 			$sender->sendMessage($desc->getDescription());
 		}
 
-		if($desc->getWebsite() != null) {
+		if($desc->getWebsite() != \null){
 			$sender->sendMessage("Website: " . $desc->getWebsite());
 		}
 
-		if(count($authors = $desc->getAuthors()) > 0) {
-			if(count($authors) === 1) {
-				$sender->sendMessage("Author: " . implode(", ", $authors));
-			} else {
-				$sender->sendMessage("Authors: " . implode(", ", $authors));
+		if(\count($authors = $desc->getAuthors()) > 0){
+			if(\count($authors) === 1){
+				$sender->sendMessage("Author: " . \implode(", ", $authors));
+			}else{
+				$sender->sendMessage("Authors: " . \implode(", ", $authors));
 			}
 		}
 	}

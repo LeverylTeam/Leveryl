@@ -26,8 +26,13 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
-class BiomeCommand extends VanillaCommand{
+class BiomeCommand extends VanillaCommand {
 
+	/**
+	 * BiomeCommand constructor.
+	 *
+	 * @param string $name
+	 */
 	public function __construct($name){
 		parent::__construct(
 			$name,
@@ -37,6 +42,13 @@ class BiomeCommand extends VanillaCommand{
 		$this->setPermission("pocketmine.command.biome");
 	}
 
+	/**
+	 * @param CommandSender $sender
+	 * @param string $currentAlias
+	 * @param array $args
+	 *
+	 * @return bool
+	 */
 	public function execute(CommandSender $sender, $currentAlias, array $args){
 		if(!$this->testPermission($sender)){
 			return true;
@@ -44,6 +56,7 @@ class BiomeCommand extends VanillaCommand{
 
 		if(count($args) === 0){
 			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+
 			return false;
 		}
 
@@ -53,11 +66,13 @@ class BiomeCommand extends VanillaCommand{
 				if(isset($sender->selectedPos[0]) and isset($sender->selectedPos[1])){
 					if(is_numeric($biome) === false){
 						$sender->sendMessage(TextFormat::RED . new TranslationContainer("pocketmine.command.biome.wrongBio"));
+
 						return false;
 					}
-					$biome = (int) $biome;
+					$biome = (int)$biome;
 					if($sender->selectedLev[0] !== $sender->selectedLev[1]){
 						$sender->sendMessage(TextFormat::RED . new TranslationContainer("pocketmine.command.biome.wrongLev"));
+
 						return false;
 					}
 					$x1 = min($sender->selectedPos[0][0], $sender->selectedPos[1][0]);
@@ -67,14 +82,7 @@ class BiomeCommand extends VanillaCommand{
 					$level = $sender->selectedLev[0];
 					for($x = $x1; $x <= $x2; $x++){
 						for($z = $z1; $z <= $z2; $z++){
-							$chunk = $level->getChunk($x >> 4, $z >> 4, false);
 							$level->setBiomeId($x, $z, $biome);
-							$chunk->setChanged(true);
-							foreach ($chunk->getEntities() as $entity) {
-								if($entity instanceof Player) {
-									$entity->onChunkChanged($chunk);
-								}
-							}
 						}
 					}
 					$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.set", [$biome]));
@@ -102,12 +110,15 @@ class BiomeCommand extends VanillaCommand{
 				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.get", [$biome]));
 			}else{
 				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+
 				return true;
 			}
 		}else{
 			$sender->sendMessage(new TranslationContainer("commands.generic.runingame"));
+
 			return false;
 		}
+
 		return true;
 	}
 }

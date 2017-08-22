@@ -55,7 +55,7 @@ class Vindicator extends Monster {
 	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Vindicator::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
@@ -76,7 +76,7 @@ class Vindicator extends Monster {
 	 */
 	public function getDrops(){
 		$drops = [
-			ItemItem::get(ItemItem::EMERALD, 0, mt_rand(0, 1))
+			ItemItem::get(ItemItem::EMERALD, 0, mt_rand(0, 1)),
 		];
 
 		return $drops;

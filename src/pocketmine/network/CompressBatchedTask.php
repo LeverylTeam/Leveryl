@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,45 +19,45 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\network;
 
-use pocketmine\network\mcpe\protocol\BatchPacket;
+
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 
-class CompressBatchedTask extends AsyncTask
-{
+class CompressBatchedTask extends AsyncTask {
 
 	public $level = 7;
 	public $data;
+	public $final;
 	public $targets;
 
-	public function __construct(BatchPacket $batch, array $targets, $level = 7)
-	{
-		$this->data = $batch->payload;
+	/**
+	 * CompressBatchedTask constructor.
+	 *
+	 * @param       $data
+	 * @param array $targets
+	 * @param int $level
+	 */
+	public function __construct($data, array $targets, $level = 7){
+		$this->data = $data;
 		$this->targets = serialize($targets);
 		$this->level = $level;
 	}
 
-	public function onRun()
-	{
-		$batch = new BatchPacket();
-		$batch->payload = $this->data;
-		$this->data = null;
+	public function onRun(){
+		try{
+			$this->final = zlib_encode($this->data, ZLIB_ENCODING_DEFLATE, $this->level);
+			$this->data = null;
+		}catch(\Throwable $e){
 
-		$batch->compress($this->level);
-		$batch->encode();
-
-		$this->setResult($batch->buffer, false);
+		}
 	}
 
-	public function onCompletion(Server $server)
-	{
-		$pk = new BatchPacket($this->getResult());
-		$pk->isEncoded = true;
-		$pk->compressed = true;
-		$server->broadcastPacketsCallback($pk, unserialize($this->targets));
+	/**
+	 * @param Server $server
+	 */
+	public function onCompletion(Server $server){
+		$server->broadcastPacketsCallback($this->final, unserialize($this->targets));
 	}
 }

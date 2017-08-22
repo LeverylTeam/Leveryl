@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,49 +15,70 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\block;
 
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class EmeraldOre extends Solid
-{
+class EmeraldOre extends Solid {
 
 	protected $id = self::EMERALD_ORE;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * EmeraldOre constructor.
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Emerald Ore";
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return int
+	 */
+	public function getHardness(){
 		return 3;
 	}
 
-	public function getDrops(Item $item)
-	{
-		if($item->isPickaxe() >= Tool::TIER_IRON) {
-			return [
-				[Item::EMERALD, 0, 1],
-			];
-		} else {
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
+		if($item->isPickaxe() >= 4){
+			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+				return [
+					[Item::EMERALD_ORE, 0, 1],
+				];
+			}else{
+				$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+				$fortunel = $fortunel > 3 ? 3 : $fortunel;
+				$times = [1, 1, 2, 3, 4];
+				$time = $times[mt_rand(0, $fortunel + 1)];
+
+				return [
+					[Item::EMERALD, 0, $time],
+				];
+			}
+		}else{
 			return [];
 		}
 	}

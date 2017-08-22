@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types = 1);
-
 /**
  * Noise classes used in Levels
  */
@@ -32,13 +30,17 @@ use pocketmine\level\generator\noise\Noise;
 use pocketmine\level\generator\normal\Normal;
 use pocketmine\utils\Random;
 
-abstract class Generator
-{
+abstract class Generator {
 	private static $list = [];
 
-	public static function addGenerator($object, $name)
-	{
-		if(is_subclass_of($object, Generator::class) and !isset(Generator::$list[$name = strtolower($name)])) {
+	/**
+	 * @param $object
+	 * @param $name
+	 *
+	 * @return bool
+	 */
+	public static function addGenerator($object, $name){
+		if(is_subclass_of($object, Generator::class) and !isset(Generator::$list[$name = strtolower($name)])){
 			Generator::$list[$name] = $object;
 
 			return true;
@@ -50,8 +52,7 @@ abstract class Generator
 	/**
 	 * @return string[]
 	 */
-	public static function getGeneratorList()
-	{
+	public static function getGeneratorList(){
 		return array_keys(Generator::$list);
 	}
 
@@ -60,19 +61,22 @@ abstract class Generator
 	 *
 	 * @return Generator
 	 */
-	public static function getGenerator($name)
-	{
-		if(isset(Generator::$list[$name = strtolower($name)])) {
+	public static function getGenerator($name){
+		if(isset(Generator::$list[$name = strtolower($name)])){
 			return Generator::$list[$name];
 		}
 
 		return Normal::class;
 	}
 
-	public static function getGeneratorName($class)
-	{
-		foreach(Generator::$list as $name => $c) {
-			if($c === $class) {
+	/**
+	 * @param $class
+	 *
+	 * @return int|string
+	 */
+	public static function getGeneratorName($class){
+		foreach(Generator::$list as $name => $c){
+			if($c === $class){
 				return $name;
 			}
 		}
@@ -89,26 +93,23 @@ abstract class Generator
 	 * @param int $z
 	 *
 	 * @return \SplFixedArray
-	 *
-	 * @throws \InvalidArgumentCountException
 	 */
-	public static function getFastNoise1D(Noise $noise, $xSize, $samplingRate, $x, $y, $z)
-	{
-		if($samplingRate === 0) {
+	public static function getFastNoise1D(Noise $noise, $xSize, $samplingRate, $x, $y, $z){
+		if($samplingRate === 0){
 			throw new \InvalidArgumentException("samplingRate cannot be 0");
 		}
-		if($xSize % $samplingRate !== 0) {
+		if($xSize % $samplingRate !== 0){
 			throw new \InvalidArgumentCountException("xSize % samplingRate must return 0");
 		}
 
 		$noiseArray = new \SplFixedArray($xSize + 1);
 
-		for($xx = 0; $xx <= $xSize; $xx += $samplingRate) {
+		for($xx = 0; $xx <= $xSize; $xx += $samplingRate){
 			$noiseArray[$xx] = $noise->noise3D($xx + $x, $y, $z);
 		}
 
-		for($xx = 0; $xx < $xSize; ++$xx) {
-			if($xx % $samplingRate !== 0) {
+		for($xx = 0; $xx < $xSize; ++$xx){
+			if($xx % $samplingRate !== 0){
 				$nx = (int)($xx / $samplingRate) * $samplingRate;
 				$noiseArray[$xx] = Noise::linearLerp($xx, $nx, $nx + $samplingRate, $noiseArray[$nx], $noiseArray[$nx + $samplingRate]);
 			}
@@ -127,33 +128,34 @@ abstract class Generator
 	 * @param int $z
 	 *
 	 * @return \SplFixedArray
-	 *
-	 * @throws \InvalidArgumentException
-	 * @throws \InvalidArgumentCountException
 	 */
-	public static function getFastNoise2D(Noise $noise, $xSize, $zSize, $samplingRate, $x, $y, $z)
-	{
-		assert($samplingRate !== 0, new \InvalidArgumentException("samplingRate cannot be 0"));
-
-		assert($xSize % $samplingRate === 0, new \InvalidArgumentCountException("xSize % samplingRate must return 0"));
-		assert($zSize % $samplingRate === 0, new \InvalidArgumentCountException("zSize % samplingRate must return 0"));
+	public static function getFastNoise2D(Noise $noise, $xSize, $zSize, $samplingRate, $x, $y, $z){
+		if($samplingRate === 0){
+			throw new \InvalidArgumentException("samplingRate cannot be 0");
+		}
+		if($xSize % $samplingRate !== 0){
+			throw new \InvalidArgumentCountException("xSize % samplingRate must return 0");
+		}
+		if($zSize % $samplingRate !== 0){
+			throw new \InvalidArgumentCountException("zSize % samplingRate must return 0");
+		}
 
 		$noiseArray = new \SplFixedArray($xSize + 1);
 
-		for($xx = 0; $xx <= $xSize; $xx += $samplingRate) {
+		for($xx = 0; $xx <= $xSize; $xx += $samplingRate){
 			$noiseArray[$xx] = new \SplFixedArray($zSize + 1);
-			for($zz = 0; $zz <= $zSize; $zz += $samplingRate) {
+			for($zz = 0; $zz <= $zSize; $zz += $samplingRate){
 				$noiseArray[$xx][$zz] = $noise->noise3D($x + $xx, $y, $z + $zz);
 			}
 		}
 
-		for($xx = 0; $xx < $xSize; ++$xx) {
-			if($xx % $samplingRate !== 0) {
+		for($xx = 0; $xx < $xSize; ++$xx){
+			if($xx % $samplingRate !== 0){
 				$noiseArray[$xx] = new \SplFixedArray($zSize + 1);
 			}
 
-			for($zz = 0; $zz < $zSize; ++$zz) {
-				if($xx % $samplingRate !== 0 or $zz % $samplingRate !== 0) {
+			for($zz = 0; $zz < $zSize; ++$zz){
+				if($xx % $samplingRate !== 0 or $zz % $samplingRate !== 0){
 					$nx = (int)($xx / $samplingRate) * $samplingRate;
 					$nz = (int)($zz / $samplingRate) * $samplingRate;
 					$noiseArray[$xx][$zz] = Noise::bilinearLerp(
@@ -181,35 +183,41 @@ abstract class Generator
 	 * @param int $z
 	 *
 	 * @return \SplFixedArray
-	 *
-	 * @throws \InvalidArgumentException
-	 * @throws \InvalidArgumentCountException
 	 */
-	public static function getFastNoise3D(Noise $noise, $xSize, $ySize, $zSize, $xSamplingRate, $ySamplingRate, $zSamplingRate, $x, $y, $z)
-	{
-
-		assert($xSamplingRate !== 0, new \InvalidArgumentException("xSamplingRate cannot be 0"));
-		assert($zSamplingRate !== 0, new \InvalidArgumentException("zSamplingRate cannot be 0"));
-		assert($ySamplingRate !== 0, new \InvalidArgumentException("ySamplingRate cannot be 0"));
-
-		assert($xSize % $xSamplingRate === 0, new \InvalidArgumentCountException("xSize % xSamplingRate must return 0"));
-		assert($zSize % $zSamplingRate === 0, new \InvalidArgumentCountException("zSize % zSamplingRate must return 0"));
-		assert($ySize % $ySamplingRate === 0, new \InvalidArgumentCountException("ySize % ySamplingRate must return 0"));
+	public static function getFastNoise3D(Noise $noise, $xSize, $ySize, $zSize, $xSamplingRate, $ySamplingRate, $zSamplingRate, $x, $y, $z){
+		if($xSamplingRate === 0){
+			throw new \InvalidArgumentException("xSamplingRate cannot be 0");
+		}
+		if($zSamplingRate === 0){
+			throw new \InvalidArgumentException("zSamplingRate cannot be 0");
+		}
+		if($ySamplingRate === 0){
+			throw new \InvalidArgumentException("ySamplingRate cannot be 0");
+		}
+		if($xSize % $xSamplingRate !== 0){
+			throw new \InvalidArgumentCountException("xSize % xSamplingRate must return 0");
+		}
+		if($zSize % $zSamplingRate !== 0){
+			throw new \InvalidArgumentCountException("zSize % zSamplingRate must return 0");
+		}
+		if($ySize % $ySamplingRate !== 0){
+			throw new \InvalidArgumentCountException("ySize % ySamplingRate must return 0");
+		}
 
 		$noiseArray = array_fill(0, $xSize + 1, array_fill(0, $zSize + 1, []));
 
-		for($xx = 0; $xx <= $xSize; $xx += $xSamplingRate) {
-			for($zz = 0; $zz <= $zSize; $zz += $zSamplingRate) {
-				for($yy = 0; $yy <= $ySize; $yy += $ySamplingRate) {
+		for($xx = 0; $xx <= $xSize; $xx += $xSamplingRate){
+			for($zz = 0; $zz <= $zSize; $zz += $zSamplingRate){
+				for($yy = 0; $yy <= $ySize; $yy += $ySamplingRate){
 					$noiseArray[$xx][$zz][$yy] = $noise->noise3D($x + $xx, $y + $yy, $z + $zz, true);
 				}
 			}
 		}
 
-		for($xx = 0; $xx < $xSize; ++$xx) {
-			for($zz = 0; $zz < $zSize; ++$zz) {
-				for($yy = 0; $yy < $ySize; ++$yy) {
-					if($xx % $xSamplingRate !== 0 or $zz % $zSamplingRate !== 0 or $yy % $ySamplingRate !== 0) {
+		for($xx = 0; $xx < $xSize; ++$xx){
+			for($zz = 0; $zz < $zSize; ++$zz){
+				for($yy = 0; $yy < $ySize; ++$yy){
+					if($xx % $xSamplingRate !== 0 or $zz % $zSamplingRate !== 0 or $yy % $ySamplingRate !== 0){
 						$nx = (int)($xx / $xSamplingRate) * $xSamplingRate;
 						$ny = (int)($yy / $ySamplingRate) * $ySamplingRate;
 						$nz = (int)($zz / $zSamplingRate) * $zSamplingRate;
@@ -244,17 +252,47 @@ abstract class Generator
 		return $noiseArray;
 	}
 
-	abstract public function __construct(array $settings = []);
+	/**
+	 * @return int
+	 */
+	public function getWaterHeight(): int{
+		return 0;
+	}
 
-	abstract public function init(ChunkManager $level, Random $random);
+	/**
+	 * Generator constructor.
+	 *
+	 * @param array $settings
+	 */
+	public abstract function __construct(array $settings = []);
 
-	abstract public function generateChunk($chunkX, $chunkZ);
+	/**
+	 * @param ChunkManager $level
+	 * @param Random $random
+	 *
+	 * @return mixed
+	 */
+	public abstract function init(ChunkManager $level, Random $random);
 
-	abstract public function populateChunk($chunkX, $chunkZ);
+	/**
+	 * @param $chunkX
+	 * @param $chunkZ
+	 *
+	 * @return mixed
+	 */
+	public abstract function generateChunk($chunkX, $chunkZ);
 
-	abstract public function getSettings();
+	/**
+	 * @param $chunkX
+	 * @param $chunkZ
+	 *
+	 * @return mixed
+	 */
+	public abstract function populateChunk($chunkX, $chunkZ);
 
-	abstract public function getName();
+	public abstract function getSettings();
 
-	abstract public function getSpawn();
+	public abstract function getName();
+
+	public abstract function getSpawn();
 }

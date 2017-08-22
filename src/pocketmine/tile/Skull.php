@@ -2,24 +2,22 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author PocketMine Team
- * @link http://www.pocketmine.net/
+ * @author iTX Technologies
+ * @link https://itxtech.org
  *
- *
-*/
-
-declare(strict_types = 1);
+ */
 
 namespace pocketmine\tile;
 
@@ -29,8 +27,8 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 
-class Skull extends Spawnable
-{
+class Skull extends Spawnable {
+
 	const TYPE_SKELETON = 0;
 	const TYPE_WITHER = 1;
 	const TYPE_ZOMBIE = 2;
@@ -38,30 +36,54 @@ class Skull extends Spawnable
 	const TYPE_CREEPER = 4;
 	const TYPE_DRAGON = 5;
 
-	public function __construct(Level $level, CompoundTag $nbt)
-	{
-		if(!isset($nbt->SkullType)) {
+	/**
+	 * Skull constructor.
+	 *
+	 * @param Level $level
+	 * @param CompoundTag $nbt
+	 */
+	public function __construct(Level $level, CompoundTag $nbt){
+		if(!isset($nbt->SkullType)){
 			$nbt->SkullType = new ByteTag("SkullType", 0);
 		}
-		if(!isset($nbt->Rot)) {
+		if(!isset($nbt->Rot) or !($nbt->Rot instanceof ByteTag)){
 			$nbt->Rot = new ByteTag("Rot", 0);
 		}
 		parent::__construct($level, $nbt);
 	}
 
-	public function setType(int $type)
-	{
-		$this->namedtag->SkullType = new ByteTag("SkullType", $type);
-		$this->onChanged();
+	/**
+	 * @param int $type
+	 *
+	 * @return bool
+	 */
+	public function setType(int $type){
+		if($type >= 0 && $type <= 4){
+			$this->namedtag->SkullType = new ByteTag("SkullType", $type);
+			$this->onChanged();
+
+			return true;
+		}
+
+		return false;
 	}
 
-	public function getType()
-	{
+	/**
+	 * @return null
+	 */
+	public function getType(){
 		return $this->namedtag["SkullType"];
 	}
 
-	public function getSpawnCompound()
-	{
+	public function saveNBT(){
+		parent::saveNBT();
+		unset($this->namedtag->Creator);
+	}
+
+	/**
+	 * @return CompoundTag
+	 */
+	public function getSpawnCompound(){
 		return new CompoundTag("", [
 			new StringTag("id", Tile::SKULL),
 			$this->namedtag->SkullType,

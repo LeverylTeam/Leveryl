@@ -32,27 +32,23 @@ use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\Player;
 
-class FlintSteel extends Tool
-{
+class FlintSteel extends Tool {
 	/** @var Vector3 */
 	private $temporalVector = null;
 
-	public function __construct($meta = 0, $count = 1)
-	{
+	public function __construct($meta = 0, $count = 1){
 		parent::__construct(self::FLINT_STEEL, $meta, $count, "Flint and Steel");
 		if($this->temporalVector === null){
 			$this->temporalVector = new Vector3(0, 0, 0);
 		}
 	}
 
-	public function canBeActivated()
-	{
+	public function canBeActivated(): bool{
 		return true;
 	}
 
-	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz)
-	{
-		if($target->getId() === Block::OBSIDIAN and $player->getServer()->getLeverylConfigValue("NetherEnabled", true)){
+	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
+		if($target->getId() === Block::OBSIDIAN and $player->getServer()->netherEnabled){
 			$tx = $target->getX();
 			$ty = $target->getY();
 			$tz = $target->getZ();
@@ -91,6 +87,7 @@ class FlintSteel extends Tool
 							$this->useOn($block, 2);
 							$player->getInventory()->setItemInHand($this);
 						}
+
 						return true;
 					}
 				}
@@ -131,19 +128,20 @@ class FlintSteel extends Tool
 							$this->useOn($block, 2);
 							$player->getInventory()->setItemInHand($this);
 						}
+
 						return true;
 					}
 				}
 			}
 		}
 
-		if($block->getId() === self::AIR and ($target instanceof Solid)) {
+		if($block->getId() === self::AIR and ($target instanceof Solid)){
 			$level->setBlock($block, new Fire(), true);
 			$player->getLevel()->broadcastLevelSoundEvent($player, LevelSoundEventPacket::SOUND_IGNITE);
-			if(($player->gamemode & 0x01) === 0 and $this->useOn($block)) {
-				if($this->getDamage() >= $this->getMaxDurability()) {
+			if(($player->gamemode & 0x01) === 0 and $this->useOn($block)){
+				if($this->getDamage() >= $this->getMaxDurability()){
 					$player->getInventory()->setItemInHand(new Item(Item::AIR, 0, 0));
-				} else {
+				}else{
 					$this->meta++;
 					$player->getInventory()->setItemInHand($this);
 				}

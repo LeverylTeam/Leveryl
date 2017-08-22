@@ -28,11 +28,9 @@ use pocketmine\command\CommandSender;
 use pocketmine\level\generator\Generator;
 use pocketmine\utils\TextFormat;
 
-class CreateWorldCommand extends VanillaCommand
-{
+class CreateWorldCommand extends VanillaCommand {
 
-	public function __construct($name)
-	{
+	public function __construct($name){
 		parent::__construct(
 			$name,
 			"Generate a world",
@@ -41,19 +39,19 @@ class CreateWorldCommand extends VanillaCommand
 		$this->setPermission("pocketmine.command.createworld");
 	}
 
-	public function execute(CommandSender $sender, $senderurrentAlias, array $args)
-	{
-		if(!$this->testPermission($sender)) {
+	public function execute(CommandSender $sender, $senderurrentAlias, array $args){
+		if(!$this->testPermission($sender)){
 			return true;
 		}
 
 		if(count($args) < 1 || count($args) > 3){
 			$sender->sendMessage("USAGE: /createworld <world name> [seed] [generator]");
+
 			return false;
 		}
 		$world = array_shift($args);
 
-		if($sender->getServer()->isLevelGenerated($world)) {
+		if($sender->getServer()->isLevelGenerated($world)){
 			$sender->sendMessage(TextFormat::RED . "A world named " . $args[0] . " already exists");
 
 			return true;
@@ -62,9 +60,9 @@ class CreateWorldCommand extends VanillaCommand
 		$seed = null;
 		$generator = null;
 		if(isset($args[1])) $seed = intval($args[1]);
-		if(isset($args[2])) {
+		if(isset($args[2])){
 			$generator = Generator::getGenerator($args[2]);
-			if(strtolower($args[2]) != Generator::getGeneratorName($generator)) {
+			if(strtolower($args[2]) != Generator::getGeneratorName($generator)){
 				$sender->sendMessage(TextFormat::RED . "Unknown generator: " . $args[2]);
 
 				return true;
@@ -75,9 +73,9 @@ class CreateWorldCommand extends VanillaCommand
 		$sender->getServer()->generateLevel($world, $seed, $generator);
 		$sender->sendMessage(TextFormat::YELLOW . "Level: \"" . $world . "\" Has now been generated.");
 		$sender->sendMessage(TextFormat::GREEN . "Loading Generated Level: " . $world);
-		if($sender->getServer()->loadLevel($world)) {
+		if($sender->getServer()->loadLevel($world)){
 			$sender->sendMessage(TextFormat::GREEN . "Successfully Loaded Level: " . $world);
-		} else {
+		}else{
 			$sender->sendMessage(TextFormat::RED . "Failed Loading Level: " . $world);
 		}
 

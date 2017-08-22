@@ -1,33 +1,31 @@
 <?php
 
 /*
- *     __						    _
- *    / /  _____   _____ _ __ _   _| |
- *   / /  / _ \ \ / / _ \ '__| | | | |
- *  / /__|  __/\ V /  __/ |  | |_| | |
- *  \____/\___| \_/ \___|_|   \__, |_|
- *						      |___/
+ *
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author LeverylTeam
- * @link https://github.com/LeverylTeam
+ * @author iTX Technologies
+ * @link https://itxtech.org
  *
-*/
+ */
 
 namespace pocketmine\level\generator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\format\Chunk;
-use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
-
-use pocketmine\Server;
 
 class Void extends Generator {
 	/** @var ChunkManager */
@@ -65,7 +63,7 @@ class Void extends Generator {
 
 	/**
 	 * @param ChunkManager $level
-	 * @param Random       $random
+	 * @param Random $random
 	 *
 	 * @return mixed|void
 	 */
@@ -88,14 +86,14 @@ class Void extends Generator {
 			for($Z = 0; $Z < 16; ++$Z){
 				for($X = 0; $X < 16; ++$X){
 					$this->chunk->setBiomeId($X, $Z, 1);
-					for($y = 0; $y < Level::Y_MAX; ++$y){
+					for($y = 0; $y < 128; ++$y){
 						$this->chunk->setBlockId($X, $y, $Z, Block::AIR);
 					}
 				}
 			}
 
 			$spawn = $this->getSpawn();
-			if(($chunkX == ($spawn->x >> 4)) and ($chunkZ == ($spawn->z >> 4))){
+			if($spawn->getX() >> 4 === $chunkX and $spawn->getZ() >> 4 === $chunkZ){
 				$this->chunk->setBlockId(0, 64, 0, Block::GRASS);
 			}else{
 				$this->emptyChunk = clone $this->chunk;
@@ -124,7 +122,7 @@ class Void extends Generator {
 	 * @return Vector3
 	 */
 	public function getSpawn(){
-		return new Vector3(256, 72, 256);
+		return new Vector3(128, 72, 128);
 	}
 
 }

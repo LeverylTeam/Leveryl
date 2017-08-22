@@ -15,7 +15,6 @@
  * GNU General Public License for more details.
 */
 
-class ArrayOutOfBoundsException extends OutOfBoundsException
-{
+class ArrayOutOfBoundsException extends OutOfBoundsException {
 
 }

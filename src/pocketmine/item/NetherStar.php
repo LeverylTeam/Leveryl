@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,15 +19,17 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine\item;
 
 
-class NetherStar extends Item
-{
-	public function __construct($meta = 0, $count = 1)
-	{
+class NetherStar extends Item {
+	/**
+	 * NetherStar constructor.
+	 *
+	 * @param int $meta
+	 * @param int $count
+	 */
+	public function __construct($meta = 0, $count = 1){
 		parent::__construct(self::NETHER_STAR, $meta, $count, "Nether Star");
 	}
 }

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____  
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,21 +15,17 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- *
+ * 
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
 
-use pocketmine\network\mcpe\NetworkSession;
+class StartGamePacket extends DataPacket {
 
-class StartGamePacket extends DataPacket
-{
 	const NETWORK_ID = ProtocolInfo::START_GAME_PACKET;
 
 	public $entityUniqueId;
@@ -48,55 +44,31 @@ class StartGamePacket extends DataPacket
 	public $spawnX;
 	public $spawnY;
 	public $spawnZ;
-	public $hasAchievementsDisabled = true;
+	public $hasAchievementsDisabled = 1;
 	public $dayCycleStopTime = -1; //-1 = not stopped, any positive value = stopped at that time
-	public $eduMode = false;
+	public $eduMode = 0;
 	public $rainLevel;
 	public $lightningLevel;
 	public $commandsEnabled;
-	public $isTexturePacksRequired = true;
-	public $levelId = ""; //base64 string, usually the same as world folder name in vanilla
+	public $isTexturePacksRequired = 0;
+	public $levelId = "";
 	public $worldName;
 	public $premiumWorldTemplateId = "";
-	public $unknownBool = false;
-	public $currentTick = 0;
 
-	public function decode()
-	{
-		$this->entityUniqueId = $this->getEntityUniqueId();
-		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		$this->playerGamemode = $this->getVarInt();
-		$this->getVector3f($this->x, $this->y, $this->z);
-		$this->pitch = $this->getLFloat();
-		$this->yaw = $this->getLFloat();
-		$this->seed = $this->getVarInt();
-		$this->dimension = $this->getVarInt();
-		$this->generator = $this->getVarInt();
-		$this->worldGamemode = $this->getVarInt();
-		$this->difficulty = $this->getVarInt();
-		$this->getBlockPosition($this->spawnX, $this->spawnY, $this->spawnZ);
-		$this->hasAchievementsDisabled = $this->getBool();
-		$this->dayCycleStopTime = $this->getVarInt();
-		$this->eduMode = $this->getBool();
-		$this->rainLevel = $this->getLFloat();
-		$this->lightningLevel = $this->getLFloat();
-		$this->commandsEnabled = $this->getBool();
-		$this->isTexturePacksRequired = $this->getBool();
-		/*$gameRulesCount = */
-		$this->getUnsignedVarInt(); //TODO
-		$this->levelId = $this->getString();
-		$this->worldName = $this->getString();
-		$this->premiumWorldTemplateId = $this->getString();
-		$this->unknownBool = $this->getBool();
-		$this->currentTick = $this->getLLong();
+	/**
+	 *
+	 */
+	public function decode(){
 
 	}
 
-	public function encode()
-	{
+	/**
+	 *
+	 */
+	public function encode(){
 		$this->reset();
-		$this->putEntityUniqueId($this->entityUniqueId);
-		$this->putEntityRuntimeId($this->entityRuntimeId);
+		$this->putEntityId($this->entityUniqueId); //EntityUniqueID
+		$this->putEntityId($this->entityRuntimeId); //EntityRuntimeID
 		$this->putVarInt($this->playerGamemode); //client gamemode, other field is world gamemode
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putLFloat($this->pitch);
@@ -106,7 +78,7 @@ class StartGamePacket extends DataPacket
 		$this->putVarInt($this->generator);
 		$this->putVarInt($this->worldGamemode);
 		$this->putVarInt($this->difficulty);
-		$this->putBlockPosition($this->spawnX, $this->spawnY, $this->spawnZ);
+		$this->putBlockCoords($this->spawnX, $this->spawnY, $this->spawnZ);
 		$this->putBool($this->hasAchievementsDisabled);
 		$this->putVarInt($this->dayCycleStopTime);
 		$this->putBool($this->eduMode);
@@ -118,13 +90,6 @@ class StartGamePacket extends DataPacket
 		$this->putString($this->levelId);
 		$this->putString($this->worldName);
 		$this->putString($this->premiumWorldTemplateId);
-		$this->putBool($this->unknownBool);
-		$this->putLLong($this->currentTick);
-	}
-
-	public function handle(NetworkSession $session): bool
-	{
-		return $session->handleStartGame($this);
 	}
 
 }

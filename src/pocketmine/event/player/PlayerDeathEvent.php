@@ -19,8 +19,6 @@
  *
  */
 
-declare(strict_types = 1);
-
 namespace pocketmine\event\player;
 
 use pocketmine\event\entity\EntityDeathEvent;
@@ -28,8 +26,7 @@ use pocketmine\event\TextContainer;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
-class PlayerDeathEvent extends EntityDeathEvent
-{
+class PlayerDeathEvent extends EntityDeathEvent {
 	public static $handlerList = null;
 
 	/** @var TextContainer|string */
@@ -42,63 +39,64 @@ class PlayerDeathEvent extends EntityDeathEvent
 	 * @param Item[] $drops
 	 * @param string|TextContainer $deathMessage
 	 */
-	public function __construct(Player $entity, array $drops, $deathMessage)
-	{
+	public function __construct(Player $entity, array $drops, $deathMessage){
 		parent::__construct($entity, $drops);
 		$this->deathMessage = $deathMessage;
-		$this->keepExperience = $entity->getServer()->getLeverylConfigValue("KeepExperiencePoints", false);
 	}
 
 	/**
 	 * @return Player
 	 */
-	public function getEntity()
-	{
+	public function getEntity(){
 		return $this->entity;
 	}
 
 	/**
 	 * @return Player
 	 */
-	public function getPlayer()
-	{
+	public function getPlayer(){
 		return $this->entity;
 	}
 
 	/**
 	 * @return TextContainer|string
 	 */
-	public function getDeathMessage()
-	{
+	public function getDeathMessage(){
 		return $this->deathMessage;
 	}
 
 	/**
-	 * @param TextContainer|string $deathMessage
+	 * @param string|TextContainer $deathMessage
 	 */
-	public function setDeathMessage($deathMessage)
-	{
+	public function setDeathMessage($deathMessage){
 		$this->deathMessage = $deathMessage;
 	}
 
-	public function getKeepInventory()
-	{
+	/**
+	 * @return bool
+	 */
+	public function getKeepInventory(): bool{
 		return $this->keepInventory;
 	}
 
-	public function setKeepInventory(bool $keepInventory)
-	{
+	/**
+	 * @param bool $keepInventory
+	 */
+	public function setKeepInventory(bool $keepInventory){
 		$this->keepInventory = $keepInventory;
 	}
 
-	public function getKeepExperience()
-	{
+	/**
+	 * @return bool
+	 */
+	public function getKeepExperience(): bool{
 		return $this->keepExperience;
 	}
 
-	public function setKeepExperience(bool $keepExperience)
-	{
+	/**
+	 * @param bool $keepExperience
+	 */
+	public function setKeepExperience(bool $keepExperience){
 		$this->keepExperience = $keepExperience;
 	}
-
 }

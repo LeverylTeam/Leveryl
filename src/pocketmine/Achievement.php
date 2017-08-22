@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types = 1);
-
 namespace pocketmine;
 
 use pocketmine\event\TranslationContainer;
@@ -29,8 +27,7 @@ use pocketmine\utils\TextFormat;
 /**
  * Handles the achievement list and a bit more
  */
-abstract class Achievement
-{
+abstract class Achievement {
 	/**
 	 * @var array[]
 	 */
@@ -108,13 +105,18 @@ abstract class Achievement
 	];
 
 
-	public static function broadcast(Player $player, $achievementId)
-	{
-		if(isset(Achievement::$list[$achievementId])) {
-			$translation = new TranslationContainer("chat.type.achievement", [$player->getDisplayName(), TextFormat::GREEN . Achievement::$list[$achievementId]["name"] . TextFormat::RESET]);
-			if(Server::getInstance()->getConfigBoolean("announce-player-achievements", true) === true) {
+	/**
+	 * @param Player $player
+	 * @param        $achievementId
+	 *
+	 * @return bool
+	 */
+	public static function broadcast(Player $player, $achievementId){
+		if(isset(Achievement::$list[$achievementId])){
+			$translation = new TranslationContainer("chat.type.achievement", [$player->getDisplayName(), TextFormat::GREEN . Achievement::$list[$achievementId]["name"]]);
+			if(Server::getInstance()->getConfigString("announce-player-achievements", true) === true){
 				Server::getInstance()->broadcastMessage($translation);
-			} else {
+			}else{
 				$player->sendMessage($translation);
 			}
 
@@ -124,9 +126,15 @@ abstract class Achievement
 		return false;
 	}
 
-	public static function add($achievementId, $achievementName, array $requires = [])
-	{
-		if(!isset(Achievement::$list[$achievementId])) {
+	/**
+	 * @param       $achievementId
+	 * @param       $achievementName
+	 * @param array $requires
+	 *
+	 * @return bool
+	 */
+	public static function add($achievementId, $achievementName, array $requires = []){
+		if(!isset(Achievement::$list[$achievementId])){
 			Achievement::$list[$achievementId] = [
 				"name"     => $achievementName,
 				"requires" => $requires,

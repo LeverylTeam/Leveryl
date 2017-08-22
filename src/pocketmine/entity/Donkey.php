@@ -54,7 +54,7 @@ class Donkey extends Animal {
 	 */
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Donkey::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
@@ -75,7 +75,7 @@ class Donkey extends Animal {
 	 */
 	public function getDrops(){
 		$drops = [
-			ItemItem::get(ItemItem::LEATHER, 0, mt_rand(1, 2))
+			ItemItem::get(ItemItem::LEATHER, 0, mt_rand(1, 2)),
 		];
 
 		return $drops;

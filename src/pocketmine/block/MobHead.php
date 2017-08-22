@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,8 +18,6 @@
  *
  *
 */
-
-declare(strict_types = 1);
 
 namespace pocketmine\block;
 
@@ -35,29 +33,37 @@ use pocketmine\tile\Skull as SkullTile;
 use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 
-class MobHead extends Flowable
-{
+class MobHead extends Flowable {
 
-	protected $id = self::MOB_HEAD_BLOCK;
+	protected $id = self::SKULL_BLOCK;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * MobHead constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return int
+	 */
+	public function getHardness(){
 		return 1;
 	}
 
-	public function getName()
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Mob Head";
 	}
 
-	protected function recalculateBoundingBox()
-	{
-		//TODO: different bounds depending on attached face (meta)
+	/**
+	 * @return AxisAlignedBB
+	 */
+	protected function recalculateBoundingBox(){
 		return new AxisAlignedBB(
 			$this->x + 0.25,
 			$this->y,
@@ -68,13 +74,24 @@ class MobHead extends Flowable
 		);
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
-	{
-		if($face !== 0) {
+	/**
+	 * @param Item $item
+	 * @param Block $block
+	 * @param Block $target
+	 * @param int $face
+	 * @param float $fx
+	 * @param float $fy
+	 * @param float $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		if($face !== 0){
 			$this->meta = $face;
-			if($face === 1) {
+			if($face === 1){
 				$rot = floor(($player->yaw * 16 / 360) + 0.5) & 0x0F;
-			} else {
+			}else{
 				$rot = $face;
 			}
 			$this->getLevel()->setBlock($block, $this, true);
@@ -86,7 +103,7 @@ class MobHead extends Flowable
 				new IntTag("y", (int)$this->y),
 				new IntTag("z", (int)$this->z),
 			]);
-			if($item->hasCustomName()) {
+			if($item->hasCustomName()){
 				$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 			}
 			/** @var Spawnable $tile */
@@ -98,10 +115,38 @@ class MobHead extends Flowable
 		return false;
 	}
 
-	public function getDrops(Item $item)
-	{
+	/**
+	 * @param int $type
+	 *
+	 * @return int|void
+	 */
+	public function onUpdate($type){
+		$faces = [
+			1 => 0,
+			2 => 3,
+			3 => 2,
+			4 => 5,
+			5 => 4,
+		];
+		if($type === Level::BLOCK_UPDATE_NORMAL){
+			if($this->getSide($faces[$this->meta])->getId() === self::AIR){
+				$this->getLevel()->useBreakOn($this);
+
+				return Level::BLOCK_UPDATE_NORMAL;
+			}
+		}
+
+		return parent::onUpdate($type);
+	}
+
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
 		$tile = $this->level->getTile($this);
-		if($tile instanceof SkullTile) {
+		if($tile instanceof SkullTile){
 			return [
 				[Item::MOB_HEAD, $tile->getType(), 1],
 			];

@@ -27,21 +27,24 @@ use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
 use pocketmine\Player;
 
-class Skeleton extends Monster implements ProjectileSource
-{
+class Skeleton extends Monster implements ProjectileSource {
 	const NETWORK_ID = 34;
 
 	public $dropExp = [5, 5];
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Skeleton";
 	}
 
-	public function spawnTo(Player $player)
-	{
+	/**
+	 * @param Player $player
+	 */
+	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->type = Skeleton::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
@@ -57,11 +60,23 @@ class Skeleton extends Monster implements ProjectileSource
 		parent::spawnTo($player);
 
 		$pk = new MobEquipmentPacket();
-		$pk->entityRuntimeId = $this->getId();
+		$pk->eid = $this->getId();
 		$pk->item = new ItemItem(ItemItem::BOW);
 		$pk->slot = 0;
 		$pk->selectedSlot = 0;
 
 		$player->dataPacket($pk);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getDrops(){
+		$drops = [
+			ItemItem::get(ItemItem::ARROW, 0, mt_rand(0, 2)),
+		];
+		$drops[] = ItemItem::get(ItemItem::BONE, 0, mt_rand(0, 2));
+
+		return $drops;
 	}
 }

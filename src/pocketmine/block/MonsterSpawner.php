@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____			_		_   __  __ _				  __  __ ____ 
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___	  |  \/  |  _ \
+ *  ____            _        _   __  __ _                  __  __ ____ 
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|	 |_|  |_|_|
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -30,42 +30,58 @@ use pocketmine\Player;
 use pocketmine\tile\MobSpawner;
 use pocketmine\tile\Tile;
 
-class MonsterSpawner extends Solid
-{
+class MonsterSpawner extends Solid {
 
 	protected $id = self::MONSTER_SPAWNER;
 
-	public function __construct($meta = 0)
-	{
+	/**
+	 * MonsterSpawner constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return int
+	 */
+	public function getHardness(){
 		return 5;
 	}
 
-	public function getToolType()
-	{
+	/**
+	 * @return int
+	 */
+	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Monster Spawner";
 	}
 
-	public function canBeActivated(): bool
-	{
+	/**
+	 * @return bool
+	 */
+	public function canBeActivated(): bool{
 		return true;
 	}
 
-	public function onActivate(Item $item, Player $player = null)
-	{
-		if($this->getDamage() == 0) {
-			if($item->getId() == Item::SPAWN_EGG) {
+	/**
+	 * @param Item $item
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function onActivate(Item $item, Player $player = null){
+		if($this->getDamage() == 0){
+			if($item->getId() == Item::SPAWN_EGG){
 				$tile = $this->getLevel()->getTile($this);
-				if($tile instanceof MobSpawner) {
+				if($tile instanceof MobSpawner){
 					$this->meta = $item->getDamage();
 					//$this->getLevel()->setBlock($this, $this, true, false);
 					$tile->setEntityId($this->meta);
@@ -78,8 +94,19 @@ class MonsterSpawner extends Solid
 		return false;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null)
-	{
+	/**
+	 * @param Item $item
+	 * @param Block $block
+	 * @param Block $target
+	 * @param int $face
+	 * @param float $fx
+	 * @param float $fy
+	 * @param float $fz
+	 * @param Player|null $player
+	 *
+	 * @return bool
+	 */
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
@@ -90,8 +117,8 @@ class MonsterSpawner extends Solid
 			new IntTag("EntityId", 0),
 		]);
 
-		if($item->hasCustomBlockData()) {
-			foreach($item->getCustomBlockData() as $key => $v) {
+		if($item->hasCustomBlockData()){
+			foreach($item->getCustomBlockData() as $key => $v){
 				$nbt->{$key} = $v;
 			}
 		}
@@ -101,8 +128,12 @@ class MonsterSpawner extends Solid
 		return true;
 	}
 
-	public function getDrops(Item $item): array
-	{
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
 		return [];
 	}
 }

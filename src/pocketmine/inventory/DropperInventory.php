@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __	__  _____
+ *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,18 +23,20 @@ namespace pocketmine\inventory;
 
 use pocketmine\tile\Dropper;
 
-class DropperInventory extends ContainerInventory
-{
-	public function __construct(Dropper $tile)
-	{
+class DropperInventory extends ContainerInventory {
+	/**
+	 * DropperInventory constructor.
+	 *
+	 * @param Dropper $tile
+	 */
+	public function __construct(Dropper $tile){
 		parent::__construct($tile, InventoryType::get(InventoryType::DROPPER));
 	}
 
 	/**
-	 * @return InventoryHolder|Dropper
+	 * @return Dropper
 	 */
-	public function getHolder()
-	{
+	public function getHolder(){
 		return $this->holder;
 	}
 }

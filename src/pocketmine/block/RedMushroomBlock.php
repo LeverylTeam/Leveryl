@@ -2,12 +2,12 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __	__  _____
+ *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |	 | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
  * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /	 ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/	 /_____/
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,46 +24,62 @@ namespace pocketmine\block;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 
-class RedMushroomBlock extends Solid
-{
+
+class RedMushroomBlock extends Solid {
 
 	const RED = 14;
 	const STEM = 10;
 
 	protected $id = self::RED_MUSHROOM_BLOCK;
 
-	public function __construct($meta = 14)
-	{
+	/**
+	 * RedMushroomBlock constructor.
+	 *
+	 * @param int $meta
+	 */
+	public function __construct($meta = 14){
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated(): bool
-	{
+	/**
+	 * @return bool
+	 */
+	public function canBeActivated(): bool{
 		return true;
 	}
 
-	public function getName(): string
-	{
+	/**
+	 * @return string
+	 */
+	public function getName(): string{
 		return "Red Mushroom Block";
 	}
 
-	public function getHardness()
-	{
+	/**
+	 * @return float
+	 */
+	public function getHardness(){
 		return 0.2;
 	}
 
-	public function getResistance()
-	{
+	/**
+	 * @return int
+	 */
+	public function getResistance(){
 		return 1;
 	}
 
-	public function getDrops(Item $item): array
-	{
-		if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0) {
+	/**
+	 * @param Item $item
+	 *
+	 * @return array
+	 */
+	public function getDrops(Item $item): array{
+		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
 			return [
 				[Item::RED_MUSHROOM_BLOCK, self::RED, 1],
 			];
-		} else {
+		}else{
 			return [
 				[Item::RED_MUSHROOM, 0, mt_rand(0, 2)],
 			];

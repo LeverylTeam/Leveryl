@@ -1,14 +1,12 @@
 <p align="center">
-  <img src="https://github.com/LeverylTeam/Leveryl/blob/master/assets/banner.png">
+  <img src="https://raw.githubusercontent.com/LeverylTeam/assets/master/banner.png">
 </p>
-
-## Warning: 32-Bit support is Deprecated!!!
-<!-- #### Notice: Master is the only supported branch. Other branches are usually still W.I.P. and might be un-stable. -->
 
 # Introduction:
 This is an Advanced & Feature Rich Server Software to hopefully Replace [Tesseract](https://www.github.com/TesseractTeam/Tesseract).  
 (They're dead. And this is **NOT** supposed to be taken out of context.)  
-This spoon is based off of [PMMP](https://www.github.com/pmmp/PocketMine-MP) (For Stability)  
+This spoon is based off of [GenisysPro](https://www.github.com/GenisysPro/GenisysPro) (For Stability) which is based on [Genisys](https://www.github.com/ITXTech/Genisys)
+Report any BUGS in the issues section...
 
 NOTE: **The master branch is the only officially supported branch.**
 _All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks._
@@ -17,35 +15,17 @@ _All other branches are in testing and may be unstable. Do not use builds from o
 You can download the latest phar from our [Jenkins Build Server](http://cortexpe.ml:8080/job/Leveryl/lastSuccessfulBuild/) :smile:
 
 # Features:
-- [ ] TO-DO: ***Re-Write the Inventory***.
-- [x] ***Multi-Protocol***
-- [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
-- [X] **EnderPearls**
-- [X] **SplashPotions**
-- [X] **XBoxLive Authentication** (Will not work without [OpenSSL](https://www.github.com/LeverylTeam/PHP7-Binaries) Extension)
-- [X] **Cauldrons**
-- [X] Fully Functional **BrewingStands**
-- [X] **XP System**
-- [X] **EnderChests**
-- [ ] **Shulker Box**
-- [X] **Full Tesseract & PMMP PluginAPI Compatibility**
 - [X] **CustomPotions**
+- [X] **Fully Support UserNames with spaces**
+- [X] **XBox Live Authentication**
+- [X] **Integrated DevTools**
+- [X] **Advanced Player Functions**
+- [X] **GeniAPI v2.0**
+- [X] **LoginPacket variables are accessible Via plugins**
 - [X] **CustomEnchants**
-- [X] Full Implementation of **DevTools**
-- [X] Built-in **Plugin Manager**
-- [ ] 1.0.1 Blocks & Items
-- [X] **Toggleable PluginAPI Version Checking**
-- [X] **Nether**
-- [X] **Toggleable Built-In Devtools & FolderPluginLoader**
-- [X] **Console Only Commands**
-- [X] **Limited Creative**
-- [X] **Weather**  
-- [X] GameRule
-- [X] Spawn Eggs
-- [X] Working Mob Spawners
-- [ ] **RedStone System**
-- [ ] **Minecart Correctly Work**
-- [ ] Toggleable MobAI
+- [X] **Plugin Compatibility for PMMP Plugins**
+- [X] **Plugin Compatibility for Tesseract & Genisys Plugins**
+- [X] **More Advanced & Open MainLogger**
 
 ***Other List Entries are on "leveryl.yml"....***
 
@@ -64,8 +44,8 @@ Which can be downloaded [Here](https://www.microsoft.com/en-us/download/details.
 
 # Acknowledgements / Credits:
 - Leveryl is a "spoon" of **[Pocketmine-MP](http://github.com/pmmp/PocketMine-MP/)**
-- Most of the original code was written by the original PocketMine Team and the new PMMP Team.
-- Some Implementations are ported from [Tesseract](https://www.github.com/TesseractTeam/Tesseract), [GenisysPro](https://www.github.com/GenisysPro/GenisysPro) and [Genisys](https://www.github.com/ITXTech/Genisys)
+- Most of the original code was written by the original [PocketMine](https://github.com/PocketMine) Team and [GenisysPro](https://github.com/GenisysPro).
+- Some Implementations are ported from [Tesseract](https://www.github.com/TesseractTeam/Tesseract), [Prismarine](https://github.com/PrismarineMC/Prismarine) and [Genisys](https://www.github.com/ITXTech/Genisys)
 - Ported files' authors are stated inside the file
 
 # License:
