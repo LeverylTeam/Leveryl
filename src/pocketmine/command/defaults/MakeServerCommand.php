@@ -30,7 +30,7 @@ class MakeServerCommand extends VanillaCommand
 		if(!file_exists(Server::getInstance()->getPluginPath() . "Leveryl" . DIRECTORY_SEPARATOR)) {
 			mkdir(Server::getInstance()->getPluginPath() . "Leveryl" . DIRECTORY_SEPARATOR, 0777);
 		}
-		$pharPath = Server::getInstance()->getPluginPath() . "Leveryl" . DIRECTORY_SEPARATOR . $server->getName() . "_v" . $server->getPocketMineVersion() . ".phar";
+		$pharPath = Server::getInstance()->getPluginPath() . "Leveryl" . DIRECTORY_SEPARATOR . "Leveryl_v" . $server->getVersion() . ".phar";
 		if(file_exists($pharPath)) {
 			$sender->sendMessage("[LeverylDevTools] " . "Phar file already exists, overwriting...");
 			@unlink($pharPath);
