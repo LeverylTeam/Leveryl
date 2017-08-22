@@ -302,7 +302,7 @@ class Block extends Position implements BlockIds, Metadatable {
 			self::$list[self::LEVER] = Lever::class;
 			self::$list[self::DAYLIGHT_SENSOR] = DaylightDetector::class;
 			self::$list[self::DAYLIGHT_SENSOR_INVERTED] = DaylightDetectorInverted::class;
-			self::$list[self::NOTEBLOCK] = Noteblock::class;
+			self::$list[self::NOTEBLOCK] = NoteBlock::class;
 			self::$list[self::SKULL_BLOCK] = SkullBlock::class;
 			self::$list[self::NETHER_QUARTZ_ORE] = NetherQuartzOre::class;
 			self::$list[self::ACTIVATOR_RAIL] = ActivatorRail::class;
@@ -323,13 +323,8 @@ class Block extends Position implements BlockIds, Metadatable {
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){
-					if($class == "NoteBlock"){
-						/** @var Noteblock */
-						$block = new \pocketmine\block\Noteblock();
-					}else{
-						/** @var Block $block */
-						$block = new $class();
-					}
+					/** @var Block $block */
+					$block = new $class();
 
 					for($data = 0; $data < 16; ++$data){
 						self::$fullList[($id << 4) | $data] = new $class($data);

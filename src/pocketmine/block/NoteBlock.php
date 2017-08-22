@@ -27,50 +27,37 @@ use pocketmine\level\sound\NoteblockSound;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 
-class Noteblock extends Solid implements ElectricalAppliance {
+class NoteBlock extends Solid
+{
 	protected $id = self::NOTEBLOCK;
 
-	/**
-	 * Noteblock constructor.
-	 *
-	 * @param int $meta
-	 */
-	public function __construct($meta = 0){
+	public function __construct($meta = 0)
+	{
 		$this->meta = $meta;
 	}
 
-	/**
-	 * @return float
-	 */
-	public function getHardness(){
+	public function getHardness()
+	{
 		return 0.8;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getResistance(){
+	public function getResistance()
+	{
 		return 4;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getToolType(){
+	public function getToolType()
+	{
 		return Tool::TYPE_AXE;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function canBeActivated(): bool{
+	public function canBeActivated(): bool
+	{
 		return true;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getStrength(){
+	public function getStrength()
+	{
 		if($this->meta < 24) $this->meta++;
 		else $this->meta = 0;
 		$this->getLevel()->setBlock($this, $this);
@@ -78,12 +65,10 @@ class Noteblock extends Solid implements ElectricalAppliance {
 		return $this->meta * 1;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getInstrument(){
+	public function getInstrument()
+	{
 		$below = $this->getSide(Vector3::SIDE_DOWN);
-		switch($below->getId()){
+		switch($below->getId()) {
 			case Block::WOOD:
 			case Block::WOOD2:
 			case Block::WOODEN_PLANK:
@@ -158,27 +143,24 @@ class Noteblock extends Solid implements ElectricalAppliance {
 		return NoteblockSound::INSTRUMENT_PIANO;
 	}
 
-	/**
-	 * @param Item $item
-	 * @param Player|null $player
-	 *
-	 * @return bool
-	 */
-	public function onActivate(Item $item, Player $player = null){
+	public function onActivate(Item $item, Player $player = null)
+	{
 		$up = $this->getSide(Vector3::SIDE_UP);
-		if($up->getId() == 0){
+		if($up->getId() == 0) {
 			$this->getLevel()->addSound(new NoteblockSound($this, $this->getInstrument(), $this->getStrength()));
 
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getName(): string{
+	public function getName(): string
+	{
 		return "Noteblock";
+	}
+
+	public function getFuelTime() : int{
+		return 300;
 	}
 }
