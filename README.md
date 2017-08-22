@@ -5,7 +5,7 @@
 # Introduction:
 This is an Advanced & Feature Rich Server Software to hopefully Replace [Tesseract](https://www.github.com/TesseractTeam/Tesseract).  
 (They're dead. And this is **NOT** supposed to be taken out of context.)  
-This spoon is based off of [GenisysPro](https://www.github.com/GenisysPro/GenisysPro) (For Stability) which is based on [Genisys](https://www.github.com/ITXTech/Genisys)
+This spoon is based off of [GenisysPro](https://www.github.com/GenisysPro/GenisysPro) (For Stability) which is based on [Genisys](https://www.github.com/ITXTech/Genisys)<br />
 Report any BUGS in the issues section...
 
 NOTE: **The master branch is the only officially supported branch.**
