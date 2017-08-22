@@ -325,7 +325,7 @@ class Block extends Position implements BlockIds, Metadatable {
 				if($class !== null){
 					if($class == "NoteBlock"){
 						/** @var Noteblock */
-						$block = new Noteblock();
+						$block = new \pocketmine\block\Noteblock();
 					}else{
 						/** @var Block $block */
 						$block = new $class();
