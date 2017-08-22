@@ -323,8 +323,13 @@ class Block extends Position implements BlockIds, Metadatable {
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){
-					/** @var Block $block */
-					$block = new $class();
+					if($class == "NoteBlock"){
+						/** @var Noteblock */
+						$block = new Noteblock();
+					}else{
+						/** @var Block $block */
+						$block = new $class();
+					}
 
 					for($data = 0; $data < 16; ++$data){
 						self::$fullList[($id << 4) | $data] = new $class($data);
