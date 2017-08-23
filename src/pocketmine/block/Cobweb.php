@@ -83,7 +83,7 @@ class Cobweb extends Flowable {
 				[Item::COBWEB, 0, 1],
 			];
 		}elseif($item->isSword() >= Tool::TIER_WOODEN){
-			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+			if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0){
 				return [
 					[Item::COBWEB, 0, 1],
 				];

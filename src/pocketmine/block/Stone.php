@@ -85,7 +85,7 @@ class Stone extends Solid {
 	 */
 	public function getDrops(Item $item): array{
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
-			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0 and $this->getDamage() === 0){
+			if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0 and $this->getDamage() === 0){
 				return [
 					[Item::STONE, 0, 1],
 				];

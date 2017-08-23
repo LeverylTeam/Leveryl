@@ -52,7 +52,7 @@ class Potato extends Crops {
 	public function getDrops(Item $item): array{
 		$drops = [];
 		if($this->meta >= 0x07){
-			$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+			$fortunel = $item->getEnchantmentLevel(Enchantment::FORTUNE);
 			$fortunel = $fortunel > 3 ? 3 : $fortunel;
 			$drops[] = [Item::POTATO, 0, mt_rand(1, 4 + $fortunel)];
 		}else{

@@ -74,7 +74,7 @@ class BrownMushroomBlock extends Solid {
 	 * @return array
 	 */
 	public function getDrops(Item $item): array{
-		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+		if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0){
 			return [
 				[Item::BROWN_MUSHROOM_BLOCK, self::BROWN, 1],
 			];

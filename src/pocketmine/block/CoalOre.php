@@ -64,12 +64,12 @@ class CoalOre extends Solid {
 	 */
 	public function getDrops(Item $item): array{
 		if($item->isPickaxe() >= 1){
-			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+			if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0){
 				return [
 					[Item::COAL_ORE, 0, 1],
 				];
 			}else{
-				$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+				$fortunel = $item->getEnchantmentLevel(Enchantment::FORTUNE);
 				$fortunel = $fortunel > 3 ? 3 : $fortunel;
 				$times = [1, 1, 2, 3, 4];
 				$time = $times[mt_rand(0, $fortunel + 1)];

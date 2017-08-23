@@ -80,12 +80,12 @@ class RedstoneOre extends Solid {
 	 */
 	public function getDrops(Item $item): array{
 		if($item->isPickaxe() >= Tool::TIER_IRON){
-			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+			if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0){
 				return [
 					[Item::REDSTONE_ORE, 0, 1],
 				];
 			}else{
-				$fortuneL = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+				$fortuneL = $item->getEnchantmentLevel(Enchantment::FORTUNE);
 				$fortuneL = $fortuneL > 3 ? 3 : $fortuneL;
 
 				return [

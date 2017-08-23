@@ -308,7 +308,7 @@ class EnchantInventory extends TemporaryInventory {
 					continue;
 				}
 
-				if(($id === Enchantment::TYPE_MINING_SILK_TOUCH and $enchantment->getId() === Enchantment::TYPE_MINING_FORTUNE) or ($id === Enchantment::TYPE_MINING_FORTUNE and $enchantment->getId() === Enchantment::TYPE_MINING_SILK_TOUCH)){
+				if(($id === Enchantment::SILK_TOUCH and $enchantment->getId() === Enchantment::FORTUNE) or ($id === Enchantment::FORTUNE and $enchantment->getId() === Enchantment::SILK_TOUCH)){
 					//Protection
 					unset($enchantments[$id]);
 					continue;

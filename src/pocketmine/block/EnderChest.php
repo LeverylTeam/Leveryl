@@ -182,7 +182,7 @@ class EnderChest extends Transparent {
 	 * @return array
 	 */
 	public function getDrops(Item $item): array{
-		if($item->hasEnchantment(Enchantment::TYPE_MINING_SILK_TOUCH)){
+		if($item->hasEnchantment(Enchantment::SILK_TOUCH)){
 			return [
 				[$this->id, 0, 1],
 			];

@@ -59,10 +59,10 @@ class Leaves2 extends Leaves {
 	 */
 	public function getDrops(Item $item): array{
 		$drops = [];
-		if($item->isShears() or $item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+		if($item->isShears() or $item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0){
 			$drops[] = [$this->id, $this->meta & 0x01, 1];
 		}else{
-			$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+			$fortunel = $item->getEnchantmentLevel(Enchantment::FORTUNE);
 			$fortunel = min(3, $fortunel);
 			$rates = [20, 16, 12, 10];
 			if(mt_rand(1, $rates[$fortunel]) === 1){ //Saplings

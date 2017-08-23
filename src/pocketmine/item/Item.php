@@ -1197,7 +1197,7 @@ class Item implements ItemIds, \JsonSerializable {
 	 */
 	public function getModifyAttackDamage(Entity $target){
 		$rec = $this->getAttackDamage();
-		$sharpL = $this->getEnchantmentLevel(Enchantment::TYPE_WEAPON_SHARPNESS);
+		$sharpL = $this->getEnchantmentLevel(Enchantment::SHARPNESS);
 		if($sharpL > 0){
 			$rec += 0.5 * ($sharpL + 1);
 		}
@@ -1206,13 +1206,13 @@ class Item implements ItemIds, \JsonSerializable {
 			$target instanceof Witch or $target instanceof PigZombie
 		){
 			//SMITE    wither skeletons
-			$rec += 2.5 * $this->getEnchantmentLevel(Enchantment::TYPE_WEAPON_SMITE);
+			$rec += 2.5 * $this->getEnchantmentLevel(Enchantment::SMITE);
 
 		}elseif($target instanceof Spider or $target instanceof CaveSpider or
 			$target instanceof Silverfish
 		){
 			//Bane of Arthropods    wither skeletons
-			$rec += 2.5 * $this->getEnchantmentLevel(Enchantment::TYPE_WEAPON_ARTHROPODS);
+			$rec += 2.5 * $this->getEnchantmentLevel(Enchantment::BANE_OF_ARTHROPODS);
 
 		}
 

@@ -72,7 +72,7 @@ abstract class Tool extends Item {
 			return true;
 		}
 
-		$unbreakingl = $this->getEnchantmentLevel(Enchantment::TYPE_MINING_DURABILITY);
+		$unbreakingl = $this->getEnchantmentLevel(Enchantment::UNBREAKING);
 		$unbreakingl = $unbreakingl > 3 ? 3 : $unbreakingl;
 		if(mt_rand(1, $unbreakingl + 1) !== 1){
 			return true;

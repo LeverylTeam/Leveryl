@@ -68,7 +68,7 @@ class Mycelium extends Solid {
 	 * @return array
 	 */
 	public function getDrops(Item $item): array{
-		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+		if($item->getEnchantmentLevel(Enchantment::SILK_TOUCH) > 0){
 			return [
 				[Item::MYCELIUM, 0, 1],
 			];

@@ -52,7 +52,7 @@ class Wheat extends Crops {
 	public function getDrops(Item $item): array{
 		$drops = [];
 		if($this->meta >= 0x07){
-			$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+			$fortunel = $item->getEnchantmentLevel(Enchantment::FORTUNE);
 			$fortunel = $fortunel > 3 ? 3 : $fortunel;
 			$drops[] = [Item::WHEAT, 0, 1];
 			$drops[] = [Item::WHEAT_SEEDS, 0, mt_rand(0, 3 + $fortunel)];
