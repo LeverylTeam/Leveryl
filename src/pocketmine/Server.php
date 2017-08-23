@@ -2970,7 +2970,7 @@ class Server {
 		for($i = 1; $i < count($trace); $i++){
 			if(isset($trace[$i]))
 				if($class != $trace[$i]['class'])
-					if(!is_null($trace[$i]['class']))return $trace[$i]['class'];
+					return $trace[$i]['class'] ?? "null";
 		}
 
 		return "null";
