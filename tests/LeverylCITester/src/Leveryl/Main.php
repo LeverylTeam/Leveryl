@@ -26,6 +26,7 @@ namespace Leveryl;
 
 use Leveryl\network\SpecterInterface;
 use pocketmine\event\Listener;
+//use pocketmine\event\server\StartupFinishEvent;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat;
 
@@ -54,14 +55,17 @@ class Main extends PluginBase implements Listener
 
         $this->getServer()->getNetwork()->registerInterface($this->interface);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
-		
-		$this->getLogger()->notice("Running test #" . (++$this->currentTestNumber) . " (PlayerJoin Test)");
+    }
+
+    /*public function onServerStartup(StartupFinishEvent $ev)
+    {
+        $this->getLogger()->notice("Running test #" . (++$this->currentTestNumber) . " (PlayerJoin Test)");
         if ($this->getInterface()->openSession("TestPlayer", "CITESTER", 19133)) {
             $this->getLogger()->notice("Finished test #" . $this->currentTestNumber . " (PlayerJoin Test): PASS");
         } else {
             $this->getLogger()->notice("Finished test #" . $this->currentTestNumber . " (PlayerJoin Test): FAIL");
         }
-    }
+    }*/
 
     /**
      * @return Test|null
