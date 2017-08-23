@@ -49,7 +49,7 @@ class TestAsyncTask extends AsyncTask{
 	public static $destroyed = false;
 
 	public function onRun(){
-		usleep(50 * 1000); //1 server tick
+		usleep(10000); //1 server tick
 	}
 
 	public function __destruct(){
