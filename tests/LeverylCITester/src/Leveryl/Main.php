@@ -50,8 +50,9 @@ class Main extends PluginBase implements Listener
     {
         $this->interface = new SpecterInterface($this);
 
-        $this->getServer()->getScheduler()->scheduleRepeatingTask(new CheckTestCompletionTask($this), 10);
-        $this->waitingTests[] = new tests\AsyncTaskMemoryLeakTest($this);
+        //$this->getServer()->getScheduler()->scheduleRepeatingTask(new CheckTestCompletionTask($this), 10);
+        // $this->waitingTests[] = new tests\AsyncTaskMemoryLeakTest($this); RIP
+		//FIXME: Bring this back soon.
 
         $this->getServer()->getNetwork()->registerInterface($this->interface);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
