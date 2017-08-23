@@ -1,23 +1,22 @@
 <?php
 
-/**
- *
- *  _____   _____   __   _   _   _____  __    __  _____
- * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
- * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
- *
+/*
+ *   ____  _            _      _       _     _
+ *  |  _ \| |          | |    (_)     | |   | |
+ *  | |_) | |_   _  ___| |     _  __ _| |__ | |_
+ *  |  _ <| | | | |/ _ \ |    | |/ _` | '_ \| __|
+ *  | |_) | | |_| |  __/ |____| | (_| | | | | |_
+ *  |____/|_|\__,_|\___|______|_|\__, |_| |_|\__|
+ *                                __/ |
+ *                               |___/
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author iTX Technologies
- * @link   https://itxtech.org
- *
- */
+ * @author BlueLightJapan Team
+ * 
+*/
 
 namespace pocketmine\block;
 
@@ -25,50 +24,48 @@ use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 
-class Rail extends Flowable {
+class Rail extends Flowable{
 
 	const STRAIGHT_EAST_WEST = 0;
 	const STRAIGHT_NORTH_SOUTH = 1;
-	const SLOPED_ASCENDING_NORTH = 2;
-	const SLOPED_ASCENDING_SOUTH = 3;
-	const SLOPED_ASCENDING_EAST = 4;
-	const SLOPED_ASCENDING_WEST = 5;
+	const ASCENDING_NORTH = 2;
+	const ASCENDING_SOUTH = 3;
+	const ASCENDING_EAST = 4;
+	const ASCENDING_WEST = 5;
 	const CURVED_NORTH_WEST = 7;
 	const CURVED_SOUTH_WEST = 6;
 	const CURVED_SOUTH_EAST = 9;
 	const CURVED_NORTH_EAST = 8;
 
-
+/*
+	const STRAIGHT_NORTH_SOUTH = 0;
+	const STRAIGHT_EAST_WEST = 1;
+	const ASCENDING_EAST = 2;
+	const ASCENDING_WEST = 3;
+	const ASCENDING_NORTH = 4;
+	const ASCENDING_SOUTH = 5;
+	const CURVE_SOUTHEAST = 6;
+	const CURVE_SOUTHWEST = 7;
+	const CURVE_NORTHWEST = 8;
+	const CURVE_NORTHEAST = 9;*/
 	protected $id = self::RAIL;
 	/** @var Vector3 [] */
 	protected $connected = [];
 
-	/**
-	 * Rail constructor.
-	 *
-	 * @param int $meta
-	 */
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getName(): string{
+	public function getName(){
 		return "Rail";
 	}
 
-	/**
-	 * @return bool
-	 */
 	protected function update(){
 		return true;
 	}
 
 	/**
 	 * @param Rail $block
-	 *
 	 * @return bool
 	 */
 	public function canConnect(Rail $block){
@@ -79,29 +76,16 @@ class Rail extends Flowable {
 		if(count($blocks = self::check($this)) == 2){
 			return false;
 		}
-
 		return $blocks;
 	}
 
-	/**
-	 * @param Block $block
-	 *
-	 * @return bool|Block
-	 */
 	public function isBlock(Block $block){
 		if($block instanceof Air){
 			return false;
 		}
-
 		return $block;
 	}
 
-	/**
-	 * @param Rail $rail
-	 * @param bool $force
-	 *
-	 * @return bool
-	 */
 	public function connect(Rail $rail, $force = false){
 
 		if(!$force){
@@ -135,27 +119,15 @@ class Rail extends Flowable {
 					break;
 			}
 		}
+		if($this instanceof PoweredRail && $this->isPowered()) $this->meta += 8;
 		$this->level->setBlock($this, Block::get($this->id, $this->meta), true, true);
-
 		return true;
 	}
 
-	/**
-	 * @param Item $item
-	 * @param Block $block
-	 * @param Block $target
-	 * @param int $face
-	 * @param float $fx
-	 * @param float $fy
-	 * @param float $fz
-	 * @param Player|null $player
-	 *
-	 * @return bool
-	 */
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$downBlock = $this->getSide(Vector3::SIDE_DOWN);
 
-		if($downBlock instanceof Rail or !$this->isBlock($downBlock)){//判断是否可以放置
+		if($downBlock instanceof Rail or !$this->isBlock($downBlock)){
 			return false;
 		}
 
@@ -204,14 +176,13 @@ class Rail extends Flowable {
 			default:
 				break;
 		}
+		if($this instanceof PoweredRail && $this->isPowered()) $this->meta += 8;
 		$this->level->setBlock($this, Block::get($this->id, $this->meta), true, true);
-
 		return true;
 	}
 
 	/**
 	 * @param Rail $rail
-	 *
 	 * @return array
 	 */
 	public static function check(Rail $rail){
@@ -225,7 +196,7 @@ class Rail extends Flowable {
 			[[1, 0], [0, 1]],
 			[[0, 1], [-1, 0]],
 			[[-1, 0], [0, -1]],
-			[[0, -1], [1, 0]],
+			[[0, -1], [1, 0]]
 		];
 		$arrayY = [0, 1, -1];
 		$blocks = $array[$rail->getDamage()];
@@ -248,28 +219,22 @@ class Rail extends Flowable {
 				break;
 			}
 		}
-
 		return $connected;
 	}
 
-	/**
-	 * @return float
-	 */
-	public function getHardness(){
+	public function getHardness() {
 		return 0.7;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getResistance(){
 		return 3.5;
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function canPassThrough(){
+		return true;
+	}
+
+	public function isRailBlock(){
 		return true;
 	}
 }
