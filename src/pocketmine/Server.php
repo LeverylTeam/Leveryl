@@ -1775,6 +1775,7 @@ class Server {
 				$this->getLogger()->info("§cOpen§8SSL§a Extension Loaded!");
 				if($this->onlineMode){
 					$this->getLogger()->info("§aX§7Box§f Live Authentication §aEnabled!");
+					$this->onlineMode = true;
 				}else{
 					$this->getLogger()->notice("The §cOpen§8SSL§e extension is loaded. But online mode seems to be turned off.");
 					$this->getLogger()->notice("You can enable it on server.properties ;)");
@@ -1782,6 +1783,7 @@ class Server {
 			}else{
 				$this->getLogger()->warning("§cOpen§8SSL§e Not Found! You'll need this extension for XBox Live Authentication.");
 				$this->setConfigBool("online-mode", false);
+				$this->onlineMode = false;
 			}
 
 			$this->forceLanguage = $this->getProperty("settings.force-language", false);

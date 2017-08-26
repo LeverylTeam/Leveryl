@@ -128,6 +128,7 @@ use pocketmine\network\mcpe\protocol\EntityEventPacket;
 use pocketmine\network\mcpe\protocol\FullChunkDataPacket;
 use pocketmine\network\mcpe\protocol\InteractPacket;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
+use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\network\mcpe\protocol\MovePlayerPacket;
 use pocketmine\network\mcpe\protocol\PlayerActionPacket;
 use pocketmine\network\mcpe\protocol\PlayStatusPacket;
@@ -231,6 +232,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public $guiscale;
 	public $controls;
 	public $LanguageCode;
+	public $xblauth = false;
 
 	private $loaderId = null;
 
@@ -2269,17 +2271,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		foreach($this->server->getOnlinePlayers() as $p){
 			if($p !== $this and strtolower($p->getName()) === strtolower($this->getName())){
-				if($p->kick("logged in from another location") === false){
-					$this->close($this->getLeaveMessage(), "Logged in from another location");
+				$this->close($this->getLeaveMessage(), "Logged in from another location");
 
-					return;
-				}
+				return;
 			}elseif($p->loggedIn and $this->getUniqueId()->equals($p->getUniqueId())){
-				if($p->kick("logged in from another location") === false){
-					$this->close($this->getLeaveMessage(), "Logged in from another location");
+				$this->close($this->getLeaveMessage(), "Logged in from another location");
 
-					return;
-				}
+				return;
 			}
 		}
 		$this->setNameTag($this->getDisplayName());
@@ -2484,9 +2482,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->guiscale = $packet->guiscale;
 				$this->controls = $packet->controls;
 				$this->LanguageCode = $packet->LanguageCode;
-				if($this->server->getConfigBoolean("online-mode", false) && $packet->identityPublicKey === null){
+
+				if($this->server->onlineMode && $packet->identityPublicKey === null){
 					$this->kick("disconnectionScreen.notAuthenticated", false);
+					$this->xblauth = false;
 					break;
+				}
+
+				if($this->server->onlineMode){
+					$this->xblauth = true;
 				}
 
 				if(count($this->server->getOnlinePlayers()) >= $this->server->getMaxPlayers() and $this->kick("disconnectionScreen.serverFull", false)){
@@ -3325,6 +3329,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 								$this->inventory->sendContents($this);
 							}
 						}
+						break;
+					case EntityEventPacket::EATING:
+						$slot = $this->inventory->getItemInHand();
+
+						if($slot->canBeConsumed()) {
+							$this->level->broadcastLevelSoundEvent($this->add(0, 2, 0), LevelSoundEventPacket::SOUND_EAT);
+						}
+						break;
+					default:
+						$this->server->getLogger()->debug("UNHANDLED EVENT: " . $packet->event);
 						break;
 				}
 				break;
@@ -4762,5 +4776,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	public function getLowerCaseName() : string {
 		return $this->iusername;
+	}
+
+	public function isXboxAuthenticated() : bool {
+		if(!extension_loaded("openssl")){
+			$this->server->getLogger()->customsend("OpenSSL Extension isn't loaded", "EXCEPTION", TextFormat::DARK_RED);
+			return false;
+		}
+		return $this->xblauth;
 	}
 }

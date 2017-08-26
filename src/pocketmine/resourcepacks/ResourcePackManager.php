@@ -85,7 +85,7 @@ class ResourcePackManager {
 
 		$this->serverForceResources = (bool)$this->resourcePacksConfig->get("force_resources", false);
 
-		$this->server->getLogger()->info($this->server->getLanguage()->translateString("pocketmine.resourcepacks.load"));
+		//$this->server->getLogger()->info($this->server->getLanguage()->translateString("pocketmine.resourcepacks.load"));
 
 		foreach($this->resourcePacksConfig->get("resource_stack", []) as $pos => $pack){
 			try{
