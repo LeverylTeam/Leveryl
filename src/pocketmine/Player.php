@@ -983,10 +983,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$pk->y = $this->y;
 				$pk->z = $this->z;
 				$this->dataPacket($pk);
-				$this->shouldSendStatus = true; // Not Instantly... So it adds a Vanilla Feel to it.
-				/*$pk1 = new PlayStatusPacket();
+				//$this->shouldSendStatus = true; // Not Instantly... So it adds a Vanilla Feel to it.
+				$pk1 = new PlayStatusPacket();
 				$pk1->status = PlayStatusPacket::PLAYER_SPAWN;
-				$this->dataPacket($pk1);*/
+				$this->dataPacket($pk1);
 			}
 			$targetLevel->getWeather()->sendWeather($this);
 
@@ -4784,5 +4784,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return false;
 		}
 		return $this->xblauth;
+	}
+
+	public function sendPlayStatus(int $status){
+		$pk = new PlayStatusPacket();
+		$pk->status = $status;
+		$this->dataPacket($pk);
 	}
 }
