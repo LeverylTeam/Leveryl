@@ -80,6 +80,7 @@ use pocketmine\level\generator\PopulationTask;
 use pocketmine\level\particle\DestroyBlockParticle;
 use pocketmine\level\particle\Particle;
 use pocketmine\level\sound\BlockPlaceSound;
+use pocketmine\level\sound\ExplodeSound;
 use pocketmine\level\sound\Sound;
 use pocketmine\level\weather\Weather;
 use pocketmine\math\AxisAlignedBB;
@@ -2447,7 +2448,7 @@ class Level implements ChunkManager, Metadatable {
 	 * @param int $z
 	 * @param Player $p
 	 */
-	public function sendLighting(int $x, int $y, int $z, Player $p){
+	public function sendLightning(int $x, int $y, int $z, Player $p){
 		$pk = new AddEntityPacket();
 		$pk->type = Lightning::NETWORK_ID;
 		$pk->eid = mt_rand(10000000, 100000000);

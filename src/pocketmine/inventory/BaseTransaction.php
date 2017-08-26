@@ -30,6 +30,8 @@ class BaseTransaction implements Transaction {
 	/** @var int */
 	protected $slot;
 	/** @var Item */
+	protected $sourceItem;
+	/** @var Item */
 	protected $targetItem;
 	/** @var float */
 	protected $creationTime;
@@ -84,6 +86,13 @@ class BaseTransaction implements Transaction {
 	 */
 	public function getTargetItem(){
 		return clone $this->targetItem;
+	}
+
+	/**
+	 * @return Item
+	 */
+	public function getSourceItem(){
+		return clone $this->getInventory()->getItem($this->slot);
 	}
 
 	/**

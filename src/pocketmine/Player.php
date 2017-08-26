@@ -2458,6 +2458,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		switch($packet::NETWORK_ID){
+			case ProtocolInfo::LEVEL_SOUND_EVENT_PACKET:
+				//TODO: Add the Event for this.
+				$this->getLevel()->addChunkPacket($this->chunk->getX(), $this->chunk->getZ(), $packet);
+				break;
 			case ProtocolInfo::PLAYER_INPUT_PACKET:
 				break;
 			case ProtocolInfo::LOGIN_PACKET:
@@ -3792,6 +3796,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				break;
 			default:
+				$this->server->getLogger()->debug("Unhandled " . $packet->getName() . " (ID: " . $packet::NETWORK_ID . ") received from " . $this->getName() . ": 0x" . bin2hex($packet->buffer));
 				break;
 		}
 
@@ -4753,5 +4758,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		parent::addEffect($effect);
+	}
+
+	public function getLowerCaseName() : string {
+		return $this->iusername;
 	}
 }

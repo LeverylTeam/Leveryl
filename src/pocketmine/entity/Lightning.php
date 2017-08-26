@@ -22,6 +22,7 @@
 namespace pocketmine\entity;
 
 use pocketmine\block\Liquid;
+use pocketmine\entity\Living;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\math\Vector3;
@@ -109,11 +110,13 @@ class Lightning extends Animal {
 			if(isset($v3)) $this->getLevel()->setBlock($v3, $fire);
 
 			foreach($this->level->getNearbyEntities($this->boundingBox->grow(4, 3, 4), $this) as $entity){
-				if($entity instanceof Player){
+				if($entity instanceof Living){
 					$damage = mt_rand(8, 20);
 					$ev = new EntityDamageByEntityEvent($this, $entity, EntityDamageByEntityEvent::CAUSE_LIGHTNING, $damage);
 					if($entity->attack($ev->getFinalDamage(), $ev) === true){
-						$ev->useArmors();
+						if($entity instanceof Player){
+							$ev->useArmors();
+						}
 					}
 					$entity->setOnFire(mt_rand(3, 8));
 				}

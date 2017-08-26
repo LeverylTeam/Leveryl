@@ -1868,8 +1868,9 @@ class Server {
 			//$this->logger->info($this->getLanguage()->translateString("pocketmine.server.networkStart", [$this->getIp() === "" ? "*" : $this->getIp(), $this->getPort()]));
 			$this->serverID = Utils::getMachineUniqueId($this->getIp() . $this->getPort());
 
-			$this->getLogger()->debug("Server unique id: " . $this->getServerUniqueId());
-			$this->getLogger()->debug("Machine unique id: " . Utils::getMachineUniqueId());
+			$this->getLogger()->debug("Server unique ID: " . $this->getServerUniqueId());
+			$this->getLogger()->debug("Machine unique ID: " . Utils::getMachineUniqueId());
+			$this->getLogger()->debug("Process ID: " . getmypid());
 
 			$this->network = new Network($this);
 			$this->network->setName($this->getMotd());

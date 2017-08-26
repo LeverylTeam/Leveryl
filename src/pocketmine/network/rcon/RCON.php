@@ -59,7 +59,7 @@ class RCON {
 		$this->server = $server;
 		$this->workers = [];
 		$this->password = (string)$password;
-		$this->server->getLogger()->info("Starting remote control listener");
+		//$this->server->getLogger()->info("Starting remote control listener");
 		if($this->password === ""){
 			$this->server->getLogger()->critical("RCON can't be started: Empty password");
 
