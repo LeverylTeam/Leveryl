@@ -56,6 +56,8 @@ class Main extends PluginBase implements Listener
 
         $this->getServer()->getNetwork()->registerInterface($this->interface);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
+		
+		$this->getServer()->shutdown();
     }
 
     /*public function onServerStartup(StartupFinishEvent $ev)
