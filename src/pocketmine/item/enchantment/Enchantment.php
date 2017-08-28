@@ -192,7 +192,7 @@ class Enchantment {
 
 	public static function registerEnchantment(int $id, String $name, int $rarity, int $activationType, int $slot){
 		if(isset(self::$enchantments[$id])){
-			Server::getInstance()->getLogger()->debug("Unable to register enchantment with id $id.");
+			Server::getInstance()->getLogger()->warning("Unable to register enchantment with id $id.");
 
 			return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
 		}
