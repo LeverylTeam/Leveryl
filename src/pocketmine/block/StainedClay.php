@@ -21,7 +21,7 @@
 
 namespace pocketmine\block;
 
-use pocketmine\item\Item;
+
 use pocketmine\item\Tool;
 
 class StainedClay extends Solid {
@@ -94,18 +94,4 @@ class StainedClay extends Solid {
 		return $names[$this->meta & 0x0f];
 	}
 
-	/**
-	* @param Item $item
-	*
-	* @return array
-	*/
-	public function getDrops(Item $item) : array{
-		if($item->isPickaxe()){
-			return [
-				[Item::STAINED_CLAY,0,1],
-			];
-		}else{
-			return [];
-		}
-	}
 }
