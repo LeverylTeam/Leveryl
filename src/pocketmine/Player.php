@@ -2652,9 +2652,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->forceMovement = new Vector3($this->x, $this->y, $this->z);
 				}
 
-				if($this->teleportPosition !== null or ($this->forceMovement instanceof Vector3 and ($newPos->distanceSquared($this->forceMovement) > 0.1 or $revert))){
-					$this->sendPosition($this->forceMovement, $packet->yaw, $packet->pitch, MovePlayerPacket::MODE_RESET);
-				}else{
+				//if($this->teleportPosition !== null or ($this->forceMovement instanceof Vector3 and ($newPos->distanceSquared($this->forceMovement) > 0.1 or $revert))){
+				//	$this->sendPosition($this->forceMovement, $packet->yaw, $packet->pitch, MovePlayerPacket::MODE_RESET);
+				//}else{
 					$packet->yaw %= 360;
 					$packet->pitch %= 360;
 
@@ -2662,10 +2662,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$packet->yaw += 360;
 					}
 
-					$this->setRotation($packet->yaw, $packet->pitch);
-					$this->newPosition = $newPos;
+				//	$this->setRotation($packet->yaw, $packet->pitch);
+				//	$this->newPosition = $newPos;
 					$this->forceMovement = null;
-				}
+				//}
 
 				break;
 			case ProtocolInfo::ADVENTURE_SETTINGS_PACKET:
