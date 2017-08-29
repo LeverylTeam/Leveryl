@@ -191,7 +191,9 @@ class Block extends Position implements BlockIds, Metadatable {
 			self::$list[self::PORTAL] = Portal::class;
 			self::$list[self::NETHER_BRICKS_STAIRS] = NetherBrickStairs::class;
 			self::$list[self::MAGMA] = Magma::class;
-			self::$list[self::NETHER_WART_BLOCK] = NetherWart::class;
+			self::$list[self::NETHER_WART_PLANT] = NetherWart::class;
+			self::$list[self::NETHER_WART_BLOCK] = NetherWartBlock::class;
+			self::$list[self::RED_NETHER_BRICK] = RedNetherBrick::class;
 			self::$list[self::ENCHANTING_TABLE] = EnchantingTable::class;
 
 			self::$list[self::BREWING_STAND_BLOCK] = BrewingStand::class;

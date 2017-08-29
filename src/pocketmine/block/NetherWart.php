@@ -30,7 +30,7 @@ use pocketmine\Server;
 
 class NetherWart extends Flowable {
 
-	protected $id = self::NETHER_WART_BLOCK;
+	protected $id = self::NETHER_WART_PLANT;
 
 	/**
 	 * NetherWart constructor.
