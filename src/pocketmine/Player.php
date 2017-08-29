@@ -1021,13 +1021,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @return Position
 	 */
 	public function getSpawn(){
-		if($this->hasValidSpawnPosition()){
-			return $this->spawnPosition;
-		}else{
+		//if($this->hasValidSpawnPosition()){
+		//	return $this->spawnPosition;
+		//}else{
 			$level = $this->server->getDefaultLevel();
 
 			return $level->getSafeSpawn();
-		}
+		//}
 	}
 
 	/**

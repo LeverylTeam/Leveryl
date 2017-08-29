@@ -30,7 +30,6 @@ use pocketmine\command\defaults\BanListCommand;
 use pocketmine\command\defaults\BiomeCommand;
 use pocketmine\command\defaults\CaveCommand;
 use pocketmine\command\defaults\ChunkInfoCommand;
-use pocketmine\command\defaults\CreateWorldCommand;
 use pocketmine\command\defaults\DefaultGamemodeCommand;
 use pocketmine\command\defaults\DeopCommand;
 use pocketmine\command\defaults\DifficultyCommand;
@@ -176,7 +175,6 @@ class SimpleCommandMap implements CommandMap {
 		$this->register("pocketmine", new XpCommand("xp"));
 		$this->register("pocketmine", new SetBlockCommand("setblock"));
 
-		$this->register("pocketmine", new CreateWorldCommand("createworld"));
 		$this->register("pocketmine", new WorldCommand("world"));
 
 		if($this->server->getProperty("debug.commands", false)){

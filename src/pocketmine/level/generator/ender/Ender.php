@@ -4,6 +4,7 @@ namespace pocketmine\level\generator\ender;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
+use pocketmine\level\Position;
 use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\generator\ender\populator\EnderPilar;
 use pocketmine\level\generator\Generator;
@@ -136,7 +137,27 @@ class Ender extends Generator {
 	}
 
 	public function getSpawn(){
-		return new Vector3(48, 128, 48);
+		//return new Vector3(48, 128, 48);
+		return findSafeArea();
+	}
+	
+	private function findSafeArea() : Vector3 {
+		$radius = 500;
+		$minRadius = 50;
+		$pos = null;
+		do {
+			$x = 128 + mt_rand($minRadius, $radius);
+			$z = 128 + mt_rand($minRadius, $radius);
+			for($y = 0; $y < Level::Y_MAX; $y++) {
+				if($this->level->getBlockIdAt($x, $y-1, $z) !== 0 && $this->level->getBlockIdAt($x, $y, $z) === 0 && $this->level->getBlockIdAt($x, $y+1, $z) === 0) {
+				$pos = new Vector3($x, $y, $z); 
+				$found = true;
+				}
+			}
+		} while (!$found);
+		if($pos != null){
+			return $pos;
+		}
 	}
 
 }
