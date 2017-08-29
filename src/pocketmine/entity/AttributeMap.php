@@ -42,7 +42,7 @@ class AttributeMap implements \ArrayAccess {
 	}
 
 	/**
-	 * @return array
+	 * @return Attribute[]
 	 */
 	public function getAll(): array{
 		return $this->attributes;

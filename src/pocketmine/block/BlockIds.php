@@ -301,6 +301,8 @@ interface BlockIds {
 	const FROSTED_ICE = 207;
 	const END_ROD = 208;
 
+	const MAGMA = 213;
+
 	const SHULKER_BOX = 218;
 	const PURPLE_GLAZED_TERRACOTTA = 219;
 	const WHITE_GLAZED_TERRACOTTA = 220;

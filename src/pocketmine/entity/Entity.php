@@ -1935,12 +1935,13 @@ abstract class Entity extends Location implements Metadatable {
 	 */
 	public function getBlocksAround(){
 		if($this->blocksAround === null){
-			$minX = Math::floorFloat($this->boundingBox->minX);
-			$minY = Math::floorFloat($this->boundingBox->minY);
-			$minZ = Math::floorFloat($this->boundingBox->minZ);
-			$maxX = Math::ceilFloat($this->boundingBox->maxX);
-			$maxY = Math::ceilFloat($this->boundingBox->maxY);
-			$maxZ = Math::ceilFloat($this->boundingBox->maxZ);
+			$bb = $this->boundingBox->grow(0.01, 0.01, 0.01);
+			$minX = Math::floorFloat($bb->minX);
+			$minY = Math::floorFloat($bb->minY);
+			$minZ = Math::floorFloat($bb->minZ);
+			$maxX = Math::ceilFloat($bb->maxX);
+			$maxY = Math::ceilFloat($bb->maxY);
+			$maxZ = Math::ceilFloat($bb->maxZ);
 
 			$this->blocksAround = [];
 
@@ -1949,7 +1950,7 @@ abstract class Entity extends Location implements Metadatable {
 					for($y = $minY; $y <= $maxY; ++$y){
 						$block = $this->level->getBlock($this->temporalVector->setComponents($x, $y, $z));
 						if($block->hasEntityCollision()){
-							$this->blocksAround[Level::blockHash($block->x, $block->y, $block->z)] = $block;
+							$this->blocksAround[] = $block;
 						}
 					}
 				}
@@ -2436,6 +2437,12 @@ abstract class Entity extends Location implements Metadatable {
 	 */
 	public function __toString(){
 		return (new \ReflectionClass($this))->getShortName() . "(" . $this->getId() . ")";
+	}
+
+	protected function resetLastMovements(){
+		list($this->lastX, $this->lastY, $this->lastZ) = [$this->x, $this->y, $this->z];
+		list($this->lastYaw, $this->lastPitch) = [$this->yaw, $this->pitch];
+		list($this->lastMotionX, $this->lastMotionY, $this->lastMotionZ) = [$this->motionX, $this->motionY, $this->motionZ];
 	}
 
 }

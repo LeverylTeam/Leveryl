@@ -2655,12 +2655,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if($this->teleportPosition !== null or ($this->forceMovement instanceof Vector3 and ($newPos->distanceSquared($this->forceMovement) > 0.1 or $revert))){
 					$this->sendPosition($this->forceMovement, $packet->yaw, $packet->pitch, MovePlayerPacket::MODE_RESET);
 				}else{
-					$packet->yaw %= 360;
-					$packet->pitch %= 360;
+					//$packet->yaw %= 360;
+					//$packet->pitch %= 360;
 
-					if($packet->yaw < 0){
-						$packet->yaw += 360;
-					}
+					//if($packet->yaw < 0){
+					//	$packet->yaw += 360;
+					//}
 
 					$this->setRotation($packet->yaw, $packet->pitch);
 					$this->newPosition = $newPos;
@@ -3041,11 +3041,23 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 						$this->server->getPluginManager()->callEvent($ev = new PlayerRespawnEvent($this, $this->getSpawn()));
 
-						$this->teleport($ev->getRespawnPosition());
+					$realSpawn = $ev->getRespawnPosition();
+
+					//if($realSpawn->distance($this->getSpawn()) > 1){
+						$this->teleport($realSpawn); //If the destination was modified by plugins
+					//}else{
+						$this->setPosition($realSpawn); //The client will move to the position of its own accord once chunks are sent
+						$this->nextChunkOrderRun = 0;
+						$this->newPosition = null;
+					//}
+
+					//$this->resetLastMovements();
 
 						$this->setSprinting(false);
 						$this->setSneaking(false);
-
+					foreach($this->attributeMap->getAll() as $attr){
+						$attr->resetToDefault();
+					}
 						$this->extinguish();
 						$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, 400);
 						$this->deadTicks = 0;

@@ -272,4 +272,8 @@ class Attribute {
 	public function markSynchronized(bool $synced = true){
 		$this->desynchronized = !$synced;
 	}
+
+	public function resetToDefault(){
+		$this->setValue($this->getDefaultValue());
+	}
 }
