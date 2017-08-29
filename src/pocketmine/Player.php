@@ -3559,27 +3559,19 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						break;
 					}
 				}else{
-					if($recipe instanceof ShapedRecipe){
-						for($x = 0; $x < 3 and $canCraft; ++$x){
-							for($y = 0; $y < 3; ++$y){
-								$item = $packet->input[$y * 3 + $x];
-								$ingredient = $recipe->getIngredient($x, $y);
-								if($item->getCount() > 0 and $item->getId() > 0){
-									if($ingredient == null){
-										$canCraft = false;
-										break;
-									}
-									if($ingredient->getId() != 0 and !$ingredient->equals($item, !$ingredient->hasAnyDamageValue(), $ingredient->hasCompoundTag())){
-										$canCraft = false;
-										break;
-									}
+        if ($recipe instanceof ShapedRecipe) {
+            for ($x = 0; $x < 3 and $canCraft; ++$x) {
+                for ($y = 0; $y < 3; ++$y) {
+                    /** @var Item $item */
+                    $item = $packet->output[0];
+                    $ingredient = $recipe->getIngredient($x, $y);
 
-								}elseif($ingredient !== null and $item->getId() !== 0){
-									$canCraft = false;
-									break;
-								}
-							}
-						}
+                        if ($canCraft || !$item->equals($ingredient, !$item->hasAnyDamageValue(), $item->hasCompoundTag())) {
+                           $canCraft = false;
+                           break;
+                          }
+                        }
+                      }
 					}elseif($recipe instanceof ShapelessRecipe){
 						$needed = $recipe->getIngredientList();
 
