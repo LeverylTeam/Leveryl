@@ -328,13 +328,6 @@ class Server {
 	 * @return string
 	 */
 	public function getName(): string{
-		$class = $this->get_calling_class();
-		if(strchr($class, "SpoonDetector")){
-			$this->logger->debug("HAHA! BYPASSED " . $class . "'s SPOON DETECTOR!");
-
-			return "PocketMine-MP"; // lol
-		}
-
 		return "Leveryl";
 	}
 
@@ -2965,18 +2958,4 @@ class Server {
 
 		return true;
 	}
-
-	private function get_calling_class(): string{
-		// tnx https://stackoverflow.com/a/6927569/7126351
-		$trace = debug_backtrace();
-		$class = $trace[1]['class'];
-		for($i = 1; $i < count($trace); $i++){
-			if(isset($trace[$i]))
-				if($class != $trace[$i]['class'])
-					return $trace[$i]['class'] ?? "null";
-		}
-
-		return "null";
-	}
-
 }

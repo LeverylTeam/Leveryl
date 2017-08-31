@@ -45,11 +45,8 @@ if exist bin\php\php.exe (
 )
 if exist PocketMine-MP.phar (
     set POCKETMINE_FILE=PocketMine-MP.phar
-) else if exist plugins\Leveryl\Leveryl*.phar (
-	REM If a DevTools build exists
-    set POCKETMINE_FILE=.\plugins\Leveryl\Leveryl*.phar
-) else if exist Leveryl*.phar (
-    set POCKETMINE_FILE=Leveryl*.phar
+) else if exist Leveryl.phar (
+    set POCKETMINE_FILE=Leveryl.phar
 ) else (
     if exist src\pocketmine\PocketMine.php (
         set POCKETMINE_FILE=src\pocketmine\PocketMine.php
@@ -67,7 +64,9 @@ if exist bin\php\php_wxwidgets.dll (
 		if exist assets\leveryl.ico (
 			start "" bin\mintty.exe -o Columns=%CONSOLE_COLUMNS% -o Rows=%CONSOLE_ROWS% -o AllowBlinking=0 -o FontQuality=3 -o Font=%CONSOLE_FONT% -o FontHeight=10 -o CursorType=0 -o CursorBlinks=1 -o Transparency=%TRANSPARENCY_LEVEL% -h error -t "Leveryl" -i assets/leveryl.ico -w max %PHP_BINARY% %POCKETMINE_FILE% --enable-ansi %*
 		) else (
-			start "" bin\mintty.exe -o Columns=%CONSOLE_COLUMNS% -o Rows=%CONSOLE_ROWS% -o AllowBlinking=0 -o FontQuality=3 -o Font=%CONSOLE_FONT% -o FontHeight=10 -o CursorType=0 -o CursorBlinks=1 -o Transparency=%TRANSPARENCY_LEVEL% -h error -t "Leveryl" -i bin/pocketmine.ico -w max %PHP_BINARY% %POCKETMINE_FILE% --enable-ansi %*
+			if exist bin\pocketmine.ico (
+				start "" bin\mintty.exe -o Columns=%CONSOLE_COLUMNS% -o Rows=%CONSOLE_ROWS% -o AllowBlinking=0 -o FontQuality=3 -o Font=%CONSOLE_FONT% -o FontHeight=10 -o CursorType=0 -o CursorBlinks=1 -o Transparency=%TRANSPARENCY_LEVEL% -h error -t "Leveryl" -i bin/pocketmine.ico -w max %PHP_BINARY% %POCKETMINE_FILE% --enable-ansi %*
+			)
 		)
     ) else (
         %PHP_BINARY% -c bin\php %POCKETMINE_FILE% %*
