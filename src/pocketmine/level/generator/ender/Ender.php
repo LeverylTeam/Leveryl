@@ -138,7 +138,6 @@ class Ender extends Generator {
 	}
 
 	public function getSpawn(){
-		//return new Vector3(48, 128, 48);
 		return $this->findSafeArea();
 	}
 	
@@ -152,7 +151,7 @@ class Ender extends Generator {
 			$x = mt_rand($minRadius, $radius) + $offset;
 			$z = mt_rand($minRadius, $radius) + $offset;
 			for($y = 0; $y < Level::Y_MAX; $y++) {
-				if($this->level->getBlockIdAt($x, $y-1, $z) !== 0 && $this->level->getBlockIdAt($x, $y, $z) === 0 && $this->level->getBlockIdAt($x, $y+1, $z) === 0) {
+				if($this->level->getBlockIdAt($x, $y-1, $z) != 0 && $this->level->getBlockIdAt($x, $y, $z) == 0 && $this->level->getBlockIdAt($x, $y+1, $z) == 0) {
 				$pos = new Vector3($x, $y, $z); 
 				$found = true;
 				}
