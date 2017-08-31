@@ -58,7 +58,7 @@ class MakeServerCommand extends VanillaCommand
 					continue;
 				}
 				$phar->addFile($file, $path);
-				$sender->sendMessage("[GenisysPro] Adding $path");
+				$sender->sendMessage("[LeverylDevTools] Adding $path");
 			}
 		}
 		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($filePath . "src")) as $file) {
