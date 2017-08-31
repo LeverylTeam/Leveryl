@@ -3,11 +3,8 @@
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
-use pocketmine\network\mcpe\protocol\ProtocolInfo;
-use pocketmine\scheduler\AsyncTask;
+use pocketmine\network\mcpe\protocol\ProtocolInfo as Info;
 use pocketmine\Server;
-use pocketmine\utils\Terminal;
-use pocketmine\utils\TextFormat;
 
 class MakeServerCommand extends VanillaCommand
 {
@@ -29,49 +26,24 @@ class MakeServerCommand extends VanillaCommand
 			return false;
 		}
 
-		$meta = [
-			"name"         => $sender->getServer()->getName(),
-			"version"      => $sender->getServer()->getPocketMineVersion(),
-			"api"          => $sender->getServer()->getApiVersion(),
-			"minecraft"    => $sender->getServer()->getVersion(),
-			"protocol"     => ProtocolInfo::CURRENT_PROTOCOL,
+		$server = $sender->getServer();
+		if(!file_exists(Server::getInstance()->getPluginPath() . "Leveryl" . DIRECTORY_SEPARATOR)) {
+			mkdir(Server::getInstance()->getPluginPath() . "Leveryl" . DIRECTORY_SEPARATOR, 0777);
+		}
+		$pharPath = Server::getInstance()->getPluginPath() . "Leveryl" . DIRECTORY_SEPARATOR . "Leveryl.phar";
+		if(file_exists($pharPath)) {
+			$sender->sendMessage("[LeverylDevTools] " . "Phar file already exists, overwriting...");
+			@unlink($pharPath);
+		}
+		$phar = new \Phar($pharPath);
+		$phar->setMetadata([
+			"name"         => $server->getName(),
+			"version"      => $server->getPocketMineVersion(),
+			"api"          => $server->getApiVersion(),
+			"minecraft"    => $server->getVersion(),
+			"protocol"     => Info::CURRENT_PROTOCOL,
 			"creationDate" => time(),
-		];
-
-		$verbose = true;
-
-		$sender->getServer()->getScheduler()->scheduleAsyncTask(new MakeServerTask($meta, Server::getInstance()->getPluginPath(), $verbose));
-
-		return true;
-	}
-}
-
-class MakeServerTask extends AsyncTask {
-
-	private $meta;
-	private $verbose;
-	private $pharPath, $serverPath;
-
-	public function __construct(array $metadata, string $serverPath, bool $verbose = true){
-		$this->meta = $metadata;
-		$this->serverPath = $serverPath;
-		$this->pharPath = $serverPath . "Leveryl" . DIRECTORY_SEPARATOR . "Leveryl.phar";
-		$this->verbose = $verbose;
-	}
-
-	public  function onRun(){
-		if(!file_exists($this->serverPath . "Leveryl" . DIRECTORY_SEPARATOR)) {
-			mkdir($this->serverPath . "Leveryl" . DIRECTORY_SEPARATOR, 0777);
-		}
-		if(file_exists($this->pharPath)) {
-			if($this->verbose){
-				$this->logMsg("Phar file already exists, overwriting...", "LeverylDevTools", TextFormat::YELLOW);
-			}
-			@unlink($this->pharPath);
-		}
-		/** @var \Phar */
-		$phar = new \Phar($this->pharPath);
-		$phar->setMetadata($this->meta);
+		]);
 		$phar->setStub('<?php define("pocketmine\\\\PATH", "phar://". __FILE__ ."/"); require_once("phar://". __FILE__ ."/src/pocketmine/PocketMine.php");  __HALT_COMPILER();');
 		$phar->setSignatureAlgorithm(\Phar::SHA1);
 		$phar->startBuffering();
@@ -86,9 +58,7 @@ class MakeServerTask extends AsyncTask {
 					continue;
 				}
 				$phar->addFile($file, $path);
-				if($this->verbose){
-					$this->logMsg("Adding " . $path, "LeverylDevTools", TextFormat::YELLOW);
-				}
+				$sender->sendMessage("[LeverylDevTools] Adding $path");
 			}
 		}
 		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($filePath . "src")) as $file) {
@@ -97,9 +67,7 @@ class MakeServerTask extends AsyncTask {
 				continue;
 			}
 			$phar->addFile($file, $path);
-			if($this->verbose){
-				$this->logMsg("Adding " . $path, "LeverylDevTools", TextFormat::YELLOW);
-			}
+			$sender->sendMessage("[LeverylDevTools] " . "Adding $path");
 		}
 		foreach($phar as $file => $finfo) {
 			/** @var \PharFileInfo $finfo */
@@ -112,24 +80,8 @@ class MakeServerTask extends AsyncTask {
 		}
 		$phar->stopBuffering();
 
+		$sender->sendMessage("[LeverylDevTools] " . $server->getName() . " " . $server->getPocketMineVersion() . " Phar file has been created on " . $pharPath);
+
 		return true;
-	}
-
-	public function onCompletion(Server $server){
-		if($this->verbose){
-			$this->logMsg("Leveryl.phar has been created on: " . $this->pharPath, "LeverylDevTools", TextFormat::YELLOW);
-		}
-	}
-
-	private function logMsg(string $message, string $name, string $color){
-		$now = time();
-		$message = TextFormat::toANSI(TextFormat::AQUA . date("H:i:s", $now) . " " . TextFormat::RESET . $color . "[" . $name . "] " . TextFormat::WHITE . $message . TextFormat::RESET);
-		$cleanMessage = TextFormat::clean($message);
-
-		if(!Terminal::hasFormattingCodes()){
-			echo $cleanMessage . PHP_EOL;
-		}else{
-			echo $message . PHP_EOL;
-		}
 	}
 }
