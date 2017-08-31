@@ -3041,23 +3041,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 						$this->server->getPluginManager()->callEvent($ev = new PlayerRespawnEvent($this, $this->getSpawn()));
 
-					$realSpawn = $ev->getRespawnPosition();
-
-					//if($realSpawn->distance($this->getSpawn()) > 1){
-						$this->teleport($realSpawn); //If the destination was modified by plugins
-					//}else{
-						$this->setPosition($realSpawn); //The client will move to the position of its own accord once chunks are sent
-						$this->nextChunkOrderRun = 0;
-						$this->newPosition = null;
-					//}
-
-					//$this->resetLastMovements();
+						$this->teleport($ev->getRespawnPosition());
 
 						$this->setSprinting(false);
 						$this->setSneaking(false);
-					foreach($this->attributeMap->getAll() as $attr){
-						$attr->resetToDefault();
-					}
 						$this->extinguish();
 						$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, 400);
 						$this->deadTicks = 0;
