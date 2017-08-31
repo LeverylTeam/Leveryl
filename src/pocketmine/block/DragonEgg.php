@@ -22,6 +22,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\level\Position;
+use pocketmine\level\sound\GenericSound;
 use pocketmine\Player;
 
 class DragonEgg extends Fallable {
@@ -88,10 +89,23 @@ class DragonEgg extends Fallable {
 			$z = $this->getZ() + $RAND_HORIZONTAL[array_rand($RAND_HORIZONTAL)];
 			if($level->getBlockIdAt($x,$y,$z) == 0 && $level->getBlockIdAt($x,$y - 1,$z) != 0){
 				$level->setBlock($this, new Air(), false, false);
+				$oldpos = clone $this;
 				$pos = new Position($x, $y, $z, $level);
+				$newpos = $pos;
 				$level->setBlock($pos, $this);
+
+				$posdistance = new Position($newpos->x - $oldpos->x, $newpos->y - $oldpos->y, $newpos->z - $oldpos->z, $this->getLevel());
+				$intdist = $oldpos->distance($newpos);
+				for($c = 0; $c <= $intdist; $c++){
+
+					$progress = $c / $intdist;
+
+					$this->getLevel()->addSound(new GenericSound(new Position($oldpos->x + $posdistance->x * $progress, 1.62 + $oldpos->y + $posdistance->y * $progress, $oldpos->z + $posdistance->z * $progress, $this->getLevel()), 2010));
+				}
 				$safe = true;
+				break;
 			}
 		}
+		return $safe; // Unnecessary but added just to stop PHPStorm from whining... And, Why not.
 	}
 }
