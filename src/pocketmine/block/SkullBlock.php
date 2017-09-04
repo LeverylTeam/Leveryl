@@ -55,9 +55,9 @@ class SkullBlock extends Flowable {
 	}
 
 	/**
-	 * @return bool
+	 * @return string
 	 */
-	public function getName(): bool{
+	public function getName(): string{
 		return "Mob Head";
 	}
 
