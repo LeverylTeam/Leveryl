@@ -1856,13 +1856,7 @@ class Server {
 				$this->logger->setLogDebug(\pocketmine\DEBUG > 1);
 			}
 
-			if(\pocketmine\DEBUG >= 0){
-				@cli_set_process_title($this->getName() . " " . $this->getPocketMineVersion());
-			}
-
-			//$this->logger->info($this->getLanguage()->translateString("pocketmine.server.networkStart", [$this->getIp() === "" ? "*" : $this->getIp(), $this->getPort()]));
 			$this->serverID = Utils::getMachineUniqueId($this->getIp() . $this->getPort());
-
 			$this->getLogger()->debug("Server unique ID: " . $this->getServerUniqueId());
 			$this->getLogger()->debug("Machine unique ID: " . Utils::getMachineUniqueId());
 			$this->getLogger()->debug("Process ID: " . getmypid());
@@ -1888,15 +1882,15 @@ class Server {
 			Attribute::init();
 			EnchantmentLevelTable::init();
 			Color::init();
+
 			$this->craftingManager = new CraftingManager();
-
 			$this->resourceManager = new ResourcePackManager($this, $this->getDataPath() . "resource_packs" . DIRECTORY_SEPARATOR);
-
 			$this->pluginManager = new PluginManager($this, $this->commandMap);
 			$this->pluginManager->subscribeToPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE, $this->consoleSender);
 			$this->pluginManager->setUseTimings($this->getProperty("settings.enable-profiling", false));
 			$this->profilingTickRate = (float)$this->getProperty("settings.profile-report-trigger", 20);
 			$this->pluginManager->registerInterface(PharPluginLoader::class);
+
 			if($this->folderpluginloader === true){
 				$this->pluginManager->registerInterface(FolderPluginLoader::class);
 			}
@@ -2005,7 +1999,7 @@ class Server {
 
 			if($cfgVer > $advVer){
 				$this->logger->notice("Your leveryl.yml needs update");
-				$this->logger->notice("Current Version: $advVer   Latest Version: $cfgVer");
+				$this->logger->notice("Current Version: $advVer\tLatest Version: $cfgVer");
 			}
 
 			$this->start();

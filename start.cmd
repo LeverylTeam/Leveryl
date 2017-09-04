@@ -66,6 +66,8 @@ if exist bin\php\php_wxwidgets.dll (
 		) else (
 			if exist bin\pocketmine.ico (
 				start "" bin\mintty.exe -o Columns=%CONSOLE_COLUMNS% -o Rows=%CONSOLE_ROWS% -o AllowBlinking=0 -o FontQuality=3 -o Font=%CONSOLE_FONT% -o FontHeight=10 -o CursorType=0 -o CursorBlinks=1 -o Transparency=%TRANSPARENCY_LEVEL% -h error -t "Leveryl" -i bin/pocketmine.ico -w max %PHP_BINARY% %POCKETMINE_FILE% --enable-ansi %*
+			) else (
+				start "" bin\mintty.exe -o Columns=%CONSOLE_COLUMNS% -o Rows=%CONSOLE_ROWS% -o AllowBlinking=0 -o FontQuality=3 -o Font=%CONSOLE_FONT% -o FontHeight=10 -o CursorType=0 -o CursorBlinks=1 -o Transparency=%TRANSPARENCY_LEVEL% -h error -t "Leveryl" -w max %PHP_BINARY% %POCKETMINE_FILE% --enable-ansi %*
 			)
 		)
     ) else (

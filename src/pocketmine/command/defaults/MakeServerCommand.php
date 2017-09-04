@@ -32,7 +32,7 @@ class MakeServerCommand extends VanillaCommand
 		}
 		$pharPath = Server::getInstance()->getPluginPath() . "Leveryl" . DIRECTORY_SEPARATOR . "Leveryl.phar";
 		if(file_exists($pharPath)) {
-			$sender->sendMessage("[LeverylDevTools] " . "Phar file already exists, overwriting...");
+			$sender->sendMessage("[LDV] Phar file already exists, overwriting...");
 			@unlink($pharPath);
 		}
 		$phar = new \Phar($pharPath);
@@ -58,7 +58,7 @@ class MakeServerCommand extends VanillaCommand
 					continue;
 				}
 				$phar->addFile($file, $path);
-				$sender->sendMessage("[LeverylDevTools] Adding $path");
+				$sender->sendMessage("[LDV] Adding $path");
 			}
 		}
 		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($filePath . "src")) as $file) {
@@ -67,7 +67,7 @@ class MakeServerCommand extends VanillaCommand
 				continue;
 			}
 			$phar->addFile($file, $path);
-			$sender->sendMessage("[LeverylDevTools] " . "Adding $path");
+			$sender->sendMessage("[LDV] Adding $path");
 		}
 		foreach($phar as $file => $finfo) {
 			/** @var \PharFileInfo $finfo */
@@ -80,7 +80,7 @@ class MakeServerCommand extends VanillaCommand
 		}
 		$phar->stopBuffering();
 
-		$sender->sendMessage("[LeverylDevTools] " . $server->getName() . " " . $server->getPocketMineVersion() . " Phar file has been created on " . $pharPath);
+		$sender->sendMessage("[LDV] " . $server->getName() . " " . $server->getPocketMineVersion() . " Phar file has been created on " . $pharPath);
 
 		return true;
 	}

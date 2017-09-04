@@ -45,7 +45,7 @@ class ExtractPluginCommand extends VanillaCommand {
 
 		$pluginName = trim(implode(" ", $args));
 		if($pluginName === "" or !(($plugin = Server::getInstance()->getPluginManager()->getPlugin($pluginName)) instanceof Plugin)){
-			$sender->sendMessage(TextFormat::RED . "Invalid plugin name, check the name case.");
+			$sender->sendMessage(TextFormat::RED . "[LDV] Invalid plugin name, check the name case.");
 			$this->sendPluginList($sender);
 
 			return true;
@@ -53,14 +53,14 @@ class ExtractPluginCommand extends VanillaCommand {
 		$description = $plugin->getDescription();
 
 		if(!($plugin->getPluginLoader() instanceof PharPluginLoader)){
-			$sender->sendMessage(TextFormat::RED . "Plugin " . $description->getName() . " is not in Phar structure.");
+			$sender->sendMessage(TextFormat::RED . "[LDV] Plugin " . $description->getName() . " is not in Phar structure.");
 
 			return true;
 		}
 
 		$folderPath = Server::getInstance()->getPluginPath() . DIRECTORY_SEPARATOR . "Leveryl" . DIRECTORY_SEPARATOR . $description->getName() . "_v" . $description->getVersion() . "/";
 		if(file_exists($folderPath)){
-			$sender->sendMessage("Plugin already exists, overwriting...");
+			$sender->sendMessage("[LDV] Plugin already exists, overwriting...");
 		}else{
 			@mkdir($folderPath);
 		}
@@ -75,7 +75,7 @@ class ExtractPluginCommand extends VanillaCommand {
 			@mkdir(dirname($folderPath . str_replace($pharPath, "", $path)), 0755, true);
 			file_put_contents($folderPath . str_replace($pharPath, "", $path), file_get_contents($path));
 		}
-		$sender->sendMessage("Source plugin " . $description->getName() . " v" . $description->getVersion() . " has been created on " . $folderPath);
+		$sender->sendMessage("[LDV] Source plugin " . $description->getName() . " v" . $description->getVersion() . " has been created on " . $folderPath);
 
 		return true;
 	}

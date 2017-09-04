@@ -2111,24 +2111,27 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 
 			if(!$this->isSpectator() and $this->speed !== null){
+				if($this->hasEffect(Effect::LEVITATION)){
+					$this->inAirTicks = 0;
+				}
 				if($this->onGround){
 					if($this->inAirTicks !== 0){
 						$this->startAirTicks = 5;
 					}
 					$this->inAirTicks = 0;
 				}else{
-					if($this->getInventory()->getItem($this->getInventory()->getSize() + 1)->getId() == "444"){
+					if($this->getInventory()->getItem($this->getInventory()->getSize() + 1)->getId() == Item::ELYTRA){
 						#enable use of elytra. todo: check if it is open
-						return;
+						$this->inAirTicks = 0;
 					}
 					if(!$this->allowFlight and $this->inAirTicks > 10 and !$this->isSleeping() and !$this->isImmobile()){
 						$expectedVelocity = (-$this->gravity) / $this->drag - ((-$this->gravity) / $this->drag) * exp(-$this->drag * ($this->inAirTicks - $this->startAirTicks));
 						$diff = ($this->speed->y - $expectedVelocity) ** 2;
 
-						if(!$this->hasEffect(Effect::JUMP) and !$this->hasEffect(Effect::LEVITATION) and $diff > 0.6 and $expectedVelocity < $this->speed->y and !$this->server->getAllowFlight()){
+						if(!$this->hasEffect(Effect::JUMP) and $diff > 0.6 and $expectedVelocity < $this->speed->y and !$this->server->getAllowFlight()){
 							if($this->inAirTicks < 1000){
 								$this->setMotion(new Vector3(0, $expectedVelocity, 0));
-							}elseif($this->kick("Flying is not enabled on this server")){
+							}elseif($this->kick("Flying is not enabled on this server", false)){
 								$this->timings->stopTiming();
 
 								return false;
@@ -2456,6 +2459,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		switch($packet::NETWORK_ID){
+			case ProtocolInfo::ENTITY_FALL_PACKET:
+				break;
 			case ProtocolInfo::LEVEL_SOUND_EVENT_PACKET:
 				//TODO: Add the Event for this.
 				$this->getLevel()->addChunkPacket($this->chunk->getX(), $this->chunk->getZ(), $packet);

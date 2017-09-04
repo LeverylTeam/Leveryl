@@ -46,7 +46,7 @@ class MakePluginCommand extends VanillaCommand {
 
 		$pluginName = trim(implode(" ", $args));
 		if($pluginName === "" or !(($plugin = Server::getInstance()->getPluginManager()->getPlugin($pluginName)) instanceof Plugin)){
-			$sender->sendMessage(TextFormat::RED . "Invalid plugin name, check the name case.");
+			$sender->sendMessage(TextFormat::RED . "[LDV] Invalid plugin name, check the name case.");
 			$this->sendPluginList($sender);
 
 			return true;
@@ -54,14 +54,14 @@ class MakePluginCommand extends VanillaCommand {
 		$description = $plugin->getDescription();
 
 		if(!($plugin->getPluginLoader() instanceof FolderPluginLoader)){
-			$sender->sendMessage(TextFormat::RED . "Plugin " . $description->getName() . " is not in folder structure.");
+			$sender->sendMessage(TextFormat::RED . "[LDV] Plugin " . $description->getName() . " is not in folder structure.");
 
 			return true;
 		}
 
 		$pharPath = Server::getInstance()->getPluginPath() . DIRECTORY_SEPARATOR . "Leveryl" . DIRECTORY_SEPARATOR . $description->getName() . "_v" . $description->getVersion() . "_" . date("Y-m-d") . ".phar";
 		if(file_exists($pharPath)){
-			$sender->sendMessage("Phar plugin already exists, overwriting...");
+			$sender->sendMessage("[LDV] Phar plugin already exists, overwriting...");
 			@unlink($pharPath);
 		}
 		$phar = new \Phar($pharPath);
@@ -93,7 +93,7 @@ class MakePluginCommand extends VanillaCommand {
 				continue;
 			}
 			$phar->addFile($file, $path);
-			$sender->sendMessage("[Leveryl] Adding $path");
+			$sender->sendMessage("[LDV] Adding $path");
 		}
 
 		foreach($phar as $file => $finfo){
@@ -103,7 +103,7 @@ class MakePluginCommand extends VanillaCommand {
 			}
 		}
 		$phar->stopBuffering();
-		$sender->sendMessage("Phar plugin " . $description->getName() . " v" . $description->getVersion() . " has been created on " . $pharPath);
+		$sender->sendMessage("[LDV] Phar plugin " . $description->getName() . " v" . $description->getVersion() . " has been created on " . $pharPath);
 
 		return true;
 	}

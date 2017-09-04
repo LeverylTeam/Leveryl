@@ -42,6 +42,7 @@ use pocketmine\event\TimingsHandler;
 use pocketmine\permission\Permissible;
 use pocketmine\permission\Permission;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 /**
  * Manages all the plugins, Permissions and Permissibles
@@ -212,6 +213,9 @@ class PluginManager {
 								continue;
 							}elseif(strpos($name, " ") !== false){
 								$this->server->getLogger()->warning($this->server->getLanguage()->translateString("pocketmine.plugin.spacesDiscouraged", [$name]));
+							}elseif(stripos($name, "devtools") !== false && $this->server->folderpluginloader){
+								$this->server->getLogger()->customsend("FolderPluginLoader is enabled, We disabled DevTools to avoid conflicts ;)", "LDV", TextFormat::GOLD);
+								continue;
 							}
 
 							if(isset($plugins[$name]) or $this->getPlugin($name) instanceof Plugin){

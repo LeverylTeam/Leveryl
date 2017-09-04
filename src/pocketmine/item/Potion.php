@@ -298,6 +298,9 @@ class Potion extends Item {
 	public static function getColor(int $meta){
 		$effect = Effect::getEffect(self::getEffectId($meta));
 
+		if($effect === null){
+			return [46, 82, 153]; // Default to Blue
+		}
 		return $effect->getColor() ?? [0, 0, 0];
 	}
 

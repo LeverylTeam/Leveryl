@@ -41,7 +41,7 @@ class ExtractPharCommand extends VanillaCommand {
 		if(!isset($args[0]) or !file_exists($args[0])) return \false;
 		$folderPath = $sender->getServer()->getPluginPath() . DIRECTORY_SEPARATOR . "Leveryl" . DIRECTORY_SEPARATOR . basename($args[0]);
 		if(file_exists($folderPath)){
-			$sender->sendMessage("Phar already exists, overwriting...");
+			$sender->sendMessage("[LDV] Phar already exists, overwriting...");
 		}else{
 			@mkdir($folderPath);
 		}
@@ -53,6 +53,6 @@ class ExtractPharCommand extends VanillaCommand {
 			@mkdir(dirname($folderPath . str_replace($pharPath, "", $path)), 0755, true);
 			file_put_contents($folderPath . str_replace($pharPath, "", $path), file_get_contents($path));
 		}
-		$sender->sendMessage("Source Phar $args[0] has been created on $folderPath");
+		$sender->sendMessage("[LDV] Source Phar $args[0] has been created on $folderPath");
 	}
 }
