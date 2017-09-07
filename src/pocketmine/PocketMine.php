@@ -73,10 +73,11 @@ namespace pocketmine {
 	use pocketmine\utils\Utils;
 	use pocketmine\wizard\Installer;
 
-	const VERSION = "1.0.1";
+	const VERSION = "1.0.2";
 	const API_VERSION = "3.0.0-ALPHA5";
-	const CODENAME = "NewBeginnings";
+	const CODENAME = "ONYX";
 	const GENISYS_API_VERSION = '2.0.0';
+	const REQUIRED_MINIMUM_PHP_VERSION = "7.2";
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -91,8 +92,8 @@ namespace pocketmine {
 		@define('pocketmine\PATH', \getcwd() . DIRECTORY_SEPARATOR);
 	}
 
-	if(version_compare("7.0", PHP_VERSION) > 0){
-		echo "[CRITICAL] You must use PHP >= 7.0" . PHP_EOL;
+	if(version_compare(self::REQUIRED_MINIMUM_PHP_VERSION, PHP_VERSION) > 0){
+		echo "[CRITICAL] You must use PHP >= " . self::REQUIRED_MINIMUM_PHP_VERSION . PHP_EOL;
 		echo "[CRITICAL] Please use the installer provided on the homepage." . PHP_EOL;
 		exit(1);
 	}
@@ -431,6 +432,11 @@ namespace pocketmine {
 
 	if(!extension_loaded("curl")){
 		$logger->critical("Unable to find the cURL extension.");
+		++$errors;
+	}
+
+	if(!extension_loaded("bcmath")){
+		$logger->critical("Unable to find the BC Math extension.");
 		++$errors;
 	}
 
