@@ -36,7 +36,8 @@ class PlayerExhaustEvent extends PlayerEvent implements Cancellable {
 	const CAUSE_WALKING = 6;
 	const CAUSE_SNEAKING = 7;
 	const CAUSE_SWIMMING = 8;
-	const CAUSE_JUMPING = 10;
+	const CAUSE_JUMPING = 9;
+	const CAUSE_SPRINT_JUMPING = 10;
 	const CAUSE_CUSTOM = 11;
 
 	const CAUSE_FLAG_SPRINT = 0x10000;

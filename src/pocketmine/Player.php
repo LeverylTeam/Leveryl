@@ -64,6 +64,7 @@ use pocketmine\event\player\PlayerGameModeChangeEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerItemConsumeEvent;
 use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerJumpEvent;
 use pocketmine\event\player\PlayerKickEvent;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerMoveEvent;
@@ -3072,6 +3073,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->scheduleUpdate();
 						break;
 					case PlayerActionPacket::ACTION_JUMP:
+						$this->jump();
 						break 2;
 					case PlayerActionPacket::ACTION_START_SPRINT:
 						$ev = new PlayerToggleSprintEvent($this, true);
@@ -4807,5 +4809,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk = new PlayStatusPacket();
 		$pk->status = $status;
 		$this->dataPacket($pk);
+	}
+
+	public function jump(){
+		$this->server->getPluginManager()->callEvent(new PlayerJumpEvent($this));
+		parent::jump();
 	}
 }
