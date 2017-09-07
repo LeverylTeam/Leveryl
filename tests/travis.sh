@@ -10,12 +10,12 @@ while getopts "p:" OPTION 2> /dev/null; do
 	esac
 done
 
-# ./tests/lint.sh -p "$PHP_BINARY"
+./tests/lint.sh -p "$PHP_BINARY"
 
-# if [ $? -ne 0 ]; then
-# 	echo Lint scan failed!
-# 	exit 1
-# fi
+if [ $? -ne 0 ]; then
+	echo Lint scan failed!
+	exit 1
+fi
 
 rm server.log 2> /dev/null
 mkdir -p ./plugins

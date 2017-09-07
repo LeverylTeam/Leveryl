@@ -486,15 +486,13 @@ class PlayerInventory extends BaseInventory {
 		return $armor;
 	}
 
-	public function clearAll($send = true){
+	public function clearAll(){
 		$limit = $this->getSize() + 4;
 		for($index = 0; $index < $limit; ++$index){
 			$this->clear($index, false);
 		}
 		$this->hotbar = range(0, $this->getHotbarSize() - 1, 1);
-		if($send){
-			$this->sendContents($this->getViewers());
-		}
+		$this->sendContents($this->getViewers());
 	}
 
 	/**
