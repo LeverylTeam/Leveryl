@@ -15,6 +15,7 @@ memoryDump_*/*
 
 # Cortex's Files.
 test.*
+bin72/*
 
 # Common IDEs
 .idea/
