@@ -77,7 +77,6 @@ namespace pocketmine {
 	const API_VERSION = "3.0.0-ALPHA5";
 	const CODENAME = "ONYX";
 	const GENISYS_API_VERSION = '2.0.0';
-	const REQUIRED_MINIMUM_PHP_VERSION = "7.2";
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -92,8 +91,8 @@ namespace pocketmine {
 		@define('pocketmine\PATH', \getcwd() . DIRECTORY_SEPARATOR);
 	}
 
-	if(version_compare(self::REQUIRED_MINIMUM_PHP_VERSION, PHP_VERSION) > 0){
-		echo "[CRITICAL] You must use PHP >= " . self::REQUIRED_MINIMUM_PHP_VERSION . PHP_EOL;
+	if(version_compare("7.2", PHP_VERSION) > 0){
+		echo "[CRITICAL] You must use PHP >= 7.2" . PHP_EOL;
 		echo "[CRITICAL] Please use the installer provided on the homepage." . PHP_EOL;
 		exit(1);
 	}
