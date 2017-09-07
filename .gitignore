@@ -14,7 +14,7 @@ resource_packs/
 memoryDump_*/*
 
 # Cortex's Files.
-copytests.bat
+test.*
 
 # Common IDEs
 .idea/

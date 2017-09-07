@@ -27,7 +27,7 @@ use pocketmine\level\format\Chunk;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 
-class Void extends Generator {
+class VoidGenerator extends Generator {
 	/** @var ChunkManager */
 	private $level;
 	/** @var Chunk */
@@ -49,11 +49,11 @@ class Void extends Generator {
 	 * @return string
 	 */
 	public function getName(){
-		return "Void";
+		return "VoidGenerator";
 	}
 
 	/**
-	 * Void constructor.
+	 * VoidGenerator constructor.
 	 *
 	 * @param array $settings
 	 */
