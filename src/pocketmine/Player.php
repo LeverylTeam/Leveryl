@@ -3884,6 +3884,20 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$this->level->dropItem($this->add(0, 1.3, 0), $item, $motion, 40);
 
+		if($this->getItemInHand()->equals($item)){
+			$countinhand = $this->getItemInHand()->getCount();
+			$countdropped = $item->getCount();
+			$inhandclone = clone $this->getItemInHand();
+			if(($countinhand - $countdropped) > 0) {
+				$inhandclone->setCount($countinhand - $countdropped);
+				$this->getInventory()->setItemInHand($inhandclone);
+			} else {
+				$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
+			}
+		} else {
+			$this->getInventory()->removeItem($item);
+		}
+
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 	}
 

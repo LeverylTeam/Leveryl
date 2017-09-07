@@ -68,6 +68,7 @@ use pocketmine\item\WoodenPickaxe;
 use pocketmine\item\WoodenShovel;
 use pocketmine\item\WoodenSword;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class Enchantment {
 
@@ -192,7 +193,7 @@ class Enchantment {
 
 	public static function registerEnchantment(int $id, String $name, int $rarity, int $activationType, int $slot){
 		if(isset(self::$enchantments[$id])){
-			Server::getInstance()->getLogger()->warning("Unable to register enchantment with id $id.");
+			Server::getInstance()->getLogger()->customsend(TextFormat::RED . "Unable to register enchantment with id $id.", "Enchantment", TextFormat::AQUA);
 
 			return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
 		}

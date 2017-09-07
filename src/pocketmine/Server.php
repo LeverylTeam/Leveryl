@@ -1737,7 +1737,7 @@ class Server {
 			$this->loadAdvancedConfig();
 
 			$this->properties = new Config($this->dataPath . "server.properties", Config::PROPERTIES, [
-				"motd"                         => "Minecraft: PE Server",
+				"motd"                         => "§l§f§oLeveryl§r§a MC:PE Server§r",
 				"server-port"                  => 19132,
 				"white-list"                   => false,
 				"announce-player-achievements" => true,
@@ -1769,9 +1769,6 @@ class Server {
 				if($this->onlineMode){
 					$this->getLogger()->info("§aX§7Box§f Live Authentication §aEnabled!");
 					$this->onlineMode = true;
-				}else{
-					$this->getLogger()->notice("The §cOpen§8SSL§e extension is loaded. But online mode seems to be turned off.");
-					$this->getLogger()->notice("You can enable it on server.properties ;)");
 				}
 			}else{
 				$this->getLogger()->warning("§cOpen§8SSL§e Not Found! You'll need this extension for XBox Live Authentication.");

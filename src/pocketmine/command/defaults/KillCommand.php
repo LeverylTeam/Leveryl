@@ -76,24 +76,112 @@ class KillCommand extends VanillaCommand {
 				return true;
 			}
 
-			$player = $sender->getServer()->getPlayer($args[0]);
+			switch($args[0]){
+				case '@r':
+					$players = $sender->getServer()->getOnlinePlayers();
+					if(count($players) > 0){
+						$player = $players[array_rand($players)];
+					} else {
+						$sender->sendMessage("No players online");
+						return true;
+					}
 
-			if($player instanceof Player){
-				$sender->getServer()->getPluginManager()->callEvent($ev = new EntityDamageEvent($player, EntityDamageEvent::CAUSE_SUICIDE, 1000));
+					if($player instanceof Player){
+						$sender->getServer()->getPluginManager()->callEvent($ev = new EntityDamageEvent($player, EntityDamageEvent::CAUSE_SUICIDE, 1000));
 
-				if($ev->isCancelled()){
+						if($ev->isCancelled()){
+							return true;
+						}
+
+						$player->setLastDamageCause($ev);
+						$player->setHealth(0);
+
+						$sender->sendMessage("Killed " . $player->getName());
+					}
 					return true;
-				}
+				case '@e':
+					$count = 0;
+					if($sender instanceof Player){
+						foreach($sender->getLevel()->getEntities() as $entity){
+							if($entity instanceof Player){
+								if($entity->getGamemode() === Player::ADVENTURE or $entity->getGamemode() === Player::SURVIVAL){
+									$sender->getServer()->getPluginManager()->callEvent($ev = new EntityDamageEvent($entity, EntityDamageEvent::CAUSE_SUICIDE, 1000));
 
-				$player->setLastDamageCause($ev);
-				$player->setHealth(0);
+									if($ev->isCancelled()){
+										return true;
+									}
 
-				Command::broadcastCommandMessage($sender, new TranslationContainer("commands.kill.successful", [$player->getName()]));
-			}else{
-				$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.generic.player.notFound"));
+									$entity->setLastDamageCause($ev);
+									$entity->setHealth(0);
+								}
+							} else {
+								$entity->close();
+							}
+							$count++;
+						}
+					} else {
+						foreach($sender->getServer()->getDefaultLevel()->getEntities() as $entity){
+							if($entity instanceof Player){
+								if($entity->getGamemode() === Player::ADVENTURE or $entity->getGamemode() === Player::SURVIVAL){
+									$sender->getServer()->getPluginManager()->callEvent($ev = new EntityDamageEvent($entity, EntityDamageEvent::CAUSE_SUICIDE, 1000));
+
+									if($ev->isCancelled()){
+										return true;
+									}
+
+									$entity->setLastDamageCause($ev);
+									$entity->setHealth(0);
+								}
+							} else {
+								$sender->getServer()->getPluginManager()->callEvent($ev = new EntityDamageEvent($entity, EntityDamageEvent::CAUSE_SUICIDE, 1000));
+
+								if($ev->isCancelled()){
+									return true;
+								}
+
+								$entity->setLastDamageCause($ev);
+								$entity->setHealth(0);
+							}
+							$count++;
+						}
+					}
+					$sender->sendMessage("Killed " . $count . " Entities");
+					return true;
+				case '@p':
+					$player = $sender;
+					if($player instanceof Player){
+						$sender->getServer()->getPluginManager()->callEvent($ev = new EntityDamageEvent($player, EntityDamageEvent::CAUSE_SUICIDE, 1000));
+
+						if($ev->isCancelled()){
+							return true;
+						}
+
+						$player->setLastDamageCause($ev);
+						$player->setHealth(0);
+
+						Command::broadcastCommandMessage($sender, new TranslationContainer("commands.kill.successful", [$player->getName()]));
+					}else{
+						$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.generic.player.notFound"));
+					}
+					return true;
+				default;
+					$player = $sender->getServer()->getPlayer($args[0]);
+					if($player instanceof Player){
+						$sender->getServer()->getPluginManager()->callEvent($ev = new EntityDamageEvent($player, EntityDamageEvent::CAUSE_SUICIDE, 1000));
+
+						if($ev->isCancelled()){
+							return true;
+						}
+
+						$player->setLastDamageCause($ev);
+						$player->setHealth(0);
+
+						Command::broadcastCommandMessage($sender, new TranslationContainer("commands.kill.successful", [$player->getName()]));
+					}else{
+						$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.generic.player.notFound"));
+					}
+					return true;
 			}
-
-			return true;
 		}
 
 		if($sender instanceof Player){

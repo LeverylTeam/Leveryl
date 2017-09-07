@@ -26,6 +26,8 @@
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
+use pocketmine\block\Crops;
+use pocketmine\block\Farmland;
 use pocketmine\block\Fire;
 use pocketmine\block\Portal;
 use pocketmine\block\PressurePlate;
@@ -1551,6 +1553,19 @@ abstract class Entity extends Location implements Metadatable {
 	public function fall($fallDistance){
 		if($this instanceof Player and $this->isSpectator()){
 			return;
+		}
+		if($fallDistance > 1){
+			$pos = $this->floor();
+			$block = $this->level->getBlock($pos);
+			$below = $this->level->getBlock($pos->subtract(0,1,0));
+			$air = \pocketmine\item\Item::get(\pocketmine\item\Item::AIR);
+			$dirt = Block::get(Block::DIRT);
+			if($block instanceof Crops){
+				$this->level->useBreakOn($block, $air, null, true);
+			}elseif($below instanceof Farmland){
+				$this->level->setBlock($below, $dirt, true, true);
+				$this->getLevel()->addParticle(new DestroyBlockParticle($this, $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))));
+			}
 		}
 		if($fallDistance > 3){
 			$this->getLevel()->addParticle(new DestroyBlockParticle($this, $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))));
