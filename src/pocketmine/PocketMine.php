@@ -91,6 +91,16 @@ namespace pocketmine {
 		@define('pocketmine\PATH', \getcwd() . DIRECTORY_SEPARATOR);
 	}
 
+	if(version_compare("7.2", PHP_VERSION) > 0){
+		echo "[CRITICAL] You must use PHP 7.0.x" . PHP_EOL;
+		echo "[CRITICAL] If you want to use PHP 7.2, Use this branch instead: https://github.com/LeverylTeam/Leveryl/tree/php7.2" . PHP_EOL;
+		echo PHP_EOL;
+		echo "[NOTICE] The master branch is the only officially supported branch." . PHP_EOL;
+		echo "[NOTICE] All other branches are in testing and may be unstable." . PHP_EOL;
+		echo "[NOTICE] Do not use builds from other branches unless you are sure you understand the risks." . PHP_EOL;
+		exit(1);
+	}
+
 	if(version_compare("7.0", PHP_VERSION) > 0){
 		echo "[CRITICAL] You must use PHP >= 7.0" . PHP_EOL;
 		echo "[CRITICAL] Please use the installer provided on the homepage." . PHP_EOL;
