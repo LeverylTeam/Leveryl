@@ -91,7 +91,7 @@ namespace pocketmine {
 		@define('pocketmine\PATH', \getcwd() . DIRECTORY_SEPARATOR);
 	}
 
-	if(version_compare("7.2", PHP_VERSION) > 0){
+	if(version_compare(phpversion(), "7.2", "<")){
 		echo "[CRITICAL] You must use PHP 7.0.x" . PHP_EOL;
 		echo "[CRITICAL] If you want to use PHP 7.2, Use this branch instead: https://github.com/LeverylTeam/Leveryl/tree/php7.2" . PHP_EOL;
 		echo PHP_EOL;
