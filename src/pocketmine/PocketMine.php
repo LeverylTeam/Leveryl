@@ -77,6 +77,7 @@ namespace pocketmine {
 	const API_VERSION = "3.0.0-ALPHA5";
 	const CODENAME = "NewBeginnings";
 	const GENISYS_API_VERSION = '2.0.0';
+	const LEVERYL_API_VERSION = '0.0.1';
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.

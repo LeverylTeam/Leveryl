@@ -10,7 +10,7 @@
 
 #配置檔案版本
 config:
- version: 28
+ version: 30
  
 level:
  #設定是否變換天氣
@@ -137,6 +137,12 @@ dserver:
 inventory:
  #如果無法使用鐵砧或附魔台請啟用本項. 將會對背包進行驗證.
  allow-cheats: false
+
+always-day:
+ #LevelName: <Time> / true / false - true will set the time to 0
+ #Examples:
+ #LevelName: 1800
+ #LevelName: true
 
 no-weather:
 # - "LevelName"

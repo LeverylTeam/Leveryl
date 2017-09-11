@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  *
  *  ____       _                          _
  * |  _ \ _ __(_)___ _ __ ___   __ _ _ __(_)_ __   ___
@@ -19,6 +19,8 @@
  *
  */
 
+declare(strict_types = 1);
+
 namespace pocketmine\inventory;
 
 use pocketmine\block\Block;
@@ -31,6 +33,7 @@ use pocketmine\network\mcpe\protocol\BlockEntityDataPacket;
 use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
 use pocketmine\Player;
 use pocketmine\tile\Tile;
+use pocketmine\utils\TextFormat;
 
 class WindowInventory extends CustomInventory {
 
@@ -75,7 +78,8 @@ class WindowInventory extends CustomInventory {
 				$this->block = 117;
 				break;
 			default:
-				$player->getServer()->getLogger()->notice("Unknown window size. If must be one from: 1, 2, 3, 5, 9, 27, 54. Using default size(27).");
+				$player->getServer()->getLogger()->customsend("Unknown Inventory size. It must be one from: 1, 2, 3, 5, 9, 27, 54. Using default size(27).", "WindowInventory", TextFormat::GRAY);
+				break;
 		}
 		$this->customName = $name;
 		$holder = new WindowHolder($player->getFloorX(), $player->getFloorY(), $player->getFloorZ(), $this);
@@ -108,13 +112,14 @@ class WindowInventory extends CustomInventory {
 		$pk->x = $holder->x;
 		$pk->y = $holder->y;
 		$pk->z = $holder->z;
-		$pk->namedtag = $nbt->write();
+		$pk->namedtag = $nbt->write(true);
 		$who->dataPacket($pk);
 		parent::onOpen($who);
 		$this->sendContents($who);
 	}
 
 	public function onClose(Player $who){
+		$this->holder = $holder = new WindowHolder($who->getFloorX(), $who->getFloorY(), $who->getFloorZ(), $this);
 		$holder = $this->holder;
 		$pk = new UpdateBlockPacket();
 		$pk->x = $holder->x;
@@ -125,7 +130,7 @@ class WindowInventory extends CustomInventory {
 		$pk->flags = UpdateBlockPacket::FLAG_ALL;
 		$who->dataPacket($pk);
 		$who->getLevel()->setBlock(new Vector3($holder->x, $holder->y, $holder->z), $this->oldID[$who->getName()]);
-		$this->oldID[$who->getName()] = 0;
+		unset($this->oldID[$who->getName()]);
 		parent::onClose($who);
 	}
 }

@@ -10,7 +10,7 @@
 
 #Version of this file
 config:
- version: 29
+ version: 30
 
 level:
  #Set if weather is enabled (rain may cause lag to older devices)

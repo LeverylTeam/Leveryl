@@ -407,7 +407,7 @@ class Server {
 	 * @return string
 	 */
 	public function getVersion(){
-		$version = implode(",", ProtocolInfo::MINECRAFT_VERSION);
+		$version = implode(", ", ProtocolInfo::MINECRAFT_VERSION);
 
 		return $version;
 	}
@@ -1535,7 +1535,7 @@ class Server {
 		}, $microseconds);
 	}
 
-	public function about(){
+	private function about(){
 		$startupmsg = "       §8##§7\§b    _                           _ §r\n      §8##§7 /§b   | | _____   _____ _ __ _   _| |§r\n     §8##§7 /§b    | |/ _ \ \ / / _ \ '__| | | | |§r\n    §8##§7 /§b     | |  __/\ V /  __/ |  | |_| | |§r\n   §8##§7 /§b      |_|\___| \_/ \___|_|   \__, |_|§r\n  §8##§7 /§b                              |___/   §r\n §8#########§7\ §bGitHub.com/LeverylTeam/Leveryl  §r\n §7\________/§r";
 
 		if($this->logger instanceof MainLogger){
@@ -1654,6 +1654,9 @@ class Server {
 		$this->logger = $logger;
 		$this->filePath = $filePath;
 		try{
+
+			echo "\x1b]0;" . $this->getName() . $this->getFormattedVersion("-") . " // Loading\x07";
+
 			if(!file_exists($dataPath . "worlds/")){
 				mkdir($dataPath . "worlds/", 0777);
 			}
@@ -1995,8 +1998,9 @@ class Server {
 			]), $this->dserverConfig["timer"]);
 
 			if($cfgVer > $advVer){
-				$this->logger->notice("Your leveryl.yml needs update");
-				$this->logger->notice("Current Version: $advVer\tLatest Version: $cfgVer");
+				$this->logger->customsend(TextFormat::YELLOW . "Your leveryl.yml needs an update.", "ConfigLoader", TextFormat::GREEN);
+				$this->logger->customsend(TextFormat::AQUA . "Current Version: $advVer", "ConfigLoader", TextFormat::GREEN);
+				$this->logger->customsend(TextFormat::AQUA . "Latest Version: $cfgVer", "ConfigLoader", TextFormat::GREEN);
 			}
 
 			$this->start();
@@ -2340,7 +2344,7 @@ class Server {
 			}
 
 			if($this->getProperty("network.upnp-forwarding", false) === true){
-				$this->logger->info("[UPnP] Removing port forward...");
+				$this->logger->customsend("Removing port forward...", "UPnP", TextFormat::WHITE);
 				UPnP::RemovePortForward($this->getPort());
 			}
 
@@ -2410,7 +2414,7 @@ class Server {
 
 
 		if($this->getProperty("network.upnp-forwarding", false) == true){
-			$this->logger->info("[UPnP] Trying to port forward...");
+			$this->logger->customsend("Trying to port forward...", "UPnP", TextFormat::WHITE);
 			UPnP::PortForward($this->getPort());
 		}
 
@@ -2948,5 +2952,12 @@ class Server {
 		}
 
 		return true;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLeverylAPIVersion(){
+		return \pocketmine\LEVERYL_API_VERSION;
 	}
 }

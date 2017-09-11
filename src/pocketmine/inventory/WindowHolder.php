@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  *
  *  ____       _                          _
  * |  _ \ _ __(_)___ _ __ ___   __ _ _ __(_)_ __   ___
@@ -18,6 +18,8 @@
  *
  *
  */
+
+declare(strict_types = 1);
 
 namespace pocketmine\inventory;
 

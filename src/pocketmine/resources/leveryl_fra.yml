@@ -10,7 +10,7 @@
 
 #Version de ce fichier
 config:
- version: 29
+ version: 30
 
 level:
  #Réglez si la météo est activée (la pluie peut provoquer un retard sur les périphériques plus anciens)

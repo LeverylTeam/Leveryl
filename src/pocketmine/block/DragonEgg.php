@@ -24,6 +24,7 @@ namespace pocketmine\block;
 
 use pocketmine\event\block\BlockTeleportEvent;
 use pocketmine\item\Item;
+use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\level\sound\GenericSound;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
@@ -93,7 +94,7 @@ class DragonEgg extends Fallable {
 			$x = $this->getX() + self::RAND_HORIZONTAL[array_rand(self::RAND_HORIZONTAL)];
 			$y = $this->getY() + self::RAND_VERTICAL[array_rand(self::RAND_VERTICAL)];
 			$z = $this->getZ() + self::RAND_HORIZONTAL[array_rand(self::RAND_HORIZONTAL)];
-			if($level->getBlockIdAt($x,$y,$z) == 0){
+			if($level->getBlockIdAt($x,$y,$z) == 0 && $y < Level::Y_MAX){
 				$safe = true;
 				break;
 			}

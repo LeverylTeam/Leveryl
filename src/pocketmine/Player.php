@@ -1816,7 +1816,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$revert = false;
 
 		if(($distanceSquared / ($tickDiff ** 2)) > 100 and !$this->allowMovementCheats){
-			$this->server->getLogger()->warning($this->getName() . " moved too fast, reverting movement");
+			$this->server->getLogger()->customsend($this->getName() . " moved too fast, reverting movement", "AntiCheat", TextFormat::YELLOW);
 			$revert = true;
 		}else{
 			if($this->chunk === null or !$this->chunk->isGenerated()){
@@ -1854,7 +1854,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				if(!$ev->isCancelled()){
 					$revert = true;
-					$this->server->getLogger()->warning($this->getServer()->getLanguage()->translateString("pocketmine.player.invalidMove", [$this->getName()]));
+					$this->server->getLogger()->customsend($this->getServer()->getLanguage()->translateString("pocketmine.player.invalidMove", [$this->getName()]), "AntiCheat", TextFormat::YELLOW);
 				}
 			}
 
@@ -3033,7 +3033,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}
 
 						if($this->server->isHardcore()){
-							$this->setBanned(true);
+							$this->getServer()->getNameBans()->addBan($this->getName(), TextFormat::RED . "Server is in HardCore Mode.", null, $this->getName());
+							$this->kick(TextFormat::RED . "Server is in HardCore Mode.", false);
 							break;
 						}
 
@@ -3048,6 +3049,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->server->getPluginManager()->callEvent($ev = new PlayerRespawnEvent($this, $this->getSpawn()));
 
 						$this->teleport($ev->getRespawnPosition());
+
+						$this->nextChunkOrderRun = 0;
 
 						$this->setSprinting(false);
 						$this->setSneaking(false);
@@ -4382,7 +4385,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				break;
 
 			default:
-
+				break;
 		}
 
 		Entity::kill();
@@ -4395,6 +4398,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if(!$ev->getKeepInventory()){
 			foreach($ev->getDrops() as $item){
 				$this->level->dropItem($this, $item);
+			}
+
+			if($this->floatingInventory !== null){
+				$this->floatingInventory->clearAll();
 			}
 
 			if($this->inventory !== null){

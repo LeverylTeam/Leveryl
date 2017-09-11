@@ -28,6 +28,7 @@ use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\math\AxisAlignedBB;
+use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
@@ -151,7 +152,7 @@ class EnderChest extends Transparent {
 	 */
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
-			$top = $this->getSide(1);
+			$top = $this->getSide(Vector3::SIDE_UP);
 			if($top->isTransparent() !== true){
 				return true;
 			}

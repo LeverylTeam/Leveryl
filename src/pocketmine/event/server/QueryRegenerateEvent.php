@@ -77,7 +77,7 @@ class QueryRegenerateEvent extends ServerEvent {
 
 		$this->gametype = ($server->getGamemode() & 0x01) === 0 ? "SMP" : "CMP";
 		$this->version = $server->getVersion();
-		$this->server_engine = $server->getName() . " " . $server->getPocketMineVersion();
+		$this->server_engine = $server->getName() . " v" . $server->getPocketMineVersion();
 		$this->map = $server->getDefaultLevel() === null ? "unknown" : $server->getDefaultLevel()->getName();
 		$this->numPlayers = $poc;
 		$this->maxPlayers = $pc;
