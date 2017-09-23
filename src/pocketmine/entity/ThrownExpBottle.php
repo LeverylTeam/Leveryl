@@ -39,6 +39,10 @@ class ThrownExpBottle extends Projectile {
 
 	private $hasSplashed = false;
 
+	const RAND_POS_X = [0, -0.1];
+	const RAND_POS_Y = [-0.2];
+	const RAND_POS_Z = [0, -0.1];
+
 	/**
 	 * ThrownExpBottle constructor.
 	 *
@@ -55,9 +59,13 @@ class ThrownExpBottle extends Projectile {
 			$this->hasSplashed = true;
 			$this->getLevel()->addParticle(new SpellParticle($this, 46, 82, 153));
 			if($this->getLevel()->getServer()->expEnabled){
-				$this->getLevel()->spawnXPOrb($this->add(0, -0.2, 0), mt_rand(1, 4));
-				$this->getLevel()->spawnXPOrb($this->add(-0.1, -0.2, 0), mt_rand(1, 4));
-				$this->getLevel()->spawnXPOrb($this->add(0, -0.2, -0.1), mt_rand(1, 4));
+				$rand = mt_rand(1,3);
+				for($c = 0; $c <= $rand; $c++){
+					$randomX = self::RAND_POS_X[array_rand(self::RAND_POS_X)];
+					$randomY = self::RAND_POS_Y[array_rand(self::RAND_POS_Y)];
+					$randomZ = self::RAND_POS_Z[array_rand(self::RAND_POS_Z)];
+					$this->getLevel()->spawnXPOrb($this->add($randomX, $randomY, $randomZ), mt_rand(1, 4));
+				}
 			}
 
 			$this->kill();

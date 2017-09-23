@@ -4421,7 +4421,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$pos = $this->getSpawn();
 
-		$this->setHealth(0);
+		$this->setHealth(0.0);
 
 		$pk = new RespawnPacket();
 		$pk->x = $pos->x;
@@ -4431,9 +4431,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	/**
-	 * @param int $amount
+	 * @param float $amount
 	 */
-	public function setHealth($amount){
+	public function setHealth(float $amount){
 		parent::setHealth($amount);
 		if($this->spawned === true){
 			$this->foodTick = 0;

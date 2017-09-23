@@ -353,8 +353,8 @@ abstract class Entity extends Location implements Metadatable {
 	public $width;
 	public $length;
 
-	/** @var int */
-	private $health = 20;
+	/** @var float */
+	private $health = 20.0;
 	private $maxHealth = 20;
 
 	protected $ySize = 0;
@@ -1125,9 +1125,9 @@ abstract class Entity extends Location implements Metadatable {
 	/**
 	 * Sets the health of the Entity. This won't send any update to the players
 	 *
-	 * @param int $amount
+	 * @param float $amount
 	 */
-	public function setHealth($amount){
+	public function setHealth(float $amount){
 		$amount = (int)$amount;
 		if($amount === $this->health){
 			return;
@@ -1166,10 +1166,10 @@ abstract class Entity extends Location implements Metadatable {
 	}
 
 	/**
-	 * @return int
+	 * @return float
 	 */
 	public function getMaxHealth(){
-		return $this->maxHealth + ($this->hasEffect(Effect::HEALTH_BOOST) ? 4 * ($this->getEffect(Effect::HEALTH_BOOST)->getAmplifier() + 1) : 0);
+		return floatval($this->maxHealth + ($this->hasEffect(Effect::HEALTH_BOOST) ? 4 * ($this->getEffect(Effect::HEALTH_BOOST)->getAmplifier() + 1) : 0));
 	}
 
 	/**
