@@ -324,6 +324,9 @@ class Server {
 	public $alwaysDay = [];
 	public $noWeatherWorlds = [];
 
+	/** @var string[] */
+	public $STRplayerList = [];
+
 	/**
 	 * @return string
 	 */
@@ -1001,6 +1004,10 @@ class Server {
 				unset($this->identifiers[spl_object_hash($player)]);
 				break;
 			}
+		}
+
+		if(in_array($player->getName(), $this->STRplayerList)){
+			unset($this->STRplayerList[array_search($player->getName(), $this->STRplayerList)]);
 		}
 	}
 
@@ -2606,6 +2613,8 @@ class Server {
 
 		$this->sendFullPlayerListData($player);
 		$player->dataPacket($this->craftingManager->getCraftingDataPacket());
+
+		$this->STRplayerList[] = $player->getName();
 	}
 
 	public function addPlayer($identifier, Player $player){

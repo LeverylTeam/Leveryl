@@ -2273,17 +2273,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->server->getPluginManager()->subscribeToPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE, $this);
 		}
 
-		foreach($this->server->getOnlinePlayers() as $p){
-			if($p !== $this and strtolower($p->getName()) === strtolower($this->getName())){
-				$this->close($this->getLeaveMessage(), "Logged in from another location");
-
-				return;
-			}elseif($p->loggedIn and $this->getUniqueId()->equals($p->getUniqueId())){
-				$this->close($this->getLeaveMessage(), "Logged in from another location");
-
-				return;
-			}
+		if(in_array($this->getName(), $this->server->STRplayerList)){
+			$this->kick("Logged in from another location", false);
 		}
+
 		$this->setNameTag($this->getDisplayName());
 
 		$nbt = $this->server->getOfflinePlayerData($this->username);
@@ -3024,10 +3017,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					case PlayerActionPacket::ACTION_STOP_SLEEPING:
 						$this->stopSleep();
 						break;
-					case PlayerActionPacket::ACTION_SPAWN_NETHER:
+					case PlayerActionPacket::ACTION_DIMENSION_CHANGE_ACK:
 						break;
-					case PlayerActionPacket::ACTION_SPAWN_SAME_DIMENSION:
-					case PlayerActionPacket::ACTION_SPAWN_OVERWORLD:
+					case PlayerActionPacket::ACTION_DIMENSION_CHANGE_REQUEST:
 						if($this->isAlive() or !$this->isOnline()){
 							break;
 						}

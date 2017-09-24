@@ -133,7 +133,7 @@ interface BlockIds {
 	const CLAY_BLOCK = 82;
 	const REEDS = 83;
 	const SUGARCANE_BLOCK = 83;
-
+	const JUKEBOX = 84;
 	const FENCE = 85;
 	const PUMPKIN = 86;
 	const NETHERRACK = 87;
@@ -177,8 +177,6 @@ interface BlockIds {
 	const NETHER_BRICK_STAIRS = 114;
 	const NETHER_BRICKS_STAIRS = 114;
 	const NETHER_WART_PLANT = 115;
-	const NETHER_WART_BLOCK = 214;
-	const RED_NETHER_BRICK = 215;
 	const ENCHANTING_TABLE = 116;
 	const ENCHANT_TABLE = 116;
 	const ENCHANTMENT_TABLE = 116;
@@ -265,7 +263,8 @@ interface BlockIds {
 	const COAL_BLOCK = 173;
 	const PACKED_ICE = 174;
 	const DOUBLE_PLANT = 175;
-
+	const STANDING_BANNER = 176;
+	const WALL_BANNER = 177;
 	const INVERTED_DAYLIGHT_SENSOR = 178;
 	const DAYLIGHT_SENSOR_INVERTED = 178;
 	const RED_SANDSTONE = 179;
@@ -298,12 +297,16 @@ interface BlockIds {
 	const PURPUR = 201;
 
 	const PURPUR_STAIRS = 203;
-
+	const UNDYED_SHULKER_BOX = 205;
 	const END_STONE_BRICKS = 206;
 	const FROSTED_ICE = 207;
 	const END_ROD = 208;
 
 	const MAGMA = 213;
+	const NETHER_WART_BLOCK = 214;
+	const RED_NETHER_BRICK = 215;
+	const BONE_BLOCK = 216;
+
 
 	const SHULKER_BOX = 218;
 	const PURPLE_GLAZED_TERRACOTTA = 219;
@@ -337,6 +340,7 @@ interface BlockIds {
 	const ATEUPD_BLOCK = 249;
 	const BLOCK_MOVED_BY_PISTON = 250;
 	const OBSERVER = 251;
+	const STRUCTURE_BLOCK = 252;
 
 	const INFO_RESERVED6 = 255;
 }
