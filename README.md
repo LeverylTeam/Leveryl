@@ -11,8 +11,12 @@ Report any BUGS in the issues section...
 NOTE: **The master branch is the only officially supported branch.**
 _All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks._
 
+# Donating
+[Head Developer's PayPal Donation Page](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MABFZPDR8F5UG)
+<br />Your donations support us as we continue to Develop Leveryl for free :wink:
+
 # Where can I get the Latest Leveryl phar?
-You can download the latest phar from our [Jenkins Build Server](http://cortexpe.ml:8080/job/Leveryl/lastSuccessfulBuild/) :smile:
+You can download the latest phar from our [Jenkins Build Server](http://cortexpe.ml:8080/job/Leveryl/lastSuccessfulBuild/)
 
 # Features:
 - [X] **CustomPotions**
