@@ -424,7 +424,6 @@ abstract class DataPacket extends BinaryStream {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Reads a list of Attributes from the stream.
 	 * @return Attribute[]
 	 *
@@ -654,8 +653,6 @@ abstract class DataPacket extends BinaryStream {
 	}
 
 	/**
-=======
->>>>>>> 211434faef5e387c91f1f1db85bba7803a2af948
 	 * @return string
 	 */
 	public function getName(){

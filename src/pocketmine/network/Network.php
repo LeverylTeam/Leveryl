@@ -25,10 +25,7 @@
 
 namespace pocketmine\network;
 
-<<<<<<< HEAD
 use pocketmine\network\mcpe\protocol\AddBehaviorTreePacket;
-=======
->>>>>>> 211434faef5e387c91f1f1db85bba7803a2af948
 use pocketmine\event\server\NetworkInterfaceCrashEvent;
 use pocketmine\event\server\NetworkInterfaceRegisterEvent;
 use pocketmine\event\server\NetworkInterfaceUnregisterEvent;

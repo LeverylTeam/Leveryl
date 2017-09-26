@@ -534,10 +534,7 @@ class Binary {
 		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
 		return $temp ^ ($raw & (1 << 63));
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> 211434faef5e387c91f1f1db85bba7803a2af948
+	
 	/**
 	 * Reads a 64-bit unsigned variable-length integer.
 	 *
@@ -551,25 +548,16 @@ class Binary {
 		for($i = 0; $i <= 63; $i += 7){
 			$b = ord($buffer{$offset++});
 			$value |= (($b & 0x7f) << $i);
-<<<<<<< HEAD
-
-=======
->>>>>>> 211434faef5e387c91f1f1db85bba7803a2af948
+			
 			if(($b & 0x80) === 0){
 				return $value;
 			}elseif(!isset($buffer{$offset})){
 				throw new \UnexpectedValueException("Expected more bytes, none left to read");
 			}
 		}
-<<<<<<< HEAD
 
 		throw new \InvalidArgumentException("VarLong did not terminate after 10 bytes!");
 	}
-
-=======
-		throw new \InvalidArgumentException("VarLong did not terminate after 10 bytes!");
-	}
->>>>>>> 211434faef5e387c91f1f1db85bba7803a2af948
 	/**
 	 * Writes a 64-bit integer as a zigzag-encoded variable-length long.
 	 *
@@ -579,10 +567,7 @@ class Binary {
 	public static function writeVarLong(int $v) : string{
 		return self::writeUnsignedVarLong(($v << 1) ^ ($v >> 63));
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> 211434faef5e387c91f1f1db85bba7803a2af948
+	
 	/**
 	 * Writes a 64-bit unsigned integer as a variable-length long.
 	 * @param int $value
@@ -598,15 +583,9 @@ class Binary {
 				$buf .= chr($value & 0x7f);
 				return $buf;
 			}
-<<<<<<< HEAD
 
 			$value = (($value >> 7) & (PHP_INT_MAX >> 6)); //PHP really needs a logical right-shift operator
 		}
-
-=======
-			$value = (($value >> 7) & (PHP_INT_MAX >> 6)); //PHP really needs a logical right-shift operator
-		}
->>>>>>> 211434faef5e387c91f1f1db85bba7803a2af948
 		throw new \InvalidArgumentException("Value too large to be encoded as a VarLong");
 	}
 }
