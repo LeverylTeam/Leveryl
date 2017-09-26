@@ -3,20 +3,27 @@
 </p>
 
 # Introduction:
-This is an Advanced & Feature Rich Server Software to hopefully Replace [Tesseract](https://www.github.com/TesseractTeam/Tesseract).  
+This is an Advanced & Feature Rich Server Software to hopefully Replace [Tesseract](https://github.com/TesseractTeam/Tesseract).  
 (They're dead. And this is **NOT** supposed to be taken out of context.)  
-This spoon is based off of [GenisysPro](https://www.github.com/GenisysPro/GenisysPro) (For Stability) which is based on [Genisys](https://www.github.com/ITXTech/Genisys)<br />
+This spoon is based off of [GenisysPro](https://github.com/GenisysPro/GenisysPro) (For Stability) which is based on [Genisys](https://github.com/ITXTech/Genisys)<br />
 Report any BUGS in the issues section...
 
 NOTE: **The master branch is the only officially supported branch.**
 _All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks._
+
+# Notice
+Leveryl for Minecraft Bedrock edition (PE) v1.2.0 is currently being developed. Please be patient on waiting for it to be ready for merging...
+<br />
+If you want to contribute and/or help, You may open a Pull Request on the [MCPE1dot2](https://github.com/LeverylTeam/Leveryl/tree/mcpe1dot2) branch...
+<br />
+If it's correct, we'll surely merge it.
 
 # Donating
 [Head Developer's PayPal Donation Page](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MABFZPDR8F5UG)
 <br />Your donations support us as we continue to Develop Leveryl for free :wink:
 
 # Where can I get the Latest Leveryl phar?
-You can download the latest phar from our [Jenkins Build Server](http://cortexpe.ml:8080/job/Leveryl/lastSuccessfulBuild/)
+You can download the latest phar from our [Jenkins Build Server](http://cortexpe.xyz:8080/job/Leveryl/lastSuccessfulBuild/)
 
 # Features:
 - [X] **CustomPotions**
@@ -34,7 +41,7 @@ You can download the latest phar from our [Jenkins Build Server](http://cortexpe
 ***Other List Entries are on "leveryl.yml"....***
 
 # Builds, Gitter Chat & Discord Server:
-#### Jenkins Build Status: [![Jenkins](http://cortexpe.ml:8080/job/Leveryl/badge/icon)](http://cortexpe.ml:8080/job/Leveryl/)
+#### Jenkins Build Status: [![Jenkins](http://cortexpe.xyz:8080/job/Leveryl/badge/icon)](http://cortexpe.ml:8080/job/Leveryl/)
 #### TravisCI Build Status: [![TravisCI](https://travis-ci.org/LeverylTeam/Leveryl.svg?branch=master)](https://travis-ci.org/LeverylTeam/Leveryl)
 #### Gitter Chat: [![Gitter](https://badges.gitter.im/leveryl/leveryl.svg)](https://gitter.im/leveryl/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=pr-badge)
 #### Discord Server (Talk to a Human For Support): [Join Server](https://discord.gg/8dXXsTq)
@@ -47,9 +54,9 @@ To be able to run this on Windows, You'll need Visual Studio C++ Redistributable
 Which can be downloaded [Here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
 
 # Acknowledgements / Credits:
-- Leveryl is a "spoon" of **[Pocketmine-MP](http://github.com/pmmp/PocketMine-MP/)**
+- Leveryl is a "spoon" of **[Pocketmine-MP](http://github.com/PocketMine/PocketMine-MP/)**
 - Most of the original code was written by the original [PocketMine](https://github.com/PocketMine) Team and [GenisysPro](https://github.com/GenisysPro).
-- Some Implementations are ported from [Tesseract](https://www.github.com/TesseractTeam/Tesseract), [Prismarine](https://github.com/PrismarineMC/Prismarine) and [Genisys](https://www.github.com/ITXTech/Genisys)
+- Some Implementations are ported from [Tesseract](https://github.com/TesseractTeam/Tesseract), [PMMP](http://github.com/pmmp/PocketMine-MP/), [Prismarine](https://github.com/PrismarineMC/Prismarine) and [Genisys](https://github.com/ITXTech/Genisys)
 - Ported files' authors are stated inside the file
 
 # License:
