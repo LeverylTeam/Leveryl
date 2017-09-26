@@ -285,6 +285,18 @@ class Binary {
 	}
 
 	/**
+	 * Reads a 4-byte floating-point number, rounded to the specified number of decimal places.
+	 *
+	 * @param string $str
+	 * @param int $accuracy
+	 *
+	 * @return float
+	 */
+	public static function readRoundedFloat(string $str, int $accuracy) : float{
+		return round(self::readFloat($str), $accuracy);
+	}
+
+	/**
 	 * @param $value
 	 *
 	 * @return string
@@ -307,6 +319,18 @@ class Binary {
 		}else{
 			return $value;
 		}
+	}
+
+	/**
+	 * Reads a 4-byte little-endian floating-point number rounded to the specified number of decimal places.
+	 *
+	 * @param string $str
+	 * @param int $accuracy
+	 *
+	 * @return float
+	 */
+	public static function readRoundedLFloat(string $str, int $accuracy) : float{
+		return round(self::readLFloat($str), $accuracy);
 	}
 
 	/**
@@ -455,7 +479,7 @@ class Binary {
 	 *
 	 * @return int
 	 */
-	public static function readUnsignedVarInt($stream){
+	public static function readUnsignedVarInt(BinaryStream $stream){
 		$value = 0;
 		$i = 0;
 		do{
@@ -496,5 +520,72 @@ class Binary {
 			$value = (($value >> 7) & (PHP_INT_MAX >> 6)); //PHP really needs a logical right-shift operator
 		}
 		throw new \InvalidArgumentException("Value too large to be encoded as a varint");
+	}
+	/**
+	 * Reads a 64-bit zigzag-encoded variable-length integer.
+	 *
+	 * @param string $buffer
+	 * @param int    &$offset
+	 *
+	 * @return int
+	 */
+	public static function readVarLong(string $buffer, int &$offset) : int{
+		$raw = self::readUnsignedVarLong($buffer, $offset);
+		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
+		return $temp ^ ($raw & (1 << 63));
+	}
+	
+	/**
+	 * Reads a 64-bit unsigned variable-length integer.
+	 *
+	 * @param string $buffer
+	 * @param int    &$offset
+	 *
+	 * @return int
+	 */
+	public static function readUnsignedVarLong(string $buffer, int &$offset) : int{
+		$value = 0;
+		for($i = 0; $i <= 63; $i += 7){
+			$b = ord($buffer{$offset++});
+			$value |= (($b & 0x7f) << $i);
+			
+			if(($b & 0x80) === 0){
+				return $value;
+			}elseif(!isset($buffer{$offset})){
+				throw new \UnexpectedValueException("Expected more bytes, none left to read");
+			}
+		}
+
+		throw new \InvalidArgumentException("VarLong did not terminate after 10 bytes!");
+	}
+	/**
+	 * Writes a 64-bit integer as a zigzag-encoded variable-length long.
+	 *
+	 * @param int $v
+	 * @return string
+	 */
+	public static function writeVarLong(int $v) : string{
+		return self::writeUnsignedVarLong(($v << 1) ^ ($v >> 63));
+	}
+	
+	/**
+	 * Writes a 64-bit unsigned integer as a variable-length long.
+	 * @param int $value
+	 *
+	 * @return string
+	 */
+	public static function writeUnsignedVarLong(int $value) : string{
+		$buf = "";
+		for($i = 0; $i < 10; ++$i){
+			if(($value >> 7) !== 0){
+				$buf .= chr($value | 0x80); //Let chr() take the last byte of this, it's faster than adding another & 0x7f.
+			}else{
+				$buf .= chr($value & 0x7f);
+				return $buf;
+			}
+
+			$value = (($value >> 7) & (PHP_INT_MAX >> 6)); //PHP really needs a logical right-shift operator
+		}
+		throw new \InvalidArgumentException("Value too large to be encoded as a VarLong");
 	}
 }
