@@ -480,10 +480,7 @@ class BinaryStream extends \stdClass {
 	public function getUnsignedVarLong() : int{
 		return Binary::readUnsignedVarLong($this->buffer, $this->offset);
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> 211434faef5e387c91f1f1db85bba7803a2af948
+	
 	/**
 	 * Writes a 64-bit variable-length integer to the end of the buffer.
 	 * @param int $v
@@ -491,10 +488,7 @@ class BinaryStream extends \stdClass {
 	public function putUnsignedVarLong(int $v){
 		$this->buffer .= Binary::writeUnsignedVarLong($v);
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> 211434faef5e387c91f1f1db85bba7803a2af948
+	
 	/**
 	 * Reads a 64-bit zigzag-encoded variable-length integer from the buffer and returns it.
 	 * @return int
@@ -502,10 +496,7 @@ class BinaryStream extends \stdClass {
 	public function getVarLong() : int{
 		return Binary::readVarLong($this->buffer, $this->offset);
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> 211434faef5e387c91f1f1db85bba7803a2af948
+	
 	/**
 	 * Writes a 64-bit zigzag-encoded variable-length integer to the end of the buffer.
 	 * @param int
