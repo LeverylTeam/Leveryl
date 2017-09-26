@@ -25,6 +25,8 @@ namespace pocketmine\network\mcpe\protocol;
 #include <rules/DataPacket.h>
 
 
+use pocketmine\utils\Utils;
+
 class LoginPacket extends DataPacket {
 	const NETWORK_ID = ProtocolInfo::LOGIN_PACKET;
 
@@ -34,7 +36,6 @@ class LoginPacket extends DataPacket {
 
 	public $username;
 	public $protocol;
-	public $gameEdition;
 	public $clientUUID;
 	public $clientId;
 	public $identityPublicKey;
@@ -71,14 +72,12 @@ class LoginPacket extends DataPacket {
 			return; //Do not attempt to decode for non-accepted protocols
 		}
 
-		$this->gameEdition = $this->getByte();
-
 		$this->setBuffer($this->getString(), 0);
 
 		$this->chainData = json_decode($this->get($this->getLInt()));
 		$chainKey = self::MOJANG_PUBKEY;
 		foreach($this->chainData->{"chain"} as $chain){
-			list($verified, $webtoken) = $this->decodeToken($chain, $chainKey);
+			list($verified, $webtoken) = Utils::decodeJWT($chain, $chainKey);
 			if(isset($webtoken["extraData"])){
 				if(isset($webtoken["extraData"]["displayName"])){
 					$this->username = $webtoken["extraData"]["displayName"];
@@ -95,7 +94,7 @@ class LoginPacket extends DataPacket {
 		}
 
 		$this->clientDataJwt = $this->get($this->getLInt());
-		$this->decoded = $this->decodeToken($this->clientDataJwt, $this->identityPublicKey);
+		$this->decoded = Utils::decodeJWT($this->clientDataJwt, $this->identityPublicKey);
 		$this->clientData = $this->decoded[1];
 
 		$this->clientId = $this->clientData["ClientRandomId"] ?? null;
@@ -136,45 +135,5 @@ class LoginPacket extends DataPacket {
 
 	public function encode(){
 		//TODO
-	}
-
-	public function decodeToken($token, $key = null){
-		if($key === null){
-			$tokens = explode(".", $token);
-			list($headB64, $payloadB64, $sigB64) = $tokens;
-
-			return [false, json_decode(base64_decode($payloadB64), true)];
-		}else{
-			if(extension_loaded("openssl")){
-				$tokens = explode(".", $token);
-				list($headB64, $payloadB64, $sigB64) = $tokens;
-				$sig = base64_decode(strtr($sigB64, '-_', '+/'), true);
-				$rawLen = 48; // ES384
-				for($i = $rawLen; $i > 0 and $sig[$rawLen - $i] == chr(0); $i--){
-				}
-				$j = $i + (ord($sig[$rawLen - $i]) >= 128 ? 1 : 0);
-				for($k = $rawLen; $k > 0 and $sig[2 * $rawLen - $k] == chr(0); $k--){
-				}
-				$l = $k + (ord($sig[2 * $rawLen - $k]) >= 128 ? 1 : 0);
-				$len = 2 + $j + 2 + $l;
-				$derSig = chr(48);
-				if($len > 255){
-					throw new \RuntimeException("Invalid signature format");
-				}elseif($len >= 128){
-					$derSig .= chr(81);
-				}
-				$derSig .= chr($len) . chr(2) . chr($j);
-				$derSig .= str_repeat(chr(0), $j - $i) . substr($sig, $rawLen - $i, $i);
-				$derSig .= chr(2) . chr($l);
-				$derSig .= str_repeat(chr(0), $l - $k) . substr($sig, 2 * $rawLen - $k, $k);
-				$verified = openssl_verify($headB64 . "." . $payloadB64, $derSig, "-----BEGIN PUBLIC KEY-----\n" . wordwrap($key, 64, "\n", true) . "\n-----END PUBLIC KEY-----\n", OPENSSL_ALGO_SHA384) === 1;
-			}else{
-				$tokens = explode(".", $token);
-				list($headB64, $payloadB64, $sigB64) = $tokens;
-				$verified = false;
-			}
-
-			return [$verified, json_decode(base64_decode($payloadB64), true)];
-		}
 	}
 }

@@ -25,6 +25,9 @@
 
 namespace pocketmine\network;
 
+use pocketmine\event\server\NetworkInterfaceCrashEvent;
+use pocketmine\event\server\NetworkInterfaceRegisterEvent;
+use pocketmine\event\server\NetworkInterfaceUnregisterEvent;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\network\mcpe\protocol\AddHangingEntityPacket;
 use pocketmine\network\mcpe\protocol\AddItemEntityPacket;
@@ -196,6 +199,8 @@ class Network {
 					}
 				}
 
+				(new NetworkInterfaceCrashEvent($interface, $e))->call();
+
 				$interface->emergencyShutdown();
 				$this->unregisterInterface($interface);
 				$logger->critical($this->server->getLanguage()->translateString("pocketmine.server.networkError", [get_class($interface), $e->getMessage()]));
@@ -207,20 +212,23 @@ class Network {
 	 * @param SourceInterface $interface
 	 */
 	public function registerInterface(SourceInterface $interface){
-		$this->interfaces[$hash = spl_object_hash($interface)] = $interface;
-		if($interface instanceof AdvancedSourceInterface){
-			$this->advancedInterfaces[$hash] = $interface;
-			$interface->setNetwork($this);
+		($ev = new NetworkInterfaceRegisterEvent($interface))->call();
+		if(!$ev->isCancelled()){
+			$this->interfaces[$hash = spl_object_hash($interface)] = $interface;
+			if($interface instanceof AdvancedSourceInterface){
+				$this->advancedInterfaces[$hash] = $interface;
+				$interface->setNetwork($this);
+			}
+			$interface->setName($this->name);
 		}
-		$interface->setName($this->name);
 	}
 
 	/**
 	 * @param SourceInterface $interface
 	 */
 	public function unregisterInterface(SourceInterface $interface){
-		unset($this->interfaces[$hash = spl_object_hash($interface)],
-			$this->advancedInterfaces[$hash]);
+		(new NetworkInterfaceUnregisterEvent($interface))->call();
+		unset($this->interfaces[$hash = spl_object_hash($interface)], $this->advancedInterfaces[$hash]);
 	}
 
 	/**
