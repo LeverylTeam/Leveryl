@@ -42,14 +42,13 @@ class PlayStatusPacket extends DataPacket {
 	 *
 	 */
 	public function decode(){
-
+		$this->status = $this->getInt();
 	}
 
 	/**
 	 *
 	 */
 	public function encode(){
-		$this->reset();
 		$this->putInt($this->status);
 	}
 

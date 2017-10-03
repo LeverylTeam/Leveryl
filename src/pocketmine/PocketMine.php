@@ -73,9 +73,9 @@ namespace pocketmine {
 	use pocketmine\utils\Utils;
 	use pocketmine\wizard\Installer;
 
-	const VERSION = "1.0.1";
-	const API_VERSION = "3.0.0-ALPHA5";
-	const CODENAME = "NewBeginnings";
+	const VERSION = "1.2.0";
+	const API_VERSION = "3.0.0-ALPHA7";
+	const CODENAME = "Citadel"; // Yes. This is a "Rick and Morty" reference :joy:
 	const GENISYS_API_VERSION = '2.0.0';
 	const LEVERYL_API_VERSION = '0.0.1';
 

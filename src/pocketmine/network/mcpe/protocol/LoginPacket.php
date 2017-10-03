@@ -25,6 +25,7 @@ namespace pocketmine\network\mcpe\protocol;
 #include <rules/DataPacket.h>
 
 
+use pocketmine\utils\Binary;
 use pocketmine\utils\Utils;
 
 class LoginPacket extends DataPacket {
@@ -64,6 +65,10 @@ class LoginPacket extends DataPacket {
 	}
 
 	public function decode(){
+		$tmpData = Binary::readInt(substr($this->buffer, 1, 4));
+		if ($tmpData == 0) {
+			$this->getShort();
+		}
 		$this->protocol = $this->getInt();
 
 		if(!in_array($this->protocol, ProtocolInfo::ACCEPTED_PROTOCOLS)){
