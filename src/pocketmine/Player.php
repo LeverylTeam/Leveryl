@@ -122,7 +122,7 @@ use pocketmine\network\mcpe\protocol\AvailableCommandsPacket;
 use pocketmine\network\mcpe\protocol\BatchPacket;
 use pocketmine\network\mcpe\protocol\ChangeDimensionPacket;
 use pocketmine\network\mcpe\protocol\ChunkRadiusUpdatedPacket;
-use pocketmine\network\mcpe\protocol\ContainerSetContentPacket;
+//use pocketmine\network\mcpe\protocol\ContainerSetContentPacket;
 use pocketmine\network\mcpe\protocol\DataPacket;
 use pocketmine\network\mcpe\protocol\DisconnectPacket;
 use pocketmine\network\mcpe\protocol\EntityEventPacket;
@@ -3136,7 +3136,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 				break;
 
-			case ProtocolInfo::REMOVE_BLOCK_PACKET:
+			/*case ProtocolInfo::REMOVE_BLOCK_PACKET:
 				if($this->spawned === false or !$this->isAlive()){
 					break;
 				}
@@ -3170,7 +3170,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if($tile instanceof Spawnable){
 					$tile->spawnTo($this);
 				}
-				break;
+				break;*/
 
 			case ProtocolInfo::MOB_ARMOR_EQUIPMENT_PACKET:
 				//This packet is ignored. Armour changes are also sent by ContainerSetSlotPackets, and are handled there instead.
@@ -3343,15 +3343,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						break;
 				}
 				break;
-			case ProtocolInfo::DROP_ITEM_PACKET:
+			/*case ProtocolInfo::DROP_ITEM_PACKET:
 				if($this->spawned === false or !$this->isAlive()){
 					break;
 				}
 				if($packet->item->getId() === Item::AIR){
-					/**
-					 * This is so stupid it's unreal.
-					 * Windows 10 Edition Beta drops the contents of the crafting grid when the inventory closes - including air.
-					 */
 					break;
 				}
 
@@ -3380,7 +3376,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				Timings::$playerCommandTimer->startTiming();
 				$this->server->dispatchCommand($ev->getPlayer(), substr($ev->getMessage(), 1));
 				Timings::$playerCommandTimer->stopTiming();
-				break;
+				break;*/
 			case ProtocolInfo::TEXT_PACKET:
 				if($this->spawned === false or !$this->isAlive()){
 					break;
@@ -3714,7 +3710,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				break;
-
+/*
 			case ProtocolInfo::CONTAINER_SET_SLOT_PACKET:
 				if($this->spawned === false or !$this->isAlive()){
 					break;
@@ -3756,7 +3752,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				$this->getTransactionQueue()->addTransaction($transaction);
 
-				break;
+				break;*/
 			case ProtocolInfo::BLOCK_ENTITY_DATA_PACKET:
 				if($this->spawned === false or !$this->isAlive()){
 					break;
