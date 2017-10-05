@@ -41,7 +41,10 @@ class PlaySoundPacket extends DataPacket {
 	 */
 	public function decode(){
 		$this->sound = $this->getString();
-		$this->getBlockPos($this->x, $this->y, $this->z);
+		$this->getBlockPosition($this->x, $this->y, $this->z);
+		$this->x /= 8;
+		$this->y /= 8;
+		$this->z /= 8;
 		$this->volume = $this->getFloat();
 		$this->float = $this->getFloat();
 	}
@@ -52,13 +55,13 @@ class PlaySoundPacket extends DataPacket {
 	public function encode(){
 		$this->reset();
 		$this->putString($this->sound);
-		$this->putBlockPos($this->x, $this->y, $this->z);
+		$this->putBlockPosition((int) ($this->x * 8), (int) ($this->y * 8), (int) ($this->z * 8)); // This needs to be typecasted because XYZ coords can be float values.
 		$this->putFloat($this->volume);
 		$this->putFloat($this->float);
 	}
 
 	/**
-	 * @return PacketName|string
+	 * @return string
 	 */
 	public function getName(){
 		return "PlaySoundPacket";

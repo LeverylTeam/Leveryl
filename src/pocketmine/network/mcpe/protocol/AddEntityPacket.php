@@ -26,6 +26,7 @@ namespace pocketmine\network\mcpe\protocol;
 #ifndef COMPILE
 
 use pocketmine\entity\Attribute;
+use pocketmine\math\Vector3;
 
 #endif
 
@@ -35,12 +36,8 @@ class AddEntityPacket extends DataPacket {
 
 	public $eid;
 	public $type;
-	public $x;
-	public $y;
-	public $z;
-	public $speedX;
-	public $speedY;
-	public $speedZ;
+	public $position;
+	public $motion;
 	public $yaw;
 	public $pitch;
 	/** @var Attribute[] */
@@ -52,7 +49,37 @@ class AddEntityPacket extends DataPacket {
 	 *
 	 */
 	public function decode(){
+		$this->eid = $this->getEntityUniqueId();
+		$this->entityRuntimeId = $this->getEntityRuntimeId();
+		$this->type = $this->getUnsignedVarInt();
+		$this->position = $this->getVector3Obj();
+		$this->motion = $this->getVector3Obj();
+		$this->pitch = $this->getLFloat();
+		$this->yaw = $this->getLFloat();
 
+		$attrCount = $this->getUnsignedVarInt();
+		for($i = 0; $i < $attrCount; ++$i){
+			$name = $this->getString();
+			$min = $this->getLFloat();
+			$current = $this->getLFloat();
+			$max = $this->getLFloat();
+			$attr = Attribute::getAttributeByName($name);
+
+			if($attr !== null){
+				$attr->setMinValue($min);
+				$attr->setMaxValue($max);
+				$attr->setValue($current);
+				$this->attributes[] = $attr;
+			}else{
+				throw new \UnexpectedValueException("Unknown attribute type \"$name\"");
+			}
+		}
+
+		$this->metadata = $this->getEntityMetadata();
+		$linkCount = $this->getUnsignedVarInt();
+		for($i = 0; $i < $linkCount; ++$i){
+			$this->links[] = $this->getEntityLink();
+		}
 	}
 
 	/**
@@ -60,11 +87,12 @@ class AddEntityPacket extends DataPacket {
 	 */
 	public function encode(){
 		$this->reset();
+		if(isset($this->x)) $this->position = new Vector3($this->x, $this->y, $this->z);
 		$this->putEntityId($this->eid); //EntityUniqueID - TODO: verify this
 		$this->putEntityId($this->eid);
 		$this->putUnsignedVarInt($this->type);
-		$this->putVector3f($this->x, $this->y, $this->z);
-		$this->putVector3f($this->speedX, $this->speedY, $this->speedZ);
+		$this->putVector3Obj($this->position);
+		$this->putVector3ObjNullable($this->motion);
 		$this->putLFloat($this->pitch * (256 / 360));
 		$this->putLFloat($this->yaw * (256 / 360));
 		$this->putUnsignedVarInt(count($this->attributes));
@@ -77,9 +105,7 @@ class AddEntityPacket extends DataPacket {
 		$this->putEntityMetadata($this->metadata);
 		$this->putUnsignedVarInt(count($this->links));
 		foreach($this->links as $link){
-			$this->putEntityId($link[0]);
-			$this->putEntityId($link[1]);
-			$this->putByte($link[2]);
+			$this->putEntityLink($link);
 		}
 	}
 

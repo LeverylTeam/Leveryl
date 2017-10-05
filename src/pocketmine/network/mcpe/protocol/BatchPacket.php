@@ -45,8 +45,12 @@ class BatchPacket extends DataPacket {
 		$this->put($this->payload);
 	}
 
+	public function encodeHeader(){
+		$this->putByte(static::NETWORK_ID);
+	}
+
 	/**
-	 * @return PacketName|string
+	 * @return string
 	 */
 	public function getName(){
 		return "BatchPacket";

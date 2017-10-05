@@ -28,17 +28,13 @@ class RespawnPacket extends DataPacket {
 
 	const NETWORK_ID = ProtocolInfo::RESPAWN_PACKET;
 
-	public $x;
-	public $y;
-	public $z;
+	public $position;
 
 	/**
 	 *
 	 */
 	public function decode(){
-		$this->x = $this->getLFloat();
-		$this->y = $this->getLFloat();
-		$this->z = $this->getLFloat();
+		$this->position = $this->getVector3Obj();
 	}
 
 	/**
@@ -46,13 +42,11 @@ class RespawnPacket extends DataPacket {
 	 */
 	public function encode(){
 		$this->reset();
-		$this->putLFloat($this->x);
-		$this->putLFloat($this->y);
-		$this->putLFloat($this->z);
+		$this->putVector3Obj($this->position);
 	}
 
 	/**
-	 * @return PacketName|string
+	 * @return string
 	 */
 	public function getName(){
 		return "RespawnPacket";

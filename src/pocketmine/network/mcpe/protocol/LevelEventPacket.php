@@ -40,10 +40,7 @@ class LevelEventPacket extends DataPacket {
 	const EVENT_SOUND_DOOR_BUMP = 1010;
 
 	const EVENT_SOUND_DOOR_CRASH = 1012;
-	
-	const EVENT_SOUND_BAT_FLY = 1015;
-	const EVENT_SOUND_ZOMBIE_INFECT = 1016;
-	const EVENT_SOUND_ZOMBIE_HEAL = 1017;
+
 	const EVENT_SOUND_ENDERMAN_TELEPORT = 1018;
 
 	const EVENT_SOUND_ANVIL_BREAK = 1020; //This sound is played on the anvil's final use, NOT when the block is broken.
@@ -62,7 +59,14 @@ class LevelEventPacket extends DataPacket {
 	
 	const EVENT_SOUND_CAMERA = 1050;
 	const EVENT_SOUND_ORB = 1051;
-	const EVENT_SOUND_BLOCK_PLACE = 1052;
+	const EVENT_SOUND_TOTEM = 1052;
+
+	const EVENT_SOUND_ARMOR_STAND_BREAK = 1060;
+	const EVENT_SOUND_ARMOR_STAND_HIT = 1061;
+	const EVENT_SOUND_ARMOR_STAND_FALL = 1062;
+	const EVENT_SOUND_ARMOR_STAND_PLACE = 1063;
+
+	//TODO: check 2000-2017
 	
 	const EVENT_PARTICLE_SHOOT = 2000;
 	const EVENT_PARTICLE_DESTROY = 2001;
@@ -94,6 +98,7 @@ class LevelEventPacket extends DataPacket {
 	const EVENT_CAULDRON_FILL_WATER = 3506;
 	const EVENT_CAULDRON_TAKE_WATER = 3507;
 	const EVENT_CAULDRON_ADD_DYE = 3508;
+	const EVENT_CAULDRON_CLEAN_BANNER = 3509;
 
 	const EVENT_BLOCK_START_BREAK = 3600;
 	const EVENT_BLOCK_STOP_BREAK = 3601;
@@ -105,16 +110,16 @@ class LevelEventPacket extends DataPacket {
 	const EVENT_ADD_PARTICLE_MASK = 0x4000;
 
 	public $evid;
-	public $x = 0; //Weather effects don't have coordinates
-	public $y = 0;
-	public $z = 0;
+	public $position;
 	public $data;
 
 	/**
 	 *
 	 */
 	public function decode(){
-
+		$this->evid = $this->getVarInt();
+		$this->position = $this->getVector3Obj();
+		$this->data = $this->getVarInt();
 	}
 
 	/**
@@ -123,7 +128,7 @@ class LevelEventPacket extends DataPacket {
 	public function encode(){
 		$this->reset();
 		$this->putVarInt($this->evid);
-		$this->putVector3f($this->x, $this->y, $this->z);
+		$this->putVector3ObjNullable($this->position);
 		$this->putVarInt($this->data);
 	}
 

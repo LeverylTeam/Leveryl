@@ -35,21 +35,25 @@ class ChangeDimensionPacket extends DataPacket {
 	const DIMENSION_END = 2;
 
 	public $dimension;
+	public $respawn = false;
 
-	public $x;
-	public $y;
-	public $z;
-	public $unknown; //bool
+	public $position;
 
 	public function decode(){
-
+		$this->dimension = $this->getVarInt();
+		$this->position = $this->getVector3Obj();
+		$this->respawn = $this->getBool();
 	}
 
 	public function encode(){
 		$this->reset();
 		$this->putVarInt($this->dimension);
-		$this->putVector3f($this->x, $this->y, $this->z);
-		$this->putBool($this->unknown);
+		$this->putVector3Obj($this->position);
+		$this->putBool($this->respawn);
+	}
+
+	public function getName(){
+		return "ChangeDimensionPacket";
 	}
 
 }

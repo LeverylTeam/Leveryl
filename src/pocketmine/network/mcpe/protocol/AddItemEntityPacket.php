@@ -24,24 +24,28 @@ namespace pocketmine\network\mcpe\protocol;
 #include <rules/DataPacket.h>
 
 
+use pocketmine\math\Vector3;
+
 class AddItemEntityPacket extends DataPacket {
 
 	const NETWORK_ID = ProtocolInfo::ADD_ITEM_ENTITY_PACKET;
 
 	public $eid;
 	public $item;
-	public $x;
-	public $y;
-	public $z;
-	public $speedX;
-	public $speedY;
-	public $speedZ;
+	public $position;
+	public $motion;
+	public $metadata = [];
 
 	/**
 	 *
 	 */
 	public function decode(){
-
+		$this->eid = $this->getEntityUniqueId();
+		$this->entityRuntimeId = $this->getEntityRuntimeId();
+		$this->item = $this->getSlot();
+		$this->position = $this->getVector3Obj();
+		$this->motion = $this->getVector3Obj();
+		$this->metadata = $this->getEntityMetadata();
 	}
 
 	/**
@@ -49,11 +53,13 @@ class AddItemEntityPacket extends DataPacket {
 	 */
 	public function encode(){
 		$this->reset();
+		if(isset($this->x)) $this->position = new Vector3($this->x, $this->y, $this->z);
 		$this->putEntityId($this->eid); //EntityUniqueID
 		$this->putEntityId($this->eid); //EntityRuntimeID
 		$this->putSlot($this->item);
-		$this->putVector3f($this->x, $this->y, $this->z);
-		$this->putVector3f($this->speedX, $this->speedY, $this->speedZ);
+		$this->putVector3Obj($this->position);
+		$this->putVector3ObjNullable($this->motion);
+		$this->putEntityMetadata($this->metadata);
 	}
 
 	/**

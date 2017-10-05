@@ -28,10 +28,8 @@ class SetEntityMotionPacket extends DataPacket {
 
 	const NETWORK_ID = ProtocolInfo::SET_ENTITY_MOTION_PACKET;
 
-	public $eid;
-	public $motionX;
-	public $motionY;
-	public $motionZ;
+	public $entityRuntimeId;
+	public $motion;
 
 	/**
 	 * @return $this
@@ -46,7 +44,8 @@ class SetEntityMotionPacket extends DataPacket {
 	 *
 	 */
 	public function decode(){
-
+		$this->entityRuntimeId = $this->getEntityRuntimeId();
+		$this->motion = $this->getVector3Obj();
 	}
 
 	/**
@@ -54,8 +53,8 @@ class SetEntityMotionPacket extends DataPacket {
 	 */
 	public function encode(){
 		$this->reset();
-		$this->putEntityId($this->eid);
-		$this->putVector3f($this->motionX, $this->motionY, $this->motionZ);
+		$this->putEntityRuntimeId($this->entityRuntimeId);
+		$this->putVector3Obj($this->motion);
 	}
 
 	/**

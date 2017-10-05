@@ -30,6 +30,30 @@ class Binary {
 	const BIG_ENDIAN = 0x00;
 	const LITTLE_ENDIAN = 0x01;
 
+	public static function signByte(int $value) : int{
+		return $value << 56 >> 56;
+	}
+
+	public static function unsignByte(int $value) : int{
+		return $value & 0xff;
+	}
+
+	public static function signShort(int $value) : int{
+		return $value << 48 >> 48;
+	}
+
+	public function unsignShort(int $value) : int{
+		return $value & 0xffff;
+	}
+
+	public static function signInt(int $value) : int{
+		return $value << 32 >> 32;
+	}
+
+	public static function unsignInt(int $value) : int{
+		return $value & 0xffffffff;
+	}
+
 	/**
 	 * @param $str
 	 * @param $expect

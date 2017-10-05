@@ -1,12 +1,12 @@
 <?php
 
 /*
- *     __						    _
+ *     _                            _
  *    / /  _____   _____ _ __ _   _| |
  *   / /  / _ \ \ / / _ \ '__| | | | |
  *  / /__|  __/\ V /  __/ |  | |_| | |
  *  \____/\___| \_/ \___|_|   \__, |_|
- *						      |___/
+ *                            |___/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
  * Merged together from BOTH Genisys and PMMP
  *
  */
-
 
 namespace pocketmine\utils;
 
@@ -79,8 +78,8 @@ class Color {
 	 *
 	 * @return Color
 	 */
-	public static function getRGB($r, $g, $b){
-		return new Color((int)$r, (int)$g, (int)$b);
+	public static function getRGB(int $r, int $g, int $b): Color{
+		return new Color($r, $g, $b);
 	}
 
 	/**
@@ -88,7 +87,7 @@ class Color {
 	 *
 	 * @return Color
 	 */
-	public static function averageColor(Color ...$colors){
+	public static function averageColor(Color ...$colors): Color{
 		$tr = 0;//total red
 		$tg = 0;//green
 		$tb = 0;//blue
@@ -106,9 +105,9 @@ class Color {
 	/**
 	 * @param $id
 	 *
-	 * @return mixed|Color
+	 * @return Color
 	 */
-	public static function getDyeColor($id){
+	public static function getDyeColor($id): Color{
 		if(isset(self::$dyeColors[$id])){
 			return clone self::$dyeColors[$id];
 		}
@@ -125,7 +124,7 @@ class Color {
 
 	// Alpha (Transparency)
 	public function getAlpha(): int{
-		return (int)$this->alpha;
+		return $this->alpha;
 	}
 
 	public function setAlpha(int $a){
@@ -134,7 +133,7 @@ class Color {
 
 	// Red
 	public function getRed(): int{
-		return (int)$this->red;
+		return $this->red;
 	}
 
 	public function setRed(int $r){
@@ -143,7 +142,7 @@ class Color {
 
 	// Green
 	public function getGreen(): int{
-		return (int)$this->green;
+		return $this->green;
 	}
 
 	public function setGreen(int $g){
@@ -152,7 +151,7 @@ class Color {
 
 	// Blue
 	public function getBlue(): int{
-		return (int)$this->blue;
+		return $this->blue;
 	}
 
 	public function setBlue(int $b){
@@ -191,15 +190,18 @@ class Color {
 	public function getB(): int{
 		return $this->getBlue();
 	}
-
 	// MIRROR FUNCTIONS... JUST FOR PLUGIN COMPATIBILITY
 
-	public static function fromRGB(int $code){
+	public static function fromRGB(int $code): Color{
 		return new Color(($code >> 16) & 0xff, ($code >> 8) & 0xff, $code & 0xff);
 	}
 
-	public static function fromARGB(int $code){
+	public static function fromARGB(int $code): Color{
 		return new Color(($code >> 16) & 0xff, ($code >> 8) & 0xff, $code & 0xff, ($code >> 24) & 0xff);
+	}
+
+	public static function fromABGR(int $code){
+		return new Color($code & 0xff, ($code >> 8) & 0xff, ($code >> 16) & 0xff, ($code >> 24) & 0xff);
 	}
 
 	public function toARGB(): int{
@@ -222,10 +224,24 @@ class Color {
 		return ($this->red << 16 | $this->green << 8 | $this->blue) & 0xffffff;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function __toString(){
-		return "Color(red:" . $this->red . ", green:" . $this->green . ", blue:" . $this->blue . ", alpha:" . $this->alpha . ")";
+	public function __toString(): string{
+		return "Color(Red:" . $this->red . ", Green:" . $this->green . ", Blue:" . $this->blue . ", Alpha:" . $this->alpha . ")";
+	}
+
+	// Leveryl Exclusive Functions (HTML Hex Code Operations)
+	public static function validateHTMLColor(string $hex): bool{
+		return preg_match('/^#[a-f0-9]{6}$/i', $hex);
+	}
+
+	public static function fromHTMLColor(string $hex): Color{
+		if(!Color::validateHTMLColor($hex)){
+			return new Color(0, 0, 0); // IMPORTANT! : Invalid Hex Code will return BLACK
+		}
+		list($r, $g, $b) = sscanf($hex, "#%02x%02x%02x");
+		return new Color($r, $g, $b);
+	}
+
+	public function toHTMLColor(): string{
+		return sprintf("#%02x%02x%02x", $this->getRed(), $this->getGreen(), $this->getBlue());
 	}
 }

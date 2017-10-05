@@ -225,4 +225,14 @@ abstract class Tile extends Position {
 		return $this->name;
 	}
 
+	public function getCleanedNBT(){
+		$this->saveNBT();
+		$tag = clone $this->namedtag;
+		unset($tag->x, $tag->y, $tag->z, $tag->id);
+		if($tag->getCount() > 0){
+			return $tag;
+		}else{
+			return null;
+		}
+	}
 }

@@ -1,7 +1,7 @@
 <?php
 
 // ---------- CREDITS ----------
-// Mirrored from pocketmine\network\mcpe\protocol\InventoryNetworkIds.php
+// Mirrored from pocketmine\network\mcpe\protocol\WindowTypes.php
 // Mirroring was done by @CortexPE of @LeverylTeam :D
 // 
 // NOTE: We know that this was hacky... But It's here to still provide support for old plugins
@@ -9,8 +9,8 @@
 
 namespace pocketmine\network\protocol\types; 
 
-use pocketmine\network\mcpe\protocol\types\InventoryNetworkIds as Original; 
+use pocketmine\network\mcpe\protocol\types\WindowTypes as Original;
 
-class InventoryNetworkIds extends Original { 
+class WindowTypes implements Original {
 
 } 

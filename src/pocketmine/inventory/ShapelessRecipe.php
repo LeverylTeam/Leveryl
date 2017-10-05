@@ -137,4 +137,8 @@ class ShapelessRecipe implements Recipe {
 	public function registerToCraftingManager(){
 		Server::getInstance()->getCraftingManager()->registerShapelessRecipe($this);
 	}
+
+	public function getAllResults() : array{
+		return [$this->getResult()]; //TODO
+	}
 }

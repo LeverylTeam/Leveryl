@@ -9,16 +9,15 @@ class SpawnExperienceOrbPacket extends DataPacket {
 
 	const NETWORK_ID = ProtocolInfo::SPAWN_EXPERIENCE_ORB_PACKET;
 
-	public $x;
-	public $y;
-	public $z;
+	public $position;
 	public $amount;
 
 	/**
 	 *
 	 */
 	public function decode(){
-
+		$this->position = $this->getVector3Obj();
+		$this->amount = $this->getVarInt();
 	}
 
 	/**
@@ -26,12 +25,12 @@ class SpawnExperienceOrbPacket extends DataPacket {
 	 */
 	public function encode(){
 		$this->reset();
-		$this->putVector3f($this->x, $this->y, $this->z);
+		$this->putVector3Obj($this->position);
 		$this->putVarInt($this->amount);
 	}
 
 	/**
-	 * @return PacketName|string
+	 * @return string
 	 */
 	public function getName(){
 		return "SpawnExperienceOrbPacket";

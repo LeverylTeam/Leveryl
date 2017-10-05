@@ -195,4 +195,8 @@ class ShapedRecipe implements Recipe {
 	public function registerToCraftingManager(){
 		Server::getInstance()->getCraftingManager()->registerShapedRecipe($this);
 	}
+
+	public function getAllResults(){
+		return $this->output;
+	}
 }

@@ -24,6 +24,8 @@ namespace pocketmine\network\mcpe\protocol;
 #include <rules/DataPacket.h>
 
 
+use pocketmine\math\Vector3;
+
 class MovePlayerPacket extends DataPacket {
 
 	const NETWORK_ID = ProtocolInfo::MOVE_PLAYER_PACKET;
@@ -33,9 +35,8 @@ class MovePlayerPacket extends DataPacket {
 	const MODE_ROTATION = 2;
 
 	public $eid;
-	public $x;
-	public $y;
-	public $z;
+	/** @var Vector3 */
+	public $position;
 	public $yaw;
 	public $bodyYaw;
 	public $pitch;
@@ -57,7 +58,7 @@ class MovePlayerPacket extends DataPacket {
 	 */
 	public function decode(){
 		$this->eid = $this->getEntityId(); //EntityRuntimeID
-		$this->getVector3f($this->x, $this->y, $this->z);
+		$this->position = $this->getVector3Obj();
 		$this->pitch = $this->getLFloat();
 		$this->yaw = $this->getLFloat();
 		$this->bodyYaw = $this->getLFloat();
@@ -71,8 +72,9 @@ class MovePlayerPacket extends DataPacket {
 	 */
 	public function encode(){
 		$this->reset();
+		if(isset($this->x)) $this->position = new Vector3($this->x, $this->y, $this->z);
 		$this->putEntityId($this->eid); //EntityRuntimeID
-		$this->putVector3f($this->x, $this->y, $this->z);
+		$this->putVector3Obj($this->position);
 		$this->putLFloat($this->pitch);
 		$this->putLFloat($this->yaw);
 		$this->putLFloat($this->bodyYaw); //TODO

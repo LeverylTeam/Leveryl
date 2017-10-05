@@ -32,7 +32,7 @@
 namespace pocketmine\network\mcpe\protocol\types;
 
 
-interface InventoryNetworkIds {
+interface WindowTypes {
 
 	const INVENTORY = -1;
 	const CONTAINER = 0;

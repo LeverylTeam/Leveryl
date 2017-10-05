@@ -68,6 +68,8 @@ use pocketmine\network\mcpe\protocol\MobEffectPacket;
 use pocketmine\network\mcpe\protocol\RemoveEntityPacket;
 use pocketmine\network\mcpe\protocol\SetEntityDataPacket;
 use pocketmine\network\mcpe\protocol\SetEntityLinkPacket;
+use pocketmine\network\mcpe\protocol\SetEntityMotionPacket;
+use pocketmine\network\protocol\MoveEntityPacket;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\Server;
@@ -220,6 +222,7 @@ abstract class Entity extends Location implements Metadatable {
 	/** @var Entity[] */
 	private static $knownEntities = [];
 	private static $shortNames = [];
+	protected $baseOffset = 0.0;
 
 	public static function init(){
 		Entity::registerEntity(Arrow::class);
@@ -2459,6 +2462,49 @@ abstract class Entity extends Location implements Metadatable {
 		list($this->lastX, $this->lastY, $this->lastZ) = [$this->x, $this->y, $this->z];
 		list($this->lastYaw, $this->lastPitch) = [$this->yaw, $this->pitch];
 		list($this->lastMotionX, $this->lastMotionY, $this->lastMotionZ) = [$this->motionX, $this->motionY, $this->motionZ];
+	}
+
+	/**
+	 * Wrapper around {@link Entity#getDataFlag} for generic data flag reading.
+	 *
+	 * @param int $flagId
+	 * @return bool
+	 */
+	public function getGenericFlag(int $flagId) : bool{
+		return $this->getDataFlag(self::DATA_FLAGS, $flagId);
+	}
+
+	/**
+	 * Wrapper around {@link Entity#setDataFlag} for generic data flag setting.
+	 *
+	 * @param int  $flagId
+	 * @param bool $value
+	 */
+	public function setGenericFlag(int $flagId, bool $value = true){
+		$this->setDataFlag(self::DATA_FLAGS, $flagId, $value, self::DATA_TYPE_LONG);
+	}
+
+	public function getOffsetPosition(Vector3 $vector3) : Vector3{
+		return new Vector3($vector3->x, $vector3->y + $this->baseOffset, $vector3->z);
+	}
+
+	protected function broadcastMovement(){
+		$pk = new MoveEntityPacket();
+		$pk->entityRuntimeId = $this->id;
+		$pk->position = $this->getOffsetPosition($this);
+		$pk->yaw = $this->yaw;
+		$pk->pitch = $this->pitch;
+		$pk->headYaw = $this->yaw; //TODO
+
+		$this->level->addChunkPacket($this->chunk->getX(), $this->chunk->getZ(), $pk);
+	}
+
+	protected function broadcastMotion(){
+		$pk = new SetEntityMotionPacket();
+		$pk->entityRuntimeId = $this->id;
+		$pk->motion = $this->getMotion();
+
+		$this->level->addChunkPacket($this->chunk->getX(), $this->chunk->getZ(), $pk);
 	}
 
 }

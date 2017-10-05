@@ -19,35 +19,15 @@
  *
 */
 
-namespace pocketmine\network\mcpe\protocol;
+declare(strict_types=1);
 
-#include <rules/DataPacket.h>
+namespace pocketmine\network\mcpe\protocol\types;
 
+interface PlayerPermissions{
 
-class ServerToClientHandshakePacket extends DataPacket {
-	const NETWORK_ID = ProtocolInfo::SERVER_TO_CLIENT_HANDSHAKE_PACKET;
+	const CUSTOM = 3;
+	const OPERATOR = 2;
+	const MEMBER = 1;
+	const VISITOR = 0;
 
-	public $jwt;
-
-	/**
-	 * @return bool
-	 */
-	public function canBeSentBeforeLogin(): bool{
-		return true;
-	}
-
-	/**
-	 *
-	 */
-	public function decode(){
-		$this->jwt = $this->getString();
-	}
-
-	/**
-	 *
-	 */
-	public function encode(){
-		$this->reset();
-		$this->putString($this->jwt);
-	}
 }

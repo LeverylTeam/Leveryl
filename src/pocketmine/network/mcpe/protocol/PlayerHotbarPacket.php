@@ -26,7 +26,7 @@ namespace pocketmine\network\mcpe\protocol;
 #include <rules/DataPacket.h>
 
 #ifndef COMPILE
-use pocketmine\network\mcpe\protocol\types\InventoryNetworkIds;
+use pocketmine\network\mcpe\protocol\types\WindowTypes;
 use pocketmine\utils\Binary;
 #endif
 
@@ -36,7 +36,7 @@ class PlayerHotbarPacket extends DataPacket{
 	/** @var int */
 	public $selectedHotbarSlot;
 	/** @var int */
-	public $windowId = InventoryNetworkIds::INVENTORY;
+	public $windowId = WindowTypes::INVENTORY;
 	/** @var int[] */
 	public $slots = [];
 	/** @var bool */
