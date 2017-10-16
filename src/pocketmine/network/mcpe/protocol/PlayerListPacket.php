@@ -33,8 +33,7 @@ class PlayerListPacket extends DataPacket {
 	const TYPE_ADD = 0;
 	const TYPE_REMOVE = 1;
 
-	//REMOVE: UUID, ADD: UUID, entity id, name, skinId, skin
-	/** @var PlayerListEntry[] */
+	// 2D Array
 	public $entries = [];
 	public $type;
 
@@ -54,20 +53,22 @@ class PlayerListPacket extends DataPacket {
 		$this->type = $this->getByte();
 		$count = $this->getUnsignedVarInt();
 		for($i = 0; $i < $count; ++$i){
-			$entry = new PlayerListEntry();
+			$entry = [];
 
 			if($this->type === self::TYPE_ADD){
-				$entry->uuid = $this->getUUID();
-				$entry->entityUniqueId = $this->getEntityUniqueId();
-				$entry->username = $this->getString();
-				$entry->skinId = $this->getString();
-				$entry->skinData = $this->getString();
-				$entry->capeData = $this->getString();
-				$entry->geometryModel = $this->getString();
-				$entry->geometryData = $this->getString();
-				$entry->xboxUserId = $this->getString();
+				$entry[0] = $this->getUUID(); // UUID
+				$entry[1] = $this->getEntityUniqueId(); // eID
+				$entry[2] = $this->getString(); // Username
+				$entry[3] = $this->getString(); // SkinID
+				$entry[4] = $this->getString(); // SkinData
+				
+				// Misc
+				$entry[5] = $this->getString(); // CapeData
+				$entry[6] = $this->getString(); // GeometryModel
+				$entry[7] = $this->getString(); // GeometryData
+				$entry[8] = $this->getString(); // XBoxUserID
 			}else{
-				$entry->uuid = $this->getUUID();
+				$entry[0] = $this->getUUID();
 			}
 
 			$this->entries[$i] = $entry;
@@ -83,17 +84,19 @@ class PlayerListPacket extends DataPacket {
 		$this->putUnsignedVarInt(count($this->entries));
 		foreach($this->entries as $entry){
 			if($this->type === self::TYPE_ADD){
-				$this->putUUID($entry->uuid);
-				$this->putEntityUniqueId($entry->entityUniqueId);
-				$this->putString($entry->username);
-				$this->putString($entry->skinId);
-				$this->putString($entry->skinData);
-				$this->putString($entry->capeData);
-				$this->putString($entry->geometryModel);
-				$this->putString($entry->geometryData);
-				$this->putString($entry->xboxUserId);
+				$this->putUUID($entry[0]);
+				$this->putEntityUniqueId($entry[1]);
+				$this->putString($entry[2]);
+				$this->putString($entry[3]);
+				$this->putString($entry[4]);
+				
+				// Misc
+				$this->putString($entry[5] ?? "");
+				$this->putString($entry[6] ?? "");
+				$this->putString($entry[7] ?? "");
+				$this->putString($entry[8] ?? "");
 			}else{
-				$this->putUUID($entry->uuid);
+				$this->putUUID($entry[0]);
 			}
 		}
 	}

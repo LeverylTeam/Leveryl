@@ -54,7 +54,7 @@ class StartGamePacket extends DataPacket {
 	public $hasXboxLiveBroadcast = false;
 	public $commandsEnabled;
 	public $isTexturePacksRequired = 0;
-	public $gamerules = [];
+	public $gameRules = [];
 	public $hasBonusChestEnabled = false;
 	public $hasStartWithMapEnabled = false;
 	public $hasTrustPlayersEnabled = false;
@@ -64,6 +64,8 @@ class StartGamePacket extends DataPacket {
 	public $levelId = ""; //base64 string, usually the same as world folder name in vanilla
 	public $worldName;
 	public $premiumWorldTemplateId = "";
+	public $unknownBool = false;
+	public $currentTick = 0;
 
 	/**
 	 *
